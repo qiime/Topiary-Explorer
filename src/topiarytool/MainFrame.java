@@ -89,17 +89,17 @@ public class MainFrame extends JFrame {
         colorPanel.setPreferredSize(new Dimension(200,600));
         
         otuMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        otuMetadataTable.setAutoCreateRowSorter(true);
+        //otuMetadataTable.setAutoCreateRowSorter(true);
         otuMetadataScrollPane = new JScrollPane(otuMetadataTable);
         dataPane.addTab("OTU Metadata", otuMetadataScrollPane);
 
         otuSampleMapTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        otuSampleMapTable.setAutoCreateRowSorter(true);
+        //otuSampleMapTable.setAutoCreateRowSorter(true);
         otuSampleMapScrollPane = new JScrollPane(otuSampleMapTable);
         dataPane.addTab("OTU-Sample Map", otuSampleMapScrollPane);
 
         sampleMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        sampleMetadataTable.setAutoCreateRowSorter(true);
+        //sampleMetadataTable.setAutoCreateRowSorter(true);
         sampleMetadataScrollPane = new JScrollPane(sampleMetadataTable);
         dataPane.addTab("Sample Metadata", sampleMetadataScrollPane);
         

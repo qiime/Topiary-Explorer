@@ -6,7 +6,7 @@
 		<path id="compile.path">
 			<fileset dir="lib" includes="*.jar" />
 		</path>
-        <javac debug="on" target="1.6"
+        <javac debug="on" target="1.5"
                classpathref="compile.path"
                srcdir="src" destdir="build/classes"
                />
