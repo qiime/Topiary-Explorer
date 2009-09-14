@@ -174,6 +174,8 @@ public class MainFrame extends JFrame {
         pcoaPanel.add(canvas, BorderLayout.CENTER);
         animator.start();
         
+
+        
         //set up the main panel
         tabbedPane.addTab("Data", dataPane);
         tabbedPane.addTab("Tree", treePanel);
@@ -184,6 +186,10 @@ public class MainFrame extends JFrame {
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, colorPanel, tabbedPane);
         
         pane.add(splitPane);
+        
+        //the following is required to make sure th GLContext is created, or else resizing the 
+        //window will result in program freezes
+        tabbedPane.setSelectedIndex(2);
      }
 
      /**
