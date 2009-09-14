@@ -8,7 +8,8 @@ public class TreeVis extends PApplet {
 
 
     //the amount of space around the tree, for viewing purposes
-    private static final double MARGIN = 50;
+    private double MARGIN = 50;
+    private final double ORIGMARGIN = 50;
 
     // Number of pixels of slop around nodes to select:
     private final double TOLERANCE = 3;
@@ -312,6 +313,9 @@ public class TreeVis extends PApplet {
      * @param  newRoot  the Node object that is the root of the new tree
      */
     public void setTree(Node newRoot) {
+      //add to the margin the longest node labels
+      MARGIN = ORIGMARGIN + newRoot.getLongestLabel().length();
+      //set the tree
       root = newRoot;
       resetTreeX();
       resetTreeY();
