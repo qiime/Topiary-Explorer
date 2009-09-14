@@ -170,7 +170,7 @@ public class MainFrame extends JFrame {
         pcoaPanel.setLayout(new BorderLayout());
         GLCanvas canvas = new GLCanvas();
         canvas.addGLEventListener(pcoa);
-        animator = new Animator(canvas);
+        animator = new FPSAnimator(canvas, 30);
         pcoaPanel.add(canvas, BorderLayout.CENTER);
         animator.start();
         
