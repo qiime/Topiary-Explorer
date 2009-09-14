@@ -1,0 +1,10 @@
+#otuid	cat1	cat2
+a	h	8
+b	h	7
+c	y	4
+d	n	8
+e	k	7
+f	n	7
+g	n	8
+h	n	4
+i	n	7
