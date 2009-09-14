@@ -4,8 +4,43 @@ package topiarytool;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
+import java.text.*;
 
 public class TopiaryFunctions {
+
+    public static ArrayList<String> tokenizeTree(String tree) {
+        ArrayList<String> goodTokens = new ArrayList<String>();
+        goodTokens.add("(");
+        goodTokens.add(":");
+        goodTokens.add(")");
+        goodTokens.add(",");
+        goodTokens.add(";");
+    
+        ArrayList<String> result = new ArrayList<String>();
+        String saved = "";
+        boolean inQuotes = false;
+        CharacterIterator it = new StringCharacterIterator(tree);
+        for (char ch=it.first(); ch!=CharacterIterator.DONE; ch=it.next()) {
+            if (Character.toString(ch).equals("'")) {
+                inQuotes = !inQuotes;
+            }
+            if (goodTokens.contains(Character.toString(ch)) && !inQuotes) {
+                String curr = saved;
+                while (curr.length() > 0 && curr.charAt(0) == ' ') curr = curr.substring(1);
+                while (curr.length() > 0 && curr.charAt(curr.length()-1) == ' ') curr = curr.substring(0, curr.length()-1);
+                if (curr.length() > 0) {
+                    result.add(curr);
+                }
+                result.add(Character.toString(ch));
+                saved = "";
+            } else {
+                saved += Character.toString(ch);
+            }
+                
+        }
+        return result;
+    }
+    
     /*
      * Return the head of a tree which is created from the given Newick string.  The algorithm is iterative
      * so should work for large trees.  It is adapted from the DndParser() in PyCogent.
@@ -18,28 +53,16 @@ public class TopiaryFunctions {
         if (left_count != right_count) {
           throw new RuntimeException("Number of open and close parentheses are not the same in tree string.");
         }
-
-        //We want to split the data, BUT INCLUDE THE TOKENS in the string, so we do the following:
-        //remove all whitespace
-        data = data.replaceAll("[ ]", "");
-        //replace all tokens with <space><token><space>
-        data = data.replaceAll("[(]", " ( ");
-        data = data.replaceAll("[:]", " : ");
-        data = data.replaceAll("[)]", " ) ");
-        data = data.replaceAll("[,]", " , ");
-        data = data.replaceAll("[;]", " ; ");
-        //replace any double spaces with a single space
-        data = data.replaceAll("  ", " ");
-        //if there are beginning or ending spaces, remove them
-        if (data.charAt(0) == ' ') { data = data.substring(1); }
-        if (data.charAt(data.length()-1) == ' ') { data = data.substring(0,data.length()-1); }
-        //now, splitting around spaces will give the desired effect
-        String[] tokens = data.split(" ");
+        
+        //remove whitespace
+        data = data.replaceAll("[ |\n|\r]", "");
+        
+        ArrayList<String> tokens = tokenizeTree(data);
         Node curr_node = null;
         String state = "PreColon";
         String state1 = "PreClosed";
-        for (int i = 0; i < tokens.length; i++) {
-          String t = tokens[i];
+        for (int i = 0; i < tokens.size(); i++) {
+          String t = tokens.get(i);
           if (t.equals(":")) {  //expecting branch length
               state = "PostColon";
               //prevent state reset
