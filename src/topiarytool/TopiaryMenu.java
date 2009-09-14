@@ -717,6 +717,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 
       //color it
       frame.recolor();
+      
+      //set view
+      frame.tabbedPane.setSelectedIndex(2);
 	}
   
 
