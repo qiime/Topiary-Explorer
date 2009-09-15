@@ -319,7 +319,7 @@ public class TreeVis extends PApplet {
       for (int i = 0; i < s.length(); i++) {
         width += currFont.width(s.charAt(i));
       }
-      MARGIN = ORIGMARGIN + width*currFont.sizea + 5;
+      MARGIN = ORIGMARGIN + width*currFont.size + 5;
       //set the tree
       root = newRoot;
       resetTreeX();
