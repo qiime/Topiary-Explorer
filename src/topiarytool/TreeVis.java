@@ -40,6 +40,7 @@ public class TreeVis extends PApplet {
     private Set hilitedNodes = new java.util.HashSet();
 
     private List listeners = new java.util.ArrayList();
+    private PFont currFont = createFont("georgia", 12);
 
 
     /**
@@ -51,8 +52,7 @@ public class TreeVis extends PApplet {
         //noLoop();
         frameRate(10);
         //set up default font
-        PFont font = createFont("georgia", 12);
-        textFont(font);
+        textFont(currFont);
         oldwidth = width;
         oldheight = height;
     }
@@ -314,7 +314,12 @@ public class TreeVis extends PApplet {
      */
     public void setTree(Node newRoot) {
       //add to the margin the longest node labels
-      MARGIN = ORIGMARGIN + newRoot.getLongestLabel().length();
+      float width = 0;
+      String s = newRoot.getLongestLabel();
+      for (int i = 0; i < s.length(); i++) {
+        width += currFont.width(s.charAt(i));
+      }
+      MARGIN = ORIGMARGIN + width*currFont.sizea + 5;
       //set the tree
       root = newRoot;
       resetTreeX();
@@ -675,8 +680,7 @@ public class TreeVis extends PApplet {
     public void exportScreenCapture(String filename) {
       PGraphics canvas = createGraphics(width, height, PDF, filename);
       canvas.beginDraw();
-      PFont font = createFont("georgia", 12);
-      textFont(font);
+      textFont(currFont);
       drawTree(root, 0, canvas);
       canvas.dispose();
       canvas.endDraw();
@@ -713,8 +717,7 @@ public class TreeVis extends PApplet {
 
       //draw the three to the file
       canvas.beginDraw();
-      PFont font = createFont("georgia", 12);
-      canvas.textFont(font);
+      canvas.textFont(currFont);
       drawTree(root, 0, canvas);
       canvas.dispose();
       canvas.endDraw();
