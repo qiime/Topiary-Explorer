@@ -34,7 +34,8 @@ public class TreeVis extends PApplet {
     private double oldheight = 0;
 
     //should the labels be drawn or not?
-    private boolean drawText = false;
+    private boolean drawExternalNodeLabels = false;
+    private boolean drawInternalNodeLabels = false;
 
     private Node selectedNode;
     private Set hilitedNodes = new java.util.HashSet();
@@ -85,12 +86,13 @@ public class TreeVis extends PApplet {
     public double getYScale() { return yscale; }
     public double getXScale() { return xscale; }
     public Node getTree() { return root; }
-    public void setExternalNodeLabels(boolean d) { drawText = d; }
     public Node getSelectedNode() { return selectedNode; }
     public void setSelectedNode(Node node) { selectedNode = node; }
     public Set getHilitedNodes() { return hilitedNodes; }
-    public boolean getDrawText() { return drawText; }
-    public void setDrawText(boolean b) { drawText = b; }
+    public boolean getDrawExternalNodeLabels() { return drawExternalNodeLabels; }
+    public boolean getDrawInternalNodeLabels() { return drawInternalNodeLabels; }
+    public void setDrawExternalNodeLabels(boolean b) { drawExternalNodeLabels = b; }
+    public void setDrawInternalNodeLabels(boolean b) { drawInternalNodeLabels = b; }
 
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
@@ -533,7 +535,7 @@ public class TreeVis extends PApplet {
 
         //width to color depends on whether the node label is being drawn
         double w;
-        if (drawText) {
+        if (drawExternalNodeLabels) {
           w = canvas.textWidth(node.getLabel()) + xbias + 4;
         }
         else {
@@ -551,8 +553,12 @@ public class TreeVis extends PApplet {
       canvas.fill(node.getColor().getRGB());
       //draw node label if we need to
       if (node.isLeaf()) {
-        if (drawText) 
+        if (drawExternalNodeLabels)
             canvas.text(node.getLabel(), (float)(xs+xbias), (float)(ys+ybias));
+      } else {
+          if (drawInternalNodeLabels) {
+              canvas.text(node.getLabel(), (float)(xs+xbias), (float)(ys+ybias));
+          }
       }
       //reset drawing color to default black
       canvas.fill(0);
@@ -700,14 +706,14 @@ public class TreeVis extends PApplet {
       double oldYScale = yscale;
       double oldXStart = xstart;
       double oldYStart = ystart;
-      boolean oldDrawText = drawText;
+      boolean oldDrawText = drawExternalNodeLabels;
 
       //reset the sizing and zooming so that the tree can be drawn visibly
       double longest = textWidth(root.getLongestLabel());
       double l = root.longestRootToTipDistance();
       double s = root.shortestRootToTipDistance();
       PGraphics canvas = createGraphics((int) ((l/s)*400+MARGIN+longest), (int) (12*root.getNumberOfLeaves() + 2*MARGIN), PDF, filename);
-      drawText = true;
+      drawExternalNodeLabels = true;
       int w = (int) ((l/s)*400+MARGIN+longest);
       int h = (int) (12*root.getNumberOfLeaves() + 2*MARGIN);
       xscale = (w-MARGIN-longest)/root.depth();
@@ -727,7 +733,7 @@ public class TreeVis extends PApplet {
       yscale = oldYScale;
       xstart = oldXStart;
       ystart = oldYStart;
-      drawText = oldDrawText;
+      drawExternalNodeLabels = oldDrawText;
 
       redraw();
 

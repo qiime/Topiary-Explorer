@@ -56,6 +56,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JCheckBoxMenuItem axesMenuItem = new JCheckBoxMenuItem("Axes");
 
     JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("External Node Labels");
+    JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");
 
     /**
      * Constructor.  Sets up the menu.
@@ -110,7 +111,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         treeMenu.add(sortBy);
         externalLabelsMenuItem.setSelected(false);
         externalLabelsMenuItem.addActionListener(this);
+        internalLabelsMenuItem.setSelected(false);
+        internalLabelsMenuItem.addActionListener(this);
         treeMenu.add(externalLabelsMenuItem);
+        treeMenu.add(internalLabelsMenuItem);
 
         //set up the "pcoa" submenus"
         JRadioButtonMenuItem button;
@@ -293,7 +297,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
          } else if (e.getActionCommand().equals("No coloring")) {
              frame.removeColor();
          } else if (e.getActionCommand().equals("External Node Labels")) {
-             frame.tree.setDrawText(externalLabelsMenuItem.getState());
+             frame.tree.setDrawExternalNodeLabels(externalLabelsMenuItem.getState());
+         } else if (e.getActionCommand().equals("Internal Node Labels")) {
+             frame.tree.setDrawInternalNodeLabels(internalLabelsMenuItem.getState());
          } else if (e.getActionCommand().equals("Collapse/Expand")) {
              if (frame.clickedNode != null) {
                 frame.clickedNode.setCollapsed(!frame.clickedNode.isCollapsed());
