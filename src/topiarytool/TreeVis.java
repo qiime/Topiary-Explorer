@@ -1,15 +1,15 @@
 package topiarytool;
 
+import java.awt.event.KeyEvent;
 import processing.core.*;
 import javax.swing.event.*;
 import java.util.*;
 
 public class TreeVis extends PApplet {
 
-
     //the amount of space around the tree, for viewing purposes
-    private double MARGIN = 50;
-    private final double ORIGMARGIN = 50;
+    private double MARGIN = 10;
+    private final double ORIGMARGIN = 10;
 
     private final int SELECTED_COLOR = 0xff66CCFF;
     private final int HIGHLIGHTED_COLOR = 0xffFF66FF;
@@ -74,6 +74,16 @@ public class TreeVis extends PApplet {
       }
       //draw the tree
       try {
+          //keyPressed() isn't working, so:
+          if (!(keyPressed && keyCode == SHIFT)) {
+            draggingLabel = false;
+            mouseOverNode = findNode(mouseX, mouseY);
+            mouseOverNodeToReplace = null;
+            if (mouseOverNode == null) {
+                cursor(ARROW);
+            }
+          }
+
          drawTree(root, 0);
       } catch (Exception e) {
           System.out.println("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");
@@ -210,10 +220,12 @@ public class TreeVis extends PApplet {
                       this.mouseOverNodeToReplace = n;
                   }
               }
+          } else {
+              this.mouseOverNode = null;
+            this.mouseOverNodeToReplace = null;
           }
       }
     }
-
 
     public void mouseReleased() {
       cursor(ARROW);
@@ -221,6 +233,7 @@ public class TreeVis extends PApplet {
           //replace node label
           mouseOverNodeToReplace.setLabel(mouseOverNode.getLabel());
           mouseOverNode.setLabel("");
+          selectedNode = mouseOverNodeToReplace;
       }
       draggingLabel = false;
       mouseOverNode = findNode(mouseX, mouseY);
