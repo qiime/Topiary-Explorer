@@ -33,9 +33,12 @@ public class TreeVis extends PApplet {
     //should the labels be drawn or not?
     private boolean drawExternalNodeLabels = false;
     private boolean drawInternalNodeLabels = false;
+    //is a label being dragged?
+    private boolean draggingLabel = false;
 
     private Node selectedNode;
     private Node mouseOverNode;
+    private Node mouseOverNodeToReplace; //used when dragging nodes around
     private Set hilightedNodes = new java.util.HashSet();
 
     private List listeners = new java.util.ArrayList();
@@ -49,7 +52,7 @@ public class TreeVis extends PApplet {
         size(800, 600);
         smooth();
         //noLoop();
-        frameRate(10);
+        frameRate(30);
         //set up default font
         textFont(currFont);
         oldwidth = width;
@@ -176,24 +179,52 @@ public class TreeVis extends PApplet {
      * mouseDragged() is called whenever the user drags the mouse
      */
     public void mouseDragged() {
-      //change the cursor to show that dragging is taking place
-      cursor(MOVE);
-      //difference in mouse position since mousePressed:
-      double bxdiff = mouseX-pmouseX;
-      double bydiff = mouseY-pmouseY;
-      //update where to draw the tree based on how the tree was dragged
-      xstart = xstart + bxdiff;
-      ystart = ystart + bydiff;
-      //ensure that the tree wasn't dragged beyond allowable bounds
-      checkBounds();
-      //notify listeners
-      fireStateChanged();
-      //re-draw the tree
-      redraw();
+      if (this.mouseOverNode == null) {
+          //change the cursor to show that dragging is taking place
+          cursor(MOVE);
+          //difference in mouse position since mousePressed:
+          double bxdiff = mouseX-pmouseX;
+          double bydiff = mouseY-pmouseY;
+          //update where to draw the tree based on how the tree was dragged
+          xstart = xstart + bxdiff;
+          ystart = ystart + bydiff;
+          //ensure that the tree wasn't dragged beyond allowable bounds
+          checkBounds();
+          //notify listeners
+          fireStateChanged();
+          //re-draw the tree
+          redraw();
+      } else {
+          //is the SHIFT key down?
+          //also, CAN ONLY DRAG INTERNAL NODES
+          if (keyPressed == true && keyCode == SHIFT && !mouseOverNode.isLeaf()) {
+              draggingLabel = true;
+              //find the node where the mouse is
+              Node n = findNode(mouseX, mouseY);
+              //can't replace a leaf!
+              if (n == null) {
+                  mouseOverNodeToReplace = null;
+              } else {
+                  //can't replace a leaf!
+                  if (!n.isLeaf()) {
+                      this.mouseOverNodeToReplace = n;
+                  }
+              }
+          }
+      }
     }
+
 
     public void mouseReleased() {
       cursor(ARROW);
+      if (draggingLabel && mouseOverNodeToReplace != null) {
+          //replace node label
+          mouseOverNodeToReplace.setLabel(mouseOverNode.getLabel());
+          mouseOverNode.setLabel("");
+      }
+      draggingLabel = false;
+      mouseOverNode = findNode(mouseX, mouseY);
+      mouseOverNodeToReplace = null;
     }
 
     /**
@@ -217,6 +248,7 @@ public class TreeVis extends PApplet {
         //set outlined node to nothing
         mouseOverNode = null;
       }
+      mouseOverNodeToReplace = null;
     }
 
     /**
@@ -247,10 +279,6 @@ public class TreeVis extends PApplet {
           else if (mouseButton == LEFT) setScaleFactor(yscale * pow(2, 0.5f), mouseX, mouseY);
         }
       }
-      //notify listeners
-      fireStateChanged();
-      //redraw tree
-      redraw();
     }
 
 
@@ -545,6 +573,14 @@ public class TreeVis extends PApplet {
       boolean selected = (node == selectedNode);
       boolean hilighted = hilightedNodes.contains(node);
 
+      float drawX = (float)xs;
+      float drawY = (float)ys;
+      if (draggingLabel && this.mouseOverNode == node) {
+          //this node's label is being dragged:
+          // change drawing coords to be wherever the mouse is
+          drawX = mouseX;
+          drawY = mouseY;
+      }
 
       if (selected || hilighted) {
         int c;
@@ -553,15 +589,15 @@ public class TreeVis extends PApplet {
         canvas.stroke(c);
 
         //draw the selection/highlighting
-        double minX = xs;
+        double minX = drawX;
         double width = 0;
         String s = node.getLabel();
         for (int i = 0; i < s.length(); i++) {
           width += currFont.width(s.charAt(i));
         }
-        double maxX =  xs + 5 + (width*currFont.size);
-        double minY = ys - (currFont.descent()*currFont.size);
-        double maxY = ys + (currFont.ascent()*currFont.size);
+        double maxX =  drawX + 5 + (width*currFont.size);
+        double minY = drawY - (currFont.descent()*currFont.size);
+        double maxY = drawY + (currFont.ascent()*currFont.size);
         if ((node.isLeaf() && !drawExternalNodeLabels) || (!node.isLeaf() && !drawInternalNodeLabels)) {
             maxX = minX + 5;
             maxY = minY + 5;
@@ -571,19 +607,19 @@ public class TreeVis extends PApplet {
         canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
 
       }
-      if (mouseOverNode == node) {
+      if (mouseOverNode == node || mouseOverNodeToReplace == node) {
         //outline the node
         canvas.strokeWeight(3);
         canvas.stroke(255,0,0);
-        double minX = xs-3;
+        double minX = drawX-3;
         double width = 0;
         String s = node.getLabel();
         for (int i = 0; i < s.length(); i++) {
           width += currFont.width(s.charAt(i));
         }
-        double maxX =  xs + 5 + (width*currFont.size)+3;
-        double minY = ys - (currFont.descent()*currFont.size)-3;
-        double maxY = ys + (currFont.ascent()*currFont.size)+3;
+        double maxX =  drawX + 5 + (width*currFont.size)+3;
+        double minY = drawY - (currFont.descent()*currFont.size)-3;
+        double maxY = drawY + (currFont.ascent()*currFont.size)+3;
         canvas.line((float)minX, (float)minY, (float)minX, (float)maxY);
         canvas.line((float)minX, (float)maxY, (float)maxX, (float)maxY);
         canvas.line((float)maxX, (float)maxY, (float)maxX, (float)minY);
@@ -598,10 +634,10 @@ public class TreeVis extends PApplet {
       //draw node label if we need to
       if (node.isLeaf()) {
         if (drawExternalNodeLabels)
-            canvas.text(node.getLabel(), (float)(xs+xbias), (float)(ys+ybias));
+            canvas.text(node.getLabel(), (float)(drawX+xbias), (float)(drawY+ybias));
       } else {
           if (drawInternalNodeLabels) {
-              canvas.text(node.getLabel(), (float)(xs+xbias), (float)(ys+ybias));
+              canvas.text(node.getLabel(), (float)(drawX+xbias), (float)(drawY+ybias));
           }
       }
       //reset drawing color to default black
