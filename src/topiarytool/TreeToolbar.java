@@ -74,9 +74,9 @@ public class TreeToolbar extends JToolBar {
 							frame.tree.setSelectedNode(n);
 							first = false;
 						}
-						frame.tree.getHilitedNodes().add(n);
+						frame.tree.getHilightedNodes().add(n);
 					} else {
-						frame.tree.getHilitedNodes().remove(n);
+						frame.tree.getHilightedNodes().remove(n);
 					}
 				}
 				frame.tree.redraw();

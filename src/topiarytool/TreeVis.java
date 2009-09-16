@@ -11,11 +11,8 @@ public class TreeVis extends PApplet {
     private double MARGIN = 50;
     private final double ORIGMARGIN = 50;
 
-    // Number of pixels of slop around nodes to select:
-    private final double TOLERANCE = 3;
-
     private final int SELECTED_COLOR = 0xff66CCFF;
-    private final int HILITED_COLOR = 0xffFF66FF;
+    private final int HIGHLIGHTED_COLOR = 0xffFF66FF;
 
     // Pixels per unit of branch length:
     private double xscale;
@@ -38,7 +35,8 @@ public class TreeVis extends PApplet {
     private boolean drawInternalNodeLabels = false;
 
     private Node selectedNode;
-    private Set hilitedNodes = new java.util.HashSet();
+    private Node mouseOverNode;
+    private Set hilightedNodes = new java.util.HashSet();
 
     private List listeners = new java.util.ArrayList();
     private PFont currFont = createFont("georgia", 12);
@@ -88,7 +86,7 @@ public class TreeVis extends PApplet {
     public Node getTree() { return root; }
     public Node getSelectedNode() { return selectedNode; }
     public void setSelectedNode(Node node) { selectedNode = node; }
-    public Set getHilitedNodes() { return hilitedNodes; }
+    public Set getHilightedNodes() { return hilightedNodes; }
     public boolean getDrawExternalNodeLabels() { return drawExternalNodeLabels; }
     public boolean getDrawInternalNodeLabels() { return drawInternalNodeLabels; }
     public void setDrawExternalNodeLabels(boolean b) { drawExternalNodeLabels = b; }
@@ -205,13 +203,19 @@ public class TreeVis extends PApplet {
       //is the mouse over a node?
       Node node = findNode(mouseX, mouseY);
       if (node != null) {
-        //if so, chance the cursor's hand and re-draw the tree
+        //if so, chance the cursor's hand
         cursor(HAND);
+        //outline the node
+        if ((node.isLeaf() && this.drawExternalNodeLabels) ||(!node.isLeaf() && this.drawInternalNodeLabels)) {
+            mouseOverNode = node;
+        }
         redraw();
       }
       else {
         //cursor is normal
         cursor(ARROW);
+        //set outlined node to nothing
+        mouseOverNode = null;
       }
     }
 
@@ -394,8 +398,23 @@ public class TreeVis extends PApplet {
       double nodeX = toScreenX(_length);
       double nodeY = toScreenY(row);
 
+      double minX = nodeX;
+      double width = 0;
+      String s = tree.getLabel();
+      for (int i = 0; i < s.length(); i++) {
+        width += currFont.width(s.charAt(i));
+      }
+      double maxX =  nodeX + 5 + (width*currFont.size);
+      double minY = nodeY - (currFont.descent()*currFont.size);
+      double maxY = nodeY + (currFont.ascent()*currFont.size);
+      if ((tree.isLeaf() && !this.drawExternalNodeLabels) || (!tree.isLeaf() && !this.drawInternalNodeLabels)) {
+          maxX = minX + 5;
+          maxY = minY + 5;
+          minX = minX - 5;
+          minY = minY - 5;
+      }
       //if the current node is within TOLERANCE pixels, return this node
-      if (Math.abs(x - nodeX) < TOLERANCE && Math.abs(y - nodeY) < TOLERANCE) {
+      if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
         return tree;
       }
 
@@ -524,27 +543,52 @@ public class TreeVis extends PApplet {
 
       //is this node slected or hilighted?
       boolean selected = (node == selectedNode);
-      boolean hilited = hilitedNodes.contains(node);
+      boolean hilighted = hilightedNodes.contains(node);
 
 
-      if (selected || hilited) {
+      if (selected || hilighted) {
         int c;
-        if (selected) { c = SELECTED_COLOR; } else { c = HILITED_COLOR; }
+        if (selected) { c = SELECTED_COLOR; } else { c = HIGHLIGHTED_COLOR; }
         canvas.fill(c);
         canvas.stroke(c);
 
-        //width to color depends on whether the node label is being drawn
-        double w;
-        if (drawExternalNodeLabels) {
-          w = canvas.textWidth(node.getLabel()) + xbias + 4;
-        }
-        else {
-          w = 10;
-        }
         //draw the selection/highlighting
-        double SELECTION_HEIGHT = 12;
-        canvas.rect((float)(xs - 2), (float)(ys - SELECTION_HEIGHT/2),
-          (float)w, (float)SELECTION_HEIGHT);
+        double minX = xs;
+        double width = 0;
+        String s = node.getLabel();
+        for (int i = 0; i < s.length(); i++) {
+          width += currFont.width(s.charAt(i));
+        }
+        double maxX =  xs + 5 + (width*currFont.size);
+        double minY = ys - (currFont.descent()*currFont.size);
+        double maxY = ys + (currFont.ascent()*currFont.size);
+        if ((node.isLeaf() && !drawExternalNodeLabels) || (!node.isLeaf() && !drawInternalNodeLabels)) {
+            maxX = minX + 5;
+            maxY = minY + 5;
+            minX = minX - 5;
+            minY = minY - 5;
+        }
+        canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
+
+      }
+      if (mouseOverNode == node) {
+        //outline the node
+        canvas.strokeWeight(3);
+        canvas.stroke(255,0,0);
+        double minX = xs-3;
+        double width = 0;
+        String s = node.getLabel();
+        for (int i = 0; i < s.length(); i++) {
+          width += currFont.width(s.charAt(i));
+        }
+        double maxX =  xs + 5 + (width*currFont.size)+3;
+        double minY = ys - (currFont.descent()*currFont.size)-3;
+        double maxY = ys + (currFont.ascent()*currFont.size)+3;
+        canvas.line((float)minX, (float)minY, (float)minX, (float)maxY);
+        canvas.line((float)minX, (float)maxY, (float)maxX, (float)maxY);
+        canvas.line((float)maxX, (float)maxY, (float)maxX, (float)minY);
+        canvas.line((float)maxX, (float)minY, (float)minX, (float)minY);
+        canvas.stroke(0);
       }
 
       //set the color/weight to draw
