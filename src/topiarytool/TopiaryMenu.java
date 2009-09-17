@@ -80,6 +80,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item.addActionListener(this);
         fileMenu.add(item);
         fileMenu.add(new JSeparator());
+        item = new JMenuItem("Save tree...");
+        item.addActionListener(this);
+        fileMenu.add(item);
+        fileMenu.add(new JSeparator());
         item = new JMenuItem("Export Tree Image...");
         item.addActionListener(this);
         fileMenu.add(item);
@@ -294,6 +298,15 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
            loadSampleMetadata();
          } else if (e.getActionCommand().equals("Load OTU-Sample Map...")) {
              loadOtuSampleMap();
+         } else if (e.getActionCommand().equals("Save tree...")) {
+             frame.tree.noLoop();
+             frame.loadDataFileChooser.setDialogTitle("Save Tree");
+             int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
+			 if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File selectedFile = frame.loadDataFileChooser.getSelectedFile();
+				TopiaryFunctions.createNewickFileFromTree( frame.tree.getTree(),selectedFile);
+			 }
+             frame.tree.loop();
          } else if (e.getActionCommand().equals("No coloring")) {
              frame.removeColor();
          } else if (e.getActionCommand().equals("External Node Labels")) {

@@ -141,6 +141,36 @@ public class TopiaryFunctions {
       return createTreeFromNewickString(newickString);
     }
 
+    public static void createNewickFileFromTree(Node node, File file) {
+        String tree = createNewickStringFromTree(node);
+        try {
+            PrintWriter out = new PrintWriter(new FileWriter(file));
+            out.print(tree);
+            out.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error writing to file.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    public static String createNewickStringFromTree(Node root) {
+        String tree = "";
+
+        if (root.isLeaf()) {
+            return root.getLabel()+":"+root.getBranchLength();
+        } else {
+            tree = "(";
+            for (Node n : root.nodes) {
+                tree += createNewickStringFromTree(n) + ",";
+            }
+            //remove last comma
+            tree = tree.substring(0,tree.length()-1);
+            tree += ")" + root.getLabel() + ":" + root.getBranchLength();
+        }
+
+        return tree;
+    }
+
     public static Object objectify (String str) {
         try {
                 int i = Integer.parseInt(str);
