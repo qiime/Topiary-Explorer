@@ -368,6 +368,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         frame.loadDataFileChooser.setDialogTitle("Load Tree");
         int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
+            frame.tree.noLoop();
             //set view
             frame.tabbedPane.setSelectedIndex(1);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
@@ -376,13 +377,16 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.removeColor();
             frame.treeToolbar.updateZoomBounds();
             frame.treeToolbar.zoomSlider.setValue(0);
+            frame.tree.loop();
         }
+        System.out.println("Done");
    }
 
    public void loadOtuMetadata() {
        frame.loadDataFileChooser.setDialogTitle("Load OTU Metadata");
        int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            frame.tree.noLoop();
             //set view
             frame.tabbedPane.setSelectedIndex(0);
             frame.dataPane.setSelectedIndex(0);
@@ -406,6 +410,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
             resetColorByOtuMenu();
             resetCollapseByMenu();
+            frame.tree.loop();
        }
    }
 
@@ -413,6 +418,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        frame.loadDataFileChooser.setDialogTitle("Load OTU Metadata");
        int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            frame.tree.noLoop();
             //set view
             frame.tabbedPane.setSelectedIndex(0);
             frame.dataPane.setSelectedIndex(2);
@@ -435,6 +441,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 frame.removeColor();
             }
             resetColorBySampleMenu();
+            frame.tree.loop();
        }
    }
 
@@ -442,6 +449,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        frame.loadDataFileChooser.setDialogTitle("Load OTU-Sample Map");
        int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            frame.tree.noLoop();
             //set view
             frame.tabbedPane.setSelectedIndex(0);
             frame.dataPane.setSelectedIndex(1);
@@ -460,6 +468,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
+            frame.tree.loop();
        }
    }
 
