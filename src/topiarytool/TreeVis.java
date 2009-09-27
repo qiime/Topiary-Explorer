@@ -9,7 +9,7 @@ public class TreeVis extends PApplet {
 
     //the amount of space around the tree, for viewing purposes
     private double MARGIN = 10;
-    private final double ORIGMARGIN = 10;
+    private double TREEMARGIN = 10;
 
     private final int SELECTED_COLOR = 0xff66CCFF;
     private final int HIGHLIGHTED_COLOR = 0xffFF66FF;
@@ -131,7 +131,7 @@ public class TreeVis extends PApplet {
     }
     public int getMaxHorizontalScrollPosition() {
       if (root==null) return 0;
-      return (int) (root.depth()*xscale + 2*MARGIN);
+      return (int) (root.depth()*xscale + MARGIN + TREEMARGIN);
     }
 
     //METHODS FOR TREE LISTENERS
@@ -306,14 +306,14 @@ public class TreeVis extends PApplet {
       if (root==null) return;
 
       //check horizontal tree scaling
-      if (xscale < (getWidth()-2*MARGIN)/root.depth()) {
+      if (xscale < (getWidth()-MARGIN - TREEMARGIN)/root.depth()) {
         //need to rescale tree
         resetTreeX();
       }
       //check horizontal tree position
       if (xstart > MARGIN) {
         xstart = MARGIN;
-      } else if (xstart + xscale*root.depth() < getWidth()-MARGIN) {
+      } else if (xstart + xscale*root.depth() < getWidth()-TREEMARGIN) {
         xstart = getWidth()-MARGIN - xscale*root.depth();
       }
 
@@ -341,7 +341,7 @@ public class TreeVis extends PApplet {
      */
     public void resetTreeX() {
       if (root==null) return;
-      xscale = (getWidth()-2*MARGIN)/root.depth();
+      xscale = (getWidth()-MARGIN-TREEMARGIN)/root.depth();
       xstart = MARGIN;
      }
 
@@ -367,7 +367,7 @@ public class TreeVis extends PApplet {
       for (int i = 0; i < s.length(); i++) {
         width += currFont.width(s.charAt(i));
       }
-      MARGIN = ORIGMARGIN + width*currFont.size + 5;
+      TREEMARGIN = MARGIN + width*currFont.size + 5;
       //set the tree
       root = newRoot;
       resetTreeX();
@@ -806,7 +806,7 @@ public class TreeVis extends PApplet {
       double longest = textWidth(root.getLongestLabel());
       double l = root.longestRootToTipDistance();
       double s = root.shortestRootToTipDistance();
-      PGraphics canvas = createGraphics((int) ((l/s)*400+MARGIN+longest), (int) (12*root.getNumberOfLeaves() + 2*MARGIN), PDF, filename);
+      PGraphics canvas = createGraphics((int) ((l/s)*400+MARGIN+longest), (int) (12*root.getNumberOfLeaves() + MARGIN+TREEMARGIN), PDF, filename);
       drawExternalNodeLabels = true;
       int w = (int) ((l/s)*400+MARGIN+longest);
       int h = (int) (12*root.getNumberOfLeaves() + 2*MARGIN);
