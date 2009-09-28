@@ -73,17 +73,7 @@ public class TreeVis extends PApplet {
           fireStateChanged();
       }
       //draw the tree
-      try {
-          //keyPressed() isn't working, so:
-          if (!(keyPressed && keyCode == SHIFT)) {
-            draggingLabel = false;
-            mouseOverNode = findNode(mouseX, mouseY);
-            mouseOverNodeToReplace = null;
-            if (mouseOverNode == null) {
-                cursor(ARROW);
-            }
-          }
-
+      try {        
          drawTree(root, 0);
       } catch (Exception e) {
           System.out.println("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");
@@ -148,6 +138,29 @@ public class TreeVis extends PApplet {
           ((ChangeListener) listeners.get(i)).stateChanged(evt);
         }
       }
+    }
+    
+    public void keyReleased() {
+        if (!(keyPressed && keyCode == SHIFT)) {
+            draggingLabel = false;
+            mouseOverNode = findNode(mouseX, mouseY);
+            mouseOverNodeToReplace = null;
+            if (mouseOverNode == null) {
+                cursor(ARROW);
+            }
+        }
+    }
+    
+    public void keyPressed() {
+        Node n = this.selectedNode;
+        if (!draggingLabel && n!=null && !n.isLeaf() && key!=CODED && key!=BACKSPACE && key!=TAB &&
+            key!=ENTER && key!=RETURN && key!= ESC && key!=DELETE) {
+            n.setLabel(n.getLabel()+key);
+        } else if (!draggingLabel && n!=null && !n.isLeaf() && key==BACKSPACE) {
+            if (n.getLabel().length() > 0){
+                n.setLabel(n.getLabel().substring(0,n.getLabel().length()-1));
+            }
+        }
     }
 
 
