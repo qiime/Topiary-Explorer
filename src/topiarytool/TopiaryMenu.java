@@ -99,11 +99,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item = new JMenuItem("Recenter");
         item.addActionListener(this);
         treeMenu.add(item);
-        collapseByMenu.add(new JSeparator());
-        item = new JMenuItem("Uncollapse All");
-        collapseByMenu.add(item);
-        item = new JMenuItem("Collapse All");
-        collapseByMenu.add(item);
+        this.resetCollapseByMenu();
         treeMenu.add(collapseByMenu);
         JMenu sortBy = new JMenu("Sort by");
         item = new JMenuItem("Number of OTUs");
@@ -475,19 +471,21 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    public void resetCollapseByMenu() {
        //NOTE: can only collapse on OTU metadata
        collapseByMenu.removeAll();
-       ArrayList<String> data = frame.otuMetadata.getColumnNames();
-       //start at 1 to skip ID column
-       for (int i = 1; i < data.size(); i++) {
-            String value = data.get(i);
-            JMenuItem item = new JMenuItem(value);
-            item.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    //get the category to color by
-                    String value = e.getActionCommand();
-                    frame.collapseByValue(value);
-                }
-            });
-            collapseByMenu.add(item);
+       if (frame.otuMetadata != null) {
+           ArrayList<String> data = frame.otuMetadata.getColumnNames();
+           //start at 1 to skip ID column
+           for (int i = 1; i < data.size(); i++) {
+                String value = data.get(i);
+                JMenuItem item = new JMenuItem(value);
+                item.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        //get the category to color by
+                        String value = e.getActionCommand();
+                        frame.collapseByValue(value);
+                    }
+                });
+                collapseByMenu.add(item);
+           }
        }
        collapseByMenu.add(new JSeparator());
        JMenuItem item = new JMenuItem("Uncollapse All");
@@ -501,6 +499,13 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.collapseTree();
+            }
+       });
+       collapseByMenu.add(item);
+       item = new JMenuItem("Internal Node Labels");
+       item.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.collapseTreeByInternalNodeLabels();
             }
        });
        collapseByMenu.add(item);

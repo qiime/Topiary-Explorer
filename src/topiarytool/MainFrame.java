@@ -466,6 +466,14 @@ public class MainFrame extends JFrame {
         }
      }
 
+     public void collapseTreeByInternalNodeLabels() {
+         for (Node n : tree.getTree().getNodes()){
+             if (!n.isLeaf() && n.getLabel().length() > 0) {
+                 n.setCollapsed(true);
+             }
+         }
+     }
+
      public void collapseByValue(String name) {
 
 	 	//first, uncollapse the entire tree
