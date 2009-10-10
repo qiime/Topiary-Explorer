@@ -55,7 +55,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JCheckBoxMenuItem connectionsMenuItem = new JCheckBoxMenuItem("Connections");
     JCheckBoxMenuItem axesMenuItem = new JCheckBoxMenuItem("Axes");
 
-    JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("External Node Labels");
+    JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels");
     JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");
 
     /**
@@ -188,7 +188,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		button = new JRadioButtonMenuItem("Binary-Sorensen-Dice");
         distanceMetricGroup.add(button);
         distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Custom...");
+		button = new JRadioButtonMenuItem("Load from file");
         distanceMetricGroup.add(button);
         distanceMetricMenu.add(button);
         pcoaMenu.add(distanceMetricMenu);
@@ -305,7 +305,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
              frame.tree.loop();
          } else if (e.getActionCommand().equals("No coloring")) {
              frame.removeColor();
-         } else if (e.getActionCommand().equals("External Node Labels")) {
+         } else if (e.getActionCommand().equals("Tip Labels")) {
              frame.tree.setDrawExternalNodeLabels(externalLabelsMenuItem.getState());
          } else if (e.getActionCommand().equals("Internal Node Labels")) {
              frame.tree.setDrawInternalNodeLabels(internalLabelsMenuItem.getState());
@@ -609,7 +609,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
 
             //is the distance metric "Custom..."?
-			if (dist_metric.equals("Custom...")) {
+			if (dist_metric.equals("Load from file")) {
 				//allow use to select file for distance matrix
                 frame.loadDataFileChooser.setDialogTitle("Load custom distance matrix");
 				int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
