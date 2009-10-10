@@ -716,10 +716,8 @@ public class TreeVis extends PApplet {
       double bottom = y-node.getMinimumYOffset();
 
       //re-scale so height is 1/2 the number of nodes
-      double total = top+bottom;
-      double newHeight = total*0.5f;
-      top = y + (top/total)*newHeight;
-      bottom = y - (bottom/total)*newHeight;
+      top = y + (top/2);
+      bottom = y - (bottom/2);
 
       //find the longest and shortest branch lengths
       double longest = node.longestRootToTipDistance() - node.getBranchLength();
@@ -774,7 +772,7 @@ public class TreeVis extends PApplet {
       node.setMinimumYOffset(node.getYOffset());
       for (int i=0; i < node.nodes.size(); i++) {
         node.setMaximumYOffset(Math.max(node.getMaximumYOffset(), node.nodes.get(i).getMaximumYOffset()));
-        node.setMinimumYOffset(Math.min(node.getMinimumYOffset(), node.nodes.get(i).getMaximumYOffset()));
+        node.setMinimumYOffset(Math.min(node.getMinimumYOffset(), node.nodes.get(i).getMinimumYOffset()));
       }
     }
 
