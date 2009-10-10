@@ -1,6 +1,5 @@
 package topiarytool;
 
-import java.awt.event.KeyEvent;
 import processing.core.*;
 import javax.swing.event.*;
 import java.util.*;
@@ -18,8 +17,6 @@ public class TreeVis extends PApplet {
     private double xscale;
     // Pixels per branch
     private double yscale;
-    //MAXYSCALE is necessary so that the zoom slider matches with double-clicking
-    private double MAXYSCALE = 1000;
 
     //the tree that is currently being displayed
     private Node root;
@@ -83,10 +80,12 @@ public class TreeVis extends PApplet {
 
 
     //GETTERS AND SETTERS
-    public double getMaxYScale() { return MAXYSCALE; }
     public double getMargin() { return MARGIN; }
+    public double getTreeMargin() { return TREEMARGIN; }
     public double getYScale() { return yscale; }
     public double getXScale() { return xscale; }
+    public double getYStart() { return ystart; }
+    public double getXStart() { return xstart; }
     public Node getTree() { return root; }
     public Node getSelectedNode() { return selectedNode; }
     public void setSelectedNode(Node node) { selectedNode = node; }
@@ -300,11 +299,6 @@ public class TreeVis extends PApplet {
         if (mouseEvent.getClickCount() == 1) {
           selectedNode = null;
         }
-        else if (mouseEvent.getClickCount() == 2) {
-          //if they double-clicked not on a node, zoom in/out
-          if (mouseButton == RIGHT) setScaleFactor(yscale / pow(2, 0.5f), mouseX, mouseY);
-          else if (mouseButton == LEFT) setScaleFactor(yscale * pow(2, 0.5f), mouseX, mouseY);
-        }
       }
     }
 
@@ -319,7 +313,7 @@ public class TreeVis extends PApplet {
       if (root==null) return;
 
       //check horizontal tree scaling
-      if (xscale < (getWidth()-MARGIN - TREEMARGIN)/root.depth()) {
+      if (xscale < (getWidth()-MARGIN-TREEMARGIN)/root.depth()) {
         //need to rescale tree
         resetTreeX();
       }
@@ -405,15 +399,13 @@ public class TreeVis extends PApplet {
      * @param  x  the x position to keep the same while the tree is scaled
      * @param  y  the y position to keep the same while the tree is scaled
      */
-    public void setScaleFactor(double value, double x, double y) {
+    public void setScaleFactor(double xvalue, double yvalue, double x, double y) {
       //convert from screen position to position in the tree
       double l = toLength(x);
       double r = toRow(y);
-      //make sure we can scale it
-      if (value < MAXYSCALE) {
-        //only change the scale if the scale is less than the maximum
-        yscale = value;
-      }
+      yscale = yvalue;
+      xscale = xvalue;
+
       //set to new values based on new scaling
 
       xstart = xstart - (toScreenX(l) - x);
@@ -423,6 +415,7 @@ public class TreeVis extends PApplet {
       fireStateChanged();
       redraw();
     }
+
 
 
     /**

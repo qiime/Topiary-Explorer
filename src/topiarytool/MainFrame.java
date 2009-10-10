@@ -32,6 +32,7 @@ public class MainFrame extends JFrame {
     JTable sampleMetadataTable = new JTable();
     JTable colorKeyTable = new JTable();
     TreeToolbar treeToolbar = new TreeToolbar(this);
+    VerticalTreeToolbar verticalTreeToolbar = new VerticalTreeToolbar(this);
     JButton interpolateButton = new JButton("Interpolate");
     TreeVis tree = new TreeVis();
     TreeAppletHolder treeHolder = new TreeAppletHolder(tree, this);
@@ -158,12 +159,14 @@ public class MainFrame extends JFrame {
 
             public void stateChanged(ChangeEvent e) {
                 treeToolbar.syncZoomSliderWithTree();
+                verticalTreeToolbar.syncZoomSliderWithTree();
             }
         });
 
 
         treePanel.setLayout(new BorderLayout());
         treePanel.add(treeToolbar, BorderLayout.PAGE_START);
+        treePanel.add(verticalTreeToolbar, BorderLayout.LINE_START);
         treePanel.add(treeHolder, BorderLayout.CENTER);
         treePanel.add(treeStatus, BorderLayout.PAGE_END);
 

@@ -371,7 +371,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.tree.setTree(TopiaryFunctions.createTreeFromNewickFile(selectedFile));
             //make sure coloring is empty
             frame.removeColor();
-            frame.treeToolbar.updateZoomBounds();
             frame.treeToolbar.zoomSlider.setValue(0);
             frame.tree.loop();
         }

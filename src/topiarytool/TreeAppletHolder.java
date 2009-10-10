@@ -68,8 +68,6 @@ public class TreeAppletHolder extends JComponent {
 		addComponentListener(new java.awt.event.ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
 				tree.checkBounds();
-				//always keep the xscale centered
-				tree.resetTreeX();
 				tree.redraw();
 
 				syncScrollbarsWithTree();

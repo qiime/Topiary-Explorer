@@ -95,36 +95,17 @@ public class TreeToolbar extends JToolBar {
         add(search);
     }
 
-    public void updateZoomBounds() {
-        if (frame.tree.getTree()==null) {return;}
-
-		double maxYScale = frame.tree.getMaxYScale();
-		double minYScale = (frame.tree.getHeight() - 2*frame.tree.getMargin())/
-			frame.tree.getTree().getNumberOfLeaves();
-
-		//each step from min to max should be a scaling by a factor of sqrt(2).  So, the number of
-		//steps from min to max will be log(min/max)/log(1/sqrt(2)).
-		double exactNumSteps =  Math.log(minYScale/maxYScale) /
-			 Math.log(1.0/Math.pow(2.0, 0.5));
-		//zooming occurs in discreet steps, so take the floor
-		int numSteps = (int) Math.floor(exactNumSteps);
-
-		//set the maximum number of steps
-		zoomSlider.setMaximum(numSteps);
-		zoomSlider.setMinimum(0);
-    }
-
     public void syncTreeWithZoomSlider() {
         if (frame.tree.getTree() == null) return;
-        double minYScale = (frame.tree.getHeight() - 2*frame.tree.getMargin())/frame.tree.getTree().getNumberOfLeaves();
-        double newScale = minYScale * Math.pow(Math.pow(2.0, 0.5), zoomSlider.getValue());
-        frame.tree.setScaleFactor(newScale, frame.tree.width/2.0, frame.tree.height/2.0);
+		double minXScale = (frame.tree.getWidth()-frame.tree.getMargin()-frame.tree.getTreeMargin())/frame.tree.getTree().depth();
+        double newScale = minXScale * Math.pow(Math.pow(2.0, 0.5), zoomSlider.getValue());
+        frame.tree.setScaleFactor(newScale, frame.tree.getYScale(), frame.tree.getXStart(), frame.tree.height/2.0);
     }
 
     public void syncZoomSliderWithTree() {
         if (frame.tree.getTree() == null) return;
-        double minYScale = (frame.tree.getHeight() - 2*frame.tree.getMargin())/frame.tree.getTree().getNumberOfLeaves();
-        int currStep = (int) Math.floor(Math.log(frame.tree.getYScale()/minYScale) / Math.log(Math.pow(2.0,0.5))+0.00001);
+		double minXScale = (frame.tree.getWidth()-frame.tree.getMargin()-frame.tree.getTreeMargin())/frame.tree.getTree().depth();
+        int currStep = (int) Math.floor(Math.log(frame.tree.getXScale()/minXScale) / Math.log(Math.pow(2.0,0.5))+0.00001);
         zoomSlider.setValue(currStep);
     }
 
