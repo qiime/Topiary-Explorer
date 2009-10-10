@@ -16,7 +16,10 @@ public class MainFrame extends JFrame {
 
     //INITIALIZE GUI OBJECTS
     JSplitPane splitPane = null;
-    
+
+    TreeVis tree = new TreeVis();
+    PcoaVis pcoa = new PcoaVis();
+    TreeAppletHolder treeHolder = new TreeAppletHolder(tree, this);
     JPanel colorPanel = new JPanel();
     JPanel treePanel = new JPanel();
     JPanel pcoaPanel = new JPanel();
@@ -33,10 +36,8 @@ public class MainFrame extends JFrame {
     JTable colorKeyTable = new JTable();
     TreeToolbar treeToolbar = new TreeToolbar(this);
     VerticalTreeToolbar verticalTreeToolbar = new VerticalTreeToolbar(this);
+    CollapseTreeToolbar collapseTreeToolbar = new CollapseTreeToolbar(this);
     JButton interpolateButton = new JButton("Interpolate");
-    TreeVis tree = new TreeVis();
-    TreeAppletHolder treeHolder = new TreeAppletHolder(tree, this);
-    PcoaVis pcoa = new PcoaVis();
     JFileChooser loadDataFileChooser = new JFileChooser();
     JLabel treeStatus = new JLabel("");
     TopiaryMenu mainMenu = new TopiaryMenu(this);
@@ -168,7 +169,7 @@ public class MainFrame extends JFrame {
         treePanel.add(treeToolbar, BorderLayout.PAGE_START);
         treePanel.add(verticalTreeToolbar, BorderLayout.LINE_START);
         treePanel.add(treeHolder, BorderLayout.CENTER);
-        treePanel.add(treeStatus, BorderLayout.PAGE_END);
+        treePanel.add(collapseTreeToolbar, BorderLayout.PAGE_END);
 
         pcoaPanel.setLayout(new BorderLayout());
         GLCanvas canvas = new GLCanvas();

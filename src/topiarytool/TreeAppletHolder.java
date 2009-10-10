@@ -70,6 +70,7 @@ public class TreeAppletHolder extends JComponent {
 				tree.checkBounds();
 				tree.redraw();
 
+                frame.collapseTreeToolbar.resetLayout();
 				syncScrollbarsWithTree();
 				//frame.updateZoomBounds();
 				//frame.syncZoomSliderWithTree();

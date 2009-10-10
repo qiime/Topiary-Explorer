@@ -32,6 +32,7 @@ public class TreeVis extends PApplet {
     private boolean drawInternalNodeLabels = false;
     //is a label being dragged?
     private boolean draggingLabel = false;
+    private float collapsedPixel = 10000000;
 
     private Node selectedNode;
     private Node mouseOverNode;
@@ -94,6 +95,7 @@ public class TreeVis extends PApplet {
     public boolean getDrawInternalNodeLabels() { return drawInternalNodeLabels; }
     public void setDrawExternalNodeLabels(boolean b) { drawExternalNodeLabels = b; }
     public void setDrawInternalNodeLabels(boolean b) { drawInternalNodeLabels = b; }
+    public void setCollapsedPixel(float pixel) { collapsedPixel = pixel; }
 
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
@@ -382,6 +384,9 @@ public class TreeVis extends PApplet {
       //recalculate the y-offsets of the nodes in the tree
       setYOffsets(newRoot, 0);
 
+      //reset collapse slider
+      //frame.collapseTreeToolbar.collapseSlider.setValue(1000);
+
       ystart = MARGIN;
       xstart = MARGIN;
       //notify listeners
@@ -505,10 +510,11 @@ public class TreeVis extends PApplet {
       if (root==null) return;
 
       boolean isInternal = !node.isLeaf();
+      boolean collapsed = node.isCollapsed() || toScreenX(x) >= collapsedPixel;
 
       // Draw the branches first, so they get over-written by the nodes later:
       if (isInternal) {
-        if (node.isCollapsed()){
+        if (collapsed){
           //if it's an internal, collapsed node, then draw a wedge in its place
           drawWedge(node,x,node.getYOffset(), canvas);
         }
@@ -521,7 +527,7 @@ public class TreeVis extends PApplet {
 
 
       //if it's internal and not collapsed, draw all the subtrees
-      if (isInternal && !node.isCollapsed()) {
+      if (isInternal && !collapsed) {
         for (int i=0; i < node.nodes.size(); i++) {
           Node child = node.nodes.get(i);
           drawTree(child, x + child.getBranchLength(), canvas);
