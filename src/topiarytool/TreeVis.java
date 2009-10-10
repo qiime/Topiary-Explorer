@@ -518,8 +518,7 @@ public class TreeVis extends PApplet {
         }
       }
 
-      //draw the current node over the branches
-      drawNode(node, x, node.getYOffset(), canvas);
+
 
       //if it's internal and not collapsed, draw all the subtrees
       if (isInternal && !node.isCollapsed()) {
@@ -528,6 +527,9 @@ public class TreeVis extends PApplet {
           drawTree(child, x + child.getBranchLength(), canvas);
         }
       }
+
+      //draw the current node over the branches
+      drawNode(node, x, node.getYOffset(), canvas);
 
       //draw the pie chart?
       if (node.getDrawPie() == true) {
@@ -609,7 +611,7 @@ public class TreeVis extends PApplet {
         canvas.stroke(c);
 
         //draw the selection/highlighting
-        double minX = drawX;
+        double minX = drawX+xbias-1;
         double width = 0;
         String s = node.getLabel();
         for (int i = 0; i < s.length(); i++) {
@@ -652,12 +654,30 @@ public class TreeVis extends PApplet {
       canvas.stroke(node.getColor().getRGB());
       canvas.fill(node.getColor().getRGB());
       //draw node label if we need to
+       double minX = drawX+xbias-1;
+       double width = 0;
+       String s = node.getLabel();
+       for (int i = 0; i < s.length(); i++) {
+         width += currFont.width(s.charAt(i));
+       }
+       double maxX =  drawX + 5 + (width*currFont.size);
+       double minY = drawY - (currFont.descent()*currFont.size);
+       double maxY = drawY + (currFont.ascent()*currFont.size);
+       canvas.fill(255);
+       canvas.noStroke();
       if (node.isLeaf()) {
-        if (drawExternalNodeLabels)
+        if (drawExternalNodeLabels && node.getLabel().length() > 0) {
+            canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
+            canvas.fill(0);
+            canvas.stroke(0);
             canvas.text(node.getLabel(), (float)(drawX+xbias), (float)(drawY+ybias));
+        }
       } else {
-          if (drawInternalNodeLabels) {
-              canvas.text(node.getLabel(), (float)(drawX+xbias), (float)(drawY+ybias));
+          if (drawInternalNodeLabels && node.getLabel().length() > 0) {
+            canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
+            canvas.fill(0);
+            canvas.stroke(0);
+            canvas.text(node.getLabel(), (float)(drawX+xbias), (float)(drawY+ybias));
           }
       }
       //reset drawing color to default black
@@ -804,7 +824,8 @@ public class TreeVis extends PApplet {
       double oldYScale = yscale;
       double oldXStart = xstart;
       double oldYStart = ystart;
-      boolean oldDrawText = drawExternalNodeLabels;
+      boolean oldDrawExternalNodeLabels = drawExternalNodeLabels;
+      boolean oldDrawInternalNodeLabels = drawInternalNodeLabels;
 
       //reset the sizing and zooming so that the tree can be drawn visibly
       double longest = textWidth(root.getLongestLabel());
@@ -812,6 +833,7 @@ public class TreeVis extends PApplet {
       double s = root.shortestRootToTipDistance();
       PGraphics canvas = createGraphics((int) ((l/s)*400+MARGIN+longest), (int) (12*root.getNumberOfLeaves() + MARGIN+TREEMARGIN), PDF, filename);
       drawExternalNodeLabels = true;
+      drawInternalNodeLabels = true;
       int w = (int) ((l/s)*400+MARGIN+longest);
       int h = (int) (12*root.getNumberOfLeaves() + 2*MARGIN);
       xscale = (w-MARGIN-longest)/root.depth();
@@ -831,7 +853,8 @@ public class TreeVis extends PApplet {
       yscale = oldYScale;
       xstart = oldXStart;
       ystart = oldYStart;
-      drawExternalNodeLabels = oldDrawText;
+      drawExternalNodeLabels = oldDrawExternalNodeLabels;
+      drawInternalNodeLabels = oldDrawInternalNodeLabels;
 
       redraw();
 
