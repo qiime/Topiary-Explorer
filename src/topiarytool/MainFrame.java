@@ -7,12 +7,18 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.media.opengl.*;
+import java.sql.*;
+import javax.swing.table.*;
 
 /**
  * MainFrame is the primary JFrame that is displayed.
  */
 
 public class MainFrame extends JFrame {
+    
+    String DATABASE_URL = ""; // jdbc:mysql://127.0.0.1/topiarytool
+    String DATABASE_UN = "";  // root
+    String DATABASE_PW = "";  // desudesu
 
     //INITIALIZE GUI OBJECTS
     JSplitPane splitPane = null;
@@ -24,12 +30,17 @@ public class MainFrame extends JFrame {
     JPanel treePanel = new JPanel();
     JPanel pcoaPanel = new JPanel();
     JPanel splitPaneMainPanel = new JPanel();
+    JPanel databasePanel = new JPanel();
+    JPanel databaseBottomPanel = new JPanel();
+    JPanel databaseTopPanel = new JPanel();
     JTabbedPane dataPane = new JTabbedPane();
     JTabbedPane tabbedPane = new JTabbedPane();
+    JScrollPane databaseScrollPane = new JScrollPane();
     JScrollPane otuMetadataScrollPane = new JScrollPane();
     JScrollPane otuSampleMapScrollPane = new JScrollPane();
     JScrollPane sampleMetadataScrollPane = new JScrollPane();
-    JScrollPane colorKeyScrollPane = new JScrollPane();    
+    JScrollPane colorKeyScrollPane = new JScrollPane();  
+    JTable databaseTable = new JTable();  
     JTable otuMetadataTable = new JTable();
     JTable otuSampleMapTable = new JTable();
     JTable sampleMetadataTable = new JTable();
@@ -38,11 +49,15 @@ public class MainFrame extends JFrame {
     VerticalTreeToolbar verticalTreeToolbar = new VerticalTreeToolbar(this);
     CollapseTreeToolbar collapseTreeToolbar = new CollapseTreeToolbar(this);
     JButton interpolateButton = new JButton("Interpolate");
+    JButton dbSearchButton = new JButton("Search database...");
     JFileChooser loadDataFileChooser = new JFileChooser();
     JLabel treeStatus = new JLabel("");
+    JLabel databaseStatus = new JLabel("Database not connected.");
     TopiaryMenu mainMenu = new TopiaryMenu(this);
     JPopupMenu treePopupMenu = new JPopupMenu();
     Animator animator = null;
+    
+    DbConnectWindow db_conn = new DbConnectWindow();
 
     //Variables that hold the data tables
     DataTable otuMetadata = null;
@@ -62,7 +77,6 @@ public class MainFrame extends JFrame {
      */
      public MainFrame() {
         super("TopiaryTool");
-
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -89,6 +103,35 @@ public class MainFrame extends JFrame {
         interpolateButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         colorPanel.add(interpolateButton);
         colorPanel.setPreferredSize(new Dimension(200,600));
+        
+        databasePanel.setLayout(new BorderLayout());
+        databaseTopPanel.setLayout(new GridLayout(1,5));
+        databaseTopPanel.add(new JLabel(""));
+        databaseTopPanel.add(new JLabel(""));
+        databaseTopPanel.add(new JLabel(""));
+        databaseTopPanel.add(new JLabel(""));
+        dbSearchButton.disable();
+        dbSearchButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                searchButtonPressed();
+            }
+        });
+        databaseTopPanel.add(dbSearchButton);
+        databasePanel.add(databaseTopPanel, BorderLayout.NORTH);
+        databaseScrollPane = new JScrollPane(databaseTable);
+        databasePanel.add(databaseScrollPane, BorderLayout.CENTER);
+        databaseBottomPanel.setLayout(new GridLayout(1,2));
+        //databaseBottomPanel.add(databaseStatus);
+        db_conn.connect_button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                connectButtonPressed();
+            }
+        });
+        databaseBottomPanel.add(db_conn);
+
+        databasePanel.add(databaseBottomPanel, BorderLayout.SOUTH);
+        databaseTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        dataPane.addTab("Database", databasePanel);
         
         otuMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         //otuMetadataTable.setAutoCreateRowSorter(true);
@@ -195,6 +238,56 @@ public class MainFrame extends JFrame {
         //window will result in program freezes
         tabbedPane.setSelectedIndex(2);
      }
+     
+     public void searchButtonPressed() {
+         
+     }
+     
+     public void connectButtonPressed() {
+         if(db_conn.connect_button.getText() == "Connect")
+         {
+             connectToDB();
+             loadMetadataFromDB();
+             db_conn.db_name_field.disable();
+             db_conn.un_field.disable();
+             db_conn.pw_field.disable();
+             db_conn.connect_button.setText("Disconnect");
+             dbSearchButton.enable();
+         }
+         else
+         {
+             db_conn.c.close_connection();
+             db_conn.db_name_field.enable();
+              db_conn.un_field.enable();
+              db_conn.pw_field.enable();
+              db_conn.connect_button.setText("Connect");
+              dbSearchButton.disable();
+         }
+     }
+
+     public mysqlConnect connectToDB() {
+         String url = db_conn.db_name_field.getText();
+         String un = db_conn.un_field.getText();
+         String pw = db_conn.pw_field.getText();
+
+         try {
+             //mysqlConnect c = new mysqlConnect("root","desudesu","jdbc:mysql://127.0.0.1/topiarytool");
+            db_conn.c = new mysqlConnect(un,pw,url);
+            db_conn.c.setData();
+            //System.out.println(db_conn.c.toString());
+            databaseStatus.setText("Connected to...");
+            //JOptionPane.showMessageDialog(null, db_conn.c.toString(), "Inane Warning", JOptionPane.WARNING_MESSAGE);
+            
+            return db_conn.c;
+        }
+        catch(NullPointerException e)
+        {
+            // alert could not connect to database with supplied credentials
+            databaseStatus.setText("Not connected.");
+            JOptionPane.showMessageDialog(null, "ERROR: could not connect to database.", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+     }
 
      /**
       * Syncs the colorKeyTable with colorMap
@@ -243,6 +336,39 @@ public class MainFrame extends JFrame {
              }
          });
      }
+     
+
+     public void loadMetadataFromDB() {
+            //frame.loadDataFileChooser.setDialogTitle("Load OTU Metadata");
+            //int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
+            //if (returnVal == JFileChooser.APPROVE_OPTION) {
+                 this.tree.noLoop();
+                 //set view
+                 this.tabbedPane.setSelectedIndex(0);
+                 this.dataPane.setSelectedIndex(3);
+                 //File selectedFile = frame.loadDataFileChooser.getSelectedFile();
+                 //try {
+                     //FileInputStream is = new FileInputStream(selectedFile);
+                     
+                     this.sampleMetadata = new DataTable(db_conn.c);
+                     this.sampleMetadataTable.setModel(new DefaultTableModel(this.sampleMetadata.getDataAsArray(),
+                         this.sampleMetadata.getColumnNames().toArray()){
+                         //make it so the user can't edit the cells manually
+                         public boolean isCellEditable(int rowIndex, int colIndex) {
+                             return false;
+                         }
+                     });
+                 /*} catch (IOException ex) {
+                     JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                     ex.printStackTrace();
+                 }*/
+                 if (this.currTable == this.otuMetadata) {
+                     this.removeColor();
+                 }
+                 mainMenu.resetColorBySampleMenu();
+                 this.tree.loop();
+            //}
+        }
 
      /**
       * Syncs the colorMap with the colorKeyTable
@@ -265,6 +391,7 @@ public class MainFrame extends JFrame {
              //it's null; don't do anything
          }
      }
+     
      public void recolorPcoaByOtu() {
         if (pcoa.spData == null) return;
         //loop over each sample vertex
