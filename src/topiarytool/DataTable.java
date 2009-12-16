@@ -1,7 +1,5 @@
 package topiarytool;
 
-
-
 import java.util.*;
 import java.io.*;
 
@@ -14,10 +12,23 @@ public class DataTable {
         data = new java.util.ArrayList<ArrayList<Object>>();
 		columnNames = new java.util.ArrayList<String>();
     }
+    
+    public DataTable(mysqlConnect conn) {
+        loadData(conn);
+    }
 
     public DataTable(InputStream is) throws IOException{
         loadData(is);
-
+    }
+    
+    public void loadData(mysqlConnect conn) {
+        data = new java.util.ArrayList<ArrayList<Object>>();
+        for(int i = 0; i < conn.resultLines.size(); i++) {
+			data.add(objectify(parseLine(conn.resultLines.get(i))));
+		}
+		int numCols = conn.colNames.size();
+		
+		columnNames = parseLine(conn.colNamesStr);
     }
 
     public void loadData(InputStream is) throws IOException{
