@@ -33,8 +33,11 @@ public class MainFrame extends JFrame {
     JPanel databasePanel = new JPanel();
     JPanel databaseBottomPanel = new JPanel();
     JPanel databaseTopPanel = new JPanel();
+    JPanel searchPanel = new JPanel();
+    JPanel dataPanel = new JPanel();
     JTabbedPane dataPane = new JTabbedPane();
     JTabbedPane tabbedPane = new JTabbedPane();
+    JTabbedPane databaseTabPane = new JTabbedPane();
     JScrollPane databaseScrollPane = new JScrollPane();
     JScrollPane otuMetadataScrollPane = new JScrollPane();
     JScrollPane otuSampleMapScrollPane = new JScrollPane();
@@ -49,7 +52,6 @@ public class MainFrame extends JFrame {
     VerticalTreeToolbar verticalTreeToolbar = new VerticalTreeToolbar(this);
     CollapseTreeToolbar collapseTreeToolbar = new CollapseTreeToolbar(this);
     JButton interpolateButton = new JButton("Interpolate");
-    JButton dbSearchButton = new JButton("Search database...");
     JFileChooser loadDataFileChooser = new JFileChooser();
     JLabel treeStatus = new JLabel("");
     JLabel databaseStatus = new JLabel("Database not connected.");
@@ -58,11 +60,13 @@ public class MainFrame extends JFrame {
     Animator animator = null;
     
     DbConnectWindow db_conn = new DbConnectWindow();
+    DbSearchWindow db_search = new DbSearchWindow();
 
     //Variables that hold the data tables
     DataTable otuMetadata = null;
     DataTable sampleMetadata = null;
     DataTable otuSampleMap = null;
+    DataTable database = null;
 
     //Holds the current coloring information
     TreeMap<Object, Color> colorMap = new TreeMap<Object, Color>();
@@ -105,19 +109,6 @@ public class MainFrame extends JFrame {
         colorPanel.setPreferredSize(new Dimension(200,600));
         
         databasePanel.setLayout(new BorderLayout());
-        databaseTopPanel.setLayout(new GridLayout(1,5));
-        databaseTopPanel.add(new JLabel(""));
-        databaseTopPanel.add(new JLabel(""));
-        databaseTopPanel.add(new JLabel(""));
-        databaseTopPanel.add(new JLabel(""));
-        dbSearchButton.disable();
-        dbSearchButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                searchButtonPressed();
-            }
-        });
-        databaseTopPanel.add(dbSearchButton);
-        databasePanel.add(databaseTopPanel, BorderLayout.NORTH);
         databaseScrollPane = new JScrollPane(databaseTable);
         databasePanel.add(databaseScrollPane, BorderLayout.CENTER);
         databaseBottomPanel.setLayout(new GridLayout(1,2));
@@ -129,9 +120,26 @@ public class MainFrame extends JFrame {
         });
         databaseBottomPanel.add(db_conn);
 
-        databasePanel.add(databaseBottomPanel, BorderLayout.SOUTH);
+        //databasePanel.add(databaseBottomPanel, BorderLayout.SOUTH);
+        databaseTabPane.addTab("Connect", databaseBottomPanel);
+        databaseTabPane.addTab("Search", db_search);
+        
+        db_search.searchButton.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e){
+               searchButtonPressed();
+           } 
+        });
+        db_search.resetButton.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e){
+               resetButtonPressed();
+           } 
+        });
+        
+        databaseTabPane.setEnabledAt(1, false);
+        //databasePanel.add(databaseTabPane, BorderLayout.SOUTH);
         databaseTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         dataPane.addTab("Database", databasePanel);
+        //dataPane.add(databaseTabPane, BorderLayout.SOUTH);
         
         otuMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         //otuMetadataTable.setAutoCreateRowSorter(true);
@@ -144,10 +152,16 @@ public class MainFrame extends JFrame {
         dataPane.addTab("OTU-Sample Map", otuSampleMapScrollPane);
 
         sampleMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        //sampleMetadataTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        sampleMetadataTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         //sampleMetadataTable.setAutoCreateRowSorter(true);
         sampleMetadataScrollPane = new JScrollPane(sampleMetadataTable);
         dataPane.addTab("Sample Metadata", sampleMetadataScrollPane);
         
+        
+        dataPanel.setLayout(new BorderLayout());
+        dataPanel.add(dataPane, BorderLayout.CENTER);
+        dataPanel.add(databaseTabPane, BorderLayout.SOUTH);
         //set up the tree panel
 
         tree.addMouseMotionListener(new MouseMotionAdapter() {
@@ -221,10 +235,8 @@ public class MainFrame extends JFrame {
         pcoaPanel.add(canvas, BorderLayout.CENTER);
         animator.start();
         
-
-        
         //set up the main panel
-        tabbedPane.addTab("Data", dataPane);
+        tabbedPane.addTab("Data", dataPanel);
         tabbedPane.addTab("Tree", treePanel);
         tabbedPane.addTab("PCoA", pcoaPanel);
 
@@ -240,53 +252,116 @@ public class MainFrame extends JFrame {
      }
      
      public void searchButtonPressed() {
+         int rowIndexStart = sampleMetadataTable.getSelectedRow();
+         int rowIndexEnd = sampleMetadataTable.getSelectionModel().getMaxSelectionIndex();
+         int colIndexStart = sampleMetadataTable.getSelectedColumn();
+         int colIndexEnd = sampleMetadataTable.getColumnModel().getSelectionModel().getMaxSelectionIndex();
+         String[] headers = sampleMetadata.getColumnNames().toArray(new String[0]);
+         String temp = "";
+         ArrayList<String> ops = new ArrayList<String>();
+         // Check each cell in the range
+         for (int r=rowIndexStart; r<=rowIndexEnd; r++) {
+             for (int c=colIndexStart; c<=colIndexEnd; c++) {
+                 if (sampleMetadataTable.isCellSelected(r, c)) {
+                     // cell is selected
+                     temp = "";
+                     temp += headers[c] + " = ";
+                     temp += "\'" + sampleMetadataTable.getValueAt(r,c).toString() + "\'";
+                     ops.add(temp);
+                 }
+             }
+         }
+
+         Set<String> setOps = new HashSet<String>(ops);
+         String[] setOpsarry = new String[setOps.size()];
+         setOps.toArray(setOpsarry);
          
+         Boolean useor = true;
+         if(db_search.andRadioButton.isSelected() == true)
+             useor = false;
+
+         db_conn.c.setData(setOpsarry, useor);
+         getMetadataFromConn();
+      }
+     
+     public void getMetadataFromConn() {
+         tree.noLoop();
+         tabbedPane.setSelectedIndex(0);
+         dataPane.setSelectedIndex(3);
+         sampleMetadata = new DataTable(db_conn.c);
+         sampleMetadataTable.setModel(new DefaultTableModel(sampleMetadata.getDataAsArray(),
+         sampleMetadata.getColumnNames().toArray()){
+         //make it so the user can't edit the cells manually
+         public boolean isCellEditable(int rowIndex, int colIndex) {
+             return false;
+             }
+         });
+         if (currTable == otuMetadata) {
+             removeColor();
+         }
+         sampleMetadataTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+         //sampleMetadataScrollPane = new JScrollPane(sampleMetadataTable);
+         mainMenu.resetColorBySampleMenu();
+         tree.loop();
+     }
+     
+     public void setDatabaseTables() {
+          tabbedPane.setSelectedIndex(0);
+          dataPane.setSelectedIndex(0);
+          database = new DataTable(db_conn.c);
+          databaseTable.setModel(new DefaultTableModel(sampleMetadata.getDataAsArray(),
+          database.getColumnNames().toArray()){
+          //make it so the user can't edit the cells manually
+          public boolean isCellEditable(int rowIndex, int colIndex) {
+              return false;
+              }
+          });
+      }
+     
+     public void resetButtonPressed() {
+         db_conn.c.reset();
+         db_conn.c.setData();
+         getMetadataFromConn();
      }
      
      public void connectButtonPressed() {
          if(db_conn.connect_button.getText() == "Connect")
          {
-             connectToDB();
-             loadMetadataFromDB();
-             db_conn.db_name_field.disable();
-             db_conn.un_field.disable();
-             db_conn.pw_field.disable();
-             db_conn.connect_button.setText("Disconnect");
-             dbSearchButton.enable();
+             if(connectToDB())
+             {
+                 db_conn.db_name_field.disable();
+                 db_conn.un_field.disable();
+                 db_conn.pw_field.disable();
+                 db_conn.connect_button.setText("Disconnect");
+                 resetButtonPressed();
+                 databaseTabPane.setEnabledAt(1, true);
+             }
+             else
+                 JOptionPane.showMessageDialog(null, "ERROR: could not connect to database.", "Error", JOptionPane.ERROR_MESSAGE);
+             
          }
          else
          {
              db_conn.c.close_connection();
              db_conn.db_name_field.enable();
-              db_conn.un_field.enable();
-              db_conn.pw_field.enable();
-              db_conn.connect_button.setText("Connect");
-              dbSearchButton.disable();
+             db_conn.un_field.enable();
+             db_conn.pw_field.enable();
+             db_conn.connect_button.setText("Connect");
+             databaseTabPane.setEnabledAt(1, false);
          }
      }
 
-     public mysqlConnect connectToDB() {
+     public Boolean connectToDB() {
          String url = db_conn.db_name_field.getText();
          String un = db_conn.un_field.getText();
          String pw = db_conn.pw_field.getText();
 
-         try {
-             //mysqlConnect c = new mysqlConnect("root","desudesu","jdbc:mysql://127.0.0.1/topiarytool");
-            db_conn.c = new mysqlConnect(un,pw,url);
+        db_conn.c = new mysqlConnect(un,pw,url);
+        Boolean success = db_conn.c.makeConnection();
+        if(success)
             db_conn.c.setData();
-            //System.out.println(db_conn.c.toString());
-            databaseStatus.setText("Connected to...");
-            //JOptionPane.showMessageDialog(null, db_conn.c.toString(), "Inane Warning", JOptionPane.WARNING_MESSAGE);
-            
-            return db_conn.c;
-        }
-        catch(NullPointerException e)
-        {
-            // alert could not connect to database with supplied credentials
-            databaseStatus.setText("Not connected.");
-            JOptionPane.showMessageDialog(null, "ERROR: could not connect to database.", "Error", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
+        
+        return success;
      }
 
      /**
@@ -336,39 +411,6 @@ public class MainFrame extends JFrame {
              }
          });
      }
-     
-
-     public void loadMetadataFromDB() {
-            //frame.loadDataFileChooser.setDialogTitle("Load OTU Metadata");
-            //int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
-            //if (returnVal == JFileChooser.APPROVE_OPTION) {
-                 this.tree.noLoop();
-                 //set view
-                 this.tabbedPane.setSelectedIndex(0);
-                 this.dataPane.setSelectedIndex(3);
-                 //File selectedFile = frame.loadDataFileChooser.getSelectedFile();
-                 //try {
-                     //FileInputStream is = new FileInputStream(selectedFile);
-                     
-                     this.sampleMetadata = new DataTable(db_conn.c);
-                     this.sampleMetadataTable.setModel(new DefaultTableModel(this.sampleMetadata.getDataAsArray(),
-                         this.sampleMetadata.getColumnNames().toArray()){
-                         //make it so the user can't edit the cells manually
-                         public boolean isCellEditable(int rowIndex, int colIndex) {
-                             return false;
-                         }
-                     });
-                 /*} catch (IOException ex) {
-                     JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                     ex.printStackTrace();
-                 }*/
-                 if (this.currTable == this.otuMetadata) {
-                     this.removeColor();
-                 }
-                 mainMenu.resetColorBySampleMenu();
-                 this.tree.loop();
-            //}
-        }
 
      /**
       * Syncs the colorMap with the colorKeyTable
@@ -449,8 +491,10 @@ public class MainFrame extends JFrame {
                  }
              }
              if (rowIndex == -1) {
-                JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
+                //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
+                //return;
+                continue;
              }
              Object category = sampleMetadata.getValueAt(rowIndex, colorColumnIndex);
              if (category == null) continue;
@@ -541,8 +585,10 @@ public class MainFrame extends JFrame {
                     }
                  }
                  if (sampleRowIndex == -1) {
-                    JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                    //return;
+                    System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
+                    continue;
                  }
                  Object val = sampleMetadata.getValueAt(sampleRowIndex, colorColumnIndex);
                  if (val == null) continue;
@@ -557,7 +603,8 @@ public class MainFrame extends JFrame {
         //get the column that this category is
         int colIndex = currTable.getColumnNames().indexOf(value);
         if (colIndex == -1) {
-            JOptionPane.showMessageDialog(null, "ERROR: Column "+value+" not found in table.", "Error", JOptionPane.ERROR_MESSAGE);
+            //JOptionPane.showMessageDialog(null, "ERROR: Column "+value+" not found in table.", "Error", JOptionPane.ERROR_MESSAGE);
+            
             return;
         }
 
