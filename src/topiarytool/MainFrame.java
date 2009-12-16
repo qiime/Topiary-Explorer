@@ -154,6 +154,7 @@ public class MainFrame extends JFrame {
         sampleMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         //sampleMetadataTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         sampleMetadataTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        sampleMetadataTable.setCellSelectionEnabled(true);
         //sampleMetadataTable.setAutoCreateRowSorter(true);
         sampleMetadataScrollPane = new JScrollPane(sampleMetadataTable);
         dataPane.addTab("Sample Metadata", sampleMetadataScrollPane);
@@ -253,35 +254,40 @@ public class MainFrame extends JFrame {
      
      public void searchButtonPressed() {
          int rowIndexStart = sampleMetadataTable.getSelectedRow();
-         int rowIndexEnd = sampleMetadataTable.getSelectionModel().getMaxSelectionIndex();
-         int colIndexStart = sampleMetadataTable.getSelectedColumn();
-         int colIndexEnd = sampleMetadataTable.getColumnModel().getSelectionModel().getMaxSelectionIndex();
-         String[] headers = sampleMetadata.getColumnNames().toArray(new String[0]);
-         String temp = "";
-         ArrayList<String> ops = new ArrayList<String>();
-         // Check each cell in the range
-         for (int r=rowIndexStart; r<=rowIndexEnd; r++) {
-             for (int c=colIndexStart; c<=colIndexEnd; c++) {
-                 if (sampleMetadataTable.isCellSelected(r, c)) {
-                     // cell is selected
-                     temp = "";
-                     temp += headers[c] + " = ";
-                     temp += "\'" + sampleMetadataTable.getValueAt(r,c).toString() + "\'";
-                     ops.add(temp);
+         if(rowIndexStart != -1)
+         {
+             int rowIndexEnd = sampleMetadataTable.getSelectionModel().getMaxSelectionIndex();
+             int colIndexStart = sampleMetadataTable.getSelectedColumn();
+             int colIndexEnd = sampleMetadataTable.getColumnModel().getSelectionModel().getMaxSelectionIndex();
+             String[] headers = sampleMetadata.getColumnNames().toArray(new String[0]);
+             String temp = "";
+             ArrayList<String> ops = new ArrayList<String>();
+             // Check each cell in the range
+             for (int r=rowIndexStart; r<=rowIndexEnd; r++) {
+                 for (int c=colIndexStart; c<=colIndexEnd; c++) {
+                     if (sampleMetadataTable.isCellSelected(r, c)) {
+                         // cell is selected
+                         temp = "";
+                         temp += headers[c] + " = ";
+                         temp += "\'" + sampleMetadataTable.getValueAt(r,c).toString() + "\'";
+                         ops.add(temp);
+                     }
                  }
              }
-         }
 
-         Set<String> setOps = new HashSet<String>(ops);
-         String[] setOpsarry = new String[setOps.size()];
-         setOps.toArray(setOpsarry);
+             Set<String> setOps = new HashSet<String>(ops);
+             String[] setOpsarry = new String[setOps.size()];
+             setOps.toArray(setOpsarry);
          
-         Boolean useor = true;
-         if(db_search.andRadioButton.isSelected() == true)
-             useor = false;
+             Boolean useor = true;
+             if(db_search.andRadioButton.isSelected() == true)
+                 useor = false;
 
-         db_conn.c.setData(setOpsarry, useor);
-         getMetadataFromConn();
+             db_conn.c.setData(setOpsarry, useor);
+             getMetadataFromConn();
+         }
+         else
+             JOptionPane.showMessageDialog(null, "ERROR: no metadata columns are selected.", "Error", JOptionPane.ERROR_MESSAGE);
       }
      
      public void getMetadataFromConn() {
