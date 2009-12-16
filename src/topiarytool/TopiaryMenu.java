@@ -82,9 +82,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         fileMenu.add(new JSeparator());
         item = new JMenuItem("Save Tree...");
         item.addActionListener(this);
-        fileMenu.add(item);
-        item = new JMenuItem("Save Metadata...");
-        item.addActionListener(this);
+        //fileMenu.add(item);
+        //item = new JMenuItem("Save Metadata...");
+        //item.addActionListener(this);
         fileMenu.add(item);
         fileMenu.add(new JSeparator());
         item = new JMenuItem("Export Tree Image...");
