@@ -80,7 +80,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item.addActionListener(this);
         fileMenu.add(item);
         fileMenu.add(new JSeparator());
-        item = new JMenuItem("Save tree...");
+        item = new JMenuItem("Save Tree...");
+        item.addActionListener(this);
+        fileMenu.add(item);
+        item = new JMenuItem("Save Metadata...");
         item.addActionListener(this);
         fileMenu.add(item);
         fileMenu.add(new JSeparator());
@@ -351,14 +354,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 			 }
              frame.tree.loop();
          } else if (e.getActionCommand().equals("Quit")) {
+             frame.db_conn.c.close_connection();
              System.exit(0);
          } else if(e.getActionCommand().equals("Run PCoA Analysis...")) {
              runPcoaAnalysis();
          }
-
     }
-
-
 
    public void loadTree() {
         frame.loadDataFileChooser.setDialogTitle("Load Tree");
@@ -384,7 +385,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.tree.noLoop();
             //set view
             frame.tabbedPane.setSelectedIndex(0);
-            frame.dataPane.setSelectedIndex(0);
+            frame.dataPane.setSelectedIndex(1);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
             try {
                 FileInputStream is = new FileInputStream(selectedFile);
@@ -416,7 +417,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.tree.noLoop();
             //set view
             frame.tabbedPane.setSelectedIndex(0);
-            frame.dataPane.setSelectedIndex(2);
+            frame.dataPane.setSelectedIndex(3);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
             try {
                 FileInputStream is = new FileInputStream(selectedFile);
@@ -447,7 +448,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.tree.noLoop();
             //set view
             frame.tabbedPane.setSelectedIndex(0);
-            frame.dataPane.setSelectedIndex(1);
+            frame.dataPane.setSelectedIndex(2);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
             try {
                 FileInputStream is = new FileInputStream(selectedFile);
