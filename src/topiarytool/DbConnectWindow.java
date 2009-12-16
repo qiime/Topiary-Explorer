@@ -26,14 +26,12 @@ public class DbConnectWindow extends JPanel {
     JLabel pw_label = new JLabel("Password: ");
     JButton connect_button = new JButton("Connect");
     
-    /** Creates new form db_connect_pane */
     public DbConnectWindow() {
         initComponents();
     }
 
     private void initComponents() {
         this.setSize(new Dimension(300,150));
-        //mainPanel.setPreferredSize(new Dimension(300,200));
         mainPanel.setLayout(new BorderLayout());
         inputPanel.setLayout(new GridLayout(3,2));
         inputPanel.add(db_name_label);
