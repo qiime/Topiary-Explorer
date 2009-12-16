@@ -34,7 +34,7 @@ public class mysqlConnect
 
           try {
               stmt = conn.createStatement();
-              this.res = stmt.executeQuery("SHOW TABLES;");
+              this.res = stmt.executeQuery("SHOW TABLES");
               parseResultSet();
               }
               // Now do something with the ResultSet ....
@@ -63,9 +63,62 @@ public class mysqlConnect
     
     public void setData()
     {
-        this.makeConnection();
-        //this.getAvailableTables();
+        reset();
         this.setResultSet();
+    }
+    
+    public void setData(String[] options, Boolean useor)
+    {
+        reset();
+        this.setResultSet(options, useor);
+    }
+    
+    public void setResultSet(String[] options, Boolean useor)
+    {
+        Statement stmt = null;
+        String query = "SELECT * FROM test_mapping";
+        if(options != null){
+            query += " WHERE ";
+            for(int i = 0; i < options.length-1; i ++)
+            {
+                query += options[i];
+                if(useor)
+                    {
+                        query += " OR ";
+                    }
+                else
+                    query += " AND ";
+            }
+            query += options[options.length-1];
+        }
+        System.out.println(query);
+          try {
+              stmt = conn.createStatement();
+              this.res = stmt.executeQuery(query);
+              parseResultSet();
+              }
+              // Now do something with the ResultSet ....
+          catch (SQLException ex){
+              // handle any errors
+              System.out.println("SQLException: " + ex.getMessage());
+              System.out.println("SQLState: " + ex.getSQLState());
+              System.out.println("VendorError: " + ex.getErrorCode());
+          }
+
+          // close SQL connections
+          if (this.res != null) {
+              try {
+                  this.res.close();
+              } catch (SQLException sqlEx) { } // ignore
+              this.res = null;
+          }
+
+          if (stmt != null) {
+              try {
+                  stmt.close();
+              } catch (SQLException sqlEx) { } // ignore
+              stmt = null;
+          }
     }
     
     public void setResultSet()
@@ -125,23 +178,33 @@ public class mysqlConnect
         }
     }
     
-    public void makeConnection()
+    public Boolean makeConnection()
     {
         try
            {
                Class.forName ("com.mysql.jdbc.Driver").newInstance();
                this.conn = DriverManager.getConnection (this.url, this.userName, this.password);
                System.out.println ("Database connection established");
+               return true;
            }
            catch (Exception e)
            {
                System.err.println(e);
                System.err.println ("Cannot connect to database server");
+               return false;
            }
+    }
+    
+    public void reset()
+    {
+        resultLines = new ArrayList<String>();
+        colNames = new ArrayList<String>();
+        colNamesStr = new String();
     }
     
     public void close_connection()
     {
+        reset();
         if (conn != null)
              {
                  try
@@ -167,7 +230,7 @@ public class mysqlConnect
    public static void main (String[] args)
    {
         mysqlConnect c = new mysqlConnect("root","desudesu","jdbc:mysql://127.0.0.1/topiarytool");
-        c.setData();
+        c.getAvailableTables();
         System.out.println(c.toString());          
    }
 }
