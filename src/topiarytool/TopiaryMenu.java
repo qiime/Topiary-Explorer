@@ -49,6 +49,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     ButtonGroup distanceMetricGroup = new ButtonGroup();
     ButtonGroup colorByGroup = new ButtonGroup();
     ButtonGroup pcoaLayoutGroup = new ButtonGroup();
+    ButtonGroup treeLayoutGroup = new ButtonGroup();
 
     JCheckBoxMenuItem samplesMenuItem = new JCheckBoxMenuItem("Samples");
     JCheckBoxMenuItem otusMenuItem = new JCheckBoxMenuItem("OTUs");
@@ -112,6 +113,43 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item.addActionListener(this);
         sortBy.add(item);
         treeMenu.add(sortBy);
+        
+        
+        JMenu layout = new JMenu("Layout");
+        JRadioButtonMenuItem radiobutton;
+        radiobutton = new JRadioButtonMenuItem("Rectangular");
+        radiobutton.setSelected(true);
+        radiobutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.tree.setTreeLayout("Rectangular");
+            }
+        });
+        treeLayoutGroup.add(radiobutton);
+        layout.add(radiobutton);
+        
+        radiobutton = new JRadioButtonMenuItem("Triangular");
+        radiobutton.setSelected(true);
+        radiobutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.tree.setTreeLayout("Triangular");
+            }
+        });
+        treeLayoutGroup.add(radiobutton);
+        layout.add(radiobutton);
+        
+        
+        radiobutton = new JRadioButtonMenuItem("Radial");
+        radiobutton.setSelected(true);
+        radiobutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.tree.setTreeLayout("Radial");
+            }
+        });
+        treeLayoutGroup.add(radiobutton);
+        layout.add(radiobutton);
+
+        treeMenu.add(layout);
+        
         externalLabelsMenuItem.setSelected(false);
         externalLabelsMenuItem.addActionListener(this);
         internalLabelsMenuItem.setSelected(false);

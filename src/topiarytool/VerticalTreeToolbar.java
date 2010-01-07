@@ -61,14 +61,24 @@ public class VerticalTreeToolbar extends JToolBar {
 
     public void syncTreeWithZoomSlider() {
         if (frame.tree.getTree() == null) return;
-        double minYScale = (frame.tree.getHeight() - 2*frame.tree.getMargin())/frame.tree.getTree().getNumberOfLeaves();
+        double minYScale = 0;
+        if (frame.tree.getTreeLayout().equals("Rectangular") || frame.tree.getTreeLayout().equals("Triangular")) {
+            minYScale = (frame.tree.getHeight() - 2*frame.tree.getMargin())/frame.tree.getTree().getNumberOfLeaves();
+        } else {
+		    minYScale = (Math.min(frame.tree.getWidth(), frame.tree.getHeight())*0.5-frame.tree.getMargin())/frame.tree.getTree().depth();
+        }
         double newScale = minYScale * Math.pow(Math.pow(2.0, 0.5), zoomSlider.getValue());
-        frame.tree.setScaleFactor(frame.tree.getXScale(), newScale, frame.tree.getXStart(), frame.tree.height/2.0);
+        frame.tree.setScaleFactor(frame.tree.getXScale(), newScale, frame.tree.getXStart(), frame.tree.getYStart());
     }
 
     public void syncZoomSliderWithTree() {
         if (frame.tree.getTree() == null) return;
-        double minYScale = (frame.tree.getHeight() - 2*frame.tree.getMargin())/frame.tree.getTree().getNumberOfLeaves();
+        double minYScale = 0;
+        if (frame.tree.getTreeLayout().equals("Rectangular") || frame.tree.getTreeLayout().equals("Triangular")) {
+            minYScale = (frame.tree.getHeight() - 2*frame.tree.getMargin())/frame.tree.getTree().getNumberOfLeaves();
+        } else {
+		    minYScale = (Math.min(frame.tree.getWidth(), frame.tree.getHeight())*0.5-frame.tree.getMargin())/frame.tree.getTree().depth();
+        }
         int currStep = (int) Math.floor(Math.log(frame.tree.getYScale()/minYScale) / Math.log(Math.pow(2.0,0.5))+0.00001);
         zoomSlider.setValue(currStep);
     }

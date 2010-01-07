@@ -14,10 +14,19 @@ public class Node {
   private String label = "";
   private double branchlength = 0;
   private double yoffset = 0;
+  private double xoffset = 0;
+  private double roffset = 0; //radius
+  private double toffset = 0; //theta
+  private double rxoffset = 0;
+  private double ryoffset = 0;
   private boolean drawPie = false; //should a pie chart be drawn for this node?
   private double maximumYOffset = 0;
   private double minimumYOffset = 0;
-
+  private double maximumTOffset = 0;
+  private double minimumTOffset = 0;
+  private double maximumROffset = 0;
+  private double minimumROffset = 0;
+  
   //parallel arrays of colors and the weight to be drawn with each
   private ArrayList<Color> groupColor = new ArrayList<Color>();
   private ArrayList<Double> groupWeight = new ArrayList<Double>();
@@ -47,13 +56,31 @@ public class Node {
   public double getBranchLength() { return branchlength; }
   public void setBranchLength(double f) { if (f >= 0) branchlength = f; }
   public double getYOffset() { return yoffset; }
+  public double getXOffset() { return xoffset; }
   public void setYOffset(double f) { yoffset = f; }
+  public void setXOffset(double f) { xoffset = f; }
+  public double getROffset() { return roffset; }
+  public double getTOffset() { return toffset; }
+  public void setROffset(double f) { roffset = f; }
+  public void setTOffset(double f) { toffset = f; }  
+  public double getRXOffset() { return rxoffset; }
+  public double getRYOffset() { return ryoffset; }
+  public void setRXOffset(double f) { rxoffset = f; }
+  public void setRYOffset(double f) { ryoffset = f; }   
   public Node getParent() { return parent; }
   public double getMaximumYOffset() { return maximumYOffset; }
   public void setMaximumYOffset(double f) { maximumYOffset = f; }
   public double getMinimumYOffset() { return minimumYOffset; }
   public void setMinimumYOffset(double f) { minimumYOffset = f; }
-
+  public double getMaximumTOffset() { return maximumTOffset; }
+  public void setMaximumTOffset(double f) { maximumTOffset = f; }
+  public double getMinimumTOffset() { return minimumTOffset; }
+  public void setMinimumTOffset(double f) { minimumTOffset = f; }
+ public double getMaximumROffset() { return maximumROffset; }
+  public void setMaximumROffset(double f) { maximumROffset = f; }
+  public double getMinimumROffset() { return minimumROffset; }
+  public void setMinimumROffset(double f) { minimumROffset = f; }  
+  
   public int getNumberOfLeaves() {
       int total = 0;
       if (isLeaf()) {
