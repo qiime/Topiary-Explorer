@@ -105,6 +105,7 @@ public class TreeVis extends PApplet {
     public void setDrawExternalNodeLabels(boolean b) { drawExternalNodeLabels = b; }
     public void setDrawInternalNodeLabels(boolean b) { drawInternalNodeLabels = b; }
     public void setCollapsedPixel(float pixel) { collapsedPixel = pixel; }
+    public float getCollapsedPixel() { return collapsedPixel; }
 
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
@@ -1066,6 +1067,7 @@ public class TreeVis extends PApplet {
       PGraphics canvas = createGraphics(width, height, PDF, filename);
       canvas.beginDraw();
       textFont(currFont);
+      background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
       drawTree(root, canvas);
       canvas.dispose();
       canvas.endDraw();
@@ -1085,6 +1087,7 @@ public class TreeVis extends PApplet {
       double oldYScale = yscale;
       double oldXStart = xstart;
       double oldYStart = ystart;
+      float oldCollapsedPixel = getCollapsedPixel();
       boolean oldDrawExternalNodeLabels = drawExternalNodeLabels;
       boolean oldDrawInternalNodeLabels = drawInternalNodeLabels;
 
@@ -1101,10 +1104,12 @@ public class TreeVis extends PApplet {
       yscale = (h-2*MARGIN)/root.getNumberOfLeaves();
       xstart = MARGIN;
       ystart = MARGIN;
+      setCollapsedPixel((float)(getCollapsedPixel()*(xscale/oldXScale)));
 
       //draw the three to the file
       canvas.beginDraw();
       canvas.textFont(currFont);
+      canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
       drawTree(root, canvas);
       canvas.dispose();
       canvas.endDraw();
@@ -1116,6 +1121,7 @@ public class TreeVis extends PApplet {
       ystart = oldYStart;
       drawExternalNodeLabels = oldDrawExternalNodeLabels;
       drawInternalNodeLabels = oldDrawInternalNodeLabels;
+      setCollapsedPixel(oldCollapsedPixel);
 
       redraw();
 
