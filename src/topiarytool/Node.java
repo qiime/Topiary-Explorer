@@ -30,6 +30,8 @@ public class Node {
   //parallel arrays of colors and the weight to be drawn with each
   private ArrayList<Color> groupColor = new ArrayList<Color>();
   private ArrayList<Double> groupWeight = new ArrayList<Double>();
+  
+  private double lineWidth = 0;
 
   private boolean collapsed = false; //if true, the children are not shown (draws a wedge)
 
@@ -80,6 +82,8 @@ public class Node {
   public void setMaximumROffset(double f) { maximumROffset = f; }
   public double getMinimumROffset() { return minimumROffset; }
   public void setMinimumROffset(double f) { minimumROffset = f; }  
+  public double getLineWidth() { return lineWidth; }
+  public void setLineWidth(double f) { lineWidth = f; }
   
   public int getNumberOfLeaves() {
       int total = 0;
@@ -300,6 +304,21 @@ public class Node {
       }
     }
     aggregateData();
+  }
+  
+  
+  public void updateLineWidthsFromChildren() {
+    if (isLeaf()) { return; }
+
+    //make the lists empty
+    double total = 0;
+    for (int i=0; i < nodes.size(); i++) {
+      //recursion
+      nodes.get(i).updateLineWidthsFromChildren();
+
+      total = total + nodes.get(i).getLineWidth();
+    }
+    setLineWidth(total/nodes.size());
   }
 
   /**

@@ -72,6 +72,7 @@ public class MainFrame extends JFrame {
     TreeMap<Object, Color> colorMap = new TreeMap<Object, Color>();
     DataTable currTable = null;
     int colorColumnIndex = -1;
+    int lineWidthColumnIndex = -1;
 
     //Holds the currently-clicked node
     Node clickedNode = null;
@@ -427,6 +428,16 @@ public class MainFrame extends JFrame {
             colorMap.put(row.get(0), (Color)row.get(1));
         }
      }
+     
+     public void resetLineWidths() {
+         if (currTable != null && currTable == otuMetadata) {
+             resetLineWidthsByOtu();
+         } else if (currTable != null && currTable == sampleMetadata) {
+             resetLineWidthsBySample();
+         } else {
+             //it's null; don't do anything
+         }     
+     }
 
      public void recolor() {
          if (currTable != null && currTable == otuMetadata) {
@@ -603,6 +614,108 @@ public class MainFrame extends JFrame {
          }
          tree.getTree().updateColorFromChildren();
      }
+     
+     
+     public void resetLineWidthsByOtu() {
+        //loop over each node
+        for (Node n : tree.getTree().getLeaves()){
+            //get the node's name
+            String nodeName = n.getLabel();
+            //get the row of the OTU metadata table with this name
+            int rowIndex = -1;
+            Object nodeNameObj = TopiaryFunctions.objectify(nodeName);
+            for (int i = 0; i < otuMetadata.getData().size(); i++) {
+                ArrayList<Object> row = otuMetadata.getData().get(i);
+                if (row.get(0).equals(nodeNameObj)) {
+                    rowIndex = i;
+                    break;
+                }
+            }
+            if (rowIndex == -1) {
+                JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            double linevalue = 0;
+            Object category = otuMetadata.getValueAt(rowIndex, lineWidthColumnIndex);
+            if (category == null) continue;
+
+            if (String.class.isInstance(category)) {
+                JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" is not all numerical data and cannot be used for line widths.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            } else if (Integer.class.isInstance(category)) {
+                linevalue = (double) ( ((Integer)category).intValue());
+            } else { //double
+                linevalue = ((Double)category).doubleValue();;
+            }      
+           
+            //set the node to this line width
+            n.setLineWidth(linevalue);
+        }
+        tree.getTree().updateLineWidthsFromChildren();
+     }
+
+     public void resetLineWidthsBySample() {
+         //loop over each node
+         for (Node n : tree.getTree().getLeaves()) {
+             //get the node's name
+             String nodeName = n.getLabel();
+             //get the row of the OTU-Sample map with this name
+             int rowIndex = -1;
+             Object nodeNameObj = TopiaryFunctions.objectify(nodeName);
+             for (int i = 0; i < otuSampleMap.getData().size(); i++) {
+                if (otuSampleMap.getData().get(i).get(0).equals(nodeNameObj)) {
+                    rowIndex = i;
+                    break;
+                }
+             }
+             if (rowIndex == -1) {
+                JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU-Sample Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+             }
+             //get the row
+             ArrayList<Object> row = otuSampleMap.getData().get(rowIndex);
+             n.clearColor();
+             //for each non-zero column value (starting after the ID column)
+             for (int i = 1; i < row.size(); i++) {
+                 Object value = row.get(i);
+                 //if it's not an Integer, skip it
+                 if (!(value instanceof Integer)) continue;
+                 Integer weight = (Integer)value;
+                 if (weight == 0) continue;
+                 String sampleID = otuSampleMap.getColumnName(i);
+                 //find the row that has this sampleID
+                 int sampleRowIndex = -1;
+                 Object sampleIDObj = TopiaryFunctions.objectify(sampleID);
+                 for (int j = 0; j < sampleMetadata.getData().size(); j++) {
+                    if (sampleMetadata.getData().get(j).get(0).equals(sampleIDObj)) {
+                        sampleRowIndex = j;
+                        break;
+                    }
+                 }
+                 if (sampleRowIndex == -1) {
+                    //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                    //return;
+                    System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
+                    continue;
+                 }
+                 double linevalue = 0;
+                 Object category = sampleMetadata.getValueAt(sampleRowIndex, lineWidthColumnIndex);
+                 if (category == null) continue;
+                 if (String.class.isInstance(category)) {
+                     JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+category+" is not all numerical data and cannot be used for line widths.", "Error", JOptionPane.ERROR_MESSAGE);
+                     return;
+                 } else if (Integer.class.isInstance(category)) {
+                     linevalue = (double) ( ((Integer)category).intValue());
+                 } else { //double
+                     linevalue = ((Double)category).doubleValue();
+                 }      
+           
+                 //set the node to this line width
+                 n.setLineWidth(linevalue);
+             }
+         }
+         tree.getTree().updateLineWidthsFromChildren();
+     }
 
      public void colorByValue(String value) {
 
@@ -637,6 +750,21 @@ public class MainFrame extends JFrame {
         //color tree from leaves
         tree.getTree().updateColorFromChildren();
      }
+     
+     public void setLineWidthByValue(String value) {
+        //get the column that this category is
+        int colIndex = currTable.getColumnNames().indexOf(value);
+        if (colIndex == -1) {
+            //JOptionPane.showMessageDialog(null, "ERROR: Column "+value+" not found in table.", "Error", JOptionPane.ERROR_MESSAGE);
+            
+            return;
+        }
+        lineWidthColumnIndex = colIndex;
+        resetLineWidths();
+        tree.getTree().updateLineWidthsFromChildren();
+     }
+     
+     
 
      public void uncollapseTree(){
         for (Node n : tree.getTree().getNodes()) {

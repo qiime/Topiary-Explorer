@@ -43,12 +43,17 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JMenu colorByOtuMetadataMenu = new JMenu("OTU Metadata");
     JMenu colorBySampleMetadataMenu = new JMenu("Sample Metadata");
     JMenu distanceMetricMenu = new JMenu("Distance Metric");
+    JMenu lineWidthMenu = new JMenu("Line Width");
+    JMenu lineWidthOtuMetadataMenu = new JMenu("OTU Metadata");
+    JMenu lineWidthSampleMetadataMenu = new JMenu("Sample Metadata");
+    JRadioButtonMenuItem uniformLineWidthItem = new JRadioButtonMenuItem("Uniform");
     JMenu pcoaLayoutMenu = new JMenu("Layout");
     JMenu collapseByMenu = new JMenu("Collapse by");
     JRadioButtonMenuItem noColoringMenuItem = new JRadioButtonMenuItem("No coloring");
 
     ButtonGroup distanceMetricGroup = new ButtonGroup();
     ButtonGroup colorByGroup = new ButtonGroup();
+    ButtonGroup lineWidthGroup = new ButtonGroup();
     ButtonGroup pcoaLayoutGroup = new ButtonGroup();
     ButtonGroup treeLayoutGroup = new ButtonGroup();
 
@@ -149,7 +154,22 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         treeLayoutGroup.add(radiobutton);
         layout.add(radiobutton);
 
-        treeMenu.add(layout);
+        treeMenu.add(layout);  
+        
+        lineWidthMenu.add(lineWidthOtuMetadataMenu);
+        lineWidthMenu.add(lineWidthSampleMetadataMenu);
+        lineWidthGroup.add(uniformLineWidthItem);
+        uniformLineWidthItem.setSelected(true);
+        uniformLineWidthItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                for (Node n : frame.tree.getTree().getNodes()) {
+                    n.setLineWidth(0);
+                }
+            }
+        });
+        lineWidthMenu.add(uniformLineWidthItem);
+        treeMenu.add(lineWidthMenu);
+        
         
         item = new JMenuItem("Background Color...");        
         item.addActionListener(new ActionListener() {        
@@ -455,6 +475,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 frame.removeColor();
             }
             resetColorByOtuMenu();
+            resetLineWidthOtuMenu();
             resetCollapseByMenu();
             frame.tree.loop();
        }
@@ -487,6 +508,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 frame.removeColor();
             }
             resetColorBySampleMenu();
+            resetLineWidthSampleMenu();
             frame.tree.loop();
        }
    }
@@ -601,6 +623,50 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             });
             colorByGroup.add(item);
             colorBySampleMetadataMenu.add(item);
+       }
+   }
+   
+   
+      public void resetLineWidthOtuMenu() {
+       uniformLineWidthItem.setSelected(true);
+       lineWidthOtuMetadataMenu.removeAll();
+       ArrayList<String> data = frame.otuMetadata.getColumnNames();
+       //start at 1 to skip ID column
+       for (int i = 1; i < data.size(); i++) {
+            String value = data.get(i);
+            JRadioButtonMenuItem item = new JRadioButtonMenuItem(value);
+            lineWidthGroup.add(item);
+            item.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    //get the category to color by
+                    String value = e.getActionCommand();
+                    System.out.println("*");
+                    frame.currTable = frame.otuMetadata;
+                    frame.setLineWidthByValue(value);
+                }
+            });
+            lineWidthOtuMetadataMenu.add(item);
+       }
+   }
+
+   public void resetLineWidthSampleMenu() {
+       uniformLineWidthItem.setSelected(true);
+       lineWidthSampleMetadataMenu.removeAll();
+       ArrayList<String> data = frame.sampleMetadata.getColumnNames();
+       //start at 1 to skip ID column
+       for (int i = 1; i < data.size(); i++) {
+            String value = data.get(i);
+            JRadioButtonMenuItem item = new JRadioButtonMenuItem(value);
+            item.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    //get the category to color by
+                    String value = e.getActionCommand();
+                    frame.currTable = frame.sampleMetadata;
+                    frame.setLineWidthByValue(value);
+                }
+            });
+            lineWidthGroup.add(item);
+            lineWidthSampleMetadataMenu.add(item);
        }
    }
 

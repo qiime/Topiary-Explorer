@@ -20,6 +20,9 @@ public class TreeVis extends PApplet {
     private double xscale;
     // Pixels per branch
     private double yscale;
+    
+    //scaling for the line width
+    private double lineWidthScale = 1;
 
     //the tree that is currently being displayed
     private Node root;
@@ -106,6 +109,8 @@ public class TreeVis extends PApplet {
     public void setDrawInternalNodeLabels(boolean b) { drawInternalNodeLabels = b; }
     public void setCollapsedPixel(float pixel) { collapsedPixel = pixel; }
     public float getCollapsedPixel() { return collapsedPixel; }
+    public double getLineWidthScale() { return lineWidthScale; }
+    public void setLineWidthScale(double f) { lineWidthScale = f; }
 
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
@@ -187,16 +192,6 @@ public class TreeVis extends PApplet {
             }
         }
     }
-
-
-    /**
-     * Returns the appropriate stroke weight to draw the tree with.  Scales based on how zoomed in the tree is.
-     */
-    private double scaledStrokeWeight() {
-      return 0.1;
-    }
-
-
 
     //COORDINATE CONVERSTION METHODS
 
@@ -658,7 +653,6 @@ public class TreeVis extends PApplet {
       //text(str(percents[i]), x+(cos(midangle)*diameter*0.25), y+(sin(midangle)*diameter*0.25));
       lastAng  = lastAng + radians((float)angles[i]);
     }
-    strokeWeight((float)scaledStrokeWeight());
   }
 
     /**
@@ -744,7 +738,7 @@ public class TreeVis extends PApplet {
       }
 
       //set the color/weight to draw
-      canvas.strokeWeight((float)scaledStrokeWeight());
+      canvas.strokeWeight(1);
       canvas.stroke(node.getColor().getRGB());
       canvas.fill(node.getColor().getRGB());
       //draw node label if we need to
@@ -803,7 +797,7 @@ public class TreeVis extends PApplet {
       double ys = toScreenY(y);
 
 
-      canvas.strokeWeight((float)scaledStrokeWeight());
+      canvas.strokeWeight((float) (node.getLineWidth()*getLineWidthScale()));
       canvas.stroke(node.getColor().getRGB());
       if (treeLayout.equals("Rectangular")) {
           
@@ -815,6 +809,7 @@ public class TreeVis extends PApplet {
           for (int i=0; i < node.nodes.size(); i++) {
               //draw horizontal line from the vertical line to the child node
               canvas.stroke(node.nodes.get(i).getColor().getRGB());
+              canvas.strokeWeight((float) (node.nodes.get(i).getLineWidth()*getLineWidthScale()));
               double yp = toScreenY(node.nodes.get(i).getYOffset());
               double xp = toScreenX(node.nodes.get(i).getXOffset());
               canvas.line((float)xs, (float)yp,
@@ -827,6 +822,7 @@ public class TreeVis extends PApplet {
           for (int i=0; i < node.nodes.size(); i++) {
               //draw line from parent to the child node
               canvas.stroke(node.nodes.get(i).getColor().getRGB());
+              canvas.strokeWeight((float) (node.nodes.get(i).getLineWidth()*getLineWidthScale()));
               double yp = toScreenY(node.nodes.get(i).getYOffset());
               double xp = toScreenX(node.nodes.get(i).getXOffset());
               canvas.line((float)xs, (float)ys,
@@ -837,6 +833,7 @@ public class TreeVis extends PApplet {
           for (int i=0; i < node.nodes.size(); i++) {
               //draw line from parent to the child node
               canvas.stroke(node.nodes.get(i).getColor().getRGB());
+              canvas.strokeWeight((float) (node.nodes.get(i).getLineWidth()*getLineWidthScale()));
               double xp = toScreenX(node.nodes.get(i).getRXOffset());
               double yp = toScreenY(node.nodes.get(i).getRYOffset());
               canvas.line((float)xs, (float)ys,
@@ -867,7 +864,7 @@ public class TreeVis extends PApplet {
       
         
       //set up the drawing properties
-      canvas.strokeWeight((float)scaledStrokeWeight());
+      canvas.strokeWeight((float) (node.getLineWidth()*getLineWidthScale()));
       canvas.stroke(node.getColor().getRGB());
       canvas.fill(node.getColor().getRGB());
   
