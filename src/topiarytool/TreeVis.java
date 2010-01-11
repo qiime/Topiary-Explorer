@@ -3,6 +3,7 @@ package topiarytool;
 import processing.core.*;
 import javax.swing.event.*;
 import java.util.*;
+import java.awt.Color;
 
 public class TreeVis extends PApplet {
 
@@ -12,6 +13,8 @@ public class TreeVis extends PApplet {
 
     private final int SELECTED_COLOR = 0xff66CCFF;
     private final int HIGHLIGHTED_COLOR = 0xffFF66FF;
+    
+    private Color backgroundColor = new Color(255,255,255);
 
     // Pixels per unit of branch length:
     private double xscale;
@@ -66,7 +69,7 @@ public class TreeVis extends PApplet {
      */
     public void draw() {
       //color over the existing graphics with a white background
-      background(255);
+      background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
       //has the size changed?
       if (oldwidth != width || oldheight != height) {
           oldwidth = width;
@@ -90,6 +93,8 @@ public class TreeVis extends PApplet {
     public double getXScale() { return xscale; }
     public double getYStart() { return ystart; }
     public double getXStart() { return xstart; }
+    public Color getBackgroundColor() { return backgroundColor; }
+    public void setBackgroundColor(Color c) { backgroundColor = c; }    
     public String getTreeLayout() { return treeLayout; }
     public Node getTree() { return root; }
     public Node getSelectedNode() { return selectedNode; }

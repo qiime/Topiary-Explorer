@@ -25,6 +25,7 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
+import javax.swing.event.*;
 
 
 /**
@@ -149,6 +150,17 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         layout.add(radiobutton);
 
         treeMenu.add(layout);
+        
+        item = new JMenuItem("Background Color...");        
+        item.addActionListener(new ActionListener() {        
+            public void actionPerformed(ActionEvent e) {
+                JColorChooser colorChooser = new JColorChooser();
+                Color c = colorChooser.showDialog(frame, "Pick a Color", frame.tree.getBackgroundColor());
+                frame.tree.setBackgroundColor(c);
+            }
+        });
+        treeMenu.add(item);
+        
         
         externalLabelsMenuItem.setSelected(false);
         externalLabelsMenuItem.addActionListener(this);
