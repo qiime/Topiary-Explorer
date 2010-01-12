@@ -413,9 +413,15 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
          } else if (e.getActionCommand().equals("Number of OTUs")) {
              frame.tree.getTree().sortByNumberOfOtus();
              frame.tree.setYOffsets(frame.tree.getTree(), 0);
+             frame.tree.setTOffsets(frame.tree.getTree(), 0);
+             frame.tree.setROffsets(frame.tree.getTree(), 0);
+             frame.tree.setRadialOffsets(frame.tree.getTree());
          } else if (e.getActionCommand().equals("Number of immediate children")) {
              frame.tree.getTree().sortByNumberOfChildren();
              frame.tree.setYOffsets(frame.tree.getTree(), 0);
+             frame.tree.setTOffsets(frame.tree.getTree(), 0);
+             frame.tree.setROffsets(frame.tree.getTree(), 0);
+             frame.tree.setRadialOffsets(frame.tree.getTree());
          } else if (e.getActionCommand().equals("Export Tree Image...")) {
             frame.tree.noLoop();
             frame.loadDataFileChooser.setDialogTitle("Select PDF File");
