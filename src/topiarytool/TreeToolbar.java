@@ -63,7 +63,7 @@ public class TreeToolbar extends JToolBar {
         add(new JLabel("Line Width:"));
         lineWidthMinusButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                lineWidthSlider.setValue(lineWidthSlider.getValue() - 1);
+                lineWidthSlider.setValue(lineWidthSlider.getValue() - 10);
                 syncTreeWithLineWidthSlider();
             }
 
@@ -71,7 +71,7 @@ public class TreeToolbar extends JToolBar {
         lineWidthPlusButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                lineWidthSlider.setValue(lineWidthSlider.getValue() + 1);
+                lineWidthSlider.setValue(lineWidthSlider.getValue() + 10);
                 syncTreeWithLineWidthSlider();
             }
 
