@@ -153,7 +153,18 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         });
         treeLayoutGroup.add(radiobutton);
         layout.add(radiobutton);
-
+        
+        radiobutton = new JRadioButtonMenuItem("Polar");
+        radiobutton.setSelected(true);
+        radiobutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.tree.setTreeLayout("Polar");
+            }
+        });
+        treeLayoutGroup.add(radiobutton);
+        layout.add(radiobutton);
+        
+        
         treeMenu.add(layout);  
         
         lineWidthMenu.add(lineWidthOtuMetadataMenu);

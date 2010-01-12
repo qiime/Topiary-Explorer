@@ -119,7 +119,7 @@ public class TreeVis extends PApplet {
     }
     public void setVerticalScrollPosition(int value) {
       ystart = -value + MARGIN;
-      if (treeLayout.equals("Radial")) {
+      if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
         ystart = ystart + getHeight()*0.5;
       }
       fireStateChanged();
@@ -131,7 +131,7 @@ public class TreeVis extends PApplet {
     }
     public void setHorizontalScrollPosition(int value) {
       xstart = -value + MARGIN;
-      if (treeLayout.equals("Radial")) {
+      if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
         xstart = xstart + getWidth()*0.5;
       }
       fireStateChanged();
@@ -211,13 +211,13 @@ public class TreeVis extends PApplet {
      * Convert from screen coords to branch-length/row based on scaling and translation
      */
     private double toLength(double xs) {
-      if (treeLayout.equals("Radial")) {
+      if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
         xs = xs - getWidth()*0.5;
       }
       return (xs - xstart)/xscale;
     }
     private double toRow(double ys) {
-      if (treeLayout.equals("Radial")) {
+      if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
         ys = ys - getHeight()*0.5;
       }    
       return (ys - ystart)/(yscale);
@@ -364,7 +364,7 @@ public class TreeVis extends PApplet {
           } else if (ystart + yscale*root.getNumberOfLeaves() < getHeight()-MARGIN) {
             ystart = getHeight()-MARGIN -yscale*root.getNumberOfLeaves();
           }
-      } else if (treeLayout.equals("Radial")) {
+      } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
           //check horizontal tree scaling
           if (xscale < (Math.min(getWidth(), getHeight())*0.5-MARGIN)/root.depth()) {
             //need to rescale tree
@@ -405,7 +405,7 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
           xscale = (getWidth()-MARGIN-TREEMARGIN)/root.depth();
           xstart = MARGIN;
-      } else if (treeLayout.equals("Radial")) {
+      } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
           xscale = (Math.min(getWidth(), getHeight())*0.5-MARGIN)/root.depth();
           xstart = getWidth()*0.5;
       }
@@ -419,7 +419,7 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
           yscale = (getHeight()-2*MARGIN)/root.getNumberOfLeaves();
           ystart = MARGIN;
-      } else if (treeLayout.equals("Radial")) {
+      } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
           yscale = (Math.min(getWidth(), getHeight())*0.5-MARGIN)/root.depth();
           ystart = getHeight()*0.5;
       }
@@ -673,6 +673,9 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Radial")) {
           x = node.getRXOffset();
           y = node.getRYOffset();
+      } else if (treeLayout.equals("Polar")) {
+          x = node.getROffset() * Math.cos(node.getTOffset());
+          y = node.getROffset() * Math.sin(node.getTOffset());
       }
       
       //convert x and y values to actual screen values
@@ -790,6 +793,9 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Radial")) {
           x = node.getRXOffset();
           y = node.getRYOffset();
+      } else if (treeLayout.equals("Polar")) {
+          x = node.getROffset() * Math.cos(node.getTOffset());
+          y = node.getROffset() * Math.sin(node.getTOffset());
       }
       
       //get the actual screen coordinates
@@ -839,6 +845,28 @@ public class TreeVis extends PApplet {
               canvas.line((float)xs, (float)ys,
                   (float)xp, (float)yp);
           }
+      } else if (treeLayout.equals("Polar")) {
+          ellipseMode(CENTER);
+          //draw curved line through the node
+          noFill();
+          double radius = node.getROffset();
+          canvas.arc((float)xstart, (float)ystart, (float)(xscale*2*radius), 
+            (float)(yscale*2*radius), (float)(node.nodes.get(0).getTOffset()),
+            (float)(node.nodes.get(node.nodes.size()-1).getTOffset()));
+                        
+          //loop over all of the children
+          for (int i=0; i < node.nodes.size(); i++) {
+              //draw line from parent to the child node
+              canvas.stroke(node.nodes.get(i).getColor().getRGB());
+              canvas.strokeWeight((float) (node.nodes.get(i).getLineWidth()*getLineWidthScale()));
+              double xp = node.nodes.get(i).getROffset() * Math.cos(node.nodes.get(i).getTOffset());
+              double yp = node.nodes.get(i).getROffset() * Math.sin(node.nodes.get(i).getTOffset());
+              double ctheta = node.nodes.get(i).getTOffset();
+              double xin = radius * Math.cos(ctheta);
+              double yin = radius * Math.sin(ctheta);
+              canvas.line((float)toScreenX(xin), (float)toScreenY(yin),
+                  (float)toScreenX(xp), (float)toScreenY(yp));
+          }
       }
       
 
@@ -860,6 +888,9 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Radial")) {
           x = node.getRXOffset();
           y = node.getRYOffset();
+      } else if (treeLayout.equals("Polar")) {
+          x = node.getROffset() * Math.cos(node.getTOffset());
+          y = node.getROffset() * Math.sin(node.getTOffset());
       }
       
         
@@ -925,7 +956,7 @@ public class TreeVis extends PApplet {
           canvas.stroke(0);
           canvas.text(str(node.getNumberOfLeaves()), (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+5));
       
-      } else if (treeLayout.equals("Radial")) {
+      } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
           
           double maxt = node.getMaximumTOffset();
           double mint = node.getMinimumTOffset();
