@@ -514,9 +514,12 @@ public class TreeVis extends PApplet {
           //get the y-offset of the root of the tree
           row = tree.getYOffset();
           col = tree.getXOffset();
-      } else {
+      } else if (treeLayout.equals("Radial")) {
           row = tree.getRYOffset();
           col = tree.getRXOffset();
+      } else if (treeLayout.equals("Polar")) {
+          row = tree.getROffset() * Math.sin(tree.getTOffset());
+          col = tree.getROffset() * Math.cos(tree.getTOffset());
       }
       //get the x and y coordinates of the current node
       double nodeX = toScreenX(col);
