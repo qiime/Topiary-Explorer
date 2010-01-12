@@ -31,7 +31,7 @@ public class Node {
   private ArrayList<Color> groupColor = new ArrayList<Color>();
   private ArrayList<Double> groupWeight = new ArrayList<Double>();
   
-  private double lineWidth = 0;
+  private double lineWidth = 1;
 
   private boolean collapsed = false; //if true, the children are not shown (draws a wedge)
 
