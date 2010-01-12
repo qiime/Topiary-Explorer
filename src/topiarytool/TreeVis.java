@@ -668,8 +668,7 @@ public class TreeVis extends PApplet {
      */
     private void drawNode(Node node, PGraphics canvas) {
       //biases are small offsets so the text doesn't overlap the graphics
-      double xbias = 5;
-      double ybias = 5;
+      double offsetbias = 5;
       
       double x = node.getXOffset();
       double y = node.getYOffset();
@@ -705,7 +704,7 @@ public class TreeVis extends PApplet {
         canvas.stroke(c);
 
         //draw the selection/highlighting
-        double minX = drawX+xbias-1;
+        double minX = drawX+offsetbias-1;
         double width = 0;
         String s = node.getLabel();
         for (int i = 0; i < s.length(); i++) {
@@ -748,7 +747,7 @@ public class TreeVis extends PApplet {
       canvas.stroke(node.getColor().getRGB());
       canvas.fill(node.getColor().getRGB());
       //draw node label if we need to
-       double minX = drawX+xbias-1;
+       double minX = drawX+offsetbias-1;
        double width = 0;
        String s = node.getLabel();
        for (int i = 0; i < s.length(); i++) {
@@ -759,24 +758,65 @@ public class TreeVis extends PApplet {
        double maxY = drawY + (currFont.ascent()*currFont.size);
        canvas.fill(255);
        canvas.noStroke();
+       
+      if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
+        pushMatrix();
+        double rotation = 0;
+        if (treeLayout.equals("Radial")) {
+            rotation = Math.atan2(yscale*node.getRYOffset(), xscale*node.getRXOffset());
+            double xt = node.getRXOffset();
+            double yt = node.getRYOffset();
+            drawX = (float)Math.sqrt((xscale*xt)*(xscale*xt)+(yscale*yt)*(yscale*yt));
+        } else {
+            rotation = node.getTOffset();
+            double xt = node.getROffset()*Math.cos(rotation);
+            double yt = node.getROffset()*Math.sin(rotation);
+            rotation = Math.atan2(yscale*yt, xscale*xt);
+            drawX = (float)Math.sqrt((xscale*xt)*(xscale*xt)+(yscale*yt)*(yscale*yt));
+        }
+        
+        //make sure rotation is positive
+        if (rotation < 0) {
+            rotation = rotation + 2*Math.PI;
+        }
+        //draw all text rightside-up
+        if (rotation > Math.PI/2 && rotation < 3*Math.PI/2) {
+            //add 180 degrees
+            rotation = rotation + Math.PI;
+            //draw on other size
+            drawX = -drawX;
+            //subtract width of the text
+            drawX = drawX - textWidth(node.getLabel()) - 2*(float)offsetbias;
+        }
+      
+        drawY = (float)0;
+        translate((float)xstart, (float)ystart);
+        rotate((float)rotation);
+      }
+     
+      
       if (node.isLeaf()) {
         if (drawExternalNodeLabels && node.getLabel().length() > 0) {
             canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
             canvas.fill(0);
             canvas.stroke(0);
-            canvas.text(node.getLabel(), (float)(drawX+xbias), (float)(drawY+ybias));
+            canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
         }
       } else {
           if (drawInternalNodeLabels && node.getLabel().length() > 0) {
             canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
             canvas.fill(0);
             canvas.stroke(0);
-            canvas.text(node.getLabel(), (float)(drawX+xbias), (float)(drawY+ybias));
+            canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
           }
       }
       //reset drawing color to default black
       canvas.fill(0);
       canvas.stroke(0);
+      
+      if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
+        popMatrix();
+      }
     }
 
 
