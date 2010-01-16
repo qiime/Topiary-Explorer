@@ -54,6 +54,33 @@ public class TopiaryFunctions {
           throw new RuntimeException("Number of open and close parentheses are not the same in tree string.");
         }
         
+        //remove comments
+        //Algorithm is: if you hit a line starting with [, it's a comment, 
+        //  and comment continues until you find a line ending with ] (possibly with trailing whitespace).
+        boolean incomment = false;
+        ArrayList<String> goodlines = new ArrayList<String>();
+        String[] lines = data.split("\n");
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            //remove whitespace
+            String line2 = line.replaceAll("[ ]", "");
+            if (incomment && line2.charAt(line2.length()-1)==']') {
+                //end of comment
+                incomment = false;
+            } else {
+                if (line2.charAt(0) == '['){
+                    incomment = true;
+                } else {
+                    goodlines.add(line);
+                }
+            }
+        }
+        data = "";
+        for (String line : goodlines) {
+            data = data+line+"\n";
+        }
+        
+        
         //remove whitespace
         data = data.replaceAll("[ |\n|\r]", "");
         
