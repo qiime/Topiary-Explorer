@@ -1,5 +1,6 @@
 package topiarytool;
 
+import processing.core.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -13,7 +14,7 @@ import javax.media.opengl.glu.*;
  * provides changeEvents and a couple of accessors to get and set the current
  * view position.
  */
-public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListener {
+public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListener, KeyListener {
 
     //links in the graph
     //format is [sp_index, sample_index, weight]
@@ -35,6 +36,8 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
     private boolean displayOtus = true;
     private boolean displayConnections = true;
     private boolean displayAxes = true;
+    
+    private boolean SHIFTPRESSED = false;
 
     private float prevMouseX = 0;
     private float prevMouseY = 0;
@@ -42,8 +45,12 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
 
     private String dynamicLayout = "None";
 
+    //rotation
     float xrotation = 0;
     float yrotation = 0;
+    //panning
+    float xshift = 0;
+    float yshift = 0;
 
     float scaling = -1;
     float meanx = -1;
@@ -65,12 +72,28 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
 	public float getLineWidthScale() { return LINEWIDTHSCALE; }
 	public void setLineWidthScale(float s) { LINEWIDTHSCALE = s; }
 	
+	public void keyPressed(KeyEvent e) {
+	    if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+	        SHIFTPRESSED = true;
+	    }
+	}
+	
+	public void keyReleased(KeyEvent e) {
+	    if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+	        SHIFTPRESSED = false;
+	    }	
+	}
+	
+	public void keyTyped(KeyEvent e) {
+	}
+	
 	public void init(GLAutoDrawable glDrawable) {
         GLCapabilities caps = new GLCapabilities();
         caps.setDoubleBuffered(true);
         caps.setHardwareAccelerated(true);
 
         glDrawable.addMouseMotionListener(this);
+        glDrawable.addKeyListener(this);
 
         GL gl = glDrawable.getGL();
         gl.glClearColor(1, 1, 1, 0);
@@ -157,6 +180,8 @@ public void mousePressed(MouseEvent e) {
   if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0) {
       mouseRButtonDown = true; 
   } 
+  prevMouseX = e.getX();
+  prevMouseY = e.getY();
 } 
 
 public void mouseReleased(MouseEvent e) { 
@@ -166,11 +191,18 @@ public void mouseReleased(MouseEvent e) {
 }
 
 public void mouseDragged(MouseEvent e) {
-  float rate = 0.5f;
-  xrotation += (prevMouseY-e.getY()) * rate;
-  yrotation += (e.getX()-prevMouseX) * rate;
+  if (SHIFTPRESSED) {
+    //pan
+    xshift += prevMouseX-e.getX();
+    yshift += prevMouseY-e.getY();
+  } else {
+      float rate = 0.5f;
+      xrotation += (prevMouseY-e.getY()) * rate;
+      yrotation += (e.getX()-prevMouseX) * rate;
+  }
   prevMouseX = e.getX();
   prevMouseY = e.getY();
+
 }
 
 public void mouseMoved(MouseEvent e) {
@@ -414,11 +446,11 @@ public void drawPCoA(GL gl) {
 
       gl.glBegin(gl.GL_LINES);
       gl.glColor3f(((float)r)/255.0f,((float)g)/255.0f,((float)b)/255.0f);
-      gl.glVertex3f(scaling*spData[link1].coords[0],
-      scaling*spData[link1].coords[1],
+      gl.glVertex3f(scaling*spData[link1].coords[0] + xshift,
+      scaling*spData[link1].coords[1] + yshift,
       scaling*spData[link1].coords[2]);
-      gl.glVertex3f( scaling*sampleData[link2].coords[0],
-      scaling*sampleData[link2].coords[1],
+      gl.glVertex3f( scaling*sampleData[link2].coords[0] + xshift,
+      scaling*sampleData[link2].coords[1] + yshift,
       scaling*sampleData[link2].coords[2]);
       gl.glEnd();
     }
@@ -446,8 +478,8 @@ public void drawPCoA(GL gl) {
         glu.gluQuadricNormals(quadric, GLU.GLU_SMOOTH);
 
         gl.glPushMatrix();
-        gl.glTranslatef(scaling*dataset[i].coords[0],
-        scaling*dataset[i].coords[1],
+        gl.glTranslatef(scaling*dataset[i].coords[0] + xshift,
+        scaling*dataset[i].coords[1] + yshift,
         scaling*dataset[i].coords[2]);
         gl.glColor3f(((float)cl.getRed())/255.0f,((float)cl.getGreen())/255.0f,((float)cl.getBlue())/255.0f);
         float weight = dataset[i].weight;
@@ -459,8 +491,8 @@ public void drawPCoA(GL gl) {
         float weight = dataset[i].weight;
         Cube c = new Cube((MAXDIAMETER-MINDIAMETER)*dataset[i].weight/maxweight + MINDIAMETER,
         cl,
-        scaling*dataset[i].coords[0],
-        scaling*dataset[i].coords[1],
+        scaling*dataset[i].coords[0] + xshift,
+        scaling*dataset[i].coords[1] + yshift,
         scaling*dataset[i].coords[2]);
         c.drawCube(gl);
       }
@@ -481,18 +513,18 @@ public void drawPCoA(GL gl) {
     gl.glLineWidth(5);
     gl.glBegin(gl.GL_LINES);
     gl.glColor3f(0,0,0);
-    gl.glVertex3f(scaling*minx,scaling*maxy,scaling*maxz);
-    gl.glVertex3f(scaling*(minx+axeslength),scaling*maxy,scaling*maxz);
+    gl.glVertex3f(scaling*minx + xshift,scaling*maxy + yshift,scaling*maxz);
+    gl.glVertex3f(scaling*(minx+axeslength) + xshift,scaling*maxy + yshift,scaling*maxz);
     gl.glEnd();
 
     gl.glBegin(gl.GL_LINES);
-    gl.glVertex3f(scaling*minx,scaling*maxy,scaling*maxz);
-    gl.glVertex3f(scaling*minx,scaling*(maxy-axeslength),scaling*maxz);
+    gl.glVertex3f(scaling*minx + xshift,scaling*maxy + yshift,scaling*maxz);
+    gl.glVertex3f(scaling*minx + xshift,scaling*(maxy-axeslength) + yshift,scaling*maxz);
     gl.glEnd();
 
     gl.glBegin(gl.GL_LINES);
-    gl.glVertex3f(scaling*minx,scaling*maxy,scaling*maxz);
-    gl.glVertex3f(scaling*minx,scaling*maxy,scaling*(maxz-axeslength));
+    gl.glVertex3f(scaling*minx + xshift,scaling*maxy + yshift,scaling*maxz);
+    gl.glVertex3f(scaling*minx + xshift,scaling*maxy + yshift,scaling*(maxz-axeslength));
     gl.glEnd();
   }
 
