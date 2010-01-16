@@ -27,6 +27,9 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
     private float MINDIAMETER = 2;
     private float MAXDIAMETER=15;
     private float MAXLINEWEIGHT=3;
+    
+    private float SCALE = 1; // scaling for zoom
+    private float LINEWIDTHSCALE = 1; //scaling for line width
 
     private boolean displaySamples = true;
     private boolean displayOtus = true;
@@ -55,8 +58,13 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
 
 	public PcoaVis() {
 	}
+	
+	public float getScale() { return SCALE; }
+	public void setScale(float s) { SCALE = s; }
 
-
+	public float getLineWidthScale() { return LINEWIDTHSCALE; }
+	public void setLineWidthScale(float s) { LINEWIDTHSCALE = s; }
+	
 	public void init(GLAutoDrawable glDrawable) {
         GLCapabilities caps = new GLCapabilities();
         caps.setDoubleBuffered(true);
@@ -100,6 +108,9 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
             yspread = getMaxY()-getMinY();
             xspread = getMaxX()-getMinX();
             scaling = Math.min((getWidth()-2*MARGIN)/xspread, (getHeight()-2*MARGIN)/yspread);
+            //scale for zooming
+            scaling = scaling * getScale();
+            
             //print(getMaxY()); print(", "); print(getMinY());print(", "); print(getMaxX()); print(", "); print(getMinX()); print(", "); println(scaling);
             gl.glTranslatef((getWidth()/2.0f)-scaling*meanx, (getHeight()/2.0f)-scaling*meany, -getMaxZ()*scaling);
             //print((getWidth()/2.0)-scaling*meanx); print(", ");println((getHeight()/2.0)-scaling*meany);
@@ -378,7 +389,7 @@ public void drawPCoA(GL gl) {
       if (weight == 0) {
         continue;
       }
-      gl.glLineWidth(MAXLINEWEIGHT*weight/maxweight);
+      gl.glLineWidth(getLineWidthScale() * MAXLINEWEIGHT*weight/maxweight);
 
       float r,g,b;
       r = g = b = 0;

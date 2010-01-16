@@ -50,6 +50,7 @@ public class MainFrame extends JFrame {
     JTable colorKeyTable = new JTable();
     TreeToolbar treeToolbar = new TreeToolbar(this);
     VerticalTreeToolbar verticalTreeToolbar = new VerticalTreeToolbar(this);
+    PcoaToolbar pcoaToolbar = new PcoaToolbar(this);
     CollapseTreeToolbar collapseTreeToolbar = new CollapseTreeToolbar(this);
     JButton interpolateButton = new JButton("Interpolate");
     JFileChooser loadDataFileChooser = new JFileChooser();
@@ -231,6 +232,7 @@ public class MainFrame extends JFrame {
         treePanel.add(collapseTreeToolbar, BorderLayout.PAGE_END);
 
         pcoaPanel.setLayout(new BorderLayout());
+        pcoaPanel.add(pcoaToolbar, BorderLayout.PAGE_START);
         GLCanvas canvas = new GLCanvas();
         canvas.addGLEventListener(pcoa);
         animator = new FPSAnimator(canvas, 30);
