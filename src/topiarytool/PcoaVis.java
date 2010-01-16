@@ -138,6 +138,9 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
             gl.glTranslatef((getWidth()/2.0f)-scaling*meanx, (getHeight()/2.0f)-scaling*meany, -getMaxZ()*scaling);
             //print((getWidth()/2.0)-scaling*meanx); print(", ");println((getHeight()/2.0)-scaling*meany);
 
+            //panning
+            gl.glTranslatef(xshift, yshift, 0);
+  
             gl.glRotatef(xrotation, 1, 0, 0);
             gl.glRotatef(yrotation, 0, 1, 0);
 
@@ -410,7 +413,7 @@ public void drawPCoA(GL gl) {
   float maxz = getMaxZ();
 
   float maxweight = getMaxVertexWeight();
-
+  
   if (displayConnections) {
     //draw all the links between vertices
     for (int i = 0; i < links.length; i++) {
@@ -446,11 +449,11 @@ public void drawPCoA(GL gl) {
 
       gl.glBegin(gl.GL_LINES);
       gl.glColor3f(((float)r)/255.0f,((float)g)/255.0f,((float)b)/255.0f);
-      gl.glVertex3f(scaling*spData[link1].coords[0] + xshift,
-      scaling*spData[link1].coords[1] + yshift,
+      gl.glVertex3f(scaling*spData[link1].coords[0],
+      scaling*spData[link1].coords[1],
       scaling*spData[link1].coords[2]);
-      gl.glVertex3f( scaling*sampleData[link2].coords[0] + xshift,
-      scaling*sampleData[link2].coords[1] + yshift,
+      gl.glVertex3f( scaling*sampleData[link2].coords[0],
+      scaling*sampleData[link2].coords[1],
       scaling*sampleData[link2].coords[2]);
       gl.glEnd();
     }
@@ -478,8 +481,8 @@ public void drawPCoA(GL gl) {
         glu.gluQuadricNormals(quadric, GLU.GLU_SMOOTH);
 
         gl.glPushMatrix();
-        gl.glTranslatef(scaling*dataset[i].coords[0] + xshift,
-        scaling*dataset[i].coords[1] + yshift,
+        gl.glTranslatef(scaling*dataset[i].coords[0],
+        scaling*dataset[i].coords[1],
         scaling*dataset[i].coords[2]);
         gl.glColor3f(((float)cl.getRed())/255.0f,((float)cl.getGreen())/255.0f,((float)cl.getBlue())/255.0f);
         float weight = dataset[i].weight;
@@ -491,8 +494,8 @@ public void drawPCoA(GL gl) {
         float weight = dataset[i].weight;
         Cube c = new Cube((MAXDIAMETER-MINDIAMETER)*dataset[i].weight/maxweight + MINDIAMETER,
         cl,
-        scaling*dataset[i].coords[0] + xshift,
-        scaling*dataset[i].coords[1] + yshift,
+        scaling*dataset[i].coords[0],
+        scaling*dataset[i].coords[1],
         scaling*dataset[i].coords[2]);
         c.drawCube(gl);
       }
@@ -513,18 +516,18 @@ public void drawPCoA(GL gl) {
     gl.glLineWidth(5);
     gl.glBegin(gl.GL_LINES);
     gl.glColor3f(0,0,0);
-    gl.glVertex3f(scaling*minx + xshift,scaling*maxy + yshift,scaling*maxz);
-    gl.glVertex3f(scaling*(minx+axeslength) + xshift,scaling*maxy + yshift,scaling*maxz);
+    gl.glVertex3f(scaling*minx,scaling*maxy,scaling*maxz);
+    gl.glVertex3f(scaling*(minx+axeslength),scaling*maxy,scaling*maxz);
     gl.glEnd();
 
     gl.glBegin(gl.GL_LINES);
-    gl.glVertex3f(scaling*minx + xshift,scaling*maxy + yshift,scaling*maxz);
-    gl.glVertex3f(scaling*minx + xshift,scaling*(maxy-axeslength) + yshift,scaling*maxz);
+    gl.glVertex3f(scaling*minx,scaling*maxy,scaling*maxz);
+    gl.glVertex3f(scaling*minx,scaling*(maxy-axeslength),scaling*maxz);
     gl.glEnd();
 
     gl.glBegin(gl.GL_LINES);
-    gl.glVertex3f(scaling*minx + xshift,scaling*maxy + yshift,scaling*maxz);
-    gl.glVertex3f(scaling*minx + xshift,scaling*maxy + yshift,scaling*(maxz-axeslength));
+    gl.glVertex3f(scaling*minx,scaling*maxy,scaling*maxz);
+    gl.glVertex3f(scaling*minx,scaling*maxy,scaling*(maxz-axeslength));
     gl.glEnd();
   }
 
