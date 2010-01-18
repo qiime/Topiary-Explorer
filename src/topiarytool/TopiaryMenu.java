@@ -303,6 +303,17 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         pcoaLayoutGroup.add(button);
         pcoaLayoutMenu.add(button);
         pcoaMenu.add(pcoaLayoutMenu);
+        
+        
+        item = new JMenuItem("Background Color...");        
+        item.addActionListener(new ActionListener() {        
+            public void actionPerformed(ActionEvent e) {
+                JColorChooser colorChooser = new JColorChooser();
+                Color c = colorChooser.showDialog(frame, "Pick a Color", frame.pcoa.getBackgroundColor());
+                frame.pcoa.setBackgroundColor(c);
+            }
+        });
+        pcoaMenu.add(item);
 
 
         samplesMenuItem.setSelected(true);

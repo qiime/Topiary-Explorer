@@ -29,6 +29,8 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
     private float MAXDIAMETER=15;
     private float MAXLINEWEIGHT=3;
     
+    private Color backgroundColor = new Color(255, 255, 255);
+    
     private float SCALE = 1; // scaling for zoom
     private float LINEWIDTHSCALE = 1; //scaling for line width
 
@@ -68,7 +70,8 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
 	
 	public float getScale() { return SCALE; }
 	public void setScale(float s) { SCALE = s; }
-
+    public Color getBackgroundColor() { return backgroundColor; }
+    public void setBackgroundColor(Color c) { backgroundColor = c; }    
 	public float getLineWidthScale() { return LINEWIDTHSCALE; }
 	public void setLineWidthScale(float s) { LINEWIDTHSCALE = s; }
 	
@@ -95,13 +98,13 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
         glDrawable.addMouseMotionListener(this);
         glDrawable.addKeyListener(this);
 
-        GL gl = glDrawable.getGL();
-        gl.glClearColor(1, 1, 1, 0);
-        
+        GL gl = glDrawable.getGL();        
 	}
     
     public void display(GLAutoDrawable glDrawable) {
         final GL gl = glDrawable.getGL();
+        
+        gl.glClearColor(backgroundColor.getRed()/255, backgroundColor.getGreen()/255, backgroundColor.getBlue()/255, 0);
 
 
         gl.glOrtho(glDrawable.getWidth()/2, -glDrawable.getWidth()/2, -glDrawable.getHeight()/2, glDrawable.getHeight()/2, 1000, -1000);
