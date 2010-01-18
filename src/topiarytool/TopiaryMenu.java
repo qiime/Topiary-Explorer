@@ -389,9 +389,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
            loadSampleMetadata();
          } else if (e.getActionCommand().equals("Load OTU-Sample Map...")) {
              loadOtuSampleMap();
-         } else if (e.getActionCommand().equals("Save tree...")) {
+         } else if (e.getActionCommand().equals("Save Tree...")) {
              frame.tree.noLoop();
-             frame.loadDataFileChooser.setDialogTitle("Save Tree");
+             frame.loadDataFileChooser.setDialogTitle("Save Tree...");
              int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
 			 if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = frame.loadDataFileChooser.getSelectedFile();
