@@ -50,8 +50,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JMenu pcoaLayoutMenu = new JMenu("Layout");
     JMenu collapseByMenu = new JMenu("Collapse by");
     JRadioButtonMenuItem noColoringMenuItem = new JRadioButtonMenuItem("No coloring");
-    JSlider lineWidthSlider = new JSlider(0, 1000, 20);
-    JSlider pcoaLineWidthSlider = new JSlider(0, 1000, 20);
+    JSlider lineWidthSlider = new JSlider(1, 1000, 20);
+    JSlider pcoaLineWidthSlider = new JSlider(1, 1000, 10);
 
     ButtonGroup distanceMetricGroup = new ButtonGroup();
     ButtonGroup colorByGroup = new ButtonGroup();
@@ -324,8 +324,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         
         pcoaLineWidthSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if (lineWidthSlider.getValueIsAdjusting()){
-                    syncTreeWithLineWidthSlider();
+                if (pcoaLineWidthSlider.getValueIsAdjusting()){
+                    syncPcoaWithLineWidthSlider();
                 }
             }
         });
@@ -617,7 +617,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     }
     
     public void syncPcoaWithLineWidthSlider() {
-        double value = lineWidthSlider.getValue();
+        double value = pcoaLineWidthSlider.getValue();
         value = value/10.0;
         frame.pcoa.setLineWidthScale((float)value);
     }
