@@ -893,9 +893,13 @@ public class TreeVis extends PApplet {
           //draw curved line through the node
           noFill();
           double radius = node.getROffset();
+          double minradius = Math.min(node.nodes.get(0).getTOffset(), 
+            node.nodes.get(node.nodes.size()-1).getTOffset());
+          double maxradius = Math.max(node.nodes.get(0).getTOffset(), 
+            node.nodes.get(node.nodes.size()-1).getTOffset());
           canvas.arc((float)xstart, (float)ystart, (float)(xscale*2*radius), 
-            (float)(yscale*2*radius), (float)(node.nodes.get(0).getTOffset()),
-            (float)(node.nodes.get(node.nodes.size()-1).getTOffset()));
+            (float)(yscale*2*radius), (float)(minradius),
+            (float)(maxradius));
                         
           //loop over all of the children
           for (int i=0; i < node.nodes.size(); i++) {
@@ -1125,6 +1129,14 @@ public class TreeVis extends PApplet {
         for (int i = 0; i < node.nodes.size(); i++) {
             setRadialOffsets(node.nodes.get(i));
         }
+        
+       //set the max and min y-offsets
+      node.setMaximumRXOffset(node.getRXOffset());
+      node.setMinimumRXOffset(node.getRXOffset());
+      for (int i=0; i < node.nodes.size(); i++) {
+        node.setMaximumRXOffset(Math.max(node.getMaximumRXOffset(), node.nodes.get(i).getMaximumRXOffset()));
+        node.setMinimumRXOffset(Math.min(node.getMinimumRXOffset(), node.nodes.get(i).getMinimumRXOffset()));
+      }
     }
     
     

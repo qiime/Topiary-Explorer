@@ -26,6 +26,8 @@ public class Node {
   private double minimumTOffset = 0;
   private double maximumROffset = 0;
   private double minimumROffset = 0;
+  private double maximumRXOffset = 0;
+  private double minimumRXOffset = 0;
   
   //parallel arrays of colors and the weight to be drawn with each
   private ArrayList<Color> groupColor = new ArrayList<Color>();
@@ -78,10 +80,14 @@ public class Node {
   public void setMaximumTOffset(double f) { maximumTOffset = f; }
   public double getMinimumTOffset() { return minimumTOffset; }
   public void setMinimumTOffset(double f) { minimumTOffset = f; }
- public double getMaximumROffset() { return maximumROffset; }
+  public double getMaximumROffset() { return maximumROffset; }
   public void setMaximumROffset(double f) { maximumROffset = f; }
   public double getMinimumROffset() { return minimumROffset; }
   public void setMinimumROffset(double f) { minimumROffset = f; }  
+  public double getMinimumRXOffset() { return minimumRXOffset; }
+  public void setMinimumRXOffset(double f) { minimumRXOffset = f; }    
+  public double getMaximumRXOffset() { return maximumRXOffset; }
+  public void setMaximumRXOffset(double f) { maximumRXOffset = f; }  
   public double getLineWidth() { return lineWidth; }
   public void setLineWidth(double f) { lineWidth = f; }
   

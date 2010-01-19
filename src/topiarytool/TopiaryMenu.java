@@ -109,6 +109,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item = new JMenuItem("Recenter");
         item.addActionListener(this);
         treeMenu.add(item);
+        item = new JMenuItem("Mirror left/right");
+        item.addActionListener(this);
+        treeMenu.add(item);
+        item = new JMenuItem("Mirror up/down");
+        item.addActionListener(this);
+        treeMenu.add(item);
         this.resetCollapseByMenu();
         treeMenu.add(collapseByMenu);
         JMenu sortBy = new JMenu("Sort by");
@@ -421,6 +427,18 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
              frame.tree.resetTreeX();
              frame.tree.resetTreeY();
              frame.treeToolbar.syncZoomSliderWithTree();
+         } else if (e.getActionCommand().equals("Mirror left/right")) {
+            for (Node n : frame.tree.getTree().getNodes()) {
+                n.setXOffset(frame.tree.getTree().depth() - n.getXOffset());
+                n.setTOffset(Math.PI - n.getTOffset());
+            }
+            frame.tree.setRadialOffsets(frame.tree.getTree());
+         } else if (e.getActionCommand().equals("Mirror up/down")) {
+            for (Node n : frame.tree.getTree().getNodes()) {
+                n.setYOffset(frame.tree.getTree().getNumberOfLeaves() - n.getYOffset());
+                n.setTOffset(-n.getTOffset());
+            }
+            frame.tree.setRadialOffsets(frame.tree.getTree());
          } else if (e.getActionCommand().equals("Number of OTUs")) {
              frame.tree.getTree().sortByNumberOfOtus();
              frame.tree.setYOffsets(frame.tree.getTree(), 0);
