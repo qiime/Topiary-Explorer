@@ -753,9 +753,6 @@ public class TreeVis extends PApplet {
        for (int i = 0; i < s.length(); i++) {
          width += currFont.width(s.charAt(i));
        }
-       double maxX =  drawX + 5 + (width*currFont.size);
-       double minY = drawY - (currFont.descent()*currFont.size);
-       double maxY = drawY + (currFont.ascent()*currFont.size);
        canvas.fill(255);
        canvas.noStroke();
        
@@ -793,18 +790,22 @@ public class TreeVis extends PApplet {
         translate((float)xstart, (float)ystart);
         rotate((float)rotation);
       }
+      
+     double maxX =  drawX + 5 + (width*currFont.size);
+     double minY = drawY - (currFont.descent()*currFont.size);
+     double maxY = drawY + (currFont.ascent()*currFont.size);
      
       
       if (node.isLeaf()) {
         if (drawExternalNodeLabels && node.getLabel().length() > 0) {
-            canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
+            //canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
             canvas.fill(0);
             canvas.stroke(0);
             canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
         }
       } else {
           if (drawInternalNodeLabels && node.getLabel().length() > 0) {
-            canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
+            //canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
             canvas.fill(0);
             canvas.stroke(0);
             canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
