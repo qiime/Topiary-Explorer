@@ -50,6 +50,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JMenu pcoaLayoutMenu = new JMenu("Layout");
     JMenu collapseByMenu = new JMenu("Collapse by");
     JRadioButtonMenuItem noColoringMenuItem = new JRadioButtonMenuItem("No coloring");
+    JSlider lineWidthSlider = new JSlider(0, 1000, 20);
+    JSlider pcoaLineWidthSlider = new JSlider(0, 1000, 20);
 
     ButtonGroup distanceMetricGroup = new ButtonGroup();
     ButtonGroup colorByGroup = new ButtonGroup();
@@ -180,11 +182,20 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         uniformLineWidthItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 for (Node n : frame.tree.getTree().getNodes()) {
-                    n.setLineWidth(0);
+                    n.setLineWidth(1);
                 }
+                syncTreeWithLineWidthSlider();
             }
         });
         lineWidthMenu.add(uniformLineWidthItem);
+        lineWidthSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                if (lineWidthSlider.getValueIsAdjusting()){
+                    syncTreeWithLineWidthSlider();
+                }
+            }
+        });
+        lineWidthMenu.add(lineWidthSlider);
         treeMenu.add(lineWidthMenu);
         
         
@@ -310,6 +321,17 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         pcoaLayoutMenu.add(button);
         pcoaMenu.add(pcoaLayoutMenu);
         
+        
+        pcoaLineWidthSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                if (lineWidthSlider.getValueIsAdjusting()){
+                    syncTreeWithLineWidthSlider();
+                }
+            }
+        });
+        JMenu pcoaLineWidthMenu = new JMenu("Line width");
+        pcoaLineWidthMenu.add(pcoaLineWidthSlider);
+        pcoaMenu.add(pcoaLineWidthMenu);
         
         item = new JMenuItem("Background Color...");        
         item.addActionListener(new ActionListener() {        
@@ -585,6 +607,21 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.tree.loop();
        }
    }
+   
+    public void syncTreeWithLineWidthSlider() {
+        if (frame.tree.getTree() == null) return;
+        double value = lineWidthSlider.getValue();
+        value = value/20.0;
+        frame.tree.setLineWidthScale(value);
+        frame.tree.redraw();
+    }
+    
+    public void syncPcoaWithLineWidthSlider() {
+        double value = lineWidthSlider.getValue();
+        value = value/10.0;
+        frame.pcoa.setLineWidthScale((float)value);
+    }
+
 
    public void resetCollapseByMenu() {
        //NOTE: can only collapse on OTU metadata

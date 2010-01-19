@@ -405,7 +405,6 @@ public void applyForces(float[][][] forces) {
   }
 }
 
-
 public void drawPCoA(GL gl) {
 
   float maxx = getMaxX();
