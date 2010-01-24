@@ -208,7 +208,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
         });
         treeMenu.add(item);
-        
+   
         
         externalLabelsMenuItem.setSelected(false);
         externalLabelsMenuItem.addActionListener(this);
@@ -339,6 +339,20 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 JColorChooser colorChooser = new JColorChooser();
                 Color c = colorChooser.showDialog(frame, "Pick a Color", frame.pcoa.getBackgroundColor());
                 frame.pcoa.setBackgroundColor(c);
+            }
+        });
+        pcoaMenu.add(item);
+        
+        item = new JMenuItem("Set axes...");        
+        item.addActionListener(new ActionListener() {        
+            public void actionPerformed(ActionEvent e) {
+            if (frame.pcoa.spData == null) {
+                JOptionPane.showMessageDialog(null, "PCOA analysis must be run first.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                PCSelectDialog p = new PCSelectDialog(frame);
+                p.pack();
+                p.setVisible(true);
+            }
             }
         });
         pcoaMenu.add(item);

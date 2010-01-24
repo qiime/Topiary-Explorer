@@ -39,6 +39,11 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
     private boolean displayConnections = true;
     private boolean displayAxes = true;
     
+    //which PC's to display?
+    private int axis1 = 0;
+    private int axis2 = 1;
+    private int axis3 = 2;
+    
     private boolean SHIFTPRESSED = false;
 
     private float prevMouseX = 0;
@@ -74,6 +79,28 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
     public void setBackgroundColor(Color c) { backgroundColor = c; }    
 	public float getLineWidthScale() { return LINEWIDTHSCALE; }
 	public void setLineWidthScale(float s) { LINEWIDTHSCALE = s; }
+	
+	public int getAxis(int i) {
+	    if (i == 1) {
+	        return axis1;
+	    } else if (i == 2) {
+	        return axis2;
+	    } else if (i == 3) {
+	        return axis3;
+	    } else {
+	        return 0;
+	    }
+	}
+	
+    public void setAxis(int i, int p) {
+	    if (i == 1) {
+	        axis1 = p;
+	    } else if (i == 2) {
+	        axis2 = p;
+	    } else if (i == 3) {
+	        axis3 = p;
+	    }
+	}
 	
 	public void keyPressed(KeyEvent e) {
 	    if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
@@ -255,9 +282,9 @@ public float[][][] getChargeForces() {
     for (int j = 0; j < spData.length; j++) {
       if (i==j) continue;
       VertexData vj = spData[j];
-      float dx = vi.coords[0] - vj.coords[0];
-      float dy = vi.coords[1] - vj.coords[1];
-      float dz = vi.coords[2] - vj.coords[2];
+      float dx = vi.coords[getAxis(1)] - vj.coords[getAxis(1)];
+      float dy = vi.coords[getAxis(2)] - vj.coords[getAxis(2)];
+      float dz = vi.coords[getAxis(3)] - vj.coords[getAxis(3)];
       float distance = (float)Math.sqrt(dx*dx + dy*dy + dz*dz);
       float weight1 = vi.weight;
       float weight2 = vj.weight;
@@ -272,9 +299,9 @@ public float[][][] getChargeForces() {
     }
     for (int j = 0; j < sampleData.length; j++) {
       VertexData vj = sampleData[j];
-      float dx = vi.coords[0] - vj.coords[0];
-      float dy = vi.coords[1] - vj.coords[1];
-      float dz = vi.coords[2] - vj.coords[2];
+      float dx = vi.coords[getAxis(1)] - vj.coords[getAxis(1)];
+      float dy = vi.coords[getAxis(2)] - vj.coords[getAxis(2)];
+      float dz = vi.coords[getAxis(3)] - vj.coords[getAxis(3)];
       float distance = (float)Math.sqrt(dx*dx + dy*dy + dz*dz);
       float weight1 = vi.weight;
       float weight2 = vj.weight;
@@ -294,9 +321,9 @@ public float[][][] getChargeForces() {
     for (int j = 0; j < sampleData.length; j++) {
       if (i==j) continue;
       VertexData vj = sampleData[j];
-      float dx = vi.coords[0] - vj.coords[0];
-      float dy = vi.coords[1] - vj.coords[1];
-      float dz = vi.coords[2] - vj.coords[2];
+      float dx = vi.coords[getAxis(1)] - vj.coords[getAxis(1)];
+      float dy = vi.coords[getAxis(2)] - vj.coords[getAxis(2)];
+      float dz = vi.coords[getAxis(3)] - vj.coords[getAxis(3)];
       float distance = (float)Math.sqrt(dx*dx + dy*dy + dz*dz);
       float weight1 = vi.weight;
       float weight2 = vj.weight;
@@ -311,9 +338,9 @@ public float[][][] getChargeForces() {
     }
     for (int j = 0; j < spData.length; j++) {
       VertexData vj = spData[j];
-      float dx = vi.coords[0] - vj.coords[0];
-      float dy = vi.coords[1] - vj.coords[1];
-      float dz = vi.coords[2] - vj.coords[2];
+      float dx = vi.coords[getAxis(1)] - vj.coords[getAxis(1)];
+      float dy = vi.coords[getAxis(2)] - vj.coords[getAxis(2)];
+      float dz = vi.coords[getAxis(3)] - vj.coords[getAxis(3)];
       float distance = (float)Math.sqrt(dx*dx + dy*dy + dz*dz);
       float weight1 = vi.weight;
       float weight2 = vj.weight;
@@ -356,9 +383,9 @@ public float[][][] getSpringForces() {
     VertexData vj = sampleData[sampleindex];
     float weight = links[i][2];
     if (weight == 0) continue;
-    float dx = vi.coords[0] - vj.coords[0];
-    float dy = vi.coords[1] - vj.coords[1];
-    float dz = vi.coords[2] - vj.coords[2];
+    float dx = vi.coords[getAxis(1)] - vj.coords[getAxis(1)];
+    float dy = vi.coords[getAxis(2)] - vj.coords[getAxis(2)];
+    float dz = vi.coords[getAxis(3)] - vj.coords[getAxis(3)];
     float distance = (float)Math.sqrt(dx*dx + dy*dy + dz*dz);
     float springForce = -0.001f*(distance-1/weight);
     //print(distance); print(", "); print(1/weight); print(", ");println(springForce);
@@ -390,18 +417,18 @@ public void applyForces(float[][][] forces) {
     vi.velocity[0] = (vi.velocity[0] + Math.max(Math.min(net_forces_sp[i][0], maxforce),minforce)) * damping;
     vi.velocity[1] = (vi.velocity[1] + Math.max(Math.min(net_forces_sp[i][1], maxforce),minforce)) * damping;
     vi.velocity[2] = (vi.velocity[2] + Math.max(Math.min(net_forces_sp[i][2], maxforce),minforce)) * damping;
-    vi.coords[0] += vi.velocity[0];
-    vi.coords[1] += vi.velocity[1];
-    vi.coords[2] += vi.velocity[2];
+    vi.coords[getAxis(1)] += vi.velocity[0];
+    vi.coords[getAxis(2)] += vi.velocity[1];
+    vi.coords[getAxis(3)] += vi.velocity[2];
   }
   for (int i = 0; i < sampleData.length; i++) {
     VertexData vi = sampleData[i];
     vi.velocity[0] = (vi.velocity[0] + Math.max(Math.min(net_forces_sample[i][0], maxforce),minforce)) * damping;
     vi.velocity[1] = (vi.velocity[1] + Math.max(Math.min(net_forces_sample[i][1], maxforce),minforce)) * damping;
     vi.velocity[2] = (vi.velocity[2] + Math.max(Math.min(net_forces_sample[i][2], maxforce),minforce)) * damping;
-    vi.coords[0] += vi.velocity[0];
-    vi.coords[1] += vi.velocity[1];
-    vi.coords[2] += vi.velocity[2];
+    vi.coords[getAxis(1)] += vi.velocity[0];
+    vi.coords[getAxis(2)] += vi.velocity[1];
+    vi.coords[getAxis(3)] += vi.velocity[2];
   }
 }
 
@@ -451,12 +478,12 @@ public void drawPCoA(GL gl) {
 
       gl.glBegin(gl.GL_LINES);
       gl.glColor3f(((float)r)/255.0f,((float)g)/255.0f,((float)b)/255.0f);
-      gl.glVertex3f(scaling*spData[link1].coords[0],
-      scaling*spData[link1].coords[1],
-      scaling*spData[link1].coords[2]);
-      gl.glVertex3f( scaling*sampleData[link2].coords[0],
-      scaling*sampleData[link2].coords[1],
-      scaling*sampleData[link2].coords[2]);
+      gl.glVertex3f(scaling*spData[link1].coords[getAxis(1)],
+      scaling*spData[link1].coords[getAxis(2)],
+      scaling*spData[link1].coords[getAxis(3)]);
+      gl.glVertex3f( scaling*sampleData[link2].coords[getAxis(1)],
+      scaling*sampleData[link2].coords[getAxis(2)],
+      scaling*sampleData[link2].coords[getAxis(3)]);
       gl.glEnd();
     }
   }
@@ -483,9 +510,9 @@ public void drawPCoA(GL gl) {
         glu.gluQuadricNormals(quadric, GLU.GLU_SMOOTH);
 
         gl.glPushMatrix();
-        gl.glTranslatef(scaling*dataset[i].coords[0],
-        scaling*dataset[i].coords[1],
-        scaling*dataset[i].coords[2]);
+        gl.glTranslatef(scaling*dataset[i].coords[getAxis(1)],
+        scaling*dataset[i].coords[getAxis(2)],
+        scaling*dataset[i].coords[getAxis(3)]);
         gl.glColor3f(((float)cl.getRed())/255.0f,((float)cl.getGreen())/255.0f,((float)cl.getBlue())/255.0f);
         float weight = dataset[i].weight;
         glu.gluSphere(quadric, (MAXDIAMETER-MINDIAMETER)*weight/maxweight + MINDIAMETER, 12,12);
@@ -496,17 +523,17 @@ public void drawPCoA(GL gl) {
         float weight = dataset[i].weight;
         Cube c = new Cube((MAXDIAMETER-MINDIAMETER)*dataset[i].weight/maxweight + MINDIAMETER,
         cl,
-        scaling*dataset[i].coords[0],
-        scaling*dataset[i].coords[1],
-        scaling*dataset[i].coords[2]);
+        scaling*dataset[i].coords[getAxis(1)],
+        scaling*dataset[i].coords[getAxis(2)],
+        scaling*dataset[i].coords[getAxis(3)]);
         c.drawCube(gl);
       }
 
       //      fill(0);
       //      text(dataset[i].label,
-      //        scaling*dataset[i].coords[0],
-      //        scaling*dataset[i].coords[1],
-      //        scaling*dataset[i].coords[2]);
+      //        scaling*dataset[i].coords[getAxis(1)],
+      //        scaling*dataset[i].coords[getAxis(2)],
+      //        scaling*dataset[i].coords[getAxis(3)]);
 
     }
   }
@@ -536,67 +563,67 @@ public void drawPCoA(GL gl) {
 }
 
     public float getMaxX() {
-      float m = spData[0].coords[0];
+      float m = spData[0].coords[getAxis(1)];
       for (int i = 0; i < spData.length; i++) {
-        m = (float)Math.max(m, spData[i].coords[0]);
+        m = (float)Math.max(m, spData[i].coords[getAxis(1)]);
       }
       for (int i = 0; i < sampleData.length; i++) {
-        m = (float)Math.max(m, sampleData[i].coords[0]);
+        m = (float)Math.max(m, sampleData[i].coords[getAxis(1)]);
       }
       return m;
     }
 
     public float getMaxY() {
-      float m = spData[0].coords[1];
+      float m = spData[0].coords[getAxis(2)];
       for (int i = 0; i < spData.length; i++) {
-        m = (float)Math.max(m, spData[i].coords[1]);
+        m = (float)Math.max(m, spData[i].coords[getAxis(2)]);
       }
       for (int i = 0; i < sampleData.length; i++) {
-        m = (float)Math.max(m, sampleData[i].coords[1]);
+        m = (float)Math.max(m, sampleData[i].coords[getAxis(2)]);
       }
       return m;
     }
 
     public float getMinX() {
-      float m = spData[0].coords[0];
+      float m = spData[0].coords[getAxis(1)];
       for (int i = 0; i < spData.length; i++) {
-        m = (float)Math.min(m, spData[i].coords[0]);
+        m = (float)Math.min(m, spData[i].coords[getAxis(1)]);
       }
       for (int i = 0; i < sampleData.length; i++) {
-        m = (float)Math.min(m, sampleData[i].coords[0]);
+        m = (float)Math.min(m, sampleData[i].coords[getAxis(1)]);
       }
       return m;
     }
 
     public float getMinY() {
-      float m = spData[0].coords[1];
+      float m = spData[0].coords[getAxis(2)];
       for (int i = 0; i < spData.length; i++) {
-        m = (float)Math.min(m, spData[i].coords[1]);
+        m = (float)Math.min(m, spData[i].coords[getAxis(2)]);
       }
       for (int i = 0; i < sampleData.length; i++) {
-        m = (float)Math.min(m, sampleData[i].coords[1]);
+        m = (float)Math.min(m, sampleData[i].coords[getAxis(2)]);
       }
       return m;
     }
 
     public float getMaxZ() {
-      float m = spData[0].coords[2];
+      float m = spData[0].coords[getAxis(3)];
       for (int i = 0; i < spData.length; i++) {
-        m = (float)Math.max(m, spData[i].coords[2]);
+        m = (float)Math.max(m, spData[i].coords[getAxis(3)]);
       }
       for (int i = 0; i < sampleData.length; i++) {
-        m = (float)Math.max(m, sampleData[i].coords[2]);
+        m = (float)Math.max(m, sampleData[i].coords[getAxis(3)]);
       }
       return m;
     }
 
     public float getMinZ() {
-      float m = spData[0].coords[2];
+      float m = spData[0].coords[getAxis(3)];
       for (int i = 0; i < spData.length; i++) {
-        m = (float)Math.min(m, spData[i].coords[2]);
+        m = (float)Math.min(m, spData[i].coords[getAxis(3)]);
       }
       for (int i = 0; i < sampleData.length; i++) {
-        m = (float)Math.min(m, sampleData[i].coords[2]);
+        m = (float)Math.min(m, sampleData[i].coords[getAxis(3)]);
       }
       return m;
     }

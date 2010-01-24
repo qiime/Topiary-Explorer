@@ -97,9 +97,9 @@ else:
 print("1")
 aa = pcoa.principal_coordinates_analysis(distance_matrix)
 sample_coords = aa[0].transpose()
-sample_coords = sample_coords[:,0:3]
+#sample_coords = sample_coords[:,0:3]
 #plt.scatter(sample_coords[:,0], sample_coords[:,1], c=range(len(ptmtx)))
-sp_coords = species_coords(aa[0], ptmtx, dims=3) * 3
+sp_coords = species_coords(aa[0], ptmtx, dims=len(sample_coords[0])) * 3
 #plt.scatter(sp_coords[:,0], sp_coords[:,1], s=10, c=range(len(sp_coords)))
 #for i in range(len(sp_coords)):
 #    plt.annotate('sp'+str(i), (sp_coords[i,0], sp_coords[i,1]))
