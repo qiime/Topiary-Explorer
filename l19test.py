@@ -97,13 +97,14 @@ else:
 print("1")
 aa = pcoa.principal_coordinates_analysis(distance_matrix)
 sample_coords = aa[0].transpose()
-#sample_coords = sample_coords[:,0:3]
-#plt.scatter(sample_coords[:,0], sample_coords[:,1], c=range(len(ptmtx)))
 sp_coords = species_coords(aa[0], ptmtx, dims=len(sample_coords[0])) * 3
-#plt.scatter(sp_coords[:,0], sp_coords[:,1], s=10, c=range(len(sp_coords)))
-#for i in range(len(sp_coords)):
-#    plt.annotate('sp'+str(i), (sp_coords[i,0], sp_coords[i,1]))
 print("1")
+
+evals = aa[1]/sum(aa[1])
+
+#scale axes by eigenvalues
+sp_coords = sp_coords*array([list(evals)]*len(sp_coords));
+sample_coords = sample_coords*array([list(evals)]*len(sample_coords))
 
 o = open('sample_coords.txt', 'w')
 for i in sample_coords:
@@ -117,5 +118,10 @@ for i in sp_coords:
     for j in i:
         o.write(str(j) + '\t')
     o.write('\n')
+o.close()
+#output eigenvalues
+o = open('evals.txt', 'w')
+for i in aa[1]:
+    o.write(str(aa[1][i]/sum(aa[i])) + '\t')
 o.close()
 print("1")
