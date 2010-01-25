@@ -6,6 +6,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
+import java.util.*;
+import java.text.*;
 
 /**
  * Panel that holds the Processing-generated TreeVis applet and a pair of
@@ -22,6 +24,7 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
     //for each vertex in the graph, we have data associated with it
     public VertexData[] sampleData = null; //sample data
     public VertexData[] spData = null; //species data
+    public ArrayList<Double> evals = null; //normalized eigenvalues for each axis
 
     private float MARGIN = 100;
 
@@ -38,17 +41,24 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
     private boolean displayOtus = true;
     private boolean displayConnections = true;
     private boolean displayAxes = true;
-    
+    private boolean displayAxisLabels = true;
+
     //which PC's to display?
     private int axis1 = 0;
     private int axis2 = 1;
     private int axis3 = 2;
     
+    private String axis1label = "";
+    private String axis2label = "";
+    private String axis3label = "";
+
     private boolean SHIFTPRESSED = false;
 
     private float prevMouseX = 0;
     private float prevMouseY = 0;
     private boolean mouseRButtonDown = false;
+    
+    private VTextRenderer textRenderer;
 
     private String dynamicLayout = "None";
 
@@ -64,6 +74,9 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
     float meany = -1;
     float yspread = -1;
     float xspread = -1;
+    
+    float xsize = 0;
+    float ysize = 0;
 
     float[] attitude = {
       0,0,0};
@@ -100,6 +113,39 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
 	    } else if (i == 3) {
 	        axis3 = p;
 	    }
+	    resetAxisLabels();
+	}
+	public String getAxisLabel(int i) {
+	    if (i == 1) {
+	        return axis1label;
+	    } else if (i == 2) {
+	        return axis2label;
+	    } else if (i == 3) {
+	        return axis3label;
+	    } else {
+	        return "";
+	    }
+	}
+	
+    public void setAxisLabel(int i, String p) {
+	    if (i == 1) {
+	        axis1label = p;
+	    } else if (i == 2) {
+	        axis2label = p;
+	    } else if (i == 3) {
+	        axis3label = p;
+	    }
+	}	
+	
+	public void resetAxisLabels() {
+	    DecimalFormat df = new DecimalFormat("#.0#");
+	    
+	    setAxisLabel(1, "PC" + Integer.toString(getAxis(1)+1) + ": " + 
+	        df.format((100*evals.get(getAxis(1)).doubleValue())) +"%");
+	    setAxisLabel(2, "PC" + Integer.toString(getAxis(2)+1) + ": " + 
+	        df.format((100*evals.get(getAxis(2)).doubleValue())) +"%");
+	    setAxisLabel(3, "PC" + Integer.toString(getAxis(3)+1) + ": " + 
+	        df.format((100*evals.get(getAxis(3)).doubleValue())) +"%");	        
 	}
 	
 	public void keyPressed(KeyEvent e) {
@@ -125,7 +171,8 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
         glDrawable.addMouseMotionListener(this);
         glDrawable.addKeyListener(this);
 
-        GL gl = glDrawable.getGL();        
+        GL gl = glDrawable.getGL();     
+        textRenderer = new VTextRenderer("Georgia", 18);
 	}
     
     public void display(GLAutoDrawable glDrawable) {
@@ -133,12 +180,13 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
         
         gl.glClearColor(backgroundColor.getRed()/255, backgroundColor.getGreen()/255, backgroundColor.getBlue()/255, 0);
 
-
-        gl.glOrtho(glDrawable.getWidth()/2, -glDrawable.getWidth()/2, -glDrawable.getHeight()/2, glDrawable.getHeight()/2, 1000, -1000);
+        xsize = glDrawable.getWidth()/2;
+        ysize = glDrawable.getHeight()/2;
+        gl.glOrtho(xsize, -xsize, -ysize, ysize, 1000, -1000);
         gl.glViewport(0,0,glDrawable.getWidth(),glDrawable.getHeight());
         gl.glMatrixMode( GL.GL_PROJECTION );
         gl.glLoadIdentity();
-        gl.glOrtho(glDrawable.getWidth()/2, -glDrawable.getWidth()/2, -glDrawable.getHeight()/2, glDrawable.getHeight()/2, 1000, -1000);
+        gl.glOrtho(xsize, -xsize, -ysize, ysize, 1000, -1000);
         gl.glViewport(0,0,glDrawable.getWidth(),glDrawable.getHeight());
         gl.glMatrixMode( GL.GL_MODELVIEW );
         gl.glLoadIdentity();
@@ -539,8 +587,8 @@ public void drawPCoA(GL gl) {
   }
 
   //Draw the axes
+  float axeslength = (float)Math.max(Math.max((maxx-minx), (maxy-miny)), (maxz-minz));
   if (displayAxes) {
-    float axeslength = (float)Math.max(Math.max((maxx-minx), (maxy-miny)), (maxz-minz))/2.0f;
 
     gl.glLineWidth(5);
     gl.glBegin(gl.GL_LINES);
@@ -558,6 +606,37 @@ public void drawPCoA(GL gl) {
     gl.glVertex3f(scaling*minx,scaling*maxy,scaling*maxz);
     gl.glVertex3f(scaling*minx,scaling*maxy,scaling*(maxz-axeslength));
     gl.glEnd();
+        
+  }
+  if (displayAxisLabels) {
+      gl.glPushMatrix();
+    gl.glTranslatef(scaling*(minx+axeslength),scaling*maxy,scaling*maxz);
+    gl.glRotatef(-yrotation, 0, 1, 0);
+    gl.glRotatef(-xrotation, 1, 0, 0);
+    gl.glRotatef(180, 0, 1, 0);
+    textRenderer.print(getAxisLabel(2), 
+        0.0f, 0.0f, 0.0f);
+    gl.glPopMatrix();
+    
+    gl.glPushMatrix();
+    gl.glTranslatef(scaling*minx,scaling*(maxy-axeslength),scaling*maxz);
+    gl.glRotatef(-yrotation, 0, 1, 0);
+    gl.glRotatef(-xrotation, 1, 0, 0);
+    gl.glRotatef(180, 0, 1, 0);
+    textRenderer.print(getAxisLabel(1), 
+        0.0f, 0.0f, 0.0f);
+    gl.glPopMatrix();
+    
+    gl.glPushMatrix();
+    gl.glTranslatef(scaling*minx,scaling*maxy,scaling*(maxz-axeslength));
+    gl.glRotatef(-yrotation, 0, 1, 0);
+    gl.glRotatef(-xrotation, 1, 0, 0);
+    gl.glRotatef(180, 0, 1, 0);
+    textRenderer.print(getAxisLabel(3), 
+        0.0f, 0.0f, 0.0f);
+    gl.glPopMatrix();
+
+  
   }
 
 }
@@ -661,5 +740,8 @@ public void drawPCoA(GL gl) {
     public void setDisplayAxes(boolean v) {
       displayAxes = v;
     }
+    public void setDisplayAxisLabels(boolean v) {
+      displayAxisLabels = v;
+    }    
 
 }

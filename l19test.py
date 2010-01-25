@@ -122,6 +122,6 @@ o.close()
 #output eigenvalues
 o = open('evals.txt', 'w')
 for i in aa[1]:
-    o.write(str(aa[1][i]/sum(aa[i])) + '\t')
+    o.write(str(i/sum(aa[1])) + '\t')
 o.close()
 print("1")

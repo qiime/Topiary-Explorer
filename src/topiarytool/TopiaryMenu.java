@@ -63,6 +63,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JCheckBoxMenuItem otusMenuItem = new JCheckBoxMenuItem("OTUs");
     JCheckBoxMenuItem connectionsMenuItem = new JCheckBoxMenuItem("Connections");
     JCheckBoxMenuItem axesMenuItem = new JCheckBoxMenuItem("Axes");
+    JCheckBoxMenuItem axisLabelsMenuItem = new JCheckBoxMenuItem("Axis Labels");
 
     JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels");
     JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");
@@ -386,6 +387,13 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
         });
         pcoaMenu.add(axesMenuItem);
+        axisLabelsMenuItem.setSelected(true);
+        axisLabelsMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.pcoa.setDisplayAxisLabels(axisLabelsMenuItem.getState());
+            }
+        });
+        pcoaMenu.add(axisLabelsMenuItem);        
         item = new JMenuItem("Run PCoA Analysis...");
         item.addActionListener(this);
         pcoaMenu.add(item);
@@ -905,6 +913,32 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 	  } catch (IOException e) {
 		JOptionPane.showMessageDialog(null, "Error reading sp_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
 	  }
+	  
+	  
+	  try {
+		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("evals.txt"))));
+	  } catch (FileNotFoundException e) {
+		JOptionPane.showMessageDialog(null, "Error opening evals.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	  }
+	  float[] evalsc = null;
+
+	  try {
+		  line = br.readLine();
+		  String[] s = line.split("\t");
+		  float[] data = new float[s.length];
+		  for (int i = 0; i < s.length; i++) {
+			try {
+			  data[i] = Float.parseFloat(s[i]);
+			} catch(Exception e) {
+			  data[i] = 0;
+			}
+		  }
+		  evalsc = data;
+	  } catch (IOException e) {
+		JOptionPane.showMessageDialog(null, "Error reading evals.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	  }
+	  
+	  
 
 	  frame.pcoa.spData = new VertexData[spc.length];
 	  System.out.println((new Integer(spc.length)).toString() + " " + (new Integer(otuids.size())).toString());
@@ -931,6 +965,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		frame.pcoa.sampleData[i].velocity = new float[3];
 		frame.pcoa.sampleData[i].velocity[0] = frame.pcoa.sampleData[i].velocity[1] = frame.pcoa.sampleData[i].velocity[2] = 0;
 		frame.pcoa.sampleData[i].sh = "sphere";
+	  }
+	  
+	  frame.pcoa.evals = new ArrayList<Double>();
+	  for (int i = 0; i < evalsc.length; i++) {
+	    frame.pcoa.evals.add(new Double(evalsc[i]));
 	  }
 
 	  float[][] links = new float[0][];
@@ -963,6 +1002,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 
       //color it
       frame.recolor();
+      
+      //set axis labels
+      frame.pcoa.resetAxisLabels();
       
       //set view
       frame.tabbedPane.setSelectedIndex(2);
