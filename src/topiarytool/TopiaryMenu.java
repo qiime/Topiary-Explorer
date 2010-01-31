@@ -495,16 +495,23 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
              frame.tree.setTOffsets(frame.tree.getTree(), 0);
              frame.tree.setROffsets(frame.tree.getTree(), 0);
              frame.tree.setRadialOffsets(frame.tree.getTree());
-         } else if (e.getActionCommand().equals("Export Tree Image...")) {
+         } else if (e.getActionCommand().equals("Export Tree Image...") && frame.tree.getTree()!= null) {
             frame.tree.noLoop();
-            frame.loadDataFileChooser.setDialogTitle("Select PDF File");
-            int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				String selectedFile = frame.loadDataFileChooser.getSelectedFile().getAbsolutePath();
-				frame.tree.exportTreeImage(selectedFile);
+             //Determine PDF dimensions
+             PDFDimensionsDialog p = new PDFDimensionsDialog(frame);
+             p.pack();
+             p.setVisible(true);
+             double dims[] = p.dims;
+             if (dims[0]!=0 || dims[1]!=0) {
+                frame.loadDataFileChooser.setDialogTitle("Select PDF File");
+                int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    String selectedFile = frame.loadDataFileChooser.getSelectedFile().getAbsolutePath();
+                    frame.tree.exportTreeImage(selectedFile, dims);
+                }
 			}
             frame.tree.loop();
-         } else if (e.getActionCommand().equals("Export Tree Screen Capture..."))  {
+         } else if (e.getActionCommand().equals("Export Tree Screen Capture...") && frame.tree.getTree()!= null)  {
              frame.tree.noLoop();
              frame.loadDataFileChooser.setDialogTitle("Select PDF File");
              int returnVal = frame.loadDataFileChooser.showSaveDialog(null);

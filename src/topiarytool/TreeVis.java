@@ -1162,7 +1162,7 @@ public class TreeVis extends PApplet {
      *
      * @param  filename  the file to write the image to
      */
-    public void exportTreeImage(String filename) {
+    public void exportTreeImage(String filename, double dims[]) {
 
       //save the current variables
       int oldWidth = getWidth();
@@ -1179,15 +1179,32 @@ public class TreeVis extends PApplet {
       double longest = textWidth(root.getLongestLabel());
       double l = root.longestRootToTipDistance();
       double s = root.shortestRootToTipDistance();
-      PGraphics canvas = createGraphics((int) ((l/s)*400+MARGIN+longest), (int) (12*root.getNumberOfLeaves() + MARGIN+TREEMARGIN), PDF, filename);
       drawExternalNodeLabels = true;
       drawInternalNodeLabels = true;
-      int w = (int) ((l/s)*400+MARGIN+longest);
-      int h = (int) (12*root.getNumberOfLeaves() + 2*MARGIN);
-      xscale = (w-MARGIN-longest)/root.depth();
-      yscale = (h-2*MARGIN)/root.getNumberOfLeaves();
-      xstart = MARGIN;
-      ystart = MARGIN;
+      if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+          xscale = (dims[0]-MARGIN-TREEMARGIN)/root.depth();
+          xstart = MARGIN;
+      } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
+          xscale = (Math.min(dims[0], dims[1])*0.5-MARGIN)/root.depth();
+          xstart = dims[0]*0.5;
+      }
+      
+     if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+          yscale = (dims[1]-2*MARGIN)/root.getNumberOfLeaves();
+          ystart = MARGIN;
+      } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
+          yscale = (Math.min(dims[0], dims[1])*0.5-MARGIN)/root.depth();
+          ystart = dims[1]*0.5;
+      }
+      
+      System.out.print(xscale);
+      System.out.print(" ");
+      System.out.println(yscale);
+      System.out.print(oldXScale);
+      System.out.print(" ");
+      System.out.println(oldYScale);
+            PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), PDF, filename);
+
       setCollapsedPixel((float)(getCollapsedPixel()*(xscale/oldXScale)));
 
       //draw the three to the file
