@@ -757,7 +757,7 @@ public class TreeVis extends PApplet {
        canvas.noStroke();
        
       if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
-        pushMatrix();
+        canvas.pushMatrix();
         double rotation = 0;
         if (treeLayout.equals("Radial")) {
             rotation = Math.atan2(yscale*node.getRYOffset(), xscale*node.getRXOffset());
@@ -787,8 +787,8 @@ public class TreeVis extends PApplet {
         }
       
         drawY = (float)0;
-        translate((float)xstart, (float)ystart);
-        rotate((float)rotation);
+        canvas.translate((float)xstart, (float)ystart);
+        canvas.rotate((float)rotation);
       }
       
      double maxX =  drawX + 5 + (width*currFont.size);
@@ -816,7 +816,7 @@ public class TreeVis extends PApplet {
       canvas.stroke(0);
       
       if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
-        popMatrix();
+        canvas.popMatrix();
       }
     }
 
@@ -890,9 +890,9 @@ public class TreeVis extends PApplet {
                   (float)xp, (float)yp);
           }
       } else if (treeLayout.equals("Polar")) {
-          ellipseMode(CENTER);
+          canvas.ellipseMode(CENTER);
           //draw curved line through the node
-          noFill();
+          canvas.noFill();
           double radius = node.getROffset();
           double minradius = Math.min(node.nodes.get(0).getTOffset(), 
             node.nodes.get(node.nodes.size()-1).getTOffset());
@@ -1150,7 +1150,7 @@ public class TreeVis extends PApplet {
     public void exportScreenCapture(String filename) {
       PGraphics canvas = createGraphics(width, height, PDF, filename);
       canvas.beginDraw();
-      textFont(currFont);
+      canvas.textFont(currFont);
       background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
       drawTree(root, canvas);
       canvas.dispose();
@@ -1197,13 +1197,7 @@ public class TreeVis extends PApplet {
           ystart = dims[1]*0.5;
       }
       
-      System.out.print(xscale);
-      System.out.print(" ");
-      System.out.println(yscale);
-      System.out.print(oldXScale);
-      System.out.print(" ");
-      System.out.println(oldYScale);
-            PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), PDF, filename);
+      PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), PDF, filename);
 
       setCollapsedPixel((float)(getCollapsedPixel()*(xscale/oldXScale)));
 
