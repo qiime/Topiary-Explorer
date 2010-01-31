@@ -201,6 +201,8 @@ public class TopiaryFunctions {
     public static Object objectify (String str) {
         try {
                 int i = Integer.parseInt(str);
+                if (i == 0)
+                    return null;
 				return i;
 			} catch (NumberFormatException nfx) {
                 try {

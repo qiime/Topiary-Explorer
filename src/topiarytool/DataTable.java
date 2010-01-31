@@ -5,11 +5,11 @@ import java.io.*;
 
 public class DataTable {
     private ArrayList<String> columnNames = new ArrayList<String>();
-    private ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
+    private SparseTable data = new SparseTable();
 
 
     public DataTable() {
-        data = new java.util.ArrayList<ArrayList<Object>>();
+        data = new SparseTable();
 		columnNames = new java.util.ArrayList<String>();
     }
     
@@ -22,10 +22,19 @@ public class DataTable {
     }
     
     public void loadData(mysqlConnect conn) {
-        data = new java.util.ArrayList<ArrayList<Object>>();
-        for(int i = 0; i < conn.resultLines.size(); i++) {
-			data.add(objectify(parseLine(conn.resultLines.get(i))));
-		}
+        data = new SparseTable();
+        int c = 0;
+        for(int r = 0; r < conn.resultLines.size(); r++) {
+		    String vals[] = conn.resultLines.get(r).split("\t");
+		    c = 0;
+		    for (String obj : vals) {
+		        Object val = TopiaryFunctions.objectify(obj);
+		        if (val != null) {
+		            data.add(r, c, val);
+		        }
+		        c = c + 1;
+		    }
+        }
 		int numCols = conn.colNames.size();
 		
 		columnNames = parseLine(conn.colNamesStr);
@@ -50,12 +59,26 @@ public class DataTable {
 		br.reset();
 
 
-        data = new java.util.ArrayList<ArrayList<Object>>();
+        data = new SparseTable();
+        int r = 0;
+        int c = 0;
 		while ((line = br.readLine()) != null) {
-			data.add(objectify(parseLine(line)));
-		}
+		    String vals[] = line.split("\t");
+		    c = 0;
+		    for (String obj : vals) {
+		        Object val = obj;
+		        if (c!=0) {
+		            val = TopiaryFunctions.objectify(obj);
+		        }
+		        if (val != null) {
+		            data.add(r, c, val);
+		        }
+		        c = c + 1;
+		    }
+		    r = r + 1;
+        }
 
-        int numCols = data.get(0).size();
+        int numCols = c;
 
         //parse each commented line until we get one that has the same number of
         //rows as the data
@@ -74,34 +97,35 @@ public class DataTable {
 			}
 			columnNames = parseLine(headerLine.substring(1));
 		}
+		
     }
 
-    public ArrayList<ArrayList<Object>> getData() {
+    public SparseTable getData() {
 		return data;
 	}
 
-	public Object[][] getDataAsArray() {
-		Object[][] r = new Object[data.size()][];
-		for (int i = 0; i < data.size(); i++) {
-			r[i] = data.get(i).toArray();
-		}
-		return r;
-	}
 
-	public void setData(ArrayList<ArrayList<Object>> data) {
+	public void setData(SparseTable data) {
 		this.data = data;
 	}
 
     public ArrayList<Object> getColumn(int index) {
         ArrayList<Object> result = new ArrayList<Object>();
-        for (ArrayList<Object> row : data) {
-            result.add(row.get(index));
+        for (int i = 0; i < data.maxRow(); i++) {
+            result.add(data.get(i, index));
+        }
+        return result;
+    }
+    public ArrayList<Object> getRow(int index) {
+        ArrayList<Object> result = new ArrayList<Object>();
+        for (int i = 0; i < data.maxCol(); i++) {
+            result.add(data.get(index,i));
         }
         return result;
     }
 
     public Object getValueAt(int row, int col) {
-        return data.get(row).get(col);
+        return data.get(row,col);
     }
 
 	public int getColumnCount() {
@@ -119,8 +143,7 @@ public class DataTable {
 	public void setColumnNames(ArrayList<String> columnNames) {
 		this.columnNames = columnNames;
 	}
-
-	private ArrayList<String> parseLine(String line) {
+    private ArrayList<String> parseLine(String line) {
 		return new ArrayList<String>(Arrays.asList(line.split("\t")));
 	}
 

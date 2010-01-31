@@ -298,8 +298,8 @@ public class MainFrame extends JFrame {
          tabbedPane.setSelectedIndex(0);
          dataPane.setSelectedIndex(3);
          sampleMetadata = new DataTable(db_conn.c);
-         sampleMetadataTable.setModel(new DefaultTableModel(sampleMetadata.getDataAsArray(),
-         sampleMetadata.getColumnNames().toArray()){
+         sampleMetadataTable.setModel(new SparseTableModel(sampleMetadata.getData(),
+         sampleMetadata.getColumnNames()){
          //make it so the user can't edit the cells manually
          public boolean isCellEditable(int rowIndex, int colIndex) {
              return false;
@@ -318,8 +318,8 @@ public class MainFrame extends JFrame {
           tabbedPane.setSelectedIndex(0);
           dataPane.setSelectedIndex(0);
           database = new DataTable(db_conn.c);
-          databaseTable.setModel(new DefaultTableModel(sampleMetadata.getDataAsArray(),
-          database.getColumnNames().toArray()){
+          databaseTable.setModel(new SparseTableModel(sampleMetadata.getData(),
+          database.getColumnNames()){
           //make it so the user can't edit the cells manually
           public boolean isCellEditable(int rowIndex, int colIndex) {
               return false;
@@ -474,8 +474,8 @@ public class MainFrame extends JFrame {
                 Object otuID = otuSampleMap.getValueAt(i,0);
                 //find the row that has this otuID
                 int otuRowIndex = -1;
-                for (int j = 0; j < otuMetadata.getData().size(); j++) {
-                   if (otuMetadata.getData().get(j).get(0).equals(otuID)) {
+                for (int j = 0; j < otuMetadata.getData().maxRow(); j++) {
+                   if (otuMetadata.getData().get(j,0).equals(otuID)) {
                        otuRowIndex = j;
                        break;
                    }
@@ -502,9 +502,8 @@ public class MainFrame extends JFrame {
              //find the row of the sample metadata table with this ID
              int rowIndex = -1;
              Object sampleIDObj = TopiaryFunctions.objectify(sampleID);
-             for (int i = 0; i < sampleMetadata.getData().size(); i++) {
-                 ArrayList<Object> row = sampleMetadata.getData().get(i);
-                 if (row.get(0).equals(sampleIDObj)) {
+             for (int i = 0; i < sampleMetadata.getData().maxRow(); i++) {
+                 if (sampleMetadata.getData().get(i,0).equals(sampleIDObj)) {
                      rowIndex = i;
                      break;
                  }
@@ -538,10 +537,9 @@ public class MainFrame extends JFrame {
             String nodeName = n.getLabel();
             //get the row of the OTU metadata table with this name
             int rowIndex = -1;
-            Object nodeNameObj = TopiaryFunctions.objectify(nodeName);
-            for (int i = 0; i < otuMetadata.getData().size(); i++) {
-                ArrayList<Object> row = otuMetadata.getData().get(i);
-                if (row.get(0).equals(nodeNameObj)) {
+            for (int i = 0; i < otuMetadata.getData().maxRow(); i++) {
+                String val = (String)otuMetadata.getData().get(i,0);
+                if (val.equals(nodeName)) {
                     rowIndex = i;
                     break;
                 }
@@ -572,9 +570,9 @@ public class MainFrame extends JFrame {
              String nodeName = n.getLabel();
              //get the row of the OTU-Sample map with this name
              int rowIndex = -1;
-             Object nodeNameObj = TopiaryFunctions.objectify(nodeName);
-             for (int i = 0; i < otuSampleMap.getData().size(); i++) {
-                if (otuSampleMap.getData().get(i).get(0).equals(nodeNameObj)) {
+             for (int i = 0; i < otuSampleMap.getData().maxRow(); i++) {
+                String val = (String)otuSampleMap.getData().get(i,0);
+                if (val.equals(nodeName)) {
                     rowIndex = i;
                     break;
                 }
@@ -584,7 +582,7 @@ public class MainFrame extends JFrame {
                 return;
              }
              //get the row
-             ArrayList<Object> row = otuSampleMap.getData().get(rowIndex);
+             ArrayList<Object> row = otuSampleMap.getRow(rowIndex);
              n.clearColor();
              //for each non-zero column value (starting after the ID column)
              for (int i = 1; i < row.size(); i++) {
@@ -597,8 +595,8 @@ public class MainFrame extends JFrame {
                  //find the row that has this sampleID
                  int sampleRowIndex = -1;
                  Object sampleIDObj = TopiaryFunctions.objectify(sampleID);
-                 for (int j = 0; j < sampleMetadata.getData().size(); j++) {
-                    if (sampleMetadata.getData().get(j).get(0).equals(sampleIDObj)) {
+                 for (int j = 0; j < sampleMetadata.getData().maxRow(); j++) {
+                    if (sampleMetadata.getData().get(j,0).equals(sampleIDObj)) {
                         sampleRowIndex = j;
                         break;
                     }
@@ -626,9 +624,8 @@ public class MainFrame extends JFrame {
             //get the row of the OTU metadata table with this name
             int rowIndex = -1;
             Object nodeNameObj = TopiaryFunctions.objectify(nodeName);
-            for (int i = 0; i < otuMetadata.getData().size(); i++) {
-                ArrayList<Object> row = otuMetadata.getData().get(i);
-                if (row.get(0).equals(nodeNameObj)) {
+            for (int i = 0; i < otuMetadata.getData().maxRow(); i++) {
+                if (otuMetadata.getData().get(i,0).equals(nodeNameObj)) {
                     rowIndex = i;
                     break;
                 }
@@ -664,8 +661,8 @@ public class MainFrame extends JFrame {
              //get the row of the OTU-Sample map with this name
              int rowIndex = -1;
              Object nodeNameObj = TopiaryFunctions.objectify(nodeName);
-             for (int i = 0; i < otuSampleMap.getData().size(); i++) {
-                if (otuSampleMap.getData().get(i).get(0).equals(nodeNameObj)) {
+             for (int i = 0; i < otuSampleMap.getData().maxRow(); i++) {
+                if (otuSampleMap.getData().get(i,0).equals(nodeNameObj)) {
                     rowIndex = i;
                     break;
                 }
@@ -675,7 +672,7 @@ public class MainFrame extends JFrame {
                 return;
              }
              //get the row
-             ArrayList<Object> row = otuSampleMap.getData().get(rowIndex);
+             ArrayList<Object> row = otuSampleMap.getRow(rowIndex);
              n.clearColor();
              //for each non-zero column value (starting after the ID column)
              for (int i = 1; i < row.size(); i++) {
@@ -688,8 +685,8 @@ public class MainFrame extends JFrame {
                  //find the row that has this sampleID
                  int sampleRowIndex = -1;
                  Object sampleIDObj = TopiaryFunctions.objectify(sampleID);
-                 for (int j = 0; j < sampleMetadata.getData().size(); j++) {
-                    if (sampleMetadata.getData().get(j).get(0).equals(sampleIDObj)) {
+                 for (int j = 0; j < sampleMetadata.getData().maxRow(); j++) {
+                    if (sampleMetadata.getData().get(j,0).equals(sampleIDObj)) {
                         sampleRowIndex = j;
                         break;
                     }
@@ -805,22 +802,22 @@ public class MainFrame extends JFrame {
 	 	//if it's a leaf, set metadata
 	 	if (node.isLeaf()) {
 	 		//first, get the metadata
-	 		ArrayList<ArrayList<Object>> rows = otuMetadata.getData();
+	 		SparseTable data = otuMetadata.getData();
 
 	 		//find which column we're looking at
 	 		int col;
-	 		for (col = 0; col < rows.get(0).size(); col++) {
+	 		for (col = 0; col < data.maxCol(); col++) {
 	 			if (otuMetadata.getColumnName(col).equals(name)) { break; }
 	 		}
 
 	 		//find out which row we're looking at
 	 		int row;
-	 		for (row = 0; row < rows.size(); row++) {
-	 			if ( ( rows.get(row).get(0).toString()).equals(node.getLabel())) { break; }
+	 		for (row = 0; row < data.maxRow(); row++) {
+	 			if ( ( data.get(row,0).toString()).equals(node.getLabel())) { break; }
 	 		}
 
 	 		//set the node's field
-	 		node.userObject = (Object) rows.get(row).get(col).toString();
+	 		node.userObject = (Object) data.get(row,col).toString();
 	 	}
 	 	else {
 	 		String consensus = (String) node.nodes.get(0).userObject;

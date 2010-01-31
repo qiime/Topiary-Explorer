@@ -557,8 +557,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             try {
                 FileInputStream is = new FileInputStream(selectedFile);
                 frame.otuMetadata = new DataTable(is);
-                frame.otuMetadataTable.setModel(new DefaultTableModel(frame.otuMetadata.getDataAsArray(),
-                    frame.otuMetadata.getColumnNames().toArray()){
+                frame.otuMetadataTable.setModel(new SparseTableModel(frame.otuMetadata.getData(),
+                    frame.otuMetadata.getColumnNames()){
                     //make it so the user can't edit the cells manually
                     public boolean isCellEditable(int rowIndex, int colIndex) {
                         return false;
@@ -590,8 +590,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             try {
                 FileInputStream is = new FileInputStream(selectedFile);
                 frame.sampleMetadata = new DataTable(is);
-                frame.sampleMetadataTable.setModel(new DefaultTableModel(frame.sampleMetadata.getDataAsArray(),
-                    frame.sampleMetadata.getColumnNames().toArray()){
+                frame.sampleMetadataTable.setModel(new SparseTableModel(frame.sampleMetadata.getData(),
+                    frame.sampleMetadata.getColumnNames()){
                     //make it so the user can't edit the cells manually
                     public boolean isCellEditable(int rowIndex, int colIndex) {
                         return false;
@@ -622,8 +622,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             try {
                 FileInputStream is = new FileInputStream(selectedFile);
                 frame.otuSampleMap = new DataTable(is);
-                frame.otuSampleMapTable.setModel(new DefaultTableModel(frame.otuSampleMap.getDataAsArray(),
-                    frame.otuSampleMap.getColumnNames().toArray()){
+                frame.otuSampleMapTable.setModel(new SparseTableModel(frame.otuSampleMap.getData(),
+                    frame.otuSampleMap.getColumnNames()){
                     //make it so the user can't edit the cells manually
                     public boolean isCellEditable(int rowIndex, int colIndex) {
                         return false;
@@ -789,7 +789,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		ArrayList<String> sampleids = new ArrayList<String>();
 
 		//Write the data to file
-		DefaultTableModel model = (DefaultTableModel) frame.otuSampleMapTable.getModel();
+		SparseTableModel model = (SparseTableModel) frame.otuSampleMapTable.getModel();
 		//get the column names
 		for (int i = 1; i < frame.otuSampleMapTable.getColumnCount(); i++) {
 			sampleids.add((String) frame.otuSampleMapTable.getColumnName(i));
@@ -801,9 +801,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 			for (int i = 0; i < frame.otuSampleMapTable.getRowCount(); i++) {
 				o.write("[");
 				//skip first col, which is OTU ID
-				otuids.add(frame.otuSampleMapTable.getValueAt(i,0).toString());
+				Object val = frame.otuSampleMapTable.getValueAt(i,0);
+				if (val==null) { val = new Integer(0); }
+				otuids.add(val.toString());
 				for (int j = 1; j < frame.otuSampleMapTable.getColumnCount(); j++) {
 					Object data = frame.otuSampleMapTable.getValueAt(i, j);
+                    if (data==null) {data = new Integer(0);}
 					if (data instanceof Integer) {
 						if (j > 1) {o.write(", ");}
 						o.write(data.toString());
@@ -982,7 +985,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 	  float[][] links = new float[0][];
 	  for (int i = 0; i < spc.length; i++) {
 	  	for (int j = 0; j < samplec.length; j++) {
-	  		float weight = (float) ((Integer) frame.otuSampleMapTable.getValueAt(i,j+1));
+	  	    Object val = frame.otuSampleMapTable.getValueAt(i,j+1);
+	  	    if (val==null) {val=new Integer(0);}
+	  		float weight = (float) ((Integer)val);
 	  		if (weight != 0) {
 	  			float[][] t = new float[links.length+1][];
 			    System.arraycopy(links, 0, t, 0, links.length);
