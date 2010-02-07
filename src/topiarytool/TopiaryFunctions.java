@@ -147,6 +147,7 @@ public class TopiaryFunctions {
         if (curr_node == null) {       //no data -- return empty node
             return new Node();
         }
+        curr_node.setCollapsed(false);
         return curr_node;    //this should be the root of the tree
     }
 

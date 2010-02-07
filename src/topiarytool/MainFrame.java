@@ -775,6 +775,7 @@ public class MainFrame extends JFrame {
         for (Node n : tree.getTree().getNodes()) {
             n.setCollapsed(true);
         }
+        tree.getTree().setCollapsed(false);
      }
 
      public void collapseTreeByInternalNodeLabels() {

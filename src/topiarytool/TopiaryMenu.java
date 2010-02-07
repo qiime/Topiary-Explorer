@@ -398,11 +398,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item.addActionListener(this);
         pcoaMenu.add(item);
 
-
-
-
         //set up the "node" submenus
         item = new JMenuItem("Collapse/Expand");
+        item.addActionListener(this);
+        nodeMenu.add(item);
+        item = new JMenuItem("Collapse/Expand All Children");
         item.addActionListener(this);
         nodeMenu.add(item);
         item = new JMenuItem("Rotate (Swap Children)");
@@ -458,6 +458,13 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
              if (frame.clickedNode != null) {
                 frame.clickedNode.setCollapsed(!frame.clickedNode.isCollapsed());
              }
+         } else if (e.getActionCommand().equals("Collapse/Expand All Children")) {
+              if (frame.clickedNode != null) {
+                 ArrayList<Node> children = frame.clickedNode.getNodes();
+                 for(Node n: children)
+                     {n.setCollapsed(!n.isCollapsed());}
+                 frame.clickedNode.setCollapsed(!frame.clickedNode.isCollapsed());
+              }
          } else if (e.getActionCommand().equals("Rotate (Swap Children)")) {
              if (frame.clickedNode != null) {
                 frame.clickedNode.rotate();
@@ -541,6 +548,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.removeColor();
             frame.treeToolbar.zoomSlider.setValue(0);
             frame.tree.loop();
+            frame.collapseTree();
         }
         System.out.println("Done");
    }

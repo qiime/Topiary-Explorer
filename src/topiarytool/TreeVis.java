@@ -330,9 +330,6 @@ public class TreeVis extends PApplet {
       }
     }
 
-
-
-
     /**
      * Ensures that the tree is not scrolled out of its bounds, and resets it back if it is
      */
