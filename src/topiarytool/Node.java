@@ -268,6 +268,25 @@ public class Node {
       }
     });
   }
+  
+  public void sortByBranchLength() {
+      for (int i=0; i < nodes.size(); i++) {
+        nodes.get(i).sortByBranchLength();
+      }
+
+      //sort this node
+      Collections.sort(nodes, new java.util.Comparator() {
+        public int compare(Object o1, Object o2) {
+          if ( ((Node)o1).longestRootToTipDistance() < ((Node)o2).longestRootToTipDistance()) {
+            return -1;
+          } else if ( ((Node)o1).longestRootToTipDistance() > ((Node)o2).longestRootToTipDistance()) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }
+      });
+  }
 
   public void sortByNumberOfChildren() {
         //sort each of the subtrees

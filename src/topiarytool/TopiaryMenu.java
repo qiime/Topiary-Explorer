@@ -35,7 +35,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 
     MainFrame frame = null;
     JMenu fileMenu = new JMenu("File");
-    JMenu editMenu = new JMenu("Edit");
+    JMenu viewMenu = new JMenu("View");
     JMenu treeMenu = new JMenu("Tree");
     JMenu nodeMenu = new JMenu("Node");
     JMenu pcoaMenu = new JMenu("PCoA");
@@ -65,7 +65,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JCheckBoxMenuItem axesMenuItem = new JCheckBoxMenuItem("Axes");
     JCheckBoxMenuItem axisLabelsMenuItem = new JCheckBoxMenuItem("Axis Labels");
 
-    JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels");
+    JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels...");
     JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");
 
     /**
@@ -108,7 +108,21 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item.addActionListener(this);
         fileMenu.add(item);
         
+        //set up the view menu
+        JCheckBoxMenuItem checkbox = new JCheckBoxMenuItem("Tree Toolbar", true);
+        checkbox.addActionListener(this);
+        viewMenu.add(checkbox);
+        checkbox = new JCheckBoxMenuItem("Node Toolbar");
+        checkbox.addActionListener(this);
+        viewMenu.add(checkbox);
+        checkbox = new JCheckBoxMenuItem("PCoA Toolbar");
+        checkbox.addActionListener(this);
+        viewMenu.add(checkbox);
+        
         //set up the "tree" submenus
+        item = new JMenuItem("Beautify");
+        item.addActionListener(this);
+        treeMenu.add(item);
         item = new JMenuItem("Recenter");
         item.addActionListener(this);
         treeMenu.add(item);
@@ -421,7 +435,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         colorByMenu.add(noColoringMenuItem);
         
         //add all the menus to the menu bar
+        treeMenu.setEnabled(false);
+        nodeMenu.setEnabled(false);
+        pcoaMenu.setEnabled(false);
+        colorByMenu.setEnabled(false);
         add(fileMenu);
+        add(viewMenu);
         add(treeMenu);
         add(nodeMenu);
         add(pcoaMenu);
@@ -448,17 +467,31 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 				TopiaryFunctions.createNewickFileFromTree( frame.tree.getTree(),selectedFile);
 			 }
              frame.tree.loop();
+         } else if (e.getActionCommand().equals("Tree Toolbar")) {
+              frame.treeToolbar();
+         } else if (e.getActionCommand().equals("Node Toolbar")) {
+               frame.nodeToolbar();
+         } else if (e.getActionCommand().equals("PCoA Toolbar")) {
+                frame.pcoaToolbar();
          } else if (e.getActionCommand().equals("No coloring")) {
              frame.removeColor();
-         } else if (e.getActionCommand().equals("Tip Labels")) {
-             frame.tree.setDrawExternalNodeLabels(externalLabelsMenuItem.getState());
+         } else if (e.getActionCommand().equals("Tip Labels...")) {
+             frame.setTipLabels(externalLabelsMenuItem.getState());
          } else if (e.getActionCommand().equals("Internal Node Labels")) {
              frame.tree.setDrawInternalNodeLabels(internalLabelsMenuItem.getState());
          } else if (e.getActionCommand().equals("Collapse/Expand")) {
              if (frame.clickedNode != null) {
                 frame.clickedNode.setCollapsed(!frame.clickedNode.isCollapsed());
              }
-         } else if (e.getActionCommand().equals("Collapse/Expand All Children")) {
+         }
+         else if (e.getActionCommand().equals("Beautify")) {
+              frame.tree.getTree().sortByBranchLength();
+              frame.tree.setYOffsets(frame.tree.getTree(), 0);
+              frame.tree.setTOffsets(frame.tree.getTree(), 0);
+              frame.tree.setROffsets(frame.tree.getTree(), 0);
+              frame.tree.setRadialOffsets(frame.tree.getTree());
+          }
+          else if (e.getActionCommand().equals("Collapse/Expand All Children")) {
               if (frame.clickedNode != null) {
                  ArrayList<Node> children = frame.clickedNode.getNodes();
                  for(Node n: children)
@@ -479,17 +512,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
              frame.tree.resetTreeY();
              frame.treeToolbar.syncZoomSliderWithTree();
          } else if (e.getActionCommand().equals("Mirror left/right")) {
-            for (Node n : frame.tree.getTree().getNodes()) {
-                n.setXOffset(frame.tree.getTree().depth() - n.getXOffset());
-                n.setTOffset(Math.PI - n.getTOffset());
-            }
-            frame.tree.setRadialOffsets(frame.tree.getTree());
+            frame.mirrorHorz();
          } else if (e.getActionCommand().equals("Mirror up/down")) {
-            for (Node n : frame.tree.getTree().getNodes()) {
-                n.setYOffset(frame.tree.getTree().getNumberOfLeaves() - n.getYOffset());
-                n.setTOffset(-n.getTOffset());
-            }
-            frame.tree.setRadialOffsets(frame.tree.getTree());
+             frame.mirrorVert();
          } else if (e.getActionCommand().equals("Number of OTUs")) {
              frame.tree.getTree().sortByNumberOfOtus();
              frame.tree.setYOffsets(frame.tree.getTree(), 0);
@@ -550,6 +575,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.tree.loop();
             frame.collapseTree();
         }
+        treeMenu.setEnabled(true);
+        nodeMenu.setEnabled(true);
+        
+        pcoaMenu.setEnabled(true);
+        colorByMenu.setEnabled(true);
         System.out.println("Done");
    }
 
@@ -587,7 +617,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    }
 
    public void loadSampleMetadata() {
-       frame.loadDataFileChooser.setDialogTitle("Load OTU Metadata");
+       frame.loadDataFileChooser.setDialogTitle("Load Sample Metadata");
        int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
        if (returnVal == JFileChooser.APPROVE_OPTION) {
             frame.tree.noLoop();
@@ -663,22 +693,22 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    public void resetCollapseByMenu() {
        //NOTE: can only collapse on OTU metadata
        collapseByMenu.removeAll();
-       if (frame.otuMetadata != null) {
-           ArrayList<String> data = frame.otuMetadata.getColumnNames();
-           //start at 1 to skip ID column
-           for (int i = 1; i < data.size(); i++) {
-                String value = data.get(i);
-                JMenuItem item = new JMenuItem(value);
-                item.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        //get the category to color by
-                        String value = e.getActionCommand();
-                        frame.collapseByValue(value);
-                    }
-                });
-                collapseByMenu.add(item);
-           }
-       }
+       /*if (frame.otuMetadata != null) {
+                  ArrayList<String> data = frame.otuMetadata.getColumnNames();
+                  //start at 1 to skip ID column
+                  for (int i = 1; i < data.size(); i++) {
+                       String value = data.get(i);
+                       JMenuItem item = new JMenuItem(value);
+                       item.addActionListener(new ActionListener() {
+                           public void actionPerformed(ActionEvent e) {
+                               //get the category to color by
+                               String value = e.getActionCommand();
+                               frame.collapseByValue(value);
+                           }
+                       });
+                       collapseByMenu.add(item);
+                  }
+              }*/
        collapseByMenu.add(new JSeparator());
        JMenuItem item = new JMenuItem("Uncollapse All");
        item.addActionListener(new ActionListener() {

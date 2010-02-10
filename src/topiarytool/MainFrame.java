@@ -60,6 +60,12 @@ public class MainFrame extends JFrame {
     JPopupMenu treePopupMenu = new JPopupMenu();
     Animator animator = null;
     
+    Container toolbarPane = new Container();
+    TreeOptionsToolbar treeOpsToolbar = new TreeOptionsToolbar(this);
+    Boolean treeOpsOn = true;
+    
+    
+    
     DbConnectWindow db_conn = new DbConnectWindow();
     DbSearchWindow db_search = new DbSearchWindow();
 
@@ -88,6 +94,8 @@ public class MainFrame extends JFrame {
 
         //get content pane
         Container pane = getContentPane();
+        
+        pane.setLayout(new BorderLayout());
         
         //set up the menu bar
         setJMenuBar(mainMenu);
@@ -244,15 +252,57 @@ public class MainFrame extends JFrame {
         tabbedPane.addTab("Tree", treePanel);
         tabbedPane.addTab("PCoA", pcoaPanel);
 
+        //set up toolbar area
+        toolbarPane.setLayout(new FlowLayout());
+        toolbarPane.add(treeOpsToolbar);
+        
+        pane.add(toolbarPane, BorderLayout.NORTH);
         
         //add them to the split pane
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, colorPanel, tabbedPane);
-        
-        pane.add(splitPane);
+        pane.add(splitPane, BorderLayout.CENTER);
         
         //the following is required to make sure th GLContext is created, or else resizing the 
         //window will result in program freezes
         tabbedPane.setSelectedIndex(2);
+     }
+     
+     public void mirrorHorz() {
+         for (Node n : tree.getTree().getNodes()) {
+             n.setXOffset(tree.getTree().depth() - n.getXOffset());
+             n.setTOffset(Math.PI - n.getTOffset());
+             }
+        tree.setRadialOffsets(tree.getTree());
+     }
+     
+     public void mirrorVert() {
+         for (Node n : tree.getTree().getNodes()) {
+             n.setYOffset(tree.getTree().getNumberOfLeaves() - n.getYOffset());
+             n.setTOffset(-n.getTOffset());
+         }
+         tree.setRadialOffsets(tree.getTree());
+     }
+     
+     public void treeToolbar() {
+         if(treeOpsOn)
+             {
+                 toolbarPane.remove(treeOpsToolbar);
+                 treeOpsOn = false;
+            }
+        else
+            {
+                toolbarPane.add(treeOpsToolbar);
+                treeOpsOn = true;
+            }
+        repaint();
+     }
+     
+     public void nodeToolbar() {
+         
+     }
+     
+     public void pcoaToolbar() {
+         
      }
      
      public void searchButtonPressed() {
@@ -715,6 +765,15 @@ public class MainFrame extends JFrame {
          }
          tree.getTree().updateLineWidthsFromChildren();
      }
+     
+     public void setTipLabels(boolean state) {
+         if(sampleMetadata != null)
+         {
+             TipLabelCustomizer tlc = new TipLabelCustomizer(this);
+/*             tlc.show();*/
+         }
+         tree.setDrawExternalNodeLabels(state);
+     }
 
      public void colorByValue(String value) {
 
@@ -762,8 +821,6 @@ public class MainFrame extends JFrame {
         resetLineWidths();
         tree.getTree().updateLineWidthsFromChildren();
      }
-     
-     
 
      public void uncollapseTree(){
         for (Node n : tree.getTree().getNodes()) {
