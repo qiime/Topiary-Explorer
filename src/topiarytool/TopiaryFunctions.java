@@ -122,10 +122,10 @@ public class TopiaryFunctions {
               //remove surrounding quotes from label
               while (t.charAt(0) == '\'' || t.charAt(0) == '"') t = t.substring(1);
               while (t.charAt(t.length()-1) == '\'' || t.charAt(t.length()-1) == '"') t = t.substring(0,t.length()-1);
-              curr_node.setLabel(t.replace("'", "").replace("\"", ""));
+              curr_node.setName(t.replace("'", "").replace("\"", ""));
           }
           else if (state.equals("PreColon") && state1.equals("PostClosed")) {
-              curr_node.setLabel(t);
+              curr_node.setName(t);
           }
           else if (state.equals("PostColon")) {  //length data for the current node
               float bl = Float.valueOf(t).floatValue();
@@ -185,7 +185,7 @@ public class TopiaryFunctions {
         String tree = "";
 
         if (root.isLeaf()) {
-            return root.getLabel()+":"+root.getBranchLength();
+            return root.getName()+":"+root.getBranchLength();
         } else {
             tree = "(";
             for (Node n : root.nodes) {
@@ -193,7 +193,7 @@ public class TopiaryFunctions {
             }
             //remove last comma
             tree = tree.substring(0,tree.length()-1);
-            tree += ")" + root.getLabel() + ":" + root.getBranchLength();
+            tree += ")" + root.getName() + ":" + root.getBranchLength();
         }
 
         return tree;

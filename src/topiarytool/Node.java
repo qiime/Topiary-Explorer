@@ -12,6 +12,7 @@ public class Node {
   public ArrayList<Node> nodes = new ArrayList(); //children
 
   private String label = "";
+  private String name = "";
   private double branchlength = 0;
   private double yoffset = 0;
   private double xoffset = 0;
@@ -44,6 +45,7 @@ public class Node {
 
   Node(String _label, double _branchlength) {
     label = _label;
+    name = _label;
     branchlength = _branchlength;
   }
 
@@ -58,6 +60,8 @@ public class Node {
   public void setLabel(String s) { label = s; }
   public String getLabel() { return label; }
   public double getBranchLength() { return branchlength; }
+  public void setName(String s) { name = s; }
+  public String getName() { return name; }
   public void setBranchLength(double f) { if (f >= 0) branchlength = f; }
   public double getYOffset() { return yoffset; }
   public double getXOffset() { return xoffset; }

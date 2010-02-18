@@ -612,6 +612,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             resetColorByOtuMenu();
             resetLineWidthOtuMenu();
             resetCollapseByMenu();
+            resetTipLabels();
             frame.tree.loop();
        }
    }
@@ -689,6 +690,13 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         frame.pcoa.setLineWidthScale((float)value);
     }
 
+    public void resetTipLabels() {
+/*        frame.tlc = new TipLabelCustomizer(frame);
+        frame.tlc.setVisible(false);
+        for(Node n : frame.tree.getTree().getNodes())
+            n.setLabel(n.getName());*/
+        frame.tree.redraw();
+    }
 
    public void resetCollapseByMenu() {
        //NOTE: can only collapse on OTU metadata

@@ -64,7 +64,7 @@ public class MainFrame extends JFrame {
     TreeOptionsToolbar treeOpsToolbar = new TreeOptionsToolbar(this);
     Boolean treeOpsOn = true;
     
-    
+    TipLabelCustomizer tlc = null;
     
     DbConnectWindow db_conn = new DbConnectWindow();
     DbSearchWindow db_search = new DbSearchWindow();
@@ -180,7 +180,7 @@ public class MainFrame extends JFrame {
 				Node node = tree.findNode(evt.getX(), evt.getY());
 				if (node != null) {
 					if (node.isLeaf()) {
-						treeStatus.setText(String.format("Leaf (OTU): %s", node.getLabel()));
+						treeStatus.setText(String.format("Leaf (OTU): %s", node.getName()));
 					} else {
 						treeStatus.setText(String.format("Sub-tree: %,d leaves", node.getNumberOfLeaves()));
 					}
@@ -268,6 +268,7 @@ public class MainFrame extends JFrame {
      }
      
      public void mirrorHorz() {
+         // reset wedge slider
          for (Node n : tree.getTree().getNodes()) {
              n.setXOffset(tree.getTree().depth() - n.getXOffset());
              n.setTOffset(Math.PI - n.getTOffset());
@@ -577,14 +578,14 @@ public class MainFrame extends JFrame {
              v.groupColor.add(c);
              v.groupFraction.add(1.0);
          }
-
+         repaint();
      }
      
      public void recolorTreeByOtu() {
         //loop over each node
         for (Node n : tree.getTree().getLeaves()){
             //get the node's name
-            String nodeName = n.getLabel();
+            String nodeName = n.getName();
             //get the row of the OTU metadata table with this name
             int rowIndex = -1;
             for (int i = 0; i < otuMetadata.getData().maxRow(); i++) {
@@ -611,13 +612,14 @@ public class MainFrame extends JFrame {
             n.addColor(c, 1.0);
         }
         tree.getTree().updateColorFromChildren();
+        repaint();
      }
 
      public void recolorTreeBySample() {
          //loop over each node
          for (Node n : tree.getTree().getLeaves()) {
              //get the node's name
-             String nodeName = n.getLabel();
+             String nodeName = n.getName();
              //get the row of the OTU-Sample map with this name
              int rowIndex = -1;
              for (int i = 0; i < otuSampleMap.getData().maxRow(); i++) {
@@ -663,6 +665,7 @@ public class MainFrame extends JFrame {
              }
          }
          tree.getTree().updateColorFromChildren();
+         repaint();
      }
      
      
@@ -670,7 +673,7 @@ public class MainFrame extends JFrame {
         //loop over each node
         for (Node n : tree.getTree().getLeaves()){
             //get the node's name
-            String nodeName = n.getLabel();
+            String nodeName = n.getName();
             //get the row of the OTU metadata table with this name
             int rowIndex = -1;
             Object nodeNameObj = TopiaryFunctions.objectify(nodeName);
@@ -707,7 +710,7 @@ public class MainFrame extends JFrame {
          //loop over each node
          for (Node n : tree.getTree().getLeaves()) {
              //get the node's name
-             String nodeName = n.getLabel();
+             String nodeName = n.getName();
              //get the row of the OTU-Sample map with this name
              int rowIndex = -1;
              Object nodeNameObj = TopiaryFunctions.objectify(nodeName);
@@ -767,11 +770,9 @@ public class MainFrame extends JFrame {
      }
      
      public void setTipLabels(boolean state) {
-         if(sampleMetadata != null)
-         {
-             TipLabelCustomizer tlc = new TipLabelCustomizer(this);
-/*             tlc.show();*/
-         }
+/*         if(sampleMetadata != null)
+            tlc.setVisible(state);*/
+        
          tree.setDrawExternalNodeLabels(state);
      }
 
@@ -837,7 +838,7 @@ public class MainFrame extends JFrame {
 
      public void collapseTreeByInternalNodeLabels() {
          for (Node n : tree.getTree().getNodes()){
-             if (!n.isLeaf() && n.getLabel().length() > 0) {
+             if (!n.isLeaf() && n.getName().length() > 0) {
                  n.setCollapsed(true);
              }
          }
@@ -871,7 +872,7 @@ public class MainFrame extends JFrame {
 	 		//find out which row we're looking at
 	 		int row;
 	 		for (row = 0; row < data.maxRow(); row++) {
-	 			if ( ( data.get(row,0).toString()).equals(node.getLabel())) { break; }
+	 			if ( ( data.get(row,0).toString()).equals(node.getName())) { break; }
 	 		}
 
 	 		//set the node's field
