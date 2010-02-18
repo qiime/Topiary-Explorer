@@ -6,9 +6,9 @@ import java.awt.*;
 
 class SparseTable {
 
-    HashMap data = new HashMap();
-    int maxrow = 0;
-    int maxcol = 0;
+    private HashMap data = new HashMap();
+    private int maxrow = 0;
+    private int maxcol = 0;
     
     public SparseTable() {
     }

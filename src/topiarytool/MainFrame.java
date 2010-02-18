@@ -552,9 +552,8 @@ public class MainFrame extends JFrame {
              String sampleID = v.label;
              //find the row of the sample metadata table with this ID
              int rowIndex = -1;
-             Object sampleIDObj = TopiaryFunctions.objectify(sampleID);
              for (int i = 0; i < sampleMetadata.getData().maxRow(); i++) {
-                 if (sampleMetadata.getData().get(i,0).equals(sampleIDObj)) {
+                 if (sampleMetadata.getData().get(i,0).equals(sampleID)) {
                      rowIndex = i;
                      break;
                  }
@@ -646,9 +645,8 @@ public class MainFrame extends JFrame {
                  String sampleID = otuSampleMap.getColumnName(i);
                  //find the row that has this sampleID
                  int sampleRowIndex = -1;
-                 Object sampleIDObj = TopiaryFunctions.objectify(sampleID);
                  for (int j = 0; j < sampleMetadata.getData().maxRow(); j++) {
-                    if (sampleMetadata.getData().get(j,0).equals(sampleIDObj)) {
+                    if (sampleMetadata.getData().get(j,0).equals(sampleID)) {
                         sampleRowIndex = j;
                         break;
                     }

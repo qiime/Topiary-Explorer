@@ -62,11 +62,13 @@ public class DataTable {
         data = new SparseTable();
         int r = 0;
         int c = 0;
+        String vals[];
+        Object val;
 		while ((line = br.readLine()) != null) {
-		    String vals[] = line.split("\t");
+		    vals = line.split("\t");
 		    c = 0;
 		    for (String obj : vals) {
-		        Object val = obj;
+		        val = obj;
 		        if (c!=0) {
 		            val = TopiaryFunctions.objectify(obj);
 		        }
@@ -79,6 +81,7 @@ public class DataTable {
         }
 
         int numCols = c;
+    
 
         //parse each commented line until we get one that has the same number of
         //rows as the data
