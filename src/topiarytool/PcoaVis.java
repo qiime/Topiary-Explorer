@@ -51,6 +51,9 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
     private String axis1label = "";
     private String axis2label = "";
     private String axis3label = "";
+    
+    private boolean colorSamples = true;
+    private boolean colorOtus = true;
 
     private boolean SHIFTPRESSED = false;
 
@@ -92,6 +95,11 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
     public void setBackgroundColor(Color c) { backgroundColor = c; }    
 	public float getLineWidthScale() { return LINEWIDTHSCALE; }
 	public void setLineWidthScale(float s) { LINEWIDTHSCALE = s; }
+	
+	public boolean getColorSamples() { return colorSamples; }
+	public void setColorSamples(boolean s) { colorSamples = s; }
+	public boolean getColorOtus() { return colorOtus; }
+	public void setColorOtus(boolean s) { colorOtus = s; }	
 	
 	public int getAxis(int i) {
 	    if (i == 1) {
@@ -525,7 +533,9 @@ public void drawPCoA(GL gl) {
 
 
       gl.glBegin(gl.GL_LINES);
-      gl.glColor3f(((float)r)/255.0f,((float)g)/255.0f,((float)b)/255.0f);
+      //gl.glColor3f(((float)r)/255.0f,((float)g)/255.0f,((float)b)/255.0f);
+      //make edges black
+      gl.glColor3f(0f,0f,0f);
       gl.glVertex3f(scaling*spData[link1].coords[getAxis(1)],
       scaling*spData[link1].coords[getAxis(2)],
       scaling*spData[link1].coords[getAxis(3)]);
@@ -550,7 +560,12 @@ public void drawPCoA(GL gl) {
     if (dataset==spData && !displayOtus) continue;
     for (int i = 0; i < dataset.length; i++) {
       //fill(dataset[i].getColor(), 200);
-      Color cl = dataset[i].getColor();
+      Color cl;
+      if ( (dataset==sampleData && getColorSamples()) || (dataset==spData && getColorOtus()) ) {
+        cl = dataset[i].getColor();
+      } else {
+        cl = new Color(0,0,0);
+      }
 
       if (dataset[i].sh.equals("sphere")) {
 

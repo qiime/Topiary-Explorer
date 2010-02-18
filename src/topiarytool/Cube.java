@@ -28,7 +28,7 @@ class Cube {
 
 
     gl.glBegin(gl.GL_QUADS);
-    gl.glColor3f(color.getRed(),color.getGreen(),color.getBlue());
+    gl.glColor3f(((float)color.getRed())/255.0f,((float)color.getGreen())/255.0f,((float)color.getBlue())/255.0f);
     // Front face
     gl.glNormal3f(0, 0, -1);
     gl.glVertex3f(-w/2 + shiftX, -w/2 + shiftY, -w/2 + shiftZ);

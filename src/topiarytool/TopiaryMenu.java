@@ -64,6 +64,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JCheckBoxMenuItem connectionsMenuItem = new JCheckBoxMenuItem("Connections");
     JCheckBoxMenuItem axesMenuItem = new JCheckBoxMenuItem("Axes");
     JCheckBoxMenuItem axisLabelsMenuItem = new JCheckBoxMenuItem("Axis Labels");
+    
+    JCheckBoxMenuItem colorSamplesMenuItem = new JCheckBoxMenuItem("Color Samples");
+    JCheckBoxMenuItem colorOtusMenuItem = new JCheckBoxMenuItem("Color OTUs");
 
     JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels...");
     JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");
@@ -372,7 +375,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         });
         pcoaMenu.add(item);
 
-
+        pcoaMenu.add(new JSeparator());
+        
         samplesMenuItem.setSelected(true);
         samplesMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -408,6 +412,25 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
         });
         pcoaMenu.add(axisLabelsMenuItem);        
+        
+        pcoaMenu.add(new JSeparator());
+        
+        colorSamplesMenuItem.setSelected(true);
+        colorSamplesMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.pcoa.setColorSamples(colorSamplesMenuItem.getState());
+            }
+        });
+        pcoaMenu.add(colorSamplesMenuItem); 
+        
+        colorOtusMenuItem.setSelected(true);
+        colorOtusMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.pcoa.setColorOtus(colorOtusMenuItem.getState());
+            }
+        });
+        pcoaMenu.add(colorOtusMenuItem); 
+        
         item = new JMenuItem("Run PCoA Analysis...");
         item.addActionListener(this);
         pcoaMenu.add(item);

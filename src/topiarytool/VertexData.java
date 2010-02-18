@@ -30,6 +30,7 @@ public class VertexData {
       g += groupFraction.get(i)/total*(groupColor.get(i).getGreen());
       b += groupFraction.get(i)/total*(groupColor.get(i).getBlue());
     }
+
     return new Color((int)r,(int)g,(int)b);
   }
 

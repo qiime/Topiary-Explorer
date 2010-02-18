@@ -536,12 +536,51 @@ public class MainFrame extends JFrame {
                    return;
                 }
                 Object val = otuMetadata.getValueAt(otuRowIndex, colorColumnIndex);
-                if (val == null) continue;
-                v.groupColor.add(colorMap.get(val));
+                if (val == null) {
+                    v.groupColor.add(new Color(0,0,0));
+                } else {
+                    v.groupColor.add(colorMap.get(val));
+                }
                 v.groupFraction.add(new Double(weight.intValue()));
             }
             v.mergeColors();
         }
+        
+        
+          //loop over each otu vertex
+         for (VertexData v : pcoa.spData) {
+             //get the otuID
+             String otuID = v.label;
+             //find the row of the otu metadata table with this ID
+             int rowIndex = -1;
+             for (int i = 0; i < otuMetadata.getData().maxRow(); i++) {
+                 if (otuMetadata.getData().get(i,0).equals(otuID)) {
+                     rowIndex = i;
+                     break;
+                 }
+             }
+             if (rowIndex == -1) {
+                //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println("ERROR: OTU ID "+otuID+" not found in OTU Metadata Table.");
+                //return;
+                continue;
+             }
+             Object category = otuMetadata.getValueAt(rowIndex, colorColumnIndex);
+             if (category == null) continue;
+             //get the color for this category
+             Color c = colorMap.get(category);
+             if (c == null) {
+                JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+             }
+             v.groupColor = new ArrayList<Color>();
+             v.groupFraction = new ArrayList<Double>();
+             v.groupColor.add(c);
+             v.groupFraction.add(1.0);
+         }
+         
+         repaint();
+        
      }
 
      public void recolorPcoaBySample() {
@@ -577,6 +616,48 @@ public class MainFrame extends JFrame {
              v.groupColor.add(c);
              v.groupFraction.add(1.0);
          }
+         
+        //loop over each sample vertex
+        for (VertexData v : pcoa.spData) {
+            v.groupColor = new ArrayList<Color>();
+            v.groupFraction = new ArrayList<Double>();
+            String otuID = v.label;
+            //find the row of the otu-sample map with this ID
+            int rowIndex = otuSampleMap.getColumn(0).indexOf(otuID);
+            //get this row of the table
+            ArrayList<Object> rowData = otuSampleMap.getRow(rowIndex);
+            //for each non-zero row value
+            for (int i = 1; i < rowData.size(); i++) {
+                Object value = rowData.get(i);
+                //if it's not an Integer, skip it
+                if (!(value instanceof Integer)) continue;
+                Integer weight = (Integer)value;
+                if (weight == 0) continue;
+                String sampleID = otuSampleMap.getColumnName(i);
+                //find the row that has this sampleID
+                int sampleRowIndex = -1;
+                for (int j = 0; j < sampleMetadata.getData().maxRow(); j++) {
+                   if (sampleMetadata.getData().get(j,0).equals(sampleID)) {
+                       sampleRowIndex = j;
+                       break;
+                   }
+                }
+                if (sampleRowIndex == -1) {
+                   JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                   return;
+                }
+                Object val = sampleMetadata.getValueAt(sampleRowIndex,colorColumnIndex);
+                if (val == null) {
+                    v.groupColor.add(new Color(0,0,0));
+                } else {
+                    v.groupColor.add(colorMap.get(val));
+                }
+                v.groupFraction.add(new Double(weight.intValue()));
+            }
+
+            v.mergeColors();
+        }
+        
          repaint();
      }
      
