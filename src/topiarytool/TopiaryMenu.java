@@ -398,6 +398,14 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         button.setSelected(true);
         sampleShapeGroup.add(button);
         sampleShapeMenu.add(button);
+        button = new JRadioButtonMenuItem("Tetrahedron");
+	    button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.pcoa.setSampleShape("Tetrahedron");
+            }
+        });
+        sampleShapeGroup.add(button);
+        sampleShapeMenu.add(button);
         pcoaMenu.add(sampleShapeMenu);
         
         button = new JRadioButtonMenuItem("Cube");
@@ -413,6 +421,14 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.pcoa.setOtuShape("Sphere");
+            }
+        });
+        otuShapeGroup.add(button);
+        otuShapeMenu.add(button);
+        button = new JRadioButtonMenuItem("Tetrahedron");
+		button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.pcoa.setOtuShape("Tetrahedron");
             }
         });
         otuShapeGroup.add(button);

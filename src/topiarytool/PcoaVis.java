@@ -577,35 +577,58 @@ public void drawPCoA(GL gl) {
       if ( (dataset == spData && getOtuShape().equals("Sphere")) ||
             (dataset == sampleData && getSampleShape().equals("Sphere")) ) {
 
-        GLUquadric quadric=glu.gluNewQuadric();
-        glu.gluQuadricNormals(quadric, GLU.GLU_SMOOTH);
-
-        gl.glPushMatrix();
-        gl.glTranslatef(scaling*dataset[i].coords[getAxis(1)],
-        scaling*dataset[i].coords[getAxis(2)],
-        scaling*dataset[i].coords[getAxis(3)]);
-        gl.glColor3f(((float)cl.getRed())/255.0f,((float)cl.getGreen())/255.0f,((float)cl.getBlue())/255.0f);
-        float weight = dataset[i].weight;
-        glu.gluSphere(quadric, (MAXDIAMETER-MINDIAMETER)*weight/maxweight + MINDIAMETER, 12,12);
-        gl.glPopMatrix();
+            GLUquadric quadric=glu.gluNewQuadric();
+            glu.gluQuadricNormals(quadric, GLU.GLU_SMOOTH);
+    
+            gl.glPushMatrix();
+            gl.glTranslatef(scaling*dataset[i].coords[getAxis(1)],
+                scaling*dataset[i].coords[getAxis(2)],
+                scaling*dataset[i].coords[getAxis(3)]);
+            gl.glColor3f(((float)cl.getRed())/255.0f,((float)cl.getGreen())/255.0f,((float)cl.getBlue())/255.0f);
+            float weight = dataset[i].weight;
+            glu.gluSphere(quadric, (MAXDIAMETER-MINDIAMETER)*weight/maxweight + MINDIAMETER, 12,12);
+            gl.glPopMatrix();
 
       } else if ( (dataset == spData && getOtuShape().equals("Cube")) ||
             (dataset == sampleData && getSampleShape().equals("Cube")) ) {
-        float weight = dataset[i].weight;
-        Cube c = new Cube((MAXDIAMETER-MINDIAMETER)*dataset[i].weight/maxweight + MINDIAMETER,
-        cl,
-        scaling*dataset[i].coords[getAxis(1)],
-        scaling*dataset[i].coords[getAxis(2)],
-        scaling*dataset[i].coords[getAxis(3)]);
-        c.drawCube(gl);
+            
+            float weight = dataset[i].weight;
+            Cube c = new Cube((MAXDIAMETER-MINDIAMETER)*dataset[i].weight/maxweight + MINDIAMETER,
+                cl,
+                scaling*dataset[i].coords[getAxis(1)],
+                scaling*dataset[i].coords[getAxis(2)],
+                scaling*dataset[i].coords[getAxis(3)]);
+            c.drawCube(gl);
+      } else if ( (dataset == spData && getOtuShape().equals("Tetrahedron")) ||
+            (dataset == sampleData && getSampleShape().equals("Tetrahedron")) ) {
+            gl.glPushMatrix();
+            gl.glTranslatef(scaling*dataset[i].coords[getAxis(1)],
+                scaling*dataset[i].coords[getAxis(2)],
+                scaling*dataset[i].coords[getAxis(3)]);
+            float weight = dataset[i].weight;
+            float edgeLength = (MAXDIAMETER-MINDIAMETER)*weight/maxweight + MINDIAMETER;
+            gl.glBegin(gl.GL_TRIANGLES);
+            gl.glColor3f(((float)cl.getRed())/255.0f,((float)cl.getGreen())/255.0f,((float)cl.getBlue())/255.0f);
+            // Front
+            gl.glVertex3f(0.0f, edgeLength, 0.0f);
+            gl.glVertex3f(-edgeLength, -edgeLength, edgeLength);
+            gl.glVertex3f(edgeLength, -edgeLength, edgeLength);   
+            // Right Side Facing Front
+            gl.glVertex3f(0.0f, edgeLength, 0.0f);
+            gl.glVertex3f(edgeLength, -edgeLength, edgeLength);
+            gl.glVertex3f(0.0f, -edgeLength, -edgeLength);
+            // Left Side Facing Front
+            gl.glVertex3f(0.0f, edgeLength, 0.0f);
+            gl.glVertex3f(0.0f, -edgeLength, -edgeLength);
+            gl.glVertex3f(-edgeLength, -edgeLength, edgeLength);
+            // Bottom
+            gl.glVertex3f(-edgeLength, -edgeLength, edgeLength);
+            gl.glVertex3f(edgeLength, -edgeLength, edgeLength);
+            gl.glVertex3f(0.0f, -edgeLength, -edgeLength);
+            gl.glEnd();
+            gl.glPopMatrix();
+            
       }
-
-      //      fill(0);
-      //      text(dataset[i].label,
-      //        scaling*dataset[i].coords[getAxis(1)],
-      //        scaling*dataset[i].coords[getAxis(2)],
-      //        scaling*dataset[i].coords[getAxis(3)]);
-
     }
   }
 
