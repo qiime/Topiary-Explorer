@@ -628,6 +628,54 @@ public void drawPCoA(GL gl) {
             gl.glEnd();
             gl.glPopMatrix();
             
+      } else if ( (dataset == spData && getOtuShape().equals("Octahedron")) ||
+            (dataset == sampleData && getSampleShape().equals("Octahedron")) ) {
+            
+            gl.glPushMatrix();
+            gl.glTranslatef(scaling*dataset[i].coords[getAxis(1)],
+                scaling*dataset[i].coords[getAxis(2)],
+                scaling*dataset[i].coords[getAxis(3)]);
+            float weight = dataset[i].weight;
+            float edgeLength = (MAXDIAMETER-MINDIAMETER)*weight/maxweight + MINDIAMETER;
+            gl.glBegin(gl.GL_TRIANGLES);
+            
+            gl.glColor3f(((float)cl.getRed())/255.0f,((float)cl.getGreen())/255.0f,((float)cl.getBlue())/255.0f);
+            
+            gl.glVertex3f(0.0f, -edgeLength, 0.0f);
+            gl.glVertex3f(edgeLength, 0.0f, 0.0f);
+            gl.glVertex3f(0.0f, 0.0f, edgeLength);
+            
+            gl.glVertex3f(-edgeLength, 0.0f, 0.0f);
+            gl.glVertex3f(0.0f, -edgeLength, 0.0f);
+            gl.glVertex3f(0.0f, 0.0f, edgeLength);
+            
+            gl.glVertex3f(0.0f, edgeLength, 0.0f);
+            gl.glVertex3f(-edgeLength, 0.0f, 0.0f);
+            gl.glVertex3f(0.0f, 0.0f, edgeLength);
+            
+            gl.glVertex3f(edgeLength, 0.0f, 0.0f);
+            gl.glVertex3f(0.0f, edgeLength, 0.0f);
+            gl.glVertex3f(0.0f, 0.0f, edgeLength);
+            
+            gl.glVertex3f(-edgeLength, 0.0f, 0.0f);
+            gl.glVertex3f(0.0f, edgeLength, 0.0f);
+            gl.glVertex3f(0.0f, 0.0f, -edgeLength);
+            
+            gl.glVertex3f(0.0f, edgeLength, 0.0f);
+            gl.glVertex3f(edgeLength, 0.0f, 0.0f);
+            gl.glVertex3f(0.0f, 0.0f, -edgeLength);
+            
+            gl.glVertex3f(edgeLength, 0.0f, 0.0f);
+            gl.glVertex3f(0.0f, -edgeLength, 0.0f);
+            gl.glVertex3f(0.0f, 0.0f, -edgeLength);
+            
+            gl.glVertex3f(0.0f, -edgeLength, 0.0f);
+            gl.glVertex3f(-edgeLength, 0.0f, 0.0f);
+            gl.glVertex3f(0.0f, 0.0f, -edgeLength);
+            
+            gl.glEnd();
+            gl.glPopMatrix();
+            
       }
     }
   }
