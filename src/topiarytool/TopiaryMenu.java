@@ -44,6 +44,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JMenu colorBySampleMetadataMenu = new JMenu("Sample Metadata");
     JMenu distanceMetricMenu = new JMenu("Distance Metric");
     JMenu lineWidthMenu = new JMenu("Line Width");
+    JMenu sampleShapeMenu = new JMenu("Sample Shape");
+    JMenu otuShapeMenu = new JMenu("OTU Shape");
     JMenu lineWidthOtuMetadataMenu = new JMenu("OTU Metadata");
     JMenu lineWidthSampleMetadataMenu = new JMenu("Sample Metadata");
     JRadioButtonMenuItem uniformLineWidthItem = new JRadioButtonMenuItem("Uniform");
@@ -58,6 +60,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     ButtonGroup lineWidthGroup = new ButtonGroup();
     ButtonGroup pcoaLayoutGroup = new ButtonGroup();
     ButtonGroup treeLayoutGroup = new ButtonGroup();
+    ButtonGroup sampleShapeGroup = new ButtonGroup();
+    ButtonGroup otuShapeGroup = new ButtonGroup();
 
     JCheckBoxMenuItem samplesMenuItem = new JCheckBoxMenuItem("Samples");
     JCheckBoxMenuItem otusMenuItem = new JCheckBoxMenuItem("OTUs");
@@ -364,17 +368,58 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item = new JMenuItem("Set axes...");        
         item.addActionListener(new ActionListener() {        
             public void actionPerformed(ActionEvent e) {
-            if (frame.pcoa.spData == null) {
-                JOptionPane.showMessageDialog(null, "PCOA analysis must be run first.", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                PCSelectDialog p = new PCSelectDialog(frame);
-                p.pack();
-                p.setVisible(true);
-            }
+                if (frame.pcoa.spData == null) {
+                    JOptionPane.showMessageDialog(null, "PCOA analysis must be run first.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    PCSelectDialog p = new PCSelectDialog(frame);
+                    p.pack();
+                    p.setVisible(true);
+                }
             }
         });
         pcoaMenu.add(item);
-
+        
+        pcoaMenu.add(new JSeparator());
+        
+        button = new JRadioButtonMenuItem("Cube");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.pcoa.setSampleShape("Cube");
+            }
+        });
+        sampleShapeGroup.add(button);
+        sampleShapeMenu.add(button);
+		button = new JRadioButtonMenuItem("Sphere");
+	    button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.pcoa.setSampleShape("Sphere");
+            }
+        });
+        button.setSelected(true);
+        sampleShapeGroup.add(button);
+        sampleShapeMenu.add(button);
+        pcoaMenu.add(sampleShapeMenu);
+        
+        button = new JRadioButtonMenuItem("Cube");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.pcoa.setOtuShape("Cube");
+            }
+        });
+        button.setSelected(true);
+        otuShapeGroup.add(button);
+        otuShapeMenu.add(button);
+		button = new JRadioButtonMenuItem("Sphere");
+		button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.pcoa.setOtuShape("Sphere");
+            }
+        });
+        otuShapeGroup.add(button);
+        otuShapeMenu.add(button);
+        pcoaMenu.add(otuShapeMenu);
+        
+        
         pcoaMenu.add(new JSeparator());
         
         samplesMenuItem.setSelected(true);
@@ -430,6 +475,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
         });
         pcoaMenu.add(colorOtusMenuItem); 
+        
+        pcoaMenu.add(new JSeparator());
         
         item = new JMenuItem("Run PCoA Analysis...");
         item.addActionListener(this);
@@ -1030,7 +1077,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		frame.pcoa.spData[i].groupFraction = new ArrayList<Double>();
 		frame.pcoa.spData[i].velocity = new float[3];
 		frame.pcoa.spData[i].velocity[0] = frame.pcoa.spData[i].velocity[1] = frame.pcoa.spData[i].velocity[2] = 0;
-		frame.pcoa.spData[i].sh = "cube";
 	  }
 
 	  frame.pcoa.sampleData = new VertexData[samplec.length];
@@ -1043,7 +1089,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		frame.pcoa.sampleData[i].groupFraction = new ArrayList<Double>();
 		frame.pcoa.sampleData[i].velocity = new float[3];
 		frame.pcoa.sampleData[i].velocity[0] = frame.pcoa.sampleData[i].velocity[1] = frame.pcoa.sampleData[i].velocity[2] = 0;
-		frame.pcoa.sampleData[i].sh = "sphere";
 	  }
 	  
 	  frame.pcoa.evals = new ArrayList<Double>();

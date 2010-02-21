@@ -52,6 +52,9 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
     private String axis2label = "";
     private String axis3label = "";
     
+    private String sampleShape = "Sphere";
+    private String otuShape = "Cube";
+    
     private boolean colorSamples = true;
     private boolean colorOtus = true;
 
@@ -99,7 +102,11 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
 	public boolean getColorSamples() { return colorSamples; }
 	public void setColorSamples(boolean s) { colorSamples = s; }
 	public boolean getColorOtus() { return colorOtus; }
-	public void setColorOtus(boolean s) { colorOtus = s; }	
+	public void setColorOtus(boolean s) { colorOtus = s; }
+	public String getSampleShape() { return sampleShape; }
+	public void setSampleShape(String s) { sampleShape = s; }
+	public String getOtuShape() { return otuShape; }
+	public void setOtuShape(String s) { otuShape = s; }
 	
 	public int getAxis(int i) {
 	    if (i == 1) {
@@ -567,7 +574,8 @@ public void drawPCoA(GL gl) {
         cl = new Color(0,0,0);
       }
 
-      if (dataset[i].sh.equals("sphere")) {
+      if ( (dataset == spData && getOtuShape().equals("Sphere")) ||
+            (dataset == sampleData && getSampleShape().equals("Sphere")) ) {
 
         GLUquadric quadric=glu.gluNewQuadric();
         glu.gluQuadricNormals(quadric, GLU.GLU_SMOOTH);
@@ -581,8 +589,8 @@ public void drawPCoA(GL gl) {
         glu.gluSphere(quadric, (MAXDIAMETER-MINDIAMETER)*weight/maxweight + MINDIAMETER, 12,12);
         gl.glPopMatrix();
 
-      }
-      else if (dataset[i].sh.equals("cube")) {
+      } else if ( (dataset == spData && getOtuShape().equals("Cube")) ||
+            (dataset == sampleData && getSampleShape().equals("Cube")) ) {
         float weight = dataset[i].weight;
         Cube c = new Cube((MAXDIAMETER-MINDIAMETER)*dataset[i].weight/maxweight + MINDIAMETER,
         cl,

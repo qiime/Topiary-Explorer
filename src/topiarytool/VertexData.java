@@ -9,7 +9,6 @@ public class VertexData {
   public ArrayList<Double> groupFraction = new ArrayList<Double>();
 
   public float weight; //weight (size) of the node
-  public String sh; //shape of the node;
   public String label; //label of the vertex
   public float[] coords = new float[3]; //location of the vertex
   public float[] velocity = new float[3]; //velocity of the particle
