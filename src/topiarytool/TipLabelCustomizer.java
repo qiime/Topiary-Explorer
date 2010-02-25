@@ -31,18 +31,27 @@ public class TipLabelCustomizer extends JFrame {
     ArrayList<JCheckBox> itemlist = new ArrayList<JCheckBox>();
     JPanel optionspanel = new JPanel();
     JLabel delimlabel = new JLabel("Delimter:");
-    JTextArea delim = new JTextArea(",    ");
+    JTextArea delim = new JTextArea(", ");
     JScrollBar scroller = new JScrollBar();
     JScrollPane optionsPane = new JScrollPane();
     JTable optionsTable = new JTable();
+    String[] metaTypes = {"OTU Metadata", "Sample Metadata"};
+    JComboBox metaCombo = new JComboBox();
     Vector<Object> cheader = new Vector<Object>();
     Vector<Object> vals = new Vector<Object>();
     
-    public TipLabelCustomizer(MainFrame _frame) {
+    public TipLabelCustomizer(MainFrame _frame, boolean otuMeta, boolean sampleMeta) {
         frame = _frame;
         this.setSize(new Dimension(400,300));
         this.setTitle("Choose metadata columns to include in node labels");
         mainPanel.setLayout(new BorderLayout());
+        
+        if(otuMeta)
+            metaCombo.addItem(metaTypes[0]);
+        /*if(sampleMeta)
+                    metaCombo.addItem(metaTypes[1]);*/
+        mainPanel.add(metaCombo, BorderLayout.NORTH);
+        
         for(String s : frame.otuMetadata.getColumnNames())
         {
             Vector<Object> temp = new Vector<Object>();
@@ -87,7 +96,6 @@ public class TipLabelCustomizer extends JFrame {
         mainPanel.add(optionspanel, BorderLayout.SOUTH);
 
         this.add(mainPanel, BorderLayout.CENTER);
-        this.show();
     }
     
     public void okbuttonpressed() {
@@ -145,7 +153,6 @@ public class TipLabelCustomizer extends JFrame {
             }
         }
         frame.tree.redraw();
-/*        this.setVisible(false);*/
     }
     
     public void allclrbuttonpressed() {

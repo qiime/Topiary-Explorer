@@ -848,11 +848,17 @@ public class MainFrame extends JFrame {
          tree.getTree().updateLineWidthsFromChildren();
      }
      
+     public void resetTipLabelCustomizer(boolean state) {
+         if(tlc != null) {tlc.dispose();}
+         tlc = new TipLabelCustomizer(this, (otuMetadata != null), (sampleMetadata != null));
+         tlc.setVisible(state);
+     }
+     
      public void setTipLabels(boolean state) {
-/*         if(sampleMetadata != null)
-            tlc.setVisible(state);*/
-        
+         if(tlc == null) {resetTipLabelCustomizer(state);}
+         tlc.setVisible(state);
          tree.setDrawExternalNodeLabels(state);
+         repaint();
      }
 
      public void colorByValue(String value) {

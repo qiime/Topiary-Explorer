@@ -38,7 +38,9 @@ public class PcoaVis extends JPanel implements GLEventListener, MouseMotionListe
     private float LINEWIDTHSCALE = 1; //scaling for line width
 
     private boolean displaySamples = true;
+    private boolean displaySampleIDs = false;
     private boolean displayOtus = true;
+    private boolean displayOtuIDs = false;
     private boolean displayConnections = true;
     private boolean displayAxes = true;
     private boolean displayAxisLabels = true;
@@ -573,7 +575,15 @@ public void drawPCoA(GL gl) {
       } else {
         cl = new Color(0,0,0);
       }
-
+      
+      if(displaySampleIDs && dataset == sampleData || displayOtuIDs && dataset == spData)
+      {
+          textRenderer.print(dataset[i].label,
+               scaling*dataset[i].coords[getAxis(1)],
+               scaling*dataset[i].coords[getAxis(2)],
+               scaling*dataset[i].coords[getAxis(3)]);
+      }
+      
       if ( (dataset == spData && getOtuShape().equals("Sphere")) ||
             (dataset == sampleData && getSampleShape().equals("Sphere")) ) {
 
@@ -825,8 +835,14 @@ public void drawPCoA(GL gl) {
     public void setDisplaySamples(boolean v) {
       displaySamples = v;
     }
+    public void setDisplaySampleIDs(boolean v) {
+        displaySampleIDs = v;
+    }
     public void setDisplayOtus(boolean v) {
       displayOtus = v;
+    }
+    public void setDisplayOtuIDs(boolean v) {
+        displayOtuIDs = v;
     }
     public void setDisplayConnections(boolean v) {
       displayConnections = v;

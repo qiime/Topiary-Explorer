@@ -68,6 +68,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JCheckBoxMenuItem connectionsMenuItem = new JCheckBoxMenuItem("Connections");
     JCheckBoxMenuItem axesMenuItem = new JCheckBoxMenuItem("Axes");
     JCheckBoxMenuItem axisLabelsMenuItem = new JCheckBoxMenuItem("Axis Labels");
+    JCheckBoxMenuItem sampleLabelsMenuItem = new JCheckBoxMenuItem("Sample Labels");
+    JCheckBoxMenuItem otuLabelsMenuItem = new JCheckBoxMenuItem("OTU Labels");
     
     JCheckBoxMenuItem colorSamplesMenuItem = new JCheckBoxMenuItem("Color Samples");
     JCheckBoxMenuItem colorOtusMenuItem = new JCheckBoxMenuItem("Color OTUs");
@@ -461,6 +463,13 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
         });
         pcoaMenu.add(samplesMenuItem);
+        sampleLabelsMenuItem.setSelected(false);
+        sampleLabelsMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.pcoa.setDisplaySampleIDs(sampleLabelsMenuItem.getState());
+            }
+        });
+        pcoaMenu.add(sampleLabelsMenuItem);
         otusMenuItem.setSelected(true);
         otusMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -468,6 +477,13 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
         });
         pcoaMenu.add(otusMenuItem);
+        otuLabelsMenuItem.setSelected(false);
+        otuLabelsMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.pcoa.setDisplayOtuIDs(otuLabelsMenuItem.getState());
+            }
+        });
+        pcoaMenu.add(otuLabelsMenuItem);
         connectionsMenuItem.setSelected(true);
         connectionsMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -578,6 +594,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
          } else if (e.getActionCommand().equals("No coloring")) {
              frame.removeColor();
          } else if (e.getActionCommand().equals("Tip Labels...")) {
+/*             frame.tree.setDrawExternalNodeLabels(externalLabelsMenuItem.getState());*/
              frame.setTipLabels(externalLabelsMenuItem.getState());
          } else if (e.getActionCommand().equals("Internal Node Labels")) {
              frame.tree.setDrawInternalNodeLabels(internalLabelsMenuItem.getState());
@@ -716,6 +733,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             resetCollapseByMenu();
             resetTipLabels();
             frame.tree.loop();
+            frame.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
        }
    }
 
@@ -748,6 +766,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             resetColorBySampleMenu();
             resetLineWidthSampleMenu();
             frame.tree.loop();
+            frame.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
        }
    }
 
