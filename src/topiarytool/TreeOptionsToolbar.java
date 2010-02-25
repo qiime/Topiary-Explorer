@@ -19,9 +19,9 @@ public class TreeOptionsToolbar extends JToolBar {
     JButton radialButton = new JButton();
     JButton polarButton = new JButton();
 
-    MainFrame frame = null;
+    TreeWindow frame = null;
 
-    public TreeOptionsToolbar(MainFrame _frame) {
+    public TreeOptionsToolbar(TreeWindow _frame) {
         super(JToolBar.HORIZONTAL);
         frame = _frame;
         

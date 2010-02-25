@@ -13,9 +13,9 @@ public class CollapseTreeToolbar extends JToolBar {
     JSlider collapseSlider = new JSlider(0, 1000, 1000);
     JPanel spacer1 = new JPanel();
 
-    MainFrame frame = null;
+    TreeWindow frame = null;
 
-    public CollapseTreeToolbar(MainFrame _frame) {
+    public CollapseTreeToolbar(TreeWindow _frame) {
 
         frame = _frame;
 

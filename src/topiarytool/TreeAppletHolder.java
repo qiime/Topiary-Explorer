@@ -21,9 +21,9 @@ public class TreeAppletHolder extends JComponent {
 	private TreeVis tree;
 	private JScrollBar verticalScroll;
 	private JScrollBar horizontalScroll;
-	private MainFrame frame;
+	private TreeWindow frame;
 
-	public TreeAppletHolder(TreeVis tree, MainFrame frame) {
+	public TreeAppletHolder(TreeVis tree, TreeWindow frame) {
 		this.tree = tree;
 		this.frame = frame;
 

@@ -15,9 +15,9 @@ public class VerticalTreeToolbar extends JToolBar {
     JSlider zoomSlider = new JSlider(JSlider.VERTICAL, 0, 8, 0);
     JPanel spacer1 = new JPanel();
 
-    MainFrame frame = null;
+    TreeWindow frame = null;
 
-    public VerticalTreeToolbar(MainFrame _frame) {
+    public VerticalTreeToolbar(TreeWindow _frame) {
 
         super(JToolBar.VERTICAL);
         

@@ -15,9 +15,9 @@ public class TreeToolbar extends JToolBar {
     JSlider zoomSlider = new JSlider(0, 8, 0);
     JTextField search = new JTextField();
     JPanel spacer1 = new JPanel();    
-    MainFrame frame = null;
+    TreeWindow frame = null;
 
-    public TreeToolbar(MainFrame _frame) {
+    public TreeToolbar(TreeWindow _frame) {
 
         frame = _frame;
 

@@ -118,13 +118,13 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         fileMenu.add(item);
         
         //set up the view menu
-        JCheckBoxMenuItem checkbox = new JCheckBoxMenuItem("Tree Toolbar", true);
+        JCheckBoxMenuItem checkbox = new JCheckBoxMenuItem("Tree Window");
         checkbox.addActionListener(this);
         viewMenu.add(checkbox);
-        checkbox = new JCheckBoxMenuItem("Node Toolbar");
+        checkbox = new JCheckBoxMenuItem("PCoA Window");
         checkbox.addActionListener(this);
         viewMenu.add(checkbox);
-        checkbox = new JCheckBoxMenuItem("PCoA Toolbar");
+        checkbox = new JCheckBoxMenuItem("Data Window");
         checkbox.addActionListener(this);
         viewMenu.add(checkbox);
         
@@ -159,7 +159,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         radiobutton.setSelected(true);
         radiobutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.tree.setTreeLayout("Rectangular");
+                frame.treeWindow.tree.setTreeLayout("Rectangular");
             }
         });
         treeLayoutGroup.add(radiobutton);
@@ -169,7 +169,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         radiobutton.setSelected(true);
         radiobutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.tree.setTreeLayout("Triangular");
+                frame.treeWindow.tree.setTreeLayout("Triangular");
             }
         });
         treeLayoutGroup.add(radiobutton);
@@ -180,7 +180,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         radiobutton.setSelected(true);
         radiobutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.tree.setTreeLayout("Radial");
+                frame.treeWindow.tree.setTreeLayout("Radial");
             }
         });
         treeLayoutGroup.add(radiobutton);
@@ -190,7 +190,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         radiobutton.setSelected(true);
         radiobutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.tree.setTreeLayout("Polar");
+                frame.treeWindow.tree.setTreeLayout("Polar");
             }
         });
         treeLayoutGroup.add(radiobutton);
@@ -205,7 +205,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         uniformLineWidthItem.setSelected(true);
         uniformLineWidthItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                for (Node n : frame.tree.getTree().getNodes()) {
+                for (Node n : frame.treeWindow.tree.getTree().getNodes()) {
                     n.setLineWidth(1);
                 }
                 syncTreeWithLineWidthSlider();
@@ -227,8 +227,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item.addActionListener(new ActionListener() {        
             public void actionPerformed(ActionEvent e) {
                 JColorChooser colorChooser = new JColorChooser();
-                Color c = colorChooser.showDialog(frame, "Pick a Color", frame.tree.getBackgroundColor());
-                frame.tree.setBackgroundColor(c);
+                Color c = colorChooser.showDialog(frame, "Pick a Color", frame.treeWindow.tree.getBackgroundColor());
+                frame.treeWindow.tree.setBackgroundColor(c);
             }
         });
         treeMenu.add(item);
@@ -577,38 +577,35 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
          } else if (e.getActionCommand().equals("Load OTU-Sample Map...")) {
              loadOtuSampleMap();
          } else if (e.getActionCommand().equals("Save Tree...")) {
-             frame.tree.noLoop();
+             frame.treeWindow.tree.noLoop();
              frame.loadDataFileChooser.setDialogTitle("Save Tree...");
              int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
 			 if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = frame.loadDataFileChooser.getSelectedFile();
-				TopiaryFunctions.createNewickFileFromTree( frame.tree.getTree(),selectedFile);
+				TopiaryFunctions.createNewickFileFromTree( frame.treeWindow.tree.getTree(),selectedFile);
 			 }
-             frame.tree.loop();
-         } else if (e.getActionCommand().equals("Tree Toolbar")) {
-              frame.treeToolbar();
-         } else if (e.getActionCommand().equals("Node Toolbar")) {
-               frame.nodeToolbar();
-         } else if (e.getActionCommand().equals("PCoA Toolbar")) {
-                frame.pcoaToolbar();
-         } else if (e.getActionCommand().equals("No coloring")) {
-             frame.removeColor();
+             frame.treeWindow.tree.loop();
+         } else if (e.getActionCommand().equals("Tree Window")) {
+                  frame.treeWindow.setVisible(true);
+              }
+              else if (e.getActionCommand().equals("No coloring")) {
+             frame.treeWindow.removeColor();
          } else if (e.getActionCommand().equals("Tip Labels...")) {
 /*             frame.tree.setDrawExternalNodeLabels(externalLabelsMenuItem.getState());*/
-             frame.setTipLabels(externalLabelsMenuItem.getState());
+             frame.treeWindow.setTipLabels(externalLabelsMenuItem.getState());
          } else if (e.getActionCommand().equals("Internal Node Labels")) {
-             frame.tree.setDrawInternalNodeLabels(internalLabelsMenuItem.getState());
+             frame.treeWindow.tree.setDrawInternalNodeLabels(internalLabelsMenuItem.getState());
          } else if (e.getActionCommand().equals("Collapse/Expand")) {
              if (frame.clickedNode != null) {
                 frame.clickedNode.setCollapsed(!frame.clickedNode.isCollapsed());
              }
          }
          else if (e.getActionCommand().equals("Beautify")) {
-              frame.tree.getTree().sortByBranchLength();
-              frame.tree.setYOffsets(frame.tree.getTree(), 0);
-              frame.tree.setTOffsets(frame.tree.getTree(), 0);
-              frame.tree.setROffsets(frame.tree.getTree(), 0);
-              frame.tree.setRadialOffsets(frame.tree.getTree());
+              frame.treeWindow.tree.getTree().sortByBranchLength();
+              frame.treeWindow.tree.setYOffsets(frame.treeWindow.tree.getTree(), 0);
+              frame.treeWindow.tree.setTOffsets(frame.treeWindow.tree.getTree(), 0);
+              frame.treeWindow.tree.setROffsets(frame.treeWindow.tree.getTree(), 0);
+              frame.treeWindow.tree.setRadialOffsets(frame.treeWindow.tree.getTree());
           }
           else if (e.getActionCommand().equals("Collapse/Expand All Children")) {
               if (frame.clickedNode != null) {
@@ -620,34 +617,34 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
          } else if (e.getActionCommand().equals("Rotate (Swap Children)")) {
              if (frame.clickedNode != null) {
                 frame.clickedNode.rotate();
-                frame.tree.setYOffsets(frame.tree.getTree(), 0);
+                frame.treeWindow.tree.setYOffsets(frame.treeWindow.tree.getTree(), 0);
              }
          } else if (e.getActionCommand().equals("Toggle Pie Chart")) {
              if (frame.clickedNode != null) {
                 frame.clickedNode.setDrawPie(!frame.clickedNode.getDrawPie());
              }
          } else if (e.getActionCommand().equals("Recenter")) {
-             frame.tree.resetTreeX();
-             frame.tree.resetTreeY();
-             frame.treeToolbar.syncZoomSliderWithTree();
+             frame.treeWindow.tree.resetTreeX();
+             frame.treeWindow.tree.resetTreeY();
+             frame.treeWindow.treeToolbar.syncZoomSliderWithTree();
          } else if (e.getActionCommand().equals("Mirror left/right")) {
-            frame.mirrorHorz();
+            frame.treeWindow.mirrorHorz();
          } else if (e.getActionCommand().equals("Mirror up/down")) {
-             frame.mirrorVert();
+             frame.treeWindow.mirrorVert();
          } else if (e.getActionCommand().equals("Number of OTUs")) {
-             frame.tree.getTree().sortByNumberOfOtus();
-             frame.tree.setYOffsets(frame.tree.getTree(), 0);
-             frame.tree.setTOffsets(frame.tree.getTree(), 0);
-             frame.tree.setROffsets(frame.tree.getTree(), 0);
-             frame.tree.setRadialOffsets(frame.tree.getTree());
+             frame.treeWindow.tree.getTree().sortByNumberOfOtus();
+             frame.treeWindow.tree.setYOffsets(frame.treeWindow.tree.getTree(), 0);
+             frame.treeWindow.tree.setTOffsets(frame.treeWindow.tree.getTree(), 0);
+             frame.treeWindow.tree.setROffsets(frame.treeWindow.tree.getTree(), 0);
+             frame.treeWindow.tree.setRadialOffsets(frame.treeWindow.tree.getTree());
          } else if (e.getActionCommand().equals("Number of immediate children")) {
-             frame.tree.getTree().sortByNumberOfChildren();
-             frame.tree.setYOffsets(frame.tree.getTree(), 0);
-             frame.tree.setTOffsets(frame.tree.getTree(), 0);
-             frame.tree.setROffsets(frame.tree.getTree(), 0);
-             frame.tree.setRadialOffsets(frame.tree.getTree());
-         } else if (e.getActionCommand().equals("Export Tree Image...") && frame.tree.getTree()!= null) {
-            frame.tree.noLoop();
+             frame.treeWindow.tree.getTree().sortByNumberOfChildren();
+             frame.treeWindow.tree.setYOffsets(frame.treeWindow.tree.getTree(), 0);
+             frame.treeWindow.tree.setTOffsets(frame.treeWindow.tree.getTree(), 0);
+             frame.treeWindow.tree.setROffsets(frame.treeWindow.tree.getTree(), 0);
+             frame.treeWindow.tree.setRadialOffsets(frame.treeWindow.tree.getTree());
+         } else if (e.getActionCommand().equals("Export Tree Image...") && frame.treeWindow.tree.getTree()!= null) {
+            frame.treeWindow.tree.noLoop();
              //Determine PDF dimensions
              PDFDimensionsDialog p = new PDFDimensionsDialog(frame);
              p.pack();
@@ -658,19 +655,19 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String selectedFile = frame.loadDataFileChooser.getSelectedFile().getAbsolutePath();
-                    frame.tree.exportTreeImage(selectedFile, dims);
+                    frame.treeWindow.tree.exportTreeImage(selectedFile, dims);
                 }
 			}
-            frame.tree.loop();
-         } else if (e.getActionCommand().equals("Export Tree Screen Capture...") && frame.tree.getTree()!= null)  {
-             frame.tree.noLoop();
+            frame.treeWindow.tree.loop();
+         } else if (e.getActionCommand().equals("Export Tree Screen Capture...") && frame.treeWindow.tree.getTree()!= null)  {
+             frame.treeWindow.tree.noLoop();
              frame.loadDataFileChooser.setDialogTitle("Save As...");
              int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
 			 if (returnVal == JFileChooser.APPROVE_OPTION) {
 				String selectedFile = frame.loadDataFileChooser.getSelectedFile().getAbsolutePath();
-				frame.tree.exportScreenCapture(selectedFile);
+				frame.treeWindow.tree.exportScreenCapture(selectedFile);
 			 }
-             frame.tree.loop();
+             frame.treeWindow.tree.loop();
          } else if (e.getActionCommand().equals("Quit")) {
              frame.db_conn.c.close_connection();
              System.exit(0);
@@ -683,32 +680,33 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         frame.loadDataFileChooser.setDialogTitle("Load Tree");
         int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            frame.tree.noLoop();
+            frame.treeWindow.tree.noLoop();
             //set view
-            frame.tabbedPane.setSelectedIndex(1);
+            //frame.tabbedPane.setSelectedIndex(1);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
-            frame.tree.setTree(TopiaryFunctions.createTreeFromNewickFile(selectedFile));
+            frame.treeWindow.tree.setTree(TopiaryFunctions.createTreeFromNewickFile(selectedFile));
             //make sure coloring is empty
-            frame.removeColor();
-            frame.treeToolbar.zoomSlider.setValue(0);
-            frame.tree.loop();
-            frame.collapseTree();
+            frame.treeWindow.removeColor();
+            frame.treeWindow.treeToolbar.zoomSlider.setValue(0);
+            frame.treeWindow.tree.loop();
+            frame.treeWindow.collapseTree();
         }
         treeMenu.setEnabled(true);
         nodeMenu.setEnabled(true);
         
         pcoaMenu.setEnabled(true);
         colorByMenu.setEnabled(true);
-        System.out.println("Done");
+        frame.treeWindow.setVisible(true);
+        System.out.println("Done drawing tree.");
    }
 
    public void loadOtuMetadata() {
        frame.loadDataFileChooser.setDialogTitle("Load OTU Metadata");
        int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            frame.tree.noLoop();
+            frame.treeWindow.tree.noLoop();
             //set view
-            frame.tabbedPane.setSelectedIndex(0);
+            frame.tabbedPane.setSelectedIndex(1);
             frame.dataPane.setSelectedIndex(1);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
             try {
@@ -726,14 +724,14 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 ex.printStackTrace();
             }
             if (frame.currTable == frame.otuMetadata) {
-                frame.removeColor();
+                frame.treeWindow.removeColor();
             }
             resetColorByOtuMenu();
             resetLineWidthOtuMenu();
             resetCollapseByMenu();
             resetTipLabels();
-            frame.tree.loop();
-            frame.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
+            frame.treeWindow.tree.loop();
+            frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
        }
    }
 
@@ -741,9 +739,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        frame.loadDataFileChooser.setDialogTitle("Load Sample Metadata");
        int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            frame.tree.noLoop();
+            frame.treeWindow.tree.noLoop();
             //set view
-            frame.tabbedPane.setSelectedIndex(0);
+            frame.tabbedPane.setSelectedIndex(1);
             frame.dataPane.setSelectedIndex(3);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
             try {
@@ -761,12 +759,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 ex.printStackTrace();
             }
             if (frame.currTable == frame.sampleMetadata) {
-                frame.removeColor();
+                frame.treeWindow.removeColor();
             }
             resetColorBySampleMenu();
             resetLineWidthSampleMenu();
-            frame.tree.loop();
-            frame.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
+            frame.treeWindow.tree.loop();
+            frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
        }
    }
 
@@ -774,9 +772,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        frame.loadDataFileChooser.setDialogTitle("Load OTU-Sample Map");
        int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            frame.tree.noLoop();
+            frame.treeWindow.tree.noLoop();
             //set view
-            frame.tabbedPane.setSelectedIndex(0);
+            frame.tabbedPane.setSelectedIndex(1);
             frame.dataPane.setSelectedIndex(2);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
             try {
@@ -793,16 +791,16 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
-            frame.tree.loop();
+            frame.treeWindow.tree.loop();
        }
    }
    
     public void syncTreeWithLineWidthSlider() {
-        if (frame.tree.getTree() == null) return;
+        if (frame.treeWindow.tree.getTree() == null) return;
         double value = lineWidthSlider.getValue();
         value = value/20.0;
-        frame.tree.setLineWidthScale(value);
-        frame.tree.redraw();
+        frame.treeWindow.tree.setLineWidthScale(value);
+        frame.treeWindow.tree.redraw();
     }
     
     public void syncPcoaWithLineWidthSlider() {
@@ -816,7 +814,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         frame.tlc.setVisible(false);
         for(Node n : frame.tree.getTree().getNodes())
             n.setLabel(n.getName());*/
-        frame.tree.redraw();
+        frame.treeWindow.tree.redraw();
     }
 
    public void resetCollapseByMenu() {
@@ -842,21 +840,21 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        JMenuItem item = new JMenuItem("Uncollapse All");
        item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.uncollapseTree();
+                frame.treeWindow.uncollapseTree();
             }
        });
        collapseByMenu.add(item);
        item = new JMenuItem("Collapse All");
        item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.collapseTree();
+                frame.treeWindow.collapseTree();
             }
        });
        collapseByMenu.add(item);
        item = new JMenuItem("Internal Node Labels");
        item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.collapseTreeByInternalNodeLabels();
+                frame.treeWindow.collapseTreeByInternalNodeLabels();
             }
        });
        collapseByMenu.add(item);
@@ -877,7 +875,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     String value = e.getActionCommand();
                     System.out.println("*");
                     frame.currTable = frame.otuMetadata;
-                    frame.colorByValue(value);
+                    frame.treeWindow.colorByValue(value);
                 }
             });
             colorByOtuMetadataMenu.add(item);
@@ -897,7 +895,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     //get the category to color by
                     String value = e.getActionCommand();
                     frame.currTable = frame.sampleMetadata;
-                    frame.colorByValue(value);
+                    frame.treeWindow.colorByValue(value);
                 }
             });
             colorByGroup.add(item);
@@ -921,7 +919,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     String value = e.getActionCommand();
                     System.out.println("*");
                     frame.currTable = frame.otuMetadata;
-                    frame.setLineWidthByValue(value);
+                    frame.treeWindow.setLineWidthByValue(value);
                 }
             });
             lineWidthOtuMetadataMenu.add(item);
@@ -941,7 +939,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     //get the category to color by
                     String value = e.getActionCommand();
                     frame.currTable = frame.sampleMetadata;
-                    frame.setLineWidthByValue(value);
+                    frame.treeWindow.setLineWidthByValue(value);
                 }
             });
             lineWidthGroup.add(item);
@@ -1184,7 +1182,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
       frame.pcoa.resetAxisLabels();
       
       //set view
-      frame.tabbedPane.setSelectedIndex(2);
+      frame.tabbedPane.setSelectedIndex(1);
 	}
   
 

@@ -16,6 +16,7 @@ import javax.swing.table.*;
  */
 public class TipLabelCustomizer extends JFrame {
     MainFrame frame = null;
+    TreeWindow treeWindow = null;
     JLabel title = new JLabel("Choose metadata columns to include in node labels:");
     JPanel mainPanel = new JPanel();
     JPanel buttonPanel = new JPanel();
@@ -40,8 +41,9 @@ public class TipLabelCustomizer extends JFrame {
     Vector<Object> cheader = new Vector<Object>();
     Vector<Object> vals = new Vector<Object>();
     
-    public TipLabelCustomizer(MainFrame _frame, boolean otuMeta, boolean sampleMeta) {
+    public TipLabelCustomizer(MainFrame _frame, TreeWindow _treeWindow, boolean otuMeta, boolean sampleMeta) {
         frame = _frame;
+        treeWindow = _treeWindow;
         this.setSize(new Dimension(400,300));
         this.setTitle("Choose metadata columns to include in node labels");
         mainPanel.setLayout(new BorderLayout());
@@ -118,7 +120,7 @@ public class TipLabelCustomizer extends JFrame {
             }
         }
 
-        for(Node n :frame.tree.getTree().getNodes()) {
+        for(Node n :treeWindow.tree.getTree().getNodes()) {
             String name = "";
             ArrayList<String> vals = new ArrayList<String>();
             for(String o : ops)
@@ -152,7 +154,7 @@ public class TipLabelCustomizer extends JFrame {
                 n.setLabel(name);
             }
         }
-        frame.tree.redraw();
+        treeWindow.tree.redraw();
     }
     
     public void allclrbuttonpressed() {
