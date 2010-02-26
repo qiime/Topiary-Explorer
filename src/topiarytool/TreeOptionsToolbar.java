@@ -18,6 +18,7 @@ public class TreeOptionsToolbar extends JToolBar {
     JButton triButton = new JButton();
     JButton radialButton = new JButton();
     JButton polarButton = new JButton();
+    JLabel treeStatus = new JLabel("");
 
     TreeWindow frame = null;
 
@@ -93,8 +94,15 @@ public class TreeOptionsToolbar extends JToolBar {
         add(triButton);
         add(radialButton);
         add(polarButton);
+        addSeparator();
+        
+        add(treeStatus);
         
         setFloatable(false);
+    }
+    
+    public void setStatus(String s) {
+        treeStatus.setText(s);
     }
 
 }

@@ -24,7 +24,6 @@ public class TreeWindow extends JFrame {
     CollapseTreeToolbar collapseTreeToolbar = null;
     TreeOptionsToolbar treeOpsToolbar = null;
     Node clickedNode = null;
-    JLabel treeStatus = new JLabel("");
     JPopupMenu treePopupMenu = new JPopupMenu();
 /*    TreeMap<Object, Color> colorMap = null;*/
     TipLabelCustomizer tlc = null;
@@ -47,12 +46,12 @@ public class TreeWindow extends JFrame {
  				Node node = tree.findNode(evt.getX(), evt.getY());
  				if (node != null) {
  					if (node.isLeaf()) {
- 						treeStatus.setText(String.format("Leaf (OTU): %s", node.getName()));
+ 						treeOpsToolbar.setStatus(String.format("Leaf (OTU): %s", node.getLabel()));
  					} else {
- 						treeStatus.setText(String.format("Sub-tree: %,d leaves", node.getNumberOfLeaves()));
+ 						treeOpsToolbar.setStatus(String.format("Sub-tree: %,d leaves", node.getNumberOfLeaves()));
  					}
  				} else {
- 						treeStatus.setText(" ");
+ 						treeOpsToolbar.setStatus(" ");
  				}
  			}
  		});
