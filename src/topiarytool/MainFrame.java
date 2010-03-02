@@ -23,9 +23,9 @@ public class MainFrame extends JFrame {
     //INITIALIZE GUI OBJECTS
     JSplitPane splitPane = null;
 
-    PcoaVis pcoa = new PcoaVis();
+/*    PcoaVis pcoa = new PcoaVis();*/
     JPanel colorPanel = new JPanel();
-    JPanel pcoaPanel = new JPanel();
+/*    JPanel pcoaPanel = new JPanel();*/
     JPanel splitPaneMainPanel = new JPanel();
     JPanel databasePanel = new JPanel();
     JPanel databaseBottomPanel = new JPanel();
@@ -45,18 +45,19 @@ public class MainFrame extends JFrame {
     JTable otuSampleMapTable = new JTable();
     JTable sampleMetadataTable = new JTable();
     JTable colorKeyTable = new JTable();
-    PcoaToolbar pcoaToolbar = new PcoaToolbar(this);
+/*    PcoaToolbar pcoaToolbar = new PcoaToolbar(this);*/
     JButton interpolateButton = new JButton("Interpolate");
     JFileChooser loadDataFileChooser = new JFileChooser();
     JLabel databaseStatus = new JLabel("Database not connected.");
     TopiaryMenu mainMenu = new TopiaryMenu(this);
-    Animator animator = null;
+/*    Animator animator = null;*/
     
     Container toolbarPane = new Container();
     //TreeOptionsToolbar treeOpsToolbar = new TreeOptionsToolbar(this);
     WindowViewToolbar windowToolbar = new WindowViewToolbar(this);
     
     TreeWindow treeWindow = new TreeWindow(this);
+    PcoaWindow pcoaWindow = new PcoaWindow(this);
     
     DbConnectWindow db_conn = new DbConnectWindow();
     DbSearchWindow db_search = new DbSearchWindow();
@@ -129,7 +130,7 @@ public class MainFrame extends JFrame {
         db_search.searchButton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e){
                searchButtonPressed();
-           } 
+           }
         });
         db_search.resetButton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e){
@@ -166,17 +167,17 @@ public class MainFrame extends JFrame {
         dataPanel.add(dataPane, BorderLayout.CENTER);
         dataPanel.add(databaseTabPane, BorderLayout.SOUTH);
 
-        pcoaPanel.setLayout(new BorderLayout());
-        pcoaPanel.add(pcoaToolbar, BorderLayout.PAGE_START);
-        GLCanvas canvas = new GLCanvas();
-        canvas.addGLEventListener(pcoa);
-        animator = new FPSAnimator(canvas, 30);
-        pcoaPanel.add(canvas, BorderLayout.CENTER);
-        animator.start();
+        /*pcoaPanel.setLayout(new BorderLayout());
+                pcoaPanel.add(pcoaToolbar, BorderLayout.PAGE_START);
+                GLCanvas canvas = new GLCanvas();
+                canvas.addGLEventListener(pcoa);
+                animator = new FPSAnimator(canvas, 30);
+                pcoaPanel.add(canvas, BorderLayout.CENTER);
+                animator.start();*/
         
         //set up the main panel
         //tabbedPane.addTab("Tree", treePanel);
-        tabbedPane.addTab("PCoA", pcoaPanel);
+        //tabbedPane.addTab("PCoA", pcoaPanel);
         tabbedPane.addTab("Data", dataPanel);
 
         //set up toolbar area
@@ -191,7 +192,7 @@ public class MainFrame extends JFrame {
         
         //the following is required to make sure th GLContext is created, or else resizing the 
         //window will result in program freezes
-        tabbedPane.setSelectedIndex(1);
+        tabbedPane.setSelectedIndex(0);
      }
      
      public void searchButtonPressed() {
@@ -383,172 +384,172 @@ public class MainFrame extends JFrame {
      public void recolor() {
          if (currTable != null && currTable == otuMetadata) {
              treeWindow.recolorTreeByOtu();
-             recolorPcoaByOtu();
+             pcoaWindow.recolorPcoaByOtu();
          } else if (currTable != null && currTable == sampleMetadata) {
              treeWindow.recolorTreeBySample();
-             recolorPcoaBySample();
+             pcoaWindow.recolorPcoaBySample();
          } else {
              //it's null; don't do anything
          }
      }
      
-     public void recolorPcoaByOtu() {
-        if (pcoa.spData == null) return;
-        //loop over each sample vertex
-        for (VertexData v : pcoa.sampleData) {
-            v.groupColor = new ArrayList<Color>();
-            v.groupFraction = new ArrayList<Double>();
-            String sampleID = v.label;
-            //find the column of the otu-sample map with this ID
-            int colIndex = otuSampleMap.getColumnNames().indexOf(sampleID);
-            //get this column of the table
-            ArrayList<Object> colData = otuSampleMap.getColumn(colIndex);
-            //for each non-zero row value
-            for (int i = 0; i < colData.size(); i++) {
-                Object value = colData.get(i);
-                //if it's not an Integer, skip it
-                if (!(value instanceof Integer)) continue;
-                Integer weight = (Integer)value;
-                if (weight == 0) continue;
-                Object otuID = otuSampleMap.getValueAt(i,0);
-                //find the row that has this otuID
-                int otuRowIndex = -1;
-                for (int j = 0; j < otuMetadata.getData().maxRow(); j++) {
-                   if (otuMetadata.getData().get(j,0).equals(otuID)) {
-                       otuRowIndex = j;
-                       break;
-                   }
-                }
-                if (otuRowIndex == -1) {
-                   JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+otuID+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
-                   return;
-                }
-                Object val = otuMetadata.getValueAt(otuRowIndex, colorColumnIndex);
-                if (val == null) {
-                    v.groupColor.add(new Color(0,0,0));
-                } else {
-                    v.groupColor.add(colorMap.get(val));
-                }
-                v.groupFraction.add(new Double(weight.intValue()));
-            }
-            v.mergeColors();
-        }
-        
-        
-          //loop over each otu vertex
-         for (VertexData v : pcoa.spData) {
-             //get the otuID
-             String otuID = v.label;
-             //find the row of the otu metadata table with this ID
-             int rowIndex = -1;
-             for (int i = 0; i < otuMetadata.getData().maxRow(); i++) {
-                 if (otuMetadata.getData().get(i,0).equals(otuID)) {
-                     rowIndex = i;
-                     break;
+     /*public void recolorPcoaByOtu() {
+             if (pcoa.spData == null) return;
+             //loop over each sample vertex
+             for (VertexData v : pcoa.sampleData) {
+                 v.groupColor = new ArrayList<Color>();
+                 v.groupFraction = new ArrayList<Double>();
+                 String sampleID = v.label;
+                 //find the column of the otu-sample map with this ID
+                 int colIndex = otuSampleMap.getColumnNames().indexOf(sampleID);
+                 //get this column of the table
+                 ArrayList<Object> colData = otuSampleMap.getColumn(colIndex);
+                 //for each non-zero row value
+                 for (int i = 0; i < colData.size(); i++) {
+                     Object value = colData.get(i);
+                     //if it's not an Integer, skip it
+                     if (!(value instanceof Integer)) continue;
+                     Integer weight = (Integer)value;
+                     if (weight == 0) continue;
+                     Object otuID = otuSampleMap.getValueAt(i,0);
+                     //find the row that has this otuID
+                     int otuRowIndex = -1;
+                     for (int j = 0; j < otuMetadata.getData().maxRow(); j++) {
+                        if (otuMetadata.getData().get(j,0).equals(otuID)) {
+                            otuRowIndex = j;
+                            break;
+                        }
+                     }
+                     if (otuRowIndex == -1) {
+                        JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+otuID+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                     }
+                     Object val = otuMetadata.getValueAt(otuRowIndex, colorColumnIndex);
+                     if (val == null) {
+                         v.groupColor.add(new Color(0,0,0));
+                     } else {
+                         v.groupColor.add(colorMap.get(val));
+                     }
+                     v.groupFraction.add(new Double(weight.intValue()));
                  }
+                 v.mergeColors();
              }
-             if (rowIndex == -1) {
-                //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
-                System.out.println("ERROR: OTU ID "+otuID+" not found in OTU Metadata Table.");
-                //return;
-                continue;
-             }
-             Object category = otuMetadata.getValueAt(rowIndex, colorColumnIndex);
-             if (category == null) continue;
-             //get the color for this category
-             Color c = colorMap.get(category);
-             if (c == null) {
-                JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-             }
-             v.groupColor = new ArrayList<Color>();
-             v.groupFraction = new ArrayList<Double>();
-             v.groupColor.add(c);
-             v.groupFraction.add(1.0);
-         }
-         
-         repaint();
-        
-     }
+             
+             
+               //loop over each otu vertex
+              for (VertexData v : pcoa.spData) {
+                  //get the otuID
+                  String otuID = v.label;
+                  //find the row of the otu metadata table with this ID
+                  int rowIndex = -1;
+                  for (int i = 0; i < otuMetadata.getData().maxRow(); i++) {
+                      if (otuMetadata.getData().get(i,0).equals(otuID)) {
+                          rowIndex = i;
+                          break;
+                      }
+                  }
+                  if (rowIndex == -1) {
+                     //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                     System.out.println("ERROR: OTU ID "+otuID+" not found in OTU Metadata Table.");
+                     //return;
+                     continue;
+                  }
+                  Object category = otuMetadata.getValueAt(rowIndex, colorColumnIndex);
+                  if (category == null) continue;
+                  //get the color for this category
+                  Color c = colorMap.get(category);
+                  if (c == null) {
+                     JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+                     return;
+                  }
+                  v.groupColor = new ArrayList<Color>();
+                  v.groupFraction = new ArrayList<Double>();
+                  v.groupColor.add(c);
+                  v.groupFraction.add(1.0);
+              }
+              
+              repaint();
+             
+          }
 
-     public void recolorPcoaBySample() {
-         if (pcoa.sampleData == null) return;
-         //loop over each sample vertex
-         for (VertexData v : pcoa.sampleData) {
-             //get the sampleID
-             String sampleID = v.label;
-             //find the row of the sample metadata table with this ID
-             int rowIndex = -1;
-             for (int i = 0; i < sampleMetadata.getData().maxRow(); i++) {
-                 if (sampleMetadata.getData().get(i,0).equals(sampleID)) {
-                     rowIndex = i;
-                     break;
+          public void recolorPcoaBySample() {
+              if (pcoa.sampleData == null) return;
+              //loop over each sample vertex
+              for (VertexData v : pcoa.sampleData) {
+                  //get the sampleID
+                  String sampleID = v.label;
+                  //find the row of the sample metadata table with this ID
+                  int rowIndex = -1;
+                  for (int i = 0; i < sampleMetadata.getData().maxRow(); i++) {
+                      if (sampleMetadata.getData().get(i,0).equals(sampleID)) {
+                          rowIndex = i;
+                          break;
+                      }
+                  }
+                  if (rowIndex == -1) {
+                     //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                     System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
+                     //return;
+                     continue;
+                  }
+                  Object category = sampleMetadata.getValueAt(rowIndex, colorColumnIndex);
+                  if (category == null) continue;
+                  //get the color for this category
+                  Color c = colorMap.get(category);
+                  if (c == null) {
+                     JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+                     return;
+                  }
+                  v.groupColor = new ArrayList<Color>();
+                  v.groupFraction = new ArrayList<Double>();
+                  v.groupColor.add(c);
+                  v.groupFraction.add(1.0);
+              }
+              
+             //loop over each sample vertex
+             for (VertexData v : pcoa.spData) {
+                 v.groupColor = new ArrayList<Color>();
+                 v.groupFraction = new ArrayList<Double>();
+                 String otuID = v.label;
+                 //find the row of the otu-sample map with this ID
+                 int rowIndex = otuSampleMap.getColumn(0).indexOf(otuID);
+                 //get this row of the table
+                 ArrayList<Object> rowData = otuSampleMap.getRow(rowIndex);
+                 //for each non-zero row value
+                 for (int i = 1; i < rowData.size(); i++) {
+                     Object value = rowData.get(i);
+                     //if it's not an Integer, skip it
+                     if (!(value instanceof Integer)) continue;
+                     Integer weight = (Integer)value;
+                     if (weight == 0) continue;
+                     String sampleID = otuSampleMap.getColumnName(i);
+                     //find the row that has this sampleID
+                     int sampleRowIndex = -1;
+                     for (int j = 0; j < sampleMetadata.getData().maxRow(); j++) {
+                        if (sampleMetadata.getData().get(j,0).equals(sampleID)) {
+                            sampleRowIndex = j;
+                            break;
+                        }
+                     }
+                     if (sampleRowIndex == -1) {
+                        JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                     }
+                     Object val = sampleMetadata.getValueAt(sampleRowIndex,colorColumnIndex);
+                     if (val == null) {
+                         v.groupColor.add(new Color(0,0,0));
+                     } else {
+                         v.groupColor.add(colorMap.get(val));
+                     }
+                     v.groupFraction.add(new Double(weight.intValue()));
                  }
-             }
-             if (rowIndex == -1) {
-                //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
-                System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
-                //return;
-                continue;
-             }
-             Object category = sampleMetadata.getValueAt(rowIndex, colorColumnIndex);
-             if (category == null) continue;
-             //get the color for this category
-             Color c = colorMap.get(category);
-             if (c == null) {
-                JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-             }
-             v.groupColor = new ArrayList<Color>();
-             v.groupFraction = new ArrayList<Double>();
-             v.groupColor.add(c);
-             v.groupFraction.add(1.0);
-         }
-         
-        //loop over each sample vertex
-        for (VertexData v : pcoa.spData) {
-            v.groupColor = new ArrayList<Color>();
-            v.groupFraction = new ArrayList<Double>();
-            String otuID = v.label;
-            //find the row of the otu-sample map with this ID
-            int rowIndex = otuSampleMap.getColumn(0).indexOf(otuID);
-            //get this row of the table
-            ArrayList<Object> rowData = otuSampleMap.getRow(rowIndex);
-            //for each non-zero row value
-            for (int i = 1; i < rowData.size(); i++) {
-                Object value = rowData.get(i);
-                //if it's not an Integer, skip it
-                if (!(value instanceof Integer)) continue;
-                Integer weight = (Integer)value;
-                if (weight == 0) continue;
-                String sampleID = otuSampleMap.getColumnName(i);
-                //find the row that has this sampleID
-                int sampleRowIndex = -1;
-                for (int j = 0; j < sampleMetadata.getData().maxRow(); j++) {
-                   if (sampleMetadata.getData().get(j,0).equals(sampleID)) {
-                       sampleRowIndex = j;
-                       break;
-                   }
-                }
-                if (sampleRowIndex == -1) {
-                   JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
-                   return;
-                }
-                Object val = sampleMetadata.getValueAt(sampleRowIndex,colorColumnIndex);
-                if (val == null) {
-                    v.groupColor.add(new Color(0,0,0));
-                } else {
-                    v.groupColor.add(colorMap.get(val));
-                }
-                v.groupFraction.add(new Double(weight.intValue()));
-            }
 
-            v.mergeColors();
-        }
-        
-         repaint();
-     }
-     
+                 v.mergeColors();
+             }
+             
+              repaint();
+          }
+          */
      public void interpolateColors() {
 		ArrayList<ArrayList<Object>> data = ((ColorTableModel)colorKeyTable.getModel()).getData();
 

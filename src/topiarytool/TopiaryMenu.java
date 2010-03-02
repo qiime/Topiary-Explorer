@@ -586,9 +586,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 			 }
              frame.treeWindow.tree.loop();
          } else if (e.getActionCommand().equals("Tree Window")) {
-                  frame.treeWindow.setVisible(true);
-              }
-              else if (e.getActionCommand().equals("No coloring")) {
+                  frame.treeWindow.setVisible(!frame.treeWindow.isVisible());
+          } else if (e.getActionCommand().equals("PCoA Window")) {
+                  frame.pcoaWindow.setVisible(!frame.pcoaWindow.isVisible());
+        } else if (e.getActionCommand().equals("No coloring")) {
              frame.treeWindow.removeColor();
          } else if (e.getActionCommand().equals("Tip Labels...")) {
 /*             frame.tree.setDrawExternalNodeLabels(externalLabelsMenuItem.getState());*/
@@ -706,7 +707,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        if (returnVal == JFileChooser.APPROVE_OPTION) {
             frame.treeWindow.tree.noLoop();
             //set view
-            frame.tabbedPane.setSelectedIndex(1);
+            frame.tabbedPane.setSelectedIndex(0);
             frame.dataPane.setSelectedIndex(1);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
             try {
@@ -741,7 +742,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        if (returnVal == JFileChooser.APPROVE_OPTION) {
             frame.treeWindow.tree.noLoop();
             //set view
-            frame.tabbedPane.setSelectedIndex(1);
+            frame.tabbedPane.setSelectedIndex(0);
             frame.dataPane.setSelectedIndex(3);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
             try {
@@ -774,7 +775,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        if (returnVal == JFileChooser.APPROVE_OPTION) {
             frame.treeWindow.tree.noLoop();
             //set view
-            frame.tabbedPane.setSelectedIndex(1);
+            frame.tabbedPane.setSelectedIndex(0);
             frame.dataPane.setSelectedIndex(2);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
             try {
@@ -1115,34 +1116,34 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 	  
 	  
 
-	  frame.pcoa.spData = new VertexData[spc.length];
+	  frame.pcoaWindow.pcoa.spData = new VertexData[spc.length];
 	  System.out.println((new Integer(spc.length)).toString() + " " + (new Integer(otuids.size())).toString());
 	  for (int i = 0; i < spc.length; i++) {
-		frame.pcoa.spData[i] = new VertexData();
-		frame.pcoa.spData[i].coords = spc[i];
-		frame.pcoa.spData[i].label = otuids.get(i);
-		frame.pcoa.spData[i].weight = 1;
-		frame.pcoa.spData[i].groupColor = new ArrayList<Color>();
-		frame.pcoa.spData[i].groupFraction = new ArrayList<Double>();
-		frame.pcoa.spData[i].velocity = new float[3];
-		frame.pcoa.spData[i].velocity[0] = frame.pcoa.spData[i].velocity[1] = frame.pcoa.spData[i].velocity[2] = 0;
+		frame.pcoaWindow.pcoa.spData[i] = new VertexData();
+		frame.pcoaWindow.pcoa.spData[i].coords = spc[i];
+		frame.pcoaWindow.pcoa.spData[i].label = otuids.get(i);
+		frame.pcoaWindow.pcoa.spData[i].weight = 1;
+		frame.pcoaWindow.pcoa.spData[i].groupColor = new ArrayList<Color>();
+		frame.pcoaWindow.pcoa.spData[i].groupFraction = new ArrayList<Double>();
+		frame.pcoaWindow.pcoa.spData[i].velocity = new float[3];
+		frame.pcoaWindow.pcoa.spData[i].velocity[0] = frame.pcoaWindow.pcoa.spData[i].velocity[1] = frame.pcoaWindow.pcoa.spData[i].velocity[2] = 0;
 	  }
 
-	  frame.pcoa.sampleData = new VertexData[samplec.length];
+	  frame.pcoaWindow.pcoa.sampleData = new VertexData[samplec.length];
 	  for (int i = 0; i < samplec.length; i++) {
-		frame.pcoa.sampleData[i] = new VertexData();
-		frame.pcoa.sampleData[i].coords = samplec[i];
-		frame.pcoa.sampleData[i].label = sampleids.get(i);
-		frame.pcoa.sampleData[i].weight = 1;
-		frame.pcoa.sampleData[i].groupColor = new ArrayList<Color>();
-		frame.pcoa.sampleData[i].groupFraction = new ArrayList<Double>();
-		frame.pcoa.sampleData[i].velocity = new float[3];
-		frame.pcoa.sampleData[i].velocity[0] = frame.pcoa.sampleData[i].velocity[1] = frame.pcoa.sampleData[i].velocity[2] = 0;
+		frame.pcoaWindow.pcoa.sampleData[i] = new VertexData();
+		frame.pcoaWindow.pcoa.sampleData[i].coords = samplec[i];
+		frame.pcoaWindow.pcoa.sampleData[i].label = sampleids.get(i);
+		frame.pcoaWindow.pcoa.sampleData[i].weight = 1;
+		frame.pcoaWindow.pcoa.sampleData[i].groupColor = new ArrayList<Color>();
+		frame.pcoaWindow.pcoa.sampleData[i].groupFraction = new ArrayList<Double>();
+		frame.pcoaWindow.pcoa.sampleData[i].velocity = new float[3];
+		frame.pcoaWindow.pcoa.sampleData[i].velocity[0] = frame.pcoaWindow.pcoa.sampleData[i].velocity[1] = frame.pcoaWindow.pcoa.sampleData[i].velocity[2] = 0;
 	  }
 	  
-	  frame.pcoa.evals = new ArrayList<Double>();
+	  frame.pcoaWindow.pcoa.evals = new ArrayList<Double>();
 	  for (int i = 0; i < evalsc.length; i++) {
-	    frame.pcoa.evals.add(new Double(evalsc[i]));
+	    frame.pcoaWindow.pcoa.evals.add(new Double(evalsc[i]));
 	  }
 
 	  float[][] links = new float[0][];
@@ -1160,8 +1161,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 			    a[1] = j;
 			    a[2] = weight;
 			    links[links.length-1] = a;
-			    frame.pcoa.spData[i].weight = frame.pcoa.spData[i].weight + 1;
-			    frame.pcoa.sampleData[j].weight = frame.pcoa.sampleData[j].weight + 1;
+			    frame.pcoaWindow.pcoa.spData[i].weight = frame.pcoaWindow.pcoa.spData[i].weight + 1;
+			    frame.pcoaWindow.pcoa.sampleData[j].weight = frame.pcoaWindow.pcoa.sampleData[j].weight + 1;
 	  		}
 	  	}
 	  }
@@ -1173,16 +1174,17 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 	  //	}
 	  //}
 	  System.out.println("done.");
-	  frame.pcoa.links = links;
+	  frame.pcoaWindow.pcoa.links = links;
 
       //color it
       frame.recolor();
       
       //set axis labels
-      frame.pcoa.resetAxisLabels();
+      frame.pcoaWindow.pcoa.resetAxisLabels();
       
       //set view
-      frame.tabbedPane.setSelectedIndex(1);
+      frame.pcoaWindow.setVisible(true);
+      //frame.tabbedPane.setSelectedIndex(1);
 	}
   
 

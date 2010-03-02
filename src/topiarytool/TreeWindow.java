@@ -25,7 +25,6 @@ public class TreeWindow extends JFrame {
     TreeOptionsToolbar treeOpsToolbar = null;
     Node clickedNode = null;
     JPopupMenu treePopupMenu = new JPopupMenu();
-/*    TreeMap<Object, Color> colorMap = null;*/
     TipLabelCustomizer tlc = null;
     
 	 public TreeWindow(MainFrame _frame) {
@@ -36,7 +35,6 @@ public class TreeWindow extends JFrame {
 	     verticalTreeToolbar = new VerticalTreeToolbar(this);
 	     collapseTreeToolbar = new CollapseTreeToolbar(this);
 	     treeOpsToolbar = new TreeOptionsToolbar(this);
-/*       colorMap = frame.colorMap;*/
 	     
 	     Container pane = getContentPane();
          pane.setLayout(new BorderLayout());
@@ -458,13 +456,13 @@ public class TreeWindow extends JFrame {
           }
 
           //reset the pcoa vertex colors
-          if (frame.pcoa.sampleData != null) {
-              for (VertexData v : frame.pcoa.sampleData) {
+          if (frame.pcoaWindow.pcoa.sampleData != null) {
+              for (VertexData v : frame.pcoaWindow.pcoa.sampleData) {
                   v.clearColor();
               }
           }
-          if (frame.pcoa.spData != null) {
-              for (VertexData v : frame.pcoa.spData) {
+          if (frame.pcoaWindow.pcoa.spData != null) {
+              for (VertexData v : frame.pcoaWindow.pcoa.spData) {
                   v.clearColor();
               }
           }

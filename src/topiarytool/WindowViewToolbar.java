@@ -24,14 +24,14 @@ public class WindowViewToolbar extends JToolBar {
         treeButton.setToolTipText("Tree Window");
         treeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //frame.collapseTree();
+                frame.treeWindow.setVisible(!frame.treeWindow.isVisible());
             }
         });
         pcoaButton.setIcon(new ImageIcon("images/pcoawindow.gif"));
         pcoaButton.setToolTipText("PCoA Window");
         pcoaButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-               // frame.uncollapseTree();
+               frame.pcoaWindow.setVisible(!frame.pcoaWindow.isVisible());
             }
         });
         dataButton.setIcon(new ImageIcon("images/datawindow.gif"));
