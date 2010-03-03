@@ -12,7 +12,6 @@ public class WindowViewToolbar extends JToolBar {
 
     JButton treeButton  = new JButton();
     JButton pcoaButton = new JButton();
-    JButton dataButton = new JButton();
 
     MainFrame frame = null;
 
@@ -34,17 +33,9 @@ public class WindowViewToolbar extends JToolBar {
                frame.pcoaWindow.setVisible(!frame.pcoaWindow.isVisible());
             }
         });
-        dataButton.setIcon(new ImageIcon("images/datawindow.gif"));
-        dataButton.setToolTipText("Data Window");
-        dataButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                //frame.mirrorVert();
-            }
-        });
         
         add(treeButton);
         add(pcoaButton);
-        add(dataButton);
         
         setFloatable(false);
     }

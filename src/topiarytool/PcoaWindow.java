@@ -28,7 +28,7 @@ public class PcoaWindow extends JFrame {
 	    Container pane = getContentPane();
         pane.setLayout(new BorderLayout());
 	    
-	    pcoaToolbar = new PcoaToolbar(frame);
+	    pcoaToolbar = new PcoaToolbar(this);
 	    
 	    pcoaPanel.setLayout(new BorderLayout());
         pcoaPanel.add(pcoaToolbar, BorderLayout.PAGE_START);

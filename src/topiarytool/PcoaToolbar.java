@@ -15,9 +15,9 @@ public class PcoaToolbar extends JToolBar {
     JSlider zoomSlider = new JSlider(-8, 8, 0);
     JPanel spacer1 = new JPanel();
     
-    MainFrame frame = null;
+    PcoaWindow frame = null;
 
-    public PcoaToolbar(MainFrame _frame) {
+    public PcoaToolbar(PcoaWindow _frame) {
 
         frame = _frame;
 
