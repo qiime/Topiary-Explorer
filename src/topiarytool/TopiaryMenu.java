@@ -124,9 +124,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         checkbox = new JCheckBoxMenuItem("PCoA Window");
         checkbox.addActionListener(this);
         viewMenu.add(checkbox);
-        checkbox = new JCheckBoxMenuItem("Data Window");
-        checkbox.addActionListener(this);
-        viewMenu.add(checkbox);
         
         //set up the "tree" submenus
         item = new JMenuItem("Beautify");
@@ -322,7 +319,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         button.setSelected(true);
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setDyamicLayout("None");
+                frame.pcoaWindow.pcoa.setDyamicLayout("None");
             }
         });
         pcoaLayoutGroup.add(button);
@@ -330,7 +327,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         button = new JRadioButtonMenuItem("Spring");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setDyamicLayout("Spring");
+                frame.pcoaWindow.pcoa.setDyamicLayout("Spring");
             }
         });
         pcoaLayoutGroup.add(button);
@@ -338,7 +335,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         button = new JRadioButtonMenuItem("Force");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setDyamicLayout("Force");
+                frame.pcoaWindow.pcoa.setDyamicLayout("Force");
             }
         });
         pcoaLayoutGroup.add(button);
@@ -361,8 +358,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item.addActionListener(new ActionListener() {        
             public void actionPerformed(ActionEvent e) {
                 JColorChooser colorChooser = new JColorChooser();
-                Color c = colorChooser.showDialog(frame, "Pick a Color", frame.pcoa.getBackgroundColor());
-                frame.pcoa.setBackgroundColor(c);
+                Color c = colorChooser.showDialog(frame, "Pick a Color", frame.pcoaWindow.pcoa.getBackgroundColor());
+                frame.pcoaWindow.pcoa.setBackgroundColor(c);
             }
         });
         pcoaMenu.add(item);
@@ -370,7 +367,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item = new JMenuItem("Set axes...");        
         item.addActionListener(new ActionListener() {        
             public void actionPerformed(ActionEvent e) {
-                if (frame.pcoa.spData == null) {
+                if (frame.pcoaWindow.pcoa.spData == null) {
                     JOptionPane.showMessageDialog(null, "PCOA analysis must be run first.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     PCSelectDialog p = new PCSelectDialog(frame);
@@ -386,7 +383,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         button = new JRadioButtonMenuItem("Cube");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setSampleShape("Cube");
+                frame.pcoaWindow.pcoa.setSampleShape("Cube");
             }
         });
         sampleShapeGroup.add(button);
@@ -394,7 +391,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		button = new JRadioButtonMenuItem("Sphere");
 	    button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setSampleShape("Sphere");
+                frame.pcoaWindow.pcoa.setSampleShape("Sphere");
             }
         });
         button.setSelected(true);
@@ -403,7 +400,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         button = new JRadioButtonMenuItem("Tetrahedron");
 	    button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setSampleShape("Tetrahedron");
+                frame.pcoaWindow.pcoa.setSampleShape("Tetrahedron");
             }
         });
         sampleShapeGroup.add(button);
@@ -411,7 +408,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         button = new JRadioButtonMenuItem("Octahedron");
 	    button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setSampleShape("Octahedron");
+                frame.pcoaWindow.pcoa.setSampleShape("Octahedron");
             }
         });
         sampleShapeGroup.add(button);
@@ -421,7 +418,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         button = new JRadioButtonMenuItem("Cube");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setOtuShape("Cube");
+                frame.pcoaWindow.pcoa.setOtuShape("Cube");
             }
         });
         button.setSelected(true);
@@ -430,7 +427,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		button = new JRadioButtonMenuItem("Sphere");
 		button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setOtuShape("Sphere");
+                frame.pcoaWindow.pcoa.setOtuShape("Sphere");
             }
         });
         otuShapeGroup.add(button);
@@ -438,7 +435,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         button = new JRadioButtonMenuItem("Tetrahedron");
 		button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setOtuShape("Tetrahedron");
+                frame.pcoaWindow.pcoa.setOtuShape("Tetrahedron");
             }
         });
         otuShapeGroup.add(button);
@@ -446,7 +443,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         button = new JRadioButtonMenuItem("Octahedron");
 		button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setOtuShape("Octahedron");
+                frame.pcoaWindow.pcoa.setOtuShape("Octahedron");
             }
         });
         otuShapeGroup.add(button);
@@ -459,49 +456,49 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         samplesMenuItem.setSelected(true);
         samplesMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setDisplaySamples(samplesMenuItem.getState());
+                frame.pcoaWindow.pcoa.setDisplaySamples(samplesMenuItem.getState());
             }
         });
         pcoaMenu.add(samplesMenuItem);
         sampleLabelsMenuItem.setSelected(false);
         sampleLabelsMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setDisplaySampleIDs(sampleLabelsMenuItem.getState());
+                frame.pcoaWindow.pcoa.setDisplaySampleIDs(sampleLabelsMenuItem.getState());
             }
         });
         pcoaMenu.add(sampleLabelsMenuItem);
         otusMenuItem.setSelected(true);
         otusMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setDisplayOtus(otusMenuItem.getState());
+                frame.pcoaWindow.pcoa.setDisplayOtus(otusMenuItem.getState());
             }
         });
         pcoaMenu.add(otusMenuItem);
         otuLabelsMenuItem.setSelected(false);
         otuLabelsMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setDisplayOtuIDs(otuLabelsMenuItem.getState());
+                frame.pcoaWindow.pcoa.setDisplayOtuIDs(otuLabelsMenuItem.getState());
             }
         });
         pcoaMenu.add(otuLabelsMenuItem);
         connectionsMenuItem.setSelected(true);
         connectionsMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setDisplayConnections(connectionsMenuItem.getState());
+                frame.pcoaWindow.pcoa.setDisplayConnections(connectionsMenuItem.getState());
             }
         });
         pcoaMenu.add(connectionsMenuItem);
         axesMenuItem.setSelected(true);
         axesMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setDisplayAxes(axesMenuItem.getState());
+                frame.pcoaWindow.pcoa.setDisplayAxes(axesMenuItem.getState());
             }
         });
         pcoaMenu.add(axesMenuItem);
         axisLabelsMenuItem.setSelected(true);
         axisLabelsMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setDisplayAxisLabels(axisLabelsMenuItem.getState());
+                frame.pcoaWindow.pcoa.setDisplayAxisLabels(axisLabelsMenuItem.getState());
             }
         });
         pcoaMenu.add(axisLabelsMenuItem);        
@@ -511,7 +508,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         colorSamplesMenuItem.setSelected(true);
         colorSamplesMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setColorSamples(colorSamplesMenuItem.getState());
+                frame.pcoaWindow.pcoa.setColorSamples(colorSamplesMenuItem.getState());
             }
         });
         pcoaMenu.add(colorSamplesMenuItem); 
@@ -519,7 +516,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         colorOtusMenuItem.setSelected(true);
         colorOtusMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.pcoa.setColorOtus(colorOtusMenuItem.getState());
+                frame.pcoaWindow.pcoa.setColorOtus(colorOtusMenuItem.getState());
             }
         });
         pcoaMenu.add(colorOtusMenuItem); 
@@ -569,7 +566,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
      public void actionPerformed(ActionEvent e) {
 
          if (e.getActionCommand().equals("Load Tree...")) {
-            loadTree();
+            frame.treeWindow.loadTree();
          } else if (e.getActionCommand().equals("Load OTU Metadata...")) {
            loadOtuMetadata();
          } else if (e.getActionCommand().equals("Load Sample Metadata...")) {
@@ -577,14 +574,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
          } else if (e.getActionCommand().equals("Load OTU-Sample Map...")) {
              loadOtuSampleMap();
          } else if (e.getActionCommand().equals("Save Tree...")) {
-             frame.treeWindow.tree.noLoop();
-             frame.loadDataFileChooser.setDialogTitle("Save Tree...");
-             int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
-			 if (returnVal == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = frame.loadDataFileChooser.getSelectedFile();
-				TopiaryFunctions.createNewickFileFromTree( frame.treeWindow.tree.getTree(),selectedFile);
-			 }
-             frame.treeWindow.tree.loop();
+             frame.treeWindow.saveTree();
          } else if (e.getActionCommand().equals("Tree Window")) {
                   frame.treeWindow.setVisible(!frame.treeWindow.isVisible());
           } else if (e.getActionCommand().equals("PCoA Window")) {
@@ -625,9 +615,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 frame.clickedNode.setDrawPie(!frame.clickedNode.getDrawPie());
              }
          } else if (e.getActionCommand().equals("Recenter")) {
-             frame.treeWindow.tree.resetTreeX();
-             frame.treeWindow.tree.resetTreeY();
-             frame.treeWindow.treeToolbar.syncZoomSliderWithTree();
+             frame.treeWindow.recenter();
          } else if (e.getActionCommand().equals("Mirror left/right")) {
             frame.treeWindow.mirrorHorz();
          } else if (e.getActionCommand().equals("Mirror up/down")) {
@@ -645,21 +633,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
              frame.treeWindow.tree.setROffsets(frame.treeWindow.tree.getTree(), 0);
              frame.treeWindow.tree.setRadialOffsets(frame.treeWindow.tree.getTree());
          } else if (e.getActionCommand().equals("Export Tree Image...") && frame.treeWindow.tree.getTree()!= null) {
-            frame.treeWindow.tree.noLoop();
-             //Determine PDF dimensions
-             PDFDimensionsDialog p = new PDFDimensionsDialog(frame);
-             p.pack();
-             p.setVisible(true);
-             double dims[] = p.dims;
-             if (dims[0]!=0 || dims[1]!=0) {
-                frame.loadDataFileChooser.setDialogTitle("Save As...");
-                int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    String selectedFile = frame.loadDataFileChooser.getSelectedFile().getAbsolutePath();
-                    frame.treeWindow.tree.exportTreeImage(selectedFile, dims);
-                }
-			}
-            frame.treeWindow.tree.loop();
+            frame.treeWindow.exportTreeImage();
          } else if (e.getActionCommand().equals("Export Tree Screen Capture...") && frame.treeWindow.tree.getTree()!= null)  {
              frame.treeWindow.tree.noLoop();
              frame.loadDataFileChooser.setDialogTitle("Save As...");
@@ -673,33 +647,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
              frame.db_conn.c.close_connection();
              System.exit(0);
          } else if(e.getActionCommand().equals("Run PCoA Analysis...")) {
-             runPcoaAnalysis();
+             frame.pcoaWindow.runPcoaAnalysis();
          }
     }
-
-   public void loadTree() {
-        frame.loadDataFileChooser.setDialogTitle("Load Tree");
-        int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            frame.treeWindow.tree.noLoop();
-            //set view
-            //frame.tabbedPane.setSelectedIndex(1);
-            File selectedFile = frame.loadDataFileChooser.getSelectedFile();
-            frame.treeWindow.tree.setTree(TopiaryFunctions.createTreeFromNewickFile(selectedFile));
-            //make sure coloring is empty
-            frame.treeWindow.removeColor();
-            frame.treeWindow.treeToolbar.zoomSlider.setValue(0);
-            frame.treeWindow.tree.loop();
-            frame.treeWindow.collapseTree();
-        }
-        treeMenu.setEnabled(true);
-        nodeMenu.setEnabled(true);
-        
-        pcoaMenu.setEnabled(true);
-        colorByMenu.setEnabled(true);
-        frame.treeWindow.setVisible(true);
-        System.out.println("Done drawing tree.");
-   }
 
    public void loadOtuMetadata() {
        frame.loadDataFileChooser.setDialogTitle("Load OTU Metadata");
@@ -707,7 +657,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        if (returnVal == JFileChooser.APPROVE_OPTION) {
             frame.treeWindow.tree.noLoop();
             //set view
-            frame.tabbedPane.setSelectedIndex(0);
             frame.dataPane.setSelectedIndex(1);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
             try {
@@ -742,7 +691,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        if (returnVal == JFileChooser.APPROVE_OPTION) {
             frame.treeWindow.tree.noLoop();
             //set view
-            frame.tabbedPane.setSelectedIndex(0);
             frame.dataPane.setSelectedIndex(3);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
             try {
@@ -775,7 +723,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        if (returnVal == JFileChooser.APPROVE_OPTION) {
             frame.treeWindow.tree.noLoop();
             //set view
-            frame.tabbedPane.setSelectedIndex(0);
             frame.dataPane.setSelectedIndex(2);
             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
             try {
@@ -807,7 +754,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     public void syncPcoaWithLineWidthSlider() {
         double value = pcoaLineWidthSlider.getValue();
         value = value/10.0;
-        frame.pcoa.setLineWidthScale((float)value);
+        frame.pcoaWindow.pcoa.setLineWidthScale((float)value);
     }
 
     public void resetTipLabels() {
@@ -947,245 +894,5 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             lineWidthSampleMetadataMenu.add(item);
        }
    }
-
-   	//run the PCoA
-	private void runPcoaAnalysis() {
-
-		ArrayList<String> otuids = new ArrayList<String>();
-		ArrayList<String> sampleids = new ArrayList<String>();
-
-		//Write the data to file
-		SparseTableModel model = (SparseTableModel) frame.otuSampleMapTable.getModel();
-		//get the column names
-		for (int i = 1; i < frame.otuSampleMapTable.getColumnCount(); i++) {
-			sampleids.add((String) frame.otuSampleMapTable.getColumnName(i));
-		}
-		try {
-			System.out.println("writing...");
-			BufferedWriter o = new BufferedWriter(new FileWriter("data.txt"));
-			o.write("[");
-			for (int i = 0; i < frame.otuSampleMapTable.getRowCount(); i++) {
-				o.write("[");
-				//skip first col, which is OTU ID
-				Object val = frame.otuSampleMapTable.getValueAt(i,0);
-				if (val==null) { val = new Integer(0); }
-				otuids.add(val.toString());
-				for (int j = 1; j < frame.otuSampleMapTable.getColumnCount(); j++) {
-					Object data = frame.otuSampleMapTable.getValueAt(i, j);
-                    if (data==null) {data = new Integer(0);}
-					if (data instanceof Integer) {
-						if (j > 1) {o.write(", ");}
-						o.write(data.toString());
-					}
-				}
-				o.write("],\n");
-			}
-			o.write("]");
-			o.close();
-			System.out.println("done");
-
-		} catch (IOException e)  {
-			JOptionPane.showMessageDialog(null, "Unable to write data file PCoA analysis", "Error", JOptionPane.ERROR_MESSAGE);
-		}
-
-		//delete data files if they already exist
-		File sample_coords = new File("sample_coords.txt");
-		sample_coords.delete();
-		File sp_coords = new File("sp_coords.txt");
-		sp_coords.delete();
-
-		System.out.println("running analysis...");
-		try {
-			//get the distance metric from combo box
-            String dist_metric = null;
-            for (Enumeration e = distanceMetricGroup.getElements(); e.hasMoreElements();) {
-                JRadioButtonMenuItem b = (JRadioButtonMenuItem) e.nextElement();
-                if (b.getModel() == distanceMetricGroup.getSelection()) {
-                    dist_metric = b.getText();
-                    break;
-                }
-            }
-
-            //is the distance metric "Custom..."?
-			if (dist_metric.equals("Load from file")) {
-				//allow use to select file for distance matrix
-                frame.loadDataFileChooser.setDialogTitle("Load custom distance matrix");
-				int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					dist_metric += " " + frame.loadDataFileChooser.getSelectedFile().getAbsolutePath();
-				}
-			}
-
-			//run python scripts to calculate PCoA
-			Process pr = Runtime.getRuntime().exec("python l19test.py " + dist_metric);
-            BufferedReader br = new BufferedReader(new InputStreamReader(pr.getErrorStream()));
-   			String line;
-			while((line = br.readLine()) != null) {
-				System.out.println(line);
-			}
-            int exitVal = pr.waitFor();
-            System.out.println("Process Exit Value:" + exitVal);
-			System.out.println("done.");
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Unable to run python script for PCoA analysis", "Error", JOptionPane.ERROR_MESSAGE);
-		}
-
-
-	  System.out.println("loading data files...");
-	  BufferedReader br = null;
-	  try {
-		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("sample_coords.txt"))));
-	  } catch (FileNotFoundException e) {
-	  	JOptionPane.showMessageDialog(null, "Error opening find sample_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
-	  }
-	  String line;
-	  float[][] samplec = new float[0][];
-
-	  try {
-		while((line = br.readLine()) != null) {
-		  String[] s = line.split("\t");
-		  float[] data = new float[s.length];
-		  for (int i = 0; i < s.length; i++) {
-			try {
-			  data[i] = Float.parseFloat(s[i]);
-			} catch(Exception e) {
-			  data[i] = 0;
-			}
-		  }
-		  //append data onto sample_coords
-		  float[][] t = new float[samplec.length+1][];
-		  System.arraycopy(samplec, 0, t, 0, samplec.length);
-		  samplec = t;
-		  samplec[samplec.length-1] = data;
-		}
-	  } catch (IOException e) {
-		JOptionPane.showMessageDialog(null, "Error reading sp_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
-	  }
-
-	 try {
-		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("sp_coords.txt"))));
-	  } catch (FileNotFoundException e) {
-		JOptionPane.showMessageDialog(null, "Error opening sp_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
-	  }
-	  float[][] spc = new float[0][];
-
-	  try {
-		while((line = br.readLine()) != null) {
-		  String[] s = line.split("\t");
-		  float[] data = new float[s.length];
-		  for (int i = 0; i < s.length; i++) {
-			try {
-			  data[i] = Float.parseFloat(s[i]);
-			} catch(Exception e) {
-			  data[i] = 0;
-			}
-		  }
-		  //append data onto sp_coords
-		  float[][] t = new float[spc.length+1][];
-		  System.arraycopy(spc, 0, t, 0, spc.length);
-		  spc = t;
-		  spc[spc.length-1] = data;
-		}
-	  } catch (IOException e) {
-		JOptionPane.showMessageDialog(null, "Error reading sp_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
-	  }
-	  
-	  
-	  try {
-		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("evals.txt"))));
-	  } catch (FileNotFoundException e) {
-		JOptionPane.showMessageDialog(null, "Error opening evals.txt", "Error", JOptionPane.ERROR_MESSAGE);
-	  }
-	  float[] evalsc = null;
-
-	  try {
-		  line = br.readLine();
-		  String[] s = line.split("\t");
-		  float[] data = new float[s.length];
-		  for (int i = 0; i < s.length; i++) {
-			try {
-			  data[i] = Float.parseFloat(s[i]);
-			} catch(Exception e) {
-			  data[i] = 0;
-			}
-		  }
-		  evalsc = data;
-	  } catch (IOException e) {
-		JOptionPane.showMessageDialog(null, "Error reading evals.txt", "Error", JOptionPane.ERROR_MESSAGE);
-	  }
-	  
-	  
-
-	  frame.pcoaWindow.pcoa.spData = new VertexData[spc.length];
-	  System.out.println((new Integer(spc.length)).toString() + " " + (new Integer(otuids.size())).toString());
-	  for (int i = 0; i < spc.length; i++) {
-		frame.pcoaWindow.pcoa.spData[i] = new VertexData();
-		frame.pcoaWindow.pcoa.spData[i].coords = spc[i];
-		frame.pcoaWindow.pcoa.spData[i].label = otuids.get(i);
-		frame.pcoaWindow.pcoa.spData[i].weight = 1;
-		frame.pcoaWindow.pcoa.spData[i].groupColor = new ArrayList<Color>();
-		frame.pcoaWindow.pcoa.spData[i].groupFraction = new ArrayList<Double>();
-		frame.pcoaWindow.pcoa.spData[i].velocity = new float[3];
-		frame.pcoaWindow.pcoa.spData[i].velocity[0] = frame.pcoaWindow.pcoa.spData[i].velocity[1] = frame.pcoaWindow.pcoa.spData[i].velocity[2] = 0;
-	  }
-
-	  frame.pcoaWindow.pcoa.sampleData = new VertexData[samplec.length];
-	  for (int i = 0; i < samplec.length; i++) {
-		frame.pcoaWindow.pcoa.sampleData[i] = new VertexData();
-		frame.pcoaWindow.pcoa.sampleData[i].coords = samplec[i];
-		frame.pcoaWindow.pcoa.sampleData[i].label = sampleids.get(i);
-		frame.pcoaWindow.pcoa.sampleData[i].weight = 1;
-		frame.pcoaWindow.pcoa.sampleData[i].groupColor = new ArrayList<Color>();
-		frame.pcoaWindow.pcoa.sampleData[i].groupFraction = new ArrayList<Double>();
-		frame.pcoaWindow.pcoa.sampleData[i].velocity = new float[3];
-		frame.pcoaWindow.pcoa.sampleData[i].velocity[0] = frame.pcoaWindow.pcoa.sampleData[i].velocity[1] = frame.pcoaWindow.pcoa.sampleData[i].velocity[2] = 0;
-	  }
-	  
-	  frame.pcoaWindow.pcoa.evals = new ArrayList<Double>();
-	  for (int i = 0; i < evalsc.length; i++) {
-	    frame.pcoaWindow.pcoa.evals.add(new Double(evalsc[i]));
-	  }
-
-	  float[][] links = new float[0][];
-	  for (int i = 0; i < spc.length; i++) {
-	  	for (int j = 0; j < samplec.length; j++) {
-	  	    Object val = frame.otuSampleMapTable.getValueAt(i,j+1);
-	  	    if (val==null) {val=new Integer(0);}
-	  		float weight = (float) ((Integer)val);
-	  		if (weight != 0) {
-	  			float[][] t = new float[links.length+1][];
-			    System.arraycopy(links, 0, t, 0, links.length);
-			    links = t;
-			    float[] a = new float[3];
-			    a[0] = i;
-			    a[1] = j;
-			    a[2] = weight;
-			    links[links.length-1] = a;
-			    frame.pcoaWindow.pcoa.spData[i].weight = frame.pcoaWindow.pcoa.spData[i].weight + 1;
-			    frame.pcoaWindow.pcoa.sampleData[j].weight = frame.pcoaWindow.pcoa.sampleData[j].weight + 1;
-	  		}
-	  	}
-	  }
-
-	  //make otus with a single connection be diamonds
-	  //for (int i = 0; i < pcoa.spData.length; i++) {
-	  //	if (pcoa.spData[i].weight == 1) {
-	  //		pcoa.spData[i].sh = "diamond";
-	  //	}
-	  //}
-	  System.out.println("done.");
-	  frame.pcoaWindow.pcoa.links = links;
-
-      //color it
-      frame.recolor();
-      
-      //set axis labels
-      frame.pcoaWindow.pcoa.resetAxisLabels();
-      
-      //set view
-      frame.pcoaWindow.setVisible(true);
-      //frame.tabbedPane.setSelectedIndex(1);
-	}
-  
 
 }

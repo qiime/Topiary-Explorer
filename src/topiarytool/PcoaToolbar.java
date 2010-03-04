@@ -56,8 +56,6 @@ public class PcoaToolbar extends JToolBar {
         spacer1.setPreferredSize(new Dimension(245,10));
         add(spacer1);
 
-
-
         setFloatable(false);
     }
 

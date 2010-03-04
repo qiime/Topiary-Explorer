@@ -9,6 +9,8 @@ import javax.swing.event.*;
 import javax.media.opengl.*;
 import java.sql.*;
 import javax.swing.table.*;
+import java.io.*;
+import javax.swing.table.*;
 
 /**
  * PcoaWindow is the window that contains the PCoA visualization.
@@ -20,18 +22,21 @@ public class PcoaWindow extends JFrame {
     JPanel pcoaPanel = new JPanel();
     PcoaToolbar pcoaToolbar = null;
     Animator animator = null;
+    PcoaOptionsToolbar pcoaOptionsToolbar = null;
 
 	public PcoaWindow(MainFrame _frame) {
 	    frame = _frame;
-	    this.setSize(new Dimension(600,600));
+	    this.setSize(new Dimension(800,600));
 	    
 	    Container pane = getContentPane();
         pane.setLayout(new BorderLayout());
 	    
 	    pcoaToolbar = new PcoaToolbar(this);
+	    pcoaOptionsToolbar = new PcoaOptionsToolbar(this);
+	    pane.add(pcoaOptionsToolbar, BorderLayout.NORTH);
 	    
 	    pcoaPanel.setLayout(new BorderLayout());
-        pcoaPanel.add(pcoaToolbar, BorderLayout.PAGE_START);
+        pcoaPanel.add(pcoaToolbar, BorderLayout.PAGE_END);
         GLCanvas canvas = new GLCanvas();
         canvas.addGLEventListener(pcoa);
         animator = new FPSAnimator(canvas, 30);
@@ -40,6 +45,245 @@ public class PcoaWindow extends JFrame {
         
         pane.add(pcoaPanel, BorderLayout.CENTER);
 	}
+	
+	
+	//run the PCoA
+	public void runPcoaAnalysis() {
+
+        //set view
+        this.setVisible(true);
+
+		ArrayList<String> otuids = new ArrayList<String>();
+		ArrayList<String> sampleids = new ArrayList<String>();
+
+		//Write the data to file
+		SparseTableModel model = (SparseTableModel) frame.otuSampleMapTable.getModel();
+		//get the column names
+		for (int i = 1; i < frame.otuSampleMapTable.getColumnCount(); i++) {
+			sampleids.add((String) frame.otuSampleMapTable.getColumnName(i));
+		}
+		try {
+			System.out.println("writing...");
+			pcoaOptionsToolbar.setStatus("Writing...");
+			BufferedWriter o = new BufferedWriter(new FileWriter("data.txt"));
+			o.write("[");
+			for (int i = 0; i < frame.otuSampleMapTable.getRowCount(); i++) {
+				o.write("[");
+				//skip first col, which is OTU ID
+				Object val = frame.otuSampleMapTable.getValueAt(i,0);
+				if (val==null) { val = new Integer(0); }
+				otuids.add(val.toString());
+				for (int j = 1; j < frame.otuSampleMapTable.getColumnCount(); j++) {
+					Object data = frame.otuSampleMapTable.getValueAt(i, j);
+                    if (data==null) {data = new Integer(0);}
+					if (data instanceof Integer) {
+						if (j > 1) {o.write(", ");}
+						o.write(data.toString());
+					}
+				}
+				o.write("],\n");
+			}
+			o.write("]");
+			o.close();
+			System.out.println("done");
+			pcoaOptionsToolbar.setStatus("Done writing.");
+
+		} catch (IOException e)  {
+			JOptionPane.showMessageDialog(null, "Unable to write data file PCoA analysis", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+
+		//delete data files if they already exist
+		File sample_coords = new File("sample_coords.txt");
+		sample_coords.delete();
+		File sp_coords = new File("sp_coords.txt");
+		sp_coords.delete();
+
+		System.out.println("running analysis...");
+		pcoaOptionsToolbar.setStatus("Running analysis...");
+		try {
+			//get the distance metric from combo box
+			
+            String dist_metric = pcoaOptionsToolbar.distanceMetrics.getSelectedItem(); 
+
+            //is the distance metric "Custom..."?
+			if (dist_metric.equals("Load from file")) {
+				//allow use to select file for distance matrix
+                frame.loadDataFileChooser.setDialogTitle("Load custom distance matrix");
+				int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					dist_metric += " " + frame.loadDataFileChooser.getSelectedFile().getAbsolutePath();
+				}
+			}
+
+			//run python scripts to calculate PCoA
+			Process pr = Runtime.getRuntime().exec("python l19test.py " + dist_metric);
+            BufferedReader br = new BufferedReader(new InputStreamReader(pr.getErrorStream()));
+   			String line;
+			while((line = br.readLine()) != null) {
+				System.out.println(line);
+			}
+            int exitVal = pr.waitFor();
+            System.out.println("Process Exit Value: " + exitVal);
+			System.out.println("done.");
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Unable to run python script for PCoA analysis", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+
+
+	  System.out.println("loading data files...");
+	  pcoaOptionsToolbar.setStatus("Loading data files...");
+	  BufferedReader br = null;
+	  try {
+		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("sample_coords.txt"))));
+	  } catch (FileNotFoundException e) {
+	  	JOptionPane.showMessageDialog(null, "Error opening find sample_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	  }
+	  String line;
+	  float[][] samplec = new float[0][];
+
+	  try {
+		while((line = br.readLine()) != null) {
+		  String[] s = line.split("\t");
+		  float[] data = new float[s.length];
+		  for (int i = 0; i < s.length; i++) {
+			try {
+			  data[i] = Float.parseFloat(s[i]);
+			} catch(Exception e) {
+			  data[i] = 0;
+			}
+		  }
+		  //append data onto sample_coords
+		  float[][] t = new float[samplec.length+1][];
+		  System.arraycopy(samplec, 0, t, 0, samplec.length);
+		  samplec = t;
+		  samplec[samplec.length-1] = data;
+		}
+	  } catch (IOException e) {
+		JOptionPane.showMessageDialog(null, "Error reading sp_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	  }
+
+	 try {
+		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("sp_coords.txt"))));
+	  } catch (FileNotFoundException e) {
+		JOptionPane.showMessageDialog(null, "Error opening sp_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	  }
+	  float[][] spc = new float[0][];
+
+	  try {
+		while((line = br.readLine()) != null) {
+		  String[] s = line.split("\t");
+		  float[] data = new float[s.length];
+		  for (int i = 0; i < s.length; i++) {
+			try {
+			  data[i] = Float.parseFloat(s[i]);
+			} catch(Exception e) {
+			  data[i] = 0;
+			}
+		  }
+		  //append data onto sp_coords
+		  float[][] t = new float[spc.length+1][];
+		  System.arraycopy(spc, 0, t, 0, spc.length);
+		  spc = t;
+		  spc[spc.length-1] = data;
+		}
+	  } catch (IOException e) {
+		JOptionPane.showMessageDialog(null, "Error reading sp_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	  }
+	  
+	  
+	  try {
+		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("evals.txt"))));
+	  } catch (FileNotFoundException e) {
+		JOptionPane.showMessageDialog(null, "Error opening evals.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	  }
+	  float[] evalsc = null;
+
+	  try {
+		  line = br.readLine();
+		  String[] s = line.split("\t");
+		  float[] data = new float[s.length];
+		  for (int i = 0; i < s.length; i++) {
+			try {
+			  data[i] = Float.parseFloat(s[i]);
+			} catch(Exception e) {
+			  data[i] = 0;
+			}
+		  }
+		  evalsc = data;
+	  } catch (IOException e) {
+		JOptionPane.showMessageDialog(null, "Error reading evals.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	  }
+	  
+	  
+
+	  pcoa.spData = new VertexData[spc.length];
+	  System.out.println((new Integer(spc.length)).toString() + " " + (new Integer(otuids.size())).toString());
+	  for (int i = 0; i < spc.length; i++) {
+		pcoa.spData[i] = new VertexData();
+		pcoa.spData[i].coords = spc[i];
+		pcoa.spData[i].label = otuids.get(i);
+		pcoa.spData[i].weight = 1;
+		pcoa.spData[i].groupColor = new ArrayList<Color>();
+		pcoa.spData[i].groupFraction = new ArrayList<Double>();
+		pcoa.spData[i].velocity = new float[3];
+		pcoa.spData[i].velocity[0] = pcoa.spData[i].velocity[1] = pcoa.spData[i].velocity[2] = 0;
+	  }
+
+	  pcoa.sampleData = new VertexData[samplec.length];
+	  for (int i = 0; i < samplec.length; i++) {
+		pcoa.sampleData[i] = new VertexData();
+		pcoa.sampleData[i].coords = samplec[i];
+		pcoa.sampleData[i].label = sampleids.get(i);
+		pcoa.sampleData[i].weight = 1;
+		pcoa.sampleData[i].groupColor = new ArrayList<Color>();
+		pcoa.sampleData[i].groupFraction = new ArrayList<Double>();
+		pcoa.sampleData[i].velocity = new float[3];
+		pcoa.sampleData[i].velocity[0] = pcoa.sampleData[i].velocity[1] = pcoa.sampleData[i].velocity[2] = 0;
+	  }
+	  
+	  pcoa.evals = new ArrayList<Double>();
+	  for (int i = 0; i < evalsc.length; i++) {
+	    pcoa.evals.add(new Double(evalsc[i]));
+	  }
+
+	  float[][] links = new float[0][];
+	  for (int i = 0; i < spc.length; i++) {
+	  	for (int j = 0; j < samplec.length; j++) {
+	  	    Object val = frame.otuSampleMapTable.getValueAt(i,j+1);
+	  	    if (val==null) {val=new Integer(0);}
+	  		float weight = (float) ((Integer)val);
+	  		if (weight != 0) {
+	  			float[][] t = new float[links.length+1][];
+			    System.arraycopy(links, 0, t, 0, links.length);
+			    links = t;
+			    float[] a = new float[3];
+			    a[0] = i;
+			    a[1] = j;
+			    a[2] = weight;
+			    links[links.length-1] = a;
+			    frame.pcoaWindow.pcoa.spData[i].weight = pcoa.spData[i].weight + 1;
+			    pcoa.sampleData[j].weight = pcoa.sampleData[j].weight + 1;
+	  		}
+	  	}
+	  }
+
+	  //make otus with a single connection be diamonds
+	  //for (int i = 0; i < pcoa.spData.length; i++) {
+	  //	if (pcoa.spData[i].weight == 1) {
+	  //		pcoa.spData[i].sh = "diamond";
+	  //	}
+	  //}
+	  System.out.println("done.");
+	  pcoaOptionsToolbar.setStatus("Done.");
+	  pcoa.links = links;
+
+      //color it
+      frame.recolor();
+      
+      //set axis labels
+      pcoa.resetAxisLabels();
+	}
+   	
 	
 	public void recolorPcoaByOtu() {
         if (pcoa.spData == null) return;

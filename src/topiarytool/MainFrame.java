@@ -30,7 +30,7 @@ public class MainFrame extends JFrame {
     JPanel searchPanel = new JPanel();
     JPanel dataPanel = new JPanel();
     JTabbedPane dataPane = new JTabbedPane();
-    JTabbedPane tabbedPane = new JTabbedPane();
+    //JTabbedPane tabbedPane = new JTabbedPane();
     JTabbedPane databaseTabPane = new JTabbedPane();
     JScrollPane databaseScrollPane = new JScrollPane();
     JScrollPane otuMetadataScrollPane = new JScrollPane();
@@ -117,7 +117,6 @@ public class MainFrame extends JFrame {
         });
         databaseBottomPanel.add(db_conn);
 
-        //databasePanel.add(databaseBottomPanel, BorderLayout.SOUTH);
         databaseTabPane.addTab("Connect", databaseBottomPanel);
         databaseTabPane.addTab("Search", db_search);
         
@@ -133,7 +132,7 @@ public class MainFrame extends JFrame {
         });
         
         databaseTabPane.setEnabledAt(1, false);
-        //databasePanel.add(databaseTabPane, BorderLayout.SOUTH);
+
         databaseTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         dataPane.addTab("Database", databasePanel);
         //dataPane.add(databaseTabPane, BorderLayout.SOUTH);
@@ -155,12 +154,14 @@ public class MainFrame extends JFrame {
         //sampleMetadataTable.setAutoCreateRowSorter(true);
         sampleMetadataScrollPane = new JScrollPane(sampleMetadataTable);
         dataPane.addTab("Sample Metadata", sampleMetadataScrollPane);
-        
+        dataPane.setSelectedIndex(1);
+        dataPane.setEnabledAt(0, false);
         
         dataPanel.setLayout(new BorderLayout());
         dataPanel.add(dataPane, BorderLayout.CENTER);
-        dataPanel.add(databaseTabPane, BorderLayout.SOUTH);
-        tabbedPane.addTab("Data", dataPanel);
+        //databaseTabPane.setEnabled(false);
+        //dataPanel.add(databaseTabPane, BorderLayout.SOUTH);
+        //tabbedPane.addTab("Data", dataPanel);
 
         //set up toolbar area
         toolbarPane.setLayout(new FlowLayout());
@@ -169,12 +170,12 @@ public class MainFrame extends JFrame {
         pane.add(toolbarPane, BorderLayout.NORTH);
         
         //add them to the split pane
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, colorPanel, tabbedPane);
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, colorPanel, dataPanel);
         pane.add(splitPane, BorderLayout.CENTER);
         
         //the following is required to make sure th GLContext is created, or else resizing the 
         //window will result in program freezes
-        tabbedPane.setSelectedIndex(0);
+        //tabbedPane.setSelectedIndex(0);
      }
      
      public void searchButtonPressed() {
@@ -217,7 +218,7 @@ public class MainFrame extends JFrame {
      
      public void getMetadataFromConn() {
          treeWindow.tree.noLoop();
-         tabbedPane.setSelectedIndex(0);
+         //tabbedPane.setSelectedIndex(0);
          dataPane.setSelectedIndex(3);
          sampleMetadata = new DataTable(db_conn.c);
          sampleMetadataTable.setModel(new SparseTableModel(sampleMetadata.getData(),
@@ -237,7 +238,7 @@ public class MainFrame extends JFrame {
      }
      
      public void setDatabaseTables() {
-          tabbedPane.setSelectedIndex(0);
+          //tabbedPane.setSelectedIndex(0);
           dataPane.setSelectedIndex(0);
           database = new DataTable(db_conn.c);
           databaseTable.setModel(new SparseTableModel(sampleMetadata.getData(),

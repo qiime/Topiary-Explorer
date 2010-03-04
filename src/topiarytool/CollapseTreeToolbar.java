@@ -9,7 +9,6 @@ import javax.swing.event.*;
 
 
 public class CollapseTreeToolbar extends JToolBar {
-
     JSlider collapseSlider = new JSlider(0, 1000, 1000);
     JPanel spacer1 = new JPanel();
 
@@ -24,6 +23,7 @@ public class CollapseTreeToolbar extends JToolBar {
         spacer1.setMinimumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
         spacer1.setMaximumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
         collapseSlider.setSnapToTicks(true);
+        collapseSlider.setToolTipText("Drag slider to collapse tree.");
         collapseSlider.setPreferredSize(new Dimension(this.getWidth(),28));
         collapseSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {

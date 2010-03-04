@@ -9,7 +9,7 @@ import javax.swing.event.*;
 import javax.media.opengl.*;
 import java.sql.*;
 import javax.swing.table.*;
-
+import java.io.*;
 /**
  * TreeWindow is the window that contains the tree visualization.
  */
@@ -103,6 +103,66 @@ public class TreeWindow extends JFrame {
 	     pane.add(treeOpsToolbar, BorderLayout.NORTH);
 	     pane.add(treePanel, BorderLayout.CENTER);
 	}
+	
+	public void loadTree() {
+         frame.loadDataFileChooser.setDialogTitle("Load Tree");
+         int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
+         if (returnVal == JFileChooser.APPROVE_OPTION) {
+             tree.noLoop();
+             //set view
+             //frame.tabbedPane.setSelectedIndex(1);
+             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
+             tree.setTree(TopiaryFunctions.createTreeFromNewickFile(selectedFile));
+             //make sure coloring is empty
+             removeColor();
+             treeToolbar.zoomSlider.setValue(0);
+             tree.loop();
+             collapseTree();
+             
+             frame.mainMenu.treeMenu.setEnabled(true);
+             frame.mainMenu.nodeMenu.setEnabled(true);
+
+             frame.mainMenu.pcoaMenu.setEnabled(true);
+             frame.mainMenu.colorByMenu.setEnabled(true);
+             this.setVisible(true);
+             System.out.println("Done drawing tree.");
+         }
+    }
+    
+    public void saveTree() {
+         tree.noLoop();
+         frame.loadDataFileChooser.setDialogTitle("Save Tree...");
+         int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
+		 if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = frame.loadDataFileChooser.getSelectedFile();
+			TopiaryFunctions.createNewickFileFromTree(tree.getTree(),selectedFile);
+		 }
+         tree.loop();
+    }
+    
+    public void exportTreeImage() {
+        tree.noLoop();
+         //Determine PDF dimensions
+         PDFDimensionsDialog p = new PDFDimensionsDialog(frame);
+         p.pack();
+         p.setVisible(true);
+         double dims[] = p.dims;
+         if (dims[0]!=0 || dims[1]!=0) {
+            frame.loadDataFileChooser.setDialogTitle("Save As...");
+            int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                String selectedFile = frame.loadDataFileChooser.getSelectedFile().getAbsolutePath();
+                tree.exportTreeImage(selectedFile, dims);
+            }
+		}
+        tree.loop();
+    }
+    
+    public void recenter() {
+        tree.resetTreeX();
+        tree.resetTreeY();
+        treeToolbar.syncZoomSliderWithTree();
+    }
 	
 	public void mirrorHorz() {
          // reset wedge slider
