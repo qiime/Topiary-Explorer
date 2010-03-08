@@ -110,12 +110,12 @@ public class MainFrame extends JFrame {
         databasePanel.add(databaseScrollPane, BorderLayout.CENTER);
         databaseBottomPanel.setLayout(new GridLayout(1,2));
         //databaseBottomPanel.add(databaseStatus);
-        db_conn.connect_button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                connectButtonPressed();
-            }
-        });
-        databaseBottomPanel.add(db_conn);
+        /*db_conn.connect_button.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        connectButtonPressed();
+                    }
+                });*/
+/*        databaseBottomPanel.add(db_conn);*/
 
         databaseTabPane.addTab("Connect", databaseBottomPanel);
         databaseTabPane.addTab("Search", db_search);

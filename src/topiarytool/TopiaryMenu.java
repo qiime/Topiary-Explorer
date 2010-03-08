@@ -549,8 +549,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         add(fileMenu);
         add(viewMenu);
         add(treeMenu);
-        add(nodeMenu);
-        add(pcoaMenu);
+        //add(nodeMenu);
+        //add(pcoaMenu);
         add(colorByMenu);
      }
 

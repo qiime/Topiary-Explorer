@@ -4,7 +4,7 @@ package topiarytool;
 import java.sql.*;
 import java.lang.*;
 import java.util.*;
-import oracle.jdbc.pool.OracleDataSource;
+//import oracle.jdbc.pool.OracleDataSource;
 
 public class dbConnect
 {
@@ -17,7 +17,7 @@ public class dbConnect
     ArrayList<String> resultLines = new ArrayList<String>();
     ArrayList<String> colNames = new ArrayList<String>();
     String colNamesStr = new String();
-    OracleDataSource ods = null;// new OracleDataSource();
+    //OracleDataSource ods = null;// new OracleDataSource();
     //ods.setURL(connect_string);
     
     public dbConnect(String un, String pw, String ur)
@@ -187,10 +187,10 @@ public class dbConnect
     {
         try
            {
-               ods.setURL(connect_string); 
+               //ods.setURL(connect_string); 
              // Connect to the databse
              //output.append ("Connecting to " + connect_string + "\n");
-             this.conn = ods.getConnection ();
+             //this.conn = ods.getConnection ();
              
              //output.append ("Connected\n");
                /*Class.forName ("com.mysql.jdbc.Driver").newInstance();
