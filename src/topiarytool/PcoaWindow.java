@@ -15,7 +15,6 @@ import javax.swing.table.*;
 /**
  * PcoaWindow is the window that contains the PCoA visualization.
  */
-
 public class PcoaWindow extends JFrame {
     MainFrame frame = null;
     PcoaVis pcoa = new PcoaVis();
@@ -24,6 +23,10 @@ public class PcoaWindow extends JFrame {
     Animator animator = null;
     PcoaOptionsToolbar pcoaOptionsToolbar = null;
 
+    /**
+    * Class constructor
+    * @param _frame Instance of MainFrame for the current run
+    */
 	public PcoaWindow(MainFrame _frame) {
 	    frame = _frame;
 	    this.setSize(new Dimension(800,600));
@@ -33,7 +36,7 @@ public class PcoaWindow extends JFrame {
 	    
 	    pcoaToolbar = new PcoaToolbar(this);
 	    pcoaOptionsToolbar = new PcoaOptionsToolbar(this);
-	    pane.add(pcoaOptionsToolbar, BorderLayout.NORTH);
+	    pane.add(pcoaOptionsToolbar, BorderLayout.WEST);
 	    
 	    pcoaPanel.setLayout(new BorderLayout());
         pcoaPanel.add(pcoaToolbar, BorderLayout.PAGE_END);
@@ -46,8 +49,26 @@ public class PcoaWindow extends JFrame {
         pane.add(pcoaPanel, BorderLayout.CENTER);
 	}
 	
+	public void setBackgroundColor() {
+	    JColorChooser colorChooser = new JColorChooser();
+        Color c = colorChooser.showDialog(this, "Pick a Color", pcoa.getBackgroundColor());
+        pcoa.setBackgroundColor(c);
+	}
 	
-	//run the PCoA
+	public void setAxes() {
+	    if (pcoa.spData == null) {
+            JOptionPane.showMessageDialog(null, "PCOA analysis must be run first.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            PCSelectDialog p = new PCSelectDialog(this);
+            p.pack();
+            p.setVisible(true);
+        }
+	}
+	
+	/**
+    * Run principle coordinates anaylsis with the currently
+    * selected distance metric.
+    */
 	public void runPcoaAnalysis() {
 
         //set view
@@ -284,7 +305,9 @@ public class PcoaWindow extends JFrame {
       pcoa.resetAxisLabels();
 	}
    	
-	
+	/**
+    * Recolor the PCoA plot by the selected OTU value
+    */
 	public void recolorPcoaByOtu() {
         if (pcoa.spData == null) return;
         //loop over each sample vertex
@@ -364,6 +387,9 @@ public class PcoaWindow extends JFrame {
         
      }
 
+     /**
+     * Recolor the PCoA plot by the selected sample value
+     */
      public void recolorPcoaBySample() {
          if (pcoa.sampleData == null) return;
          //loop over each sample vertex
@@ -435,10 +461,8 @@ public class PcoaWindow extends JFrame {
                 }
                 v.groupFraction.add(new Double(weight.intValue()));
             }
-
             v.mergeColors();
         }
-        
-         repaint();
+        repaint();
      }
 }

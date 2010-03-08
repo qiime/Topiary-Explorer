@@ -18,35 +18,35 @@ class PCSelectDialog extends JDialog implements ActionListener {
         super(frame, false);
         setTitle("Select Axes");
         
-        String[] data = new String[((MainFrame)frame).pcoa.spData[0].coords.length];
-        for (int i = 0; i < ((MainFrame)frame).pcoa.spData[0].coords.length; i++) {
+        String[] data = new String[((PcoaWindow)frame).pcoa.spData[0].coords.length];
+        for (int i = 0; i < ((PcoaWindow)frame).pcoa.spData[0].coords.length; i++) {
             Integer in = new Integer(i+1);
             data[i] = new String("PC"+ in.toString());
         }
         axis1 = new JList(data);
         axis1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        axis1.setSelectedIndex(((MainFrame)frame).pcoa.getAxis(1));
+        axis1.setSelectedIndex(((PcoaWindow)frame).pcoa.getAxis(1));
         axis1.addListSelectionListener( new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 if (e.getValueIsAdjusting() == false)
-                    ((MainFrame)frame).pcoa.setAxis(1, axis1.getSelectedIndex());
+                    ((PcoaWindow)frame).pcoa.setAxis(1, axis1.getSelectedIndex());
             }
         });        
         axis2 = new JList(data);
         axis2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        axis2.setSelectedIndex(((MainFrame)frame).pcoa.getAxis(2));
+        axis2.setSelectedIndex(((PcoaWindow)frame).pcoa.getAxis(2));
         axis2.addListSelectionListener( new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 if (e.getValueIsAdjusting() == false)
-                    ((MainFrame)frame).pcoa.setAxis(2, axis2.getSelectedIndex());            }
+                    ((PcoaWindow)frame).pcoa.setAxis(2, axis2.getSelectedIndex());            }
         });        
         axis3 = new JList(data);
         axis3.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        axis3.setSelectedIndex(((MainFrame)frame).pcoa.getAxis(3));
+        axis3.setSelectedIndex(((PcoaWindow)frame).pcoa.getAxis(3));
         axis3.addListSelectionListener( new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 if (e.getValueIsAdjusting() == false)
-                    ((MainFrame)frame).pcoa.setAxis(3, axis3.getSelectedIndex());            }
+                    ((PcoaWindow)frame).pcoa.setAxis(3, axis3.getSelectedIndex());            }
         });
 
 
@@ -87,11 +87,7 @@ class PCSelectDialog extends JDialog implements ActionListener {
        });
        cp.add(okbutton);
        
-
-
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        
-
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
 
     }
 

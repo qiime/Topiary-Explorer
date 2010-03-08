@@ -357,23 +357,15 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item = new JMenuItem("Background Color...");        
         item.addActionListener(new ActionListener() {        
             public void actionPerformed(ActionEvent e) {
-                JColorChooser colorChooser = new JColorChooser();
-                Color c = colorChooser.showDialog(frame, "Pick a Color", frame.pcoaWindow.pcoa.getBackgroundColor());
-                frame.pcoaWindow.pcoa.setBackgroundColor(c);
-            }
+                frame.pcoaWindow.setBackgroundColor();
+                }
         });
         pcoaMenu.add(item);
         
         item = new JMenuItem("Set axes...");        
         item.addActionListener(new ActionListener() {        
             public void actionPerformed(ActionEvent e) {
-                if (frame.pcoaWindow.pcoa.spData == null) {
-                    JOptionPane.showMessageDialog(null, "PCOA analysis must be run first.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    PCSelectDialog p = new PCSelectDialog(frame);
-                    p.pack();
-                    p.setVisible(true);
-                }
+                frame.pcoaWindow.setAxes();
             }
         });
         pcoaMenu.add(item);
@@ -650,7 +642,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
              frame.pcoaWindow.runPcoaAnalysis();
          }
     }
-
+    
+    /**
+    * Loads OTU metadata from a file selected by the user.
+    * Populates otu metadata table with information from the file.
+    */
    public void loadOtuMetadata() {
        frame.loadDataFileChooser.setDialogTitle("Load OTU Metadata");
        int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
@@ -685,6 +681,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        }
    }
 
+   /**
+   * Loads sample metadata from a file selected by the user.
+   * Populates sample metadata table with information from the file.
+   */
    public void loadSampleMetadata() {
        frame.loadDataFileChooser.setDialogTitle("Load Sample Metadata");
        int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
@@ -717,6 +717,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        }
    }
 
+   /**
+   * Loads OTU-sample map from a file selected by the user.
+   * Populates otu-sample map table with information from the file.
+   */
    public void loadOtuSampleMap() {
        frame.loadDataFileChooser.setDialogTitle("Load OTU-Sample Map");
        int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
@@ -743,6 +747,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        }
    }
    
+   /**
+   * 
+   */
     public void syncTreeWithLineWidthSlider() {
         if (frame.treeWindow.tree.getTree() == null) return;
         double value = lineWidthSlider.getValue();
@@ -751,12 +758,18 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         frame.treeWindow.tree.redraw();
     }
     
+    /**
+    * 
+    */
     public void syncPcoaWithLineWidthSlider() {
         double value = pcoaLineWidthSlider.getValue();
         value = value/10.0;
         frame.pcoaWindow.pcoa.setLineWidthScale((float)value);
     }
 
+    /**
+    * Resets tip labels on the tree
+    */
     public void resetTipLabels() {
 /*        frame.tlc = new TipLabelCustomizer(frame);
         frame.tlc.setVisible(false);
@@ -765,6 +778,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         frame.treeWindow.tree.redraw();
     }
 
+    /**
+    * Resets collapse by menu when new OTU or Sample metadata
+    * files are loaded
+    */
    public void resetCollapseByMenu() {
        //NOTE: can only collapse on OTU metadata
        collapseByMenu.removeAll();
@@ -808,6 +825,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        collapseByMenu.add(item);
    }
 
+   /**
+   * Resets colorby OTU menu when a new otu table is loaded
+   */
    public void resetColorByOtuMenu() {
        noColoringMenuItem.setSelected(true);
        colorByOtuMetadataMenu.removeAll();
@@ -830,6 +850,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        }
    }
 
+
+   /**
+   * Resets colorby Sample menu when a new sample metadata table is loaded
+   */
    public void resetColorBySampleMenu() {
        noColoringMenuItem.setSelected(true);
        colorBySampleMetadataMenu.removeAll();

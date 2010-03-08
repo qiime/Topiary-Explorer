@@ -27,6 +27,9 @@ public class TreeWindow extends JFrame {
     JPopupMenu treePopupMenu = new JPopupMenu();
     TipLabelCustomizer tlc = null;
     
+    /**
+    * Class Constructor
+    */
 	 public TreeWindow(MainFrame _frame) {
 	     this.setSize(new Dimension(900,700));
 	     frame = _frame;
@@ -104,6 +107,9 @@ public class TreeWindow extends JFrame {
 	     pane.add(treePanel, BorderLayout.CENTER);
 	}
 	
+	/**
+    * Loads a new tree from the selected file
+    */
 	public void loadTree() {
          frame.loadDataFileChooser.setDialogTitle("Load Tree");
          int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
@@ -129,6 +135,9 @@ public class TreeWindow extends JFrame {
          }
     }
     
+    /**
+    * Saves the current tree in newick format
+    */
     public void saveTree() {
          tree.noLoop();
          frame.loadDataFileChooser.setDialogTitle("Save Tree...");
@@ -140,6 +149,10 @@ public class TreeWindow extends JFrame {
          tree.loop();
     }
     
+    /**
+    * Exports the current tree and coloring as a pdf with
+    * supplied dimensions
+    */
     public void exportTreeImage() {
         tree.noLoop();
          //Determine PDF dimensions
@@ -158,12 +171,18 @@ public class TreeWindow extends JFrame {
         tree.loop();
     }
     
+    /**
+    * Recenters the tree in the treeview window
+    */
     public void recenter() {
         tree.resetTreeX();
         tree.resetTreeY();
         treeToolbar.syncZoomSliderWithTree();
     }
 	
+	/**
+    * Mirrors the tree horizontally
+    */
 	public void mirrorHorz() {
          // reset wedge slider
          for (Node n : tree.getTree().getNodes()) {
@@ -173,6 +192,9 @@ public class TreeWindow extends JFrame {
         tree.setRadialOffsets(tree.getTree());
      }
      
+     /**
+     * Mirrors the tree vertically
+     */
      public void mirrorVert() {
          for (Node n : tree.getTree().getNodes()) {
              n.setYOffset(tree.getTree().getNumberOfLeaves() - n.getYOffset());
@@ -181,6 +203,9 @@ public class TreeWindow extends JFrame {
          tree.setRadialOffsets(tree.getTree());
      }
 	
+	 /**
+     * Recolors the tree based on selected OTU metadata field
+     */
 	public void recolorTreeByOtu() {
        //loop over each node
        for (Node n : tree.getTree().getLeaves()){
@@ -215,6 +240,9 @@ public class TreeWindow extends JFrame {
        frame.repaint();
     }
     
+    /**
+    * Recolors tree by selected sample metadata
+    */
     public void recolorTreeBySample() {
          //loop over each node
          for (Node n : tree.getTree().getLeaves()) {
@@ -368,18 +396,25 @@ public class TreeWindow extends JFrame {
          tree.getTree().updateLineWidthsFromChildren();
      }
      
+     /**
+     * Resets tipLabelCustomizer object based on new OTU metadata
+     */
      public void resetTipLabelCustomizer(boolean state) {
          if(tlc != null) {tlc.dispose();}
          tlc = new TipLabelCustomizer(frame, this, (frame.otuMetadata != null), (frame.sampleMetadata != null));
          tlc.setVisible(state);
      }
      
+     /**
+     * Sets tip labels based on user selected metadata values
+     */
      public void setTipLabels(boolean state) {
          if(tlc == null) {resetTipLabelCustomizer(state);}
          tlc.setVisible(state);
          tree.setDrawExternalNodeLabels(state);
          frame.repaint();
      }
+     
      
      public void colorByValue(String value) {
 
@@ -427,13 +462,19 @@ public class TreeWindow extends JFrame {
          frame.resetLineWidths();
          tree.getTree().updateLineWidthsFromChildren();
       }
-
+      
+      /**
+      * Uncollapses all tree branches
+      */
       public void uncollapseTree(){
          for (Node n : tree.getTree().getNodes()) {
              n.setCollapsed(false);
          }
       }
 
+      /**
+      * Collapses all tree branches
+      */
       public void collapseTree() {
          for (Node n : tree.getTree().getNodes()) {
              n.setCollapsed(true);

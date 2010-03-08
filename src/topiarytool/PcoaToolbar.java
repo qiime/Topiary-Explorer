@@ -7,7 +7,9 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
 
-
+/**
+ * Toolbar for holding PCoA zoom slider
+ */
 public class PcoaToolbar extends JToolBar {
 
     JButton zoomOutButton  = new JButton("-");
@@ -17,6 +19,10 @@ public class PcoaToolbar extends JToolBar {
     
     PcoaWindow frame = null;
 
+    /**
+     * Class constructor
+     *
+     */
     public PcoaToolbar(PcoaWindow _frame) {
 
         frame = _frame;
@@ -59,6 +65,10 @@ public class PcoaToolbar extends JToolBar {
         setFloatable(false);
     }
 
+    /**
+     * Makes sure that the PCoA plot is synced with the
+     * zoom slider. 
+     */
     public void syncPcoaWithZoomSlider() {
         double minScale = 1;      
         double newScale = minScale * Math.pow(Math.pow(2.0, 0.5), zoomSlider.getValue());
