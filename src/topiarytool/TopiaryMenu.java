@@ -737,7 +737,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     }
                     catch(NullPointerException e)
                     {
-                        System.out.println(e);
+                        System.out.println(line);
                         break;
                     }
                 line = br.readLine();
@@ -745,7 +745,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 br.close();
             }
             catch(IOException e)
-                {System.out.println("hurf");}
+                {System.out.println("Error opening project.");}
         }
     }
     
@@ -775,7 +775,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 outputStream.close();
             }
             catch(IOException e)
-                {System.out.println("hurf");}
+                {System.out.println("Error saving project.");}
         }
     }
     
