@@ -596,7 +596,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         } else if (e.getActionCommand().equals("No coloring")) {
              frame.treeWindow.removeColor();
          } else if (e.getActionCommand().equals("Tip Labels...")) {
-/*             frame.tree.setDrawExternalNodeLabels(externalLabelsMenuItem.getState());*/
              frame.treeWindow.setTipLabels(externalLabelsMenuItem.getState());
          } else if (e.getActionCommand().equals("Internal Node Labels")) {
              frame.treeWindow.tree.setDrawInternalNodeLabels(internalLabelsMenuItem.getState());
@@ -941,9 +940,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     * Resets tip labels on the tree
     */
     public void resetTipLabels() {
-/*        frame.tlc = new TipLabelCustomizer(frame);
-        frame.tlc.setVisible(false);
-        for(Node n : frame.tree.getTree().getNodes())
+/*        frame.treeWindow.tlc = new TipLabelCustomizer(frame.treeWindow);
+        frame.treeWindow.tlc.setVisible(false);
+        for(Node n : frame.treeWindow.tree.getTree().getNodes())
             n.setLabel(n.getName());*/
         frame.treeWindow.tree.redraw();
     }

@@ -395,22 +395,26 @@ public class TreeWindow extends JFrame {
      * Resets tipLabelCustomizer object based on new OTU metadata
      */
      public void resetTipLabelCustomizer(boolean state) {
-         if(frame.otuMetadata != null)
-         {
-             if(tlc != null) {tlc.dispose();}
-             tlc = new TipLabelCustomizer(frame, this, (frame.otuMetadata != null), (frame.sampleMetadata != null));
-             tlc.setVisible(state);
-         }
+         if(tlc != null) {tlc.dispose();}
+         tlc = new TipLabelCustomizer(frame, this, (frame.otuMetadata != null), (frame.sampleMetadata != null));
+         tlc.setVisible(state);
      }
      
      /**
      * Sets tip labels based on user selected metadata values
      */
      public void setTipLabels(boolean state) {
-         if(tlc == null) {resetTipLabelCustomizer(state);}
-         tlc.setVisible(state);
-         tree.setDrawExternalNodeLabels(state);
-         frame.repaint();
+         if(frame.otuMetadata == null)
+         {
+             JOptionPane.showMessageDialog(null, "No OTU metadata to use in tip labels.", "Error", JOptionPane.ERROR_MESSAGE);
+         }
+         else
+         {
+             if(tlc == null) {resetTipLabelCustomizer(state);}
+             tlc.setVisible(state);
+        }
+        tree.setDrawExternalNodeLabels(state);
+        frame.repaint();
      }
      
      
