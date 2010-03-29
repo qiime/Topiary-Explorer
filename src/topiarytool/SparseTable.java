@@ -19,8 +19,16 @@ class SparseTable {
         maxcol = Math.max(col, maxcol);
     }
     
+    public void set(Object value, int row, int col) {
+        data.put(new Point(row, col), value);
+    }
+    
     public Object get(int row, int col) {
         return data.get(new Point(row, col));
+    }
+    
+    public void removeElements() {
+        data.clear();
     }
     
     public int maxRow() { return maxrow+1; }

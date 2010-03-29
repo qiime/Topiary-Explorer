@@ -14,7 +14,7 @@ import javax.swing.event.*;
  *
  */
 public class WindowViewToolbar extends JToolBar {
-    
+    JButton newTreeButton = new JButton();
     JButton openTreeButton = new JButton();
     JButton saveTreeButton = new JButton();
     JButton exportTreeButton = new JButton();
@@ -31,20 +31,29 @@ public class WindowViewToolbar extends JToolBar {
         super(JToolBar.HORIZONTAL);
         frame = _frame;
         
+        newTreeButton.setIcon(new ImageIcon("images/newproject.gif"));
+        newTreeButton.setToolTipText("New Project");
+        newTreeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.mainMenu.newProject();
+            }
+        });
+        add(newTreeButton);
+        
         openTreeButton.setIcon(new ImageIcon("images/opentree.gif"));
-        openTreeButton.setToolTipText("Load Tree");
+        openTreeButton.setToolTipText("Open Project");
         openTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.treeWindow.loadTree();
+                frame.mainMenu.openProject(frame.mainMenu.getProjectFile("Select Project File",false));
             }
         });
         add(openTreeButton);
         
         saveTreeButton.setIcon(new ImageIcon("images/savetree.gif"));
-        saveTreeButton.setToolTipText("Save Tree");
+        saveTreeButton.setToolTipText("Save Project");
         saveTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.treeWindow.saveTree();
+                frame.mainMenu.saveProject(frame.mainMenu.getProjectFile("Save Project File As",true));
             }
         });
         add(saveTreeButton);

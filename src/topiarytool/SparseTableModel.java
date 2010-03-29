@@ -15,6 +15,11 @@ class SparseTableModel extends AbstractTableModel {
     lookup = table;
   }
 
+  public void clearTable() {
+      lookup.removeElements();
+      headers.removeAll(headers);
+  }
+
   public int getColumnCount() {
     return lookup.maxCol();
   }

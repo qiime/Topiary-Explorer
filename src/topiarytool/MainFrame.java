@@ -9,6 +9,7 @@ import javax.swing.event.*;
 import javax.media.opengl.*;
 import java.sql.*;
 import javax.swing.table.*;
+import java.io.*;
 
 /**
  * MainFrame is the primary JFrame that is displayed.
@@ -19,6 +20,11 @@ public class MainFrame extends JFrame {
     String DATABASE_URL = ""; // jdbc:mysql://127.0.0.1/topiarytool
     String DATABASE_UN = "";  // root
     String DATABASE_PW = "";  // desudesu
+
+    File treeFile = null;
+    File otuMetadataFile = null;
+    File otuSampleMapFile = null;
+    File sampleMetadataFile = null;
 
     //INITIALIZE GUI OBJECTS
     JSplitPane splitPane = null;
@@ -44,6 +50,7 @@ public class MainFrame extends JFrame {
     JTable colorKeyTable = new JTable();
     JButton interpolateButton = new JButton("Interpolate");
     JFileChooser loadDataFileChooser = new JFileChooser();
+    NewProjectDialog newProjectChooser = null;
     JLabel databaseStatus = new JLabel("Database not connected.");
     TopiaryMenu mainMenu = new TopiaryMenu(this);
     
@@ -177,6 +184,23 @@ public class MainFrame extends JFrame {
         //window will result in program freezes
         //tabbedPane.setSelectedIndex(0);
      }
+     
+/*     public void clearProject() {
+         mainMenu.clearOtuMetadata();
+         mainMenu.clearOtuSampleMap();
+         mainMenu.clearSampleMetadata();
+         if(treeWindow != null)
+         {
+             treeWindow.dispose();
+             treeWindow = new TreeWindow(this);
+         }
+         if(pcoaWindow != null)
+         {
+             pcoaWindow.dispose();
+             pcoaWindow = new PcoaWindow(this);
+        }
+         repaint();
+     }*/
      
      public void searchButtonPressed() {
          int rowIndexStart = sampleMetadataTable.getSelectedRow();

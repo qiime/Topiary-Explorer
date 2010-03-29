@@ -146,6 +146,12 @@ public class DataTable {
 	public void setColumnNames(ArrayList<String> columnNames) {
 		this.columnNames = columnNames;
 	}
+	
+	public void clearTable() {
+	    data = new SparseTable();
+	    ArrayList<String> columnNames = new ArrayList<String>();
+	}
+	
     private ArrayList<String> parseLine(String line) {
 		return new ArrayList<String>(Arrays.asList(line.split("\t")));
 	}

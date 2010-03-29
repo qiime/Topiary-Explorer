@@ -110,15 +110,10 @@ public class TreeWindow extends JFrame {
 	/**
     * Loads a new tree from the selected file
     */
-	public void loadTree() {
-         frame.loadDataFileChooser.setDialogTitle("Load Tree");
-         int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
-         if (returnVal == JFileChooser.APPROVE_OPTION) {
+	public void loadTree(File inFile) {
+         if (inFile != null) {
              tree.noLoop();
-             //set view
-             //frame.tabbedPane.setSelectedIndex(1);
-             File selectedFile = frame.loadDataFileChooser.getSelectedFile();
-             tree.setTree(TopiaryFunctions.createTreeFromNewickFile(selectedFile));
+             tree.setTree(TopiaryFunctions.createTreeFromNewickFile(inFile));
              //make sure coloring is empty
              removeColor();
              treeToolbar.zoomSlider.setValue(0);
@@ -128,10 +123,10 @@ public class TreeWindow extends JFrame {
              frame.mainMenu.treeMenu.setEnabled(true);
              frame.mainMenu.nodeMenu.setEnabled(true);
 
-             frame.mainMenu.pcoaMenu.setEnabled(true);
              frame.mainMenu.colorByMenu.setEnabled(true);
              this.setVisible(true);
              System.out.println("Done drawing tree.");
+             frame.treeFile = inFile;
          }
     }
     
@@ -400,9 +395,12 @@ public class TreeWindow extends JFrame {
      * Resets tipLabelCustomizer object based on new OTU metadata
      */
      public void resetTipLabelCustomizer(boolean state) {
-         if(tlc != null) {tlc.dispose();}
-         tlc = new TipLabelCustomizer(frame, this, (frame.otuMetadata != null), (frame.sampleMetadata != null));
-         tlc.setVisible(state);
+         if(frame.otuMetadata != null)
+         {
+             if(tlc != null) {tlc.dispose();}
+             tlc = new TipLabelCustomizer(frame, this, (frame.otuMetadata != null), (frame.sampleMetadata != null));
+             tlc.setVisible(state);
+         }
      }
      
      /**
