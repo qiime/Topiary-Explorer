@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
+import javax.jnlp.*;
 
 
 public class PcoaOptionsToolbar extends JToolBar implements ItemListener{
@@ -36,12 +37,17 @@ public class PcoaOptionsToolbar extends JToolBar implements ItemListener{
     int sampleShapeIndex = 1;
     int otuShapeIndex = 0;
 
+	BasicService bs;
     PcoaWindow frame = null;
 
     public PcoaOptionsToolbar(PcoaWindow _frame) {
         super(JToolBar.VERTICAL);
         frame = _frame;
         
+        try { 
+        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
+    	} catch (UnavailableServiceException e) { bs=null; } 
+    	
         add(layoutLabel);
                 layout.add("None");
                 layout.add("Spring");
@@ -215,7 +221,9 @@ public class PcoaOptionsToolbar extends JToolBar implements ItemListener{
         
         add(distanceMetrics);
         
-        runButton.setIcon(new ImageIcon("images/runpcoa.gif"));
+        try{
+        runButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/runpcoa.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         runButton.setToolTipText("Run PCoA Analysis");
         runButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

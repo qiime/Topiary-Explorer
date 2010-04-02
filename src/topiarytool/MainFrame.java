@@ -10,6 +10,7 @@ import javax.media.opengl.*;
 import java.sql.*;
 import javax.swing.table.*;
 import java.io.*;
+import javax.jnlp.*;
 
 /**
  * MainFrame is the primary JFrame that is displayed.
@@ -17,14 +18,19 @@ import java.io.*;
 
 public class MainFrame extends JFrame {
     
+    FileOpenService fos;
+    FileSaveService fss;
+    ExtendedService es;
+    BasicService bs;
+    
     String DATABASE_URL = ""; // jdbc:mysql://127.0.0.1/topiarytool
     String DATABASE_UN = "";  // root
     String DATABASE_PW = "";  // desudesu
 
-    File treeFile = null;
-    File otuMetadataFile = null;
-    File otuSampleMapFile = null;
-    File sampleMetadataFile = null;
+    FileContents treeFile = null;
+    FileContents otuMetadataFile = null;
+    FileContents otuSampleMapFile = null;
+    FileContents sampleMetadataFile = null;
 
     //INITIALIZE GUI OBJECTS
     JSplitPane splitPane = null;
@@ -49,7 +55,6 @@ public class MainFrame extends JFrame {
     JTable sampleMetadataTable = new JTable();
     JTable colorKeyTable = new JTable();
     JButton interpolateButton = new JButton("Interpolate");
-    JFileChooser loadDataFileChooser = new JFileChooser();
     NewProjectDialog newProjectChooser = null;
     JLabel databaseStatus = new JLabel("Database not connected.");
     TopiaryMenu mainMenu = new TopiaryMenu(this);
@@ -183,6 +188,20 @@ public class MainFrame extends JFrame {
         //the following is required to make sure th GLContext is created, or else resizing the 
         //window will result in program freezes
         //tabbedPane.setSelectedIndex(0);
+        
+        //Set up the jnlp services
+        try { 
+        	fos = (FileOpenService)ServiceManager.lookup("javax.jnlp.FileOpenService");
+    	} catch (UnavailableServiceException e) { fos=null; }
+    	try { 
+        	fss = (FileSaveService)ServiceManager.lookup("javax.jnlp.FileSaveService");
+    	} catch (UnavailableServiceException e) { fss=null; }
+    	try { 
+        	es = (ExtendedService)ServiceManager.lookup("javax.jnlp.ExtendedService");
+    	} catch (UnavailableServiceException e) { es=null; }   
+    	try { 
+        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
+    	} catch (UnavailableServiceException e) { bs=null; }   
      }
      
 /*     public void clearProject() {

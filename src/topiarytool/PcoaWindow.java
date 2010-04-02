@@ -11,6 +11,7 @@ import java.sql.*;
 import javax.swing.table.*;
 import java.io.*;
 import javax.swing.table.*;
+import javax.jnlp.*;
 
 /**
  * PcoaWindow is the window that contains the PCoA visualization.
@@ -129,11 +130,11 @@ public class PcoaWindow extends JFrame {
             //is the distance metric "Custom..."?
 			if (dist_metric.equals("Load from file")) {
 				//allow use to select file for distance matrix
-                frame.loadDataFileChooser.setDialogTitle("Load custom distance matrix");
-				int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					dist_metric += " " + frame.loadDataFileChooser.getSelectedFile().getAbsolutePath();
-				}
+				
+				try {
+					FileContents fc = frame.fos.openFileDialog(null,null);
+					dist_metric += " " + fc.getName();
+				} catch (IOException ex) {}
 			}
 
 			//run python scripts to calculate PCoA

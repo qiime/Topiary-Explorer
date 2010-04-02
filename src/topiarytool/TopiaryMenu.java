@@ -27,6 +27,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.jnlp.*;
 
 
 /**
@@ -93,10 +94,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item = new JMenuItem("Open Project...");
         item.addActionListener(this);
         fileMenu.add(item);
-        item = new JMenuItem("Save Project");
-        item.addActionListener(this);
-        fileMenu.add(item);
-        item = new JMenuItem("Save Project As...");
+        item = new JMenuItem("Save Project...");
         item.addActionListener(this);
         fileMenu.add(item);
         fileMenu.add(new JSeparator());
@@ -572,21 +570,19 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
      public void actionPerformed(ActionEvent e) {
 
          if (e.getActionCommand().equals("Load Tree...")) {
-            frame.treeWindow.loadTree(getFile("Load Tree"));
+            frame.treeWindow.loadTree(null);
          } else if (e.getActionCommand().equals("New Project...")) {
            newProject();
          } else if (e.getActionCommand().equals("Open Project...")) {
-                  openProject(getProjectFile("Open Project", false));
-        } else if (e.getActionCommand().equals("Save Project")) {
-                   saveProject(getProjectFile("Save Project", true));
-        } else if (e.getActionCommand().equals("Save Project As...")) {
-                    saveProject(getProjectFile("Save Project As...", true));
+                  openProject();
+        } else if (e.getActionCommand().equals("Save Project...")) {
+                    saveProject();
         } else if (e.getActionCommand().equals("Load OTU Metadata...")) {
-           loadOtuMetadata(getFile("Load OTU Metadata"));
+           loadOtuMetadata(null);
          } else if (e.getActionCommand().equals("Load Sample Metadata...")) {
-           loadSampleMetadata(getFile("Load Sample Metadata"));
+           loadSampleMetadata(null);
          } else if (e.getActionCommand().equals("Load OTU-Sample Map...")) {
-             loadOtuSampleMap(getFile("Load OTU-Sample Map"));
+             loadOtuSampleMap(null);
          } else if (e.getActionCommand().equals("Save Tree...")) {
              frame.treeWindow.saveTree();
          } else if (e.getActionCommand().equals("Tree Window")) {
@@ -649,7 +645,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.treeWindow.exportTreeImage();
          } else if (e.getActionCommand().equals("Export Tree Screen Capture...") && frame.treeWindow.tree.getTree()!= null)  {
              frame.treeWindow.tree.noLoop();
-			 frame.treeWindow.tree.exportScreenCapture(getFile("Save as...").getAbsolutePath());
+             try {
+                 FileContents fc = frame.fos.openFileDialog(null, null);
+			 	 frame.treeWindow.tree.exportScreenCapture(fc);
+			 } catch(IOException ex){}
              frame.treeWindow.tree.loop();
          } else if (e.getActionCommand().equals("Quit")) {
              frame.db_conn.c.close_connection();
@@ -659,51 +658,18 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
          }
     }
     
-    public File getFile(String windowTitle) {
-        frame.loadDataFileChooser.setAcceptAllFileFilterUsed(true);
-        frame.loadDataFileChooser.setDialogTitle(windowTitle);
-           int returnVal = frame.loadDataFileChooser.showOpenDialog(null);
-           if (returnVal == JFileChooser.APPROVE_OPTION) {
-               File selectedFile = frame.loadDataFileChooser.getSelectedFile();
-               return selectedFile;
-           }
-           else
-            return null;
-    }
-    
-    public File getProjectFile(String windowTitle, boolean forsave) {
-        frame.loadDataFileChooser.setAcceptAllFileFilterUsed(false);
-        frame.loadDataFileChooser.setDialogTitle(windowTitle);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "Topiary Explorer Project files", "tep");
-        frame.loadDataFileChooser.setFileFilter(filter);
-        int returnVal;
-        if(forsave)
-        {
-            frame.loadDataFileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-            returnVal = frame.loadDataFileChooser.showSaveDialog(null);
-        }
-        else
-            returnVal = frame.loadDataFileChooser.showOpenDialog(null);
-            
-       if (returnVal == JFileChooser.APPROVE_OPTION) {
-           File selectedFile = frame.loadDataFileChooser.getSelectedFile();
-           return selectedFile;
-       }
-       else
-        return null;
-    }
-    
+
     public void newProject() {
         frame.newProjectChooser = new NewProjectDialog(frame);
     }
     
-    public void openProject(File inFile){
-        if(inFile != null)
+    public void openProject(){
+        try {
+		    FileContents inFile = frame.fos.openFileDialog(null, null);
+		
+	    if(inFile != null)
         {
-            try
-            {
-                BufferedReader br = new BufferedReader(new FileReader(inFile));
+                BufferedReader br = new BufferedReader(new InputStreamReader(inFile.getInputStream()));
                 String line = br.readLine();
                 File curr = null;
                 while(line != "")
@@ -711,23 +677,24 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     try
                     {
                         curr = new File(line.substring(4, line.length()));
+                        FileContents fc = frame.es.openFile(curr);
                         if(curr.exists())
                         {
                             switch(line.charAt(0))
                             {
                                 case 't':
-                                    frame.treeWindow.loadTree(curr);
+                                    frame.treeWindow.loadTree(fc);
                                     break;
                                 case 'o':
                                     if(line.charAt(1) == 't')
                                     {
-                                        this.loadOtuMetadata(curr);
+                                        this.loadOtuMetadata(fc);
                                     }
                                     else
-                                        this.loadOtuSampleMap(curr);
+                                        this.loadOtuSampleMap(fc);
                                     break;
                                 case 's':
-                                    this.loadSampleMetadata(curr);
+                                    this.loadSampleMetadata(fc);
                                     break;
                                 default:
                                     break;
@@ -743,46 +710,43 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 }
                 br.close();
             }
-            catch(IOException e)
+            
+            } catch(IOException e)
                 {System.out.println("Error opening project.");}
         }
-    }
     
-    public void saveProject(File inFile){
-        if(inFile != null)
-        {
-            try
-            {
-                String selectedFile = inFile.getAbsolutePath();
-                String basepath = selectedFile.substring(0,selectedFile.lastIndexOf("/"));
-                BufferedWriter outputStream = new BufferedWriter(new FileWriter(selectedFile));
-                outputStream.write("tre ");
-                if(frame.treeFile != null)
-                    outputStream.write(frame.treeFile.getAbsolutePath());
-                outputStream.newLine();
-                outputStream.write("otm ");
-                if(frame.otuMetadataFile != null)
-                    outputStream.write(frame.otuMetadataFile.getAbsolutePath());
-                outputStream.newLine();
-                outputStream.write("osm ");
-                if(frame.otuSampleMapFile != null) 
-                    outputStream.write(frame.otuSampleMapFile.getAbsolutePath());
-                outputStream.newLine();
-                outputStream.write("sam ");
-                if(frame.sampleMetadataFile != null)
-                    outputStream.write(frame.sampleMetadataFile.getAbsolutePath());
-                outputStream.close();
-            }
-            catch(IOException e)
-                {System.out.println("Error saving project.");}
-        }
+    public void saveProject(){
+		try
+		{
+			String s = "tre ";
+			if(frame.treeFile != null)
+				s = s + frame.treeFile.getName();
+			s = s + "\notm ";
+			if(frame.otuMetadataFile != null)
+				s = s + frame.otuMetadataFile.getName();
+			s = s + "\nosm ";
+			if(frame.otuSampleMapFile != null) 
+				s = s + frame.otuSampleMapFile.getName();
+			s = s + "\nsam ";
+			if(frame.sampleMetadataFile != null)
+				s = s + frame.sampleMetadataFile.getName();
+			FileContents fc = frame.fss.saveFileDialog(null, null, 
+				new ByteArrayInputStream(s.getBytes()),null);
+		}
+		catch(IOException e)
+			{System.out.println("Error saving project.");}
     }
     
     /**
     * Loads OTU metadata from a file selected by the user.
     * Populates otu metadata table with information from the file.
     */
-   public void loadOtuMetadata(File inFile){
+   public void loadOtuMetadata(FileContents inFile){
+      if (inFile==null) {
+      	   try {
+   	           inFile = frame.fos.openFileDialog(null,null);
+   	       } catch (java.io.IOException e) {}
+   	   }
        if(inFile != null)
        {
            frame.treeWindow.tree.noLoop();
@@ -792,7 +756,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             //set view
             frame.dataPane.setSelectedIndex(1);
             try {
-                FileInputStream is = new FileInputStream(inFile);
+                InputStream is = inFile.getInputStream();
                 frame.otuMetadata = new DataTable(is);
                 frame.otuMetadataTable.setModel(new SparseTableModel(frame.otuMetadata.getData(),
                     frame.otuMetadata.getColumnNames()){
@@ -833,7 +797,13 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    * Loads sample metadata from a file selected by the user.
    * Populates sample metadata table with information from the file.
    */
-   public void loadSampleMetadata(File inFile){
+   public void loadSampleMetadata(FileContents inFile){
+   
+   	   if (inFile==null) {
+   	       try {
+   	           inFile = frame.fos.openFileDialog(null,null);
+   	       } catch (java.io.IOException e) {}
+   	   }
        if (inFile != null) {
            frame.treeWindow.tree.noLoop();
            if(frame.sampleMetadata != null)
@@ -842,7 +812,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             //set view
             frame.dataPane.setSelectedIndex(3);
             try {
-                FileInputStream is = new FileInputStream(inFile);
+                InputStream is = inFile.getInputStream();
                 frame.sampleMetadata = new DataTable(is);
                 frame.sampleMetadataTable.setModel(new SparseTableModel(frame.sampleMetadata.getData(),
                     frame.sampleMetadata.getColumnNames()){
@@ -881,7 +851,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    * Loads OTU-sample map from a file selected by the user.
    * Populates otu-sample map table with information from the file.
    */
-   public void loadOtuSampleMap(File inFile){
+   public void loadOtuSampleMap(FileContents inFile){
+   	   if (inFile==null) {
+   	       try {
+   	           inFile = frame.fos.openFileDialog(null,null);
+   	       } catch (java.io.IOException e) {}
+   	   }   
        if (inFile != null) {
            frame.treeWindow.tree.noLoop();
            if(frame.otuSampleMap != null)
@@ -889,7 +864,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             //set view
             frame.dataPane.setSelectedIndex(2);
             try {
-                FileInputStream is = new FileInputStream(inFile);
+                InputStream is = inFile.getInputStream();
                 frame.otuSampleMap = new DataTable(is);
                 frame.otuSampleMapTable.setModel(new SparseTableModel(frame.otuSampleMap.getData(),
                     frame.otuSampleMap.getColumnNames()){

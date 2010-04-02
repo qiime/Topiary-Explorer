@@ -10,6 +10,7 @@ import java.sql.*;
 import javax.swing.table.*;
 import java.io.*;
 import javax.swing.table.*;
+import javax.jnlp.*;
 
 /**
  * <<Class summary>>
@@ -20,37 +21,39 @@ import javax.swing.table.*;
 public class BrowseButton extends JButton{
     NewProjectDialog frame = null;
     JTextField partner = null;
-    String title = null;
-    File fl = null;
+    FileContents fl = null;
     
 	// {{{ browsButton constructor
     /**
      * 
      */
-    public BrowseButton(NewProjectDialog _frame, JTextField _partner, String _title) {
+    public BrowseButton(NewProjectDialog _frame, JTextField _partner) {
         frame = _frame;
         partner = _partner;
-        title = _title;
         this.setText("Browse...");
         this.addActionListener(new ActionListener() {
                public void actionPerformed(ActionEvent e) {
-                   fl = buttonPressed(title);
-                   if(fl != null)
-                       partner.setText(fl.getAbsolutePath());
+                   fl = buttonPressed();
+                   if(fl != null) {
+                       try {
+                       	  partner.setText(fl.getName());
+                       } catch (IOException ex) {}
+                   }
                }
         });
     }
     // }}}
     
-    public File buttonPressed(String windowTitle) {
-        frame.frame.loadDataFileChooser.setAcceptAllFileFilterUsed(true);
-        frame.frame.loadDataFileChooser.setDialogTitle(windowTitle);
-       int returnVal = frame.frame.loadDataFileChooser.showOpenDialog(null);
-       if (returnVal == JFileChooser.APPROVE_OPTION) {
-           File selectedFile = frame.frame.loadDataFileChooser.getSelectedFile();
-           return selectedFile;
-       }
-       else
-        return null;
+    public FileContents buttonPressed() {
+    	FileOpenService fos;
+    	try { 
+        	fos = (FileOpenService)ServiceManager.lookup("javax.jnlp.FileOpenService");
+    	} catch (UnavailableServiceException e) {fos = null;} 
+    	FileContents fc = null;
+    	try {
+    		fc = fos.openFileDialog(null,null);
+        } catch (IOException ex) {};
+        return fc;
+
     }
 }

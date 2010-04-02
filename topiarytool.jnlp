@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp 
+    codebase="https://topiarytool.svn.sourceforge.net/svnroot/topiarytool/trunk/main"
+    href="topiarytool.jnlp">
+    
+    <information>
+    <title>TopiaryTool</title>
+    <vendor>University of Colorado</vendor>
+    <homepage href="blah"/>
+    <description>TopiaryTool</description>
+    <!--<icon href="icon.png"/>-->
+    <!--<icon kind="splash" href="images/splash.gif"/>-->
+    
+    <offline-allowed/>
+     
+
+  </information>
+  
+<!--
+  This is what you need to enable to get rid of the "Java App Window" warnings.
+  But then you also need to sign all the code...  
+  <security>
+      <all-permissions/>
+  </security>
+  -->
+  
+  <resources>
+    <j2se version="1.5+"  max-heap-size="128m" />
+	<extension name="jogl" href="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp" />
+	
+    <jar href="topiarytool.jar" />
+	<jar href="lib/core.jar" />
+	<jar href="lib/itext.jar" />
+	<jar href="lib/pdf.jar" />
+	<jar href="lib/mysql-connector-java-5.1.10-bin.jar" />
+  </resources>
+  
+  <application-desc main-class="topiarytool.TopiaryTool" />
+</jnlp>

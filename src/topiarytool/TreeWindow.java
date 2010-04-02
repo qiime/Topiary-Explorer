@@ -10,6 +10,8 @@ import javax.media.opengl.*;
 import java.sql.*;
 import javax.swing.table.*;
 import java.io.*;
+import javax.jnlp.*;
+
 /**
  * TreeWindow is the window that contains the tree visualization.
  */
@@ -110,7 +112,12 @@ public class TreeWindow extends JFrame {
 	/**
     * Loads a new tree from the selected file
     */
-	public void loadTree(File inFile) {
+	public void loadTree(FileContents inFile) {
+	     if (inFile == null) {
+	     	 try {
+	             inFile = frame.fos.openFileDialog(null,null);
+	         } catch (java.io.IOException e) {}
+	     }
          if (inFile != null) {
              tree.noLoop();
              tree.setTree(TopiaryFunctions.createTreeFromNewickFile(inFile));
@@ -134,14 +141,12 @@ public class TreeWindow extends JFrame {
     * Saves the current tree in newick format
     */
     public void saveTree() {
-         tree.noLoop();
-         frame.loadDataFileChooser.setDialogTitle("Save Tree...");
-         int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
-		 if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File selectedFile = frame.loadDataFileChooser.getSelectedFile();
-			TopiaryFunctions.createNewickFileFromTree(tree.getTree(),selectedFile);
-		 }
-         tree.loop();
+	    String s = TopiaryFunctions.createNewickStringFromTree(tree.getTree());
+        try {
+        	FileContents fc = frame.fss.saveFileDialog(null,null,new ByteArrayInputStream(s.getBytes()),null);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error writing to file.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     /**
@@ -156,12 +161,10 @@ public class TreeWindow extends JFrame {
          p.setVisible(true);
          double dims[] = p.dims;
          if (dims[0]!=0 || dims[1]!=0) {
-            frame.loadDataFileChooser.setDialogTitle("Save As...");
-            int returnVal = frame.loadDataFileChooser.showSaveDialog(null);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                String selectedFile = frame.loadDataFileChooser.getSelectedFile().getAbsolutePath();
-                tree.exportTreeImage(selectedFile, dims);
-            }
+         	try {
+         		byte[] b = new byte[0];
+            	tree.exportTreeImage(frame.fss.saveFileDialog(null,null,new ByteArrayInputStream(b),null), dims);
+           	} catch(IOException ex) {};
 		}
         tree.loop();
     }

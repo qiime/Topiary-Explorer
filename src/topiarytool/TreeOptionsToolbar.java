@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
+import javax.jnlp.*;
 
 
 public class TreeOptionsToolbar extends JToolBar {
@@ -20,20 +21,30 @@ public class TreeOptionsToolbar extends JToolBar {
     JButton polarButton = new JButton();
     JLabel treeStatus = new JLabel("");
 
+	BasicService bs;
+	
     TreeWindow frame = null;
 
     public TreeOptionsToolbar(TreeWindow _frame) {
         super(JToolBar.HORIZONTAL);
         frame = _frame;
         
-        collapseButton.setIcon(new ImageIcon("images/collapse.gif"));
+        try { 
+        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
+    	} catch (UnavailableServiceException e) { bs=null; } 
+        
+        try{
+        collapseButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/collapse.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         collapseButton.setToolTipText("Collapse");
         collapseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.collapseTree();
             }
         });
-        expandButton.setIcon(new ImageIcon("images/expand.gif"));
+        try{
+        expandButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/expand.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         expandButton.setToolTipText("Expand");
         expandButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -43,15 +54,18 @@ public class TreeOptionsToolbar extends JToolBar {
         add(collapseButton);
         add(expandButton);
         addSeparator();
-        
-        mirrorvertButton.setIcon(new ImageIcon("images/mirror_vert.gif"));
+        try{
+        mirrorvertButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/mirror_vert.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         mirrorvertButton.setToolTipText("Flip Vertical");
         mirrorvertButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.mirrorVert();
             }
         });
-        mirrorhorzButton.setIcon(new ImageIcon("images/mirror_horz.gif"));
+        try{
+        mirrorhorzButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/mirror_horz.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         mirrorhorzButton.setToolTipText("Flip Horizontal");
         mirrorhorzButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -62,28 +76,36 @@ public class TreeOptionsToolbar extends JToolBar {
         add(mirrorhorzButton);
         addSeparator();
         
-        rectButton.setIcon(new ImageIcon("images/rectangular.gif"));
+        try{
+        rectButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/rectangular.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         rectButton.setToolTipText("Rectangular");
         rectButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.tree.setTreeLayout("Rectangular");
             }
         });
-        triButton.setIcon(new ImageIcon("images/triangular.gif"));
+        try{
+        triButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/triangular.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         triButton.setToolTipText("Triangular");
         triButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.tree.setTreeLayout("Triangular");
             }
         });
-        radialButton.setIcon(new ImageIcon("images/radial.gif"));
+        try{
+        radialButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/radial.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         radialButton.setToolTipText("Radial");
         radialButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.tree.setTreeLayout("Radial");
             }
         });
-        polarButton.setIcon(new ImageIcon("images/polar.gif"));
+        try{
+        polarButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/polar.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         polarButton.setToolTipText("Polar");
         polarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

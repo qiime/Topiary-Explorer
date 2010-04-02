@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
+import javax.jnlp.*;
 
 
 /**
@@ -20,6 +21,8 @@ public class WindowViewToolbar extends JToolBar {
     JButton exportTreeButton = new JButton();
     JButton treeButton  = new JButton();
     JButton pcoaButton = new JButton();
+    
+    BasicService bs;
 
     MainFrame frame = null;
     
@@ -30,8 +33,13 @@ public class WindowViewToolbar extends JToolBar {
     public WindowViewToolbar(MainFrame _frame) {
         super(JToolBar.HORIZONTAL);
         frame = _frame;
-        
-        newTreeButton.setIcon(new ImageIcon("images/newproject.gif"));
+        try { 
+        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
+    	} catch (UnavailableServiceException e) { bs=null; }   
+    	
+        try{
+        newTreeButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/newproject.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         newTreeButton.setToolTipText("New Project");
         newTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -40,33 +48,42 @@ public class WindowViewToolbar extends JToolBar {
         });
         add(newTreeButton);
         
-        openTreeButton.setIcon(new ImageIcon("images/opentree.gif"));
+        try {
+        openTreeButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/opentree.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         openTreeButton.setToolTipText("Open Project");
         openTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.mainMenu.openProject(frame.mainMenu.getProjectFile("Select Project File",false));
+                frame.mainMenu.openProject();
             }
         });
         add(openTreeButton);
         
-        saveTreeButton.setIcon(new ImageIcon("images/savetree.gif"));
+        try{
+        saveTreeButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/savetree.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         saveTreeButton.setToolTipText("Save Project");
         saveTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.mainMenu.saveProject(frame.mainMenu.getProjectFile("Save Project File As",true));
+                frame.mainMenu.saveProject();
             }
         });
         add(saveTreeButton);
         addSeparator();
         
-        treeButton.setIcon(new ImageIcon("images/treewindow.gif"));
+        try{
+        treeButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/treewindow.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         treeButton.setToolTipText("Tree Window");
         treeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.treeWindow.setVisible(!frame.treeWindow.isVisible());
             }
         });
-        pcoaButton.setIcon(new ImageIcon("images/pcoawindow.gif"));
+        
+        try{
+        pcoaButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/pcoawindow.gif")));
+        } catch(java.net.MalformedURLException ex) {}
         pcoaButton.setToolTipText("PCoA Window");
         pcoaButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

@@ -4,6 +4,8 @@ import processing.core.*;
 import javax.swing.event.*;
 import java.util.*;
 import java.awt.Color;
+import javax.jnlp.*;
+import java.io.*;
 
 public class TreeVis extends PApplet {
 
@@ -1144,14 +1146,17 @@ public class TreeVis extends PApplet {
      *
      * @param  filename  the file to write the image to
      */
-    public void exportScreenCapture(String filename) {
-      PGraphics canvas = createGraphics(width, height, PDF, filename);
-      canvas.beginDraw();
-      canvas.textFont(currFont);
-      background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
-      drawTree(root, canvas);
-      canvas.dispose();
-      canvas.endDraw();
+    public void exportScreenCapture(FileContents fc) {
+      try {
+		  String filename = fc.getName();
+		  PGraphics canvas = createGraphics(width, height, PDF, filename);
+		  canvas.beginDraw();
+		  canvas.textFont(currFont);
+		  background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
+		  drawTree(root, canvas);
+		  canvas.dispose();
+		  canvas.endDraw();
+      } catch (java.io.IOException e) {}
     }
 
     /**
@@ -1159,63 +1164,64 @@ public class TreeVis extends PApplet {
      *
      * @param  filename  the file to write the image to
      */
-    public void exportTreeImage(String filename, double dims[]) {
-
-      //save the current variables
-      int oldWidth = getWidth();
-      int oldHeight = getHeight();
-      double oldXScale = xscale;
-      double oldYScale = yscale;
-      double oldXStart = xstart;
-      double oldYStart = ystart;
-      float oldCollapsedPixel = getCollapsedPixel();
-      boolean oldDrawExternalNodeLabels = drawExternalNodeLabels;
-      boolean oldDrawInternalNodeLabels = drawInternalNodeLabels;
-
-      //reset the sizing and zooming so that the tree can be drawn visibly
-      double longest = textWidth(root.getLongestLabel());
-      double l = root.longestRootToTipDistance();
-      double s = root.shortestRootToTipDistance();
-      drawExternalNodeLabels = true;
-      drawInternalNodeLabels = true;
-      if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-          xscale = (dims[0]-MARGIN-TREEMARGIN)/root.depth();
-          xstart = MARGIN;
-      } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-          xscale = (Math.min(dims[0], dims[1])*0.5-MARGIN)/root.depth();
-          xstart = dims[0]*0.5;
-      }
-      
-     if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-          yscale = (dims[1]-2*MARGIN)/root.getNumberOfLeaves();
-          ystart = MARGIN;
-      } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-          yscale = (Math.min(dims[0], dims[1])*0.5-MARGIN)/root.depth();
-          ystart = dims[1]*0.5;
-      }
-      
-      PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), PDF, filename);
-
-      setCollapsedPixel((float)(getCollapsedPixel()*(xscale/oldXScale)));
-
-      //draw the three to the file
-      canvas.beginDraw();
-      canvas.textFont(currFont);
-      canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
-      drawTree(root, canvas);
-      canvas.dispose();
-      canvas.endDraw();
-
-      //go back to how it was
-      xscale = oldXScale;
-      yscale = oldYScale;
-      xstart = oldXStart;
-      ystart = oldYStart;
-      drawExternalNodeLabels = oldDrawExternalNodeLabels;
-      drawInternalNodeLabels = oldDrawInternalNodeLabels;
-      setCollapsedPixel(oldCollapsedPixel);
-
-      redraw();
+    public void exportTreeImage(FileContents file, double dims[]) {
+	  try {
+		  //save the current variables
+		  int oldWidth = getWidth();
+		  int oldHeight = getHeight();
+		  double oldXScale = xscale;
+		  double oldYScale = yscale;
+		  double oldXStart = xstart;
+		  double oldYStart = ystart;
+		  float oldCollapsedPixel = getCollapsedPixel();
+		  boolean oldDrawExternalNodeLabels = drawExternalNodeLabels;
+		  boolean oldDrawInternalNodeLabels = drawInternalNodeLabels;
+	
+		  //reset the sizing and zooming so that the tree can be drawn visibly
+		  double longest = textWidth(root.getLongestLabel());
+		  double l = root.longestRootToTipDistance();
+		  double s = root.shortestRootToTipDistance();
+		  drawExternalNodeLabels = true;
+		  drawInternalNodeLabels = true;
+		  if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+			  xscale = (dims[0]-MARGIN-TREEMARGIN)/root.depth();
+			  xstart = MARGIN;
+		  } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
+			  xscale = (Math.min(dims[0], dims[1])*0.5-MARGIN)/root.depth();
+			  xstart = dims[0]*0.5;
+		  }
+		  
+		 if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+			  yscale = (dims[1]-2*MARGIN)/root.getNumberOfLeaves();
+			  ystart = MARGIN;
+		  } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
+			  yscale = (Math.min(dims[0], dims[1])*0.5-MARGIN)/root.depth();
+			  ystart = dims[1]*0.5;
+		  }
+		  
+		  PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), PDF, file.getName());
+	
+		  setCollapsedPixel((float)(getCollapsedPixel()*(xscale/oldXScale)));
+	
+		  //draw the three to the file
+		  canvas.beginDraw();
+		  canvas.textFont(currFont);
+		  canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
+		  drawTree(root, canvas);
+		  canvas.dispose();
+		  canvas.endDraw();
+	
+		  //go back to how it was
+		  xscale = oldXScale;
+		  yscale = oldYScale;
+		  xstart = oldXStart;
+		  ystart = oldYStart;
+		  drawExternalNodeLabels = oldDrawExternalNodeLabels;
+		  drawInternalNodeLabels = oldDrawInternalNodeLabels;
+		  setCollapsedPixel(oldCollapsedPixel);
+	
+		  redraw();
+	} catch (IOException ex) {};
 
     }
 }

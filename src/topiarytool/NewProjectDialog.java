@@ -10,6 +10,7 @@ import java.sql.*;
 import javax.swing.table.*;
 import java.io.*;
 import javax.swing.table.*;
+import javax.jnlp.*;
 
 /**
  * <<Class summary>>
@@ -20,7 +21,6 @@ import javax.swing.table.*;
 public class NewProjectDialog extends JFrame{
 
     MainFrame frame = null;
-    JFileChooser fileChooser = new JFileChooser();
     JPanel mainPanel = new JPanel();
     JPanel topPanel = new JPanel();
     JPanel bottomPanel = new JPanel();
@@ -65,22 +65,22 @@ public class NewProjectDialog extends JFrame{
         
         treePanel.add(treeFileLabel);
         treePanel.add(treeFileField);
-        treePanel.add(new BrowseButton(this, treeFileField, "Choose tree file location"));
+        treePanel.add(new BrowseButton(this, treeFileField));
         mainPanel.add(treePanel);
         
         otuMetaPanel.add(otuMetaLabel);
         otuMetaPanel.add(otuMetaField);
-        otuMetaPanel.add(new BrowseButton(this, otuMetaField, "Choose OTU metadata file location"));
+        otuMetaPanel.add(new BrowseButton(this, otuMetaField));
         mainPanel.add(otuMetaPanel);
         
         otuSamplePanel.add(otuSampleLabel);
         otuSamplePanel.add(otuSampleField);
-        otuSamplePanel.add(new BrowseButton(this, otuSampleField, "Choose OTU-Sample map file location"));
+        otuSamplePanel.add(new BrowseButton(this, otuSampleField));
         mainPanel.add(otuSamplePanel);
         
         sampleMetaPanel.add(sampleMetaLabel);
         sampleMetaPanel.add(sampleMetaField);
-        sampleMetaPanel.add(new BrowseButton(this, sampleMetaField, "Choose sample metadata file location"));
+        sampleMetaPanel.add(new BrowseButton(this, sampleMetaField));
         mainPanel.add(sampleMetaPanel);
         
         this.add(mainPanel, BorderLayout.CENTER);
@@ -111,21 +111,26 @@ public class NewProjectDialog extends JFrame{
 	    File temp = null;
         
 	    if(treeFileField.getText() != "")
-	    {
+	    {   try {
             temp = new File(treeFileField.getText());
+            FileContents fc = frame.es.openFile(temp);
             if(temp.exists())
                 {
-                    frame.treeWindow.loadTree(temp);
+                    frame.treeWindow.loadTree(fc);
                 }
+            } catch (IOException ex) {}
 	    }
     
 	    if(otuMetaField.getText().length() > 0)
 	    {
+	    	try {
             temp = new File(otuMetaField.getText());
+            FileContents fc = frame.es.openFile(temp);
             if(temp.exists())
             {
-                frame.mainMenu.loadOtuMetadata(temp); 
+                frame.mainMenu.loadOtuMetadata(fc); 
             }
+            } catch (IOException ex) {}
 	    }
       else
         {frame.mainMenu.clearOtuMetadata();}
@@ -133,22 +138,28 @@ public class NewProjectDialog extends JFrame{
         
 	    if(otuSampleField.getText().length() > 0)
 	    {
+	    	try {
             temp = new File(otuSampleField.getText());
+            FileContents fc = frame.es.openFile(temp);
             if(temp.exists())
             {
-                frame.mainMenu.loadOtuSampleMap(temp); 
+                frame.mainMenu.loadOtuSampleMap(fc); 
             }
+            } catch (IOException ex) {}
 	    }
       else
             {frame.mainMenu.clearOtuSampleMap();}
     
 	    if(sampleMetaField.getText().length() > 0)
 	    {
+	    	try{
             temp = new File(sampleMetaField.getText());
+            FileContents fc = frame.es.openFile(temp);
             if(temp.exists())
             {
-                frame.mainMenu.loadSampleMetadata(temp); 
+                frame.mainMenu.loadSampleMetadata(fc); 
             }
+            } catch (IOException ex) {}
 	    }
       else
             {frame.mainMenu.clearSampleMetadata();}

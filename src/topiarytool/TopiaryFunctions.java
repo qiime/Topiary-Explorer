@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import java.text.*;
+import javax.jnlp.*;
 
 public class TopiaryFunctions {
 
@@ -155,10 +156,10 @@ public class TopiaryFunctions {
     /**
      * Load a Newick-formatted tree from the given file and returns the head node of the tree.
      */
-    public static Node createTreeFromNewickFile(File file) {
+    public static Node createTreeFromNewickFile(FileContents file) {
       String newickString = "";
       try {
-        Scanner scanner = new Scanner(file);
+        Scanner scanner = new Scanner(file.getInputStream());
         scanner.useDelimiter("\\Z");
         newickString = scanner.next();
         scanner.close();
@@ -167,18 +168,6 @@ public class TopiaryFunctions {
         JOptionPane.showMessageDialog(null, "Unable to load " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
       }
       return createTreeFromNewickString(newickString);
-    }
-
-    public static void createNewickFileFromTree(Node node, File file) {
-        String tree = createNewickStringFromTree(node);
-        try {
-            PrintWriter out = new PrintWriter(new FileWriter(file));
-            out.print(tree);
-            out.close();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error writing to file.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
     }
 
     public static String createNewickStringFromTree(Node root) {
