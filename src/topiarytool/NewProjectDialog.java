@@ -114,10 +114,7 @@ public class NewProjectDialog extends JFrame{
 	    {   try {
             temp = new File(treeFileField.getText());
             FileContents fc = frame.es.openFile(temp);
-            if(temp.exists())
-                {
-                    frame.treeWindow.loadTree(fc);
-                }
+            frame.treeWindow.loadTree(fc);
             } catch (IOException ex) {}
 	    }
     
@@ -126,10 +123,7 @@ public class NewProjectDialog extends JFrame{
 	    	try {
             temp = new File(otuMetaField.getText());
             FileContents fc = frame.es.openFile(temp);
-            if(temp.exists())
-            {
-                frame.mainMenu.loadOtuMetadata(fc); 
-            }
+            frame.mainMenu.loadOtuMetadata(fc); 
             } catch (IOException ex) {}
 	    }
       else
@@ -141,10 +135,7 @@ public class NewProjectDialog extends JFrame{
 	    	try {
             temp = new File(otuSampleField.getText());
             FileContents fc = frame.es.openFile(temp);
-            if(temp.exists())
-            {
-                frame.mainMenu.loadOtuSampleMap(fc); 
-            }
+            frame.mainMenu.loadOtuSampleMap(fc); 
             } catch (IOException ex) {}
 	    }
       else
@@ -155,10 +146,7 @@ public class NewProjectDialog extends JFrame{
 	    	try{
             temp = new File(sampleMetaField.getText());
             FileContents fc = frame.es.openFile(temp);
-            if(temp.exists())
-            {
-                frame.mainMenu.loadSampleMetadata(fc); 
-            }
+            frame.mainMenu.loadSampleMetadata(fc); 
             } catch (IOException ex) {}
 	    }
       else
