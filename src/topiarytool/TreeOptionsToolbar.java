@@ -7,7 +7,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
 import javax.jnlp.*;
-
+import java.io.*;
 
 public class TreeOptionsToolbar extends JToolBar {
 
@@ -21,7 +21,7 @@ public class TreeOptionsToolbar extends JToolBar {
     JButton polarButton = new JButton();
     JLabel treeStatus = new JLabel("");
 
-	BasicService bs;
+	ExtendedService es;
 	
     TreeWindow frame = null;
 
@@ -30,12 +30,15 @@ public class TreeOptionsToolbar extends JToolBar {
         frame = _frame;
         
         try { 
-        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
-    	} catch (UnavailableServiceException e) { bs=null; } 
+        	es = (ExtendedService)ServiceManager.lookup("javax.jnlp.ExtendedService");
+    	} catch (UnavailableServiceException e) { es=null; } 
         
         try{
-        collapseButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/collapse.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/collapse.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        collapseButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         collapseButton.setToolTipText("Collapse");
         collapseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -43,8 +46,11 @@ public class TreeOptionsToolbar extends JToolBar {
             }
         });
         try{
-        expandButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/expand.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/expand.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        expandButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         expandButton.setToolTipText("Expand");
         expandButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -55,8 +61,11 @@ public class TreeOptionsToolbar extends JToolBar {
         add(expandButton);
         addSeparator();
         try{
-        mirrorvertButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/mirror_vert.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/mirror_vert.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        mirrorvertButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         mirrorvertButton.setToolTipText("Flip Vertical");
         mirrorvertButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -64,8 +73,11 @@ public class TreeOptionsToolbar extends JToolBar {
             }
         });
         try{
-        mirrorhorzButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/mirror_horz.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/mirror_horiz.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        mirrorhorzButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         mirrorhorzButton.setToolTipText("Flip Horizontal");
         mirrorhorzButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -77,8 +89,11 @@ public class TreeOptionsToolbar extends JToolBar {
         addSeparator();
         
         try{
-        rectButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/rectangular.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/rectangular.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        rectButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         rectButton.setToolTipText("Rectangular");
         rectButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -86,8 +101,11 @@ public class TreeOptionsToolbar extends JToolBar {
             }
         });
         try{
-        triButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/triangular.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/triangular.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        triButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         triButton.setToolTipText("Triangular");
         triButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -95,8 +113,11 @@ public class TreeOptionsToolbar extends JToolBar {
             }
         });
         try{
-        radialButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/radial.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/radial.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        radialButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         radialButton.setToolTipText("Radial");
         radialButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -104,8 +125,11 @@ public class TreeOptionsToolbar extends JToolBar {
             }
         });
         try{
-        polarButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/polar.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/polar.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        polarButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         polarButton.setToolTipText("Polar");
         polarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

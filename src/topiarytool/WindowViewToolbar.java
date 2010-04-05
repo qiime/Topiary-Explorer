@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
 import javax.jnlp.*;
+import java.io.*;
 
 
 /**
@@ -22,7 +23,7 @@ public class WindowViewToolbar extends JToolBar {
     JButton treeButton  = new JButton();
     JButton pcoaButton = new JButton();
     
-    BasicService bs;
+    ExtendedService es;
 
     MainFrame frame = null;
     
@@ -34,12 +35,15 @@ public class WindowViewToolbar extends JToolBar {
         super(JToolBar.HORIZONTAL);
         frame = _frame;
         try { 
-        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
-    	} catch (UnavailableServiceException e) { bs=null; }   
+        	es = (ExtendedService)ServiceManager.lookup("javax.jnlp.ExtendedService");
+    	} catch (UnavailableServiceException e) { es=null; }   
     	
         try{
-        newTreeButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/newproject.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/newproject.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        newTreeButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         newTreeButton.setToolTipText("New Project");
         newTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -49,8 +53,11 @@ public class WindowViewToolbar extends JToolBar {
         add(newTreeButton);
         
         try {
-        openTreeButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/opentree.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/opentree.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        openTreeButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         openTreeButton.setToolTipText("Open Project");
         openTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -60,8 +67,11 @@ public class WindowViewToolbar extends JToolBar {
         add(openTreeButton);
         
         try{
-        saveTreeButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/savetree.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/savetree.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        saveTreeButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         saveTreeButton.setToolTipText("Save Project");
         saveTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -72,8 +82,11 @@ public class WindowViewToolbar extends JToolBar {
         addSeparator();
         
         try{
-        treeButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/treewindow.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/treewindow.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        treeButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         treeButton.setToolTipText("Tree Window");
         treeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -82,8 +95,11 @@ public class WindowViewToolbar extends JToolBar {
         });
         
         try{
-        pcoaButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/pcoawindow.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/pcoawindow.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        pcoaButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         pcoaButton.setToolTipText("PCoA Window");
         pcoaButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

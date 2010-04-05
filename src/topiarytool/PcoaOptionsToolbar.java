@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
 import javax.jnlp.*;
+import java.io.*;
 
 
 public class PcoaOptionsToolbar extends JToolBar implements ItemListener{
@@ -37,7 +38,7 @@ public class PcoaOptionsToolbar extends JToolBar implements ItemListener{
     int sampleShapeIndex = 1;
     int otuShapeIndex = 0;
 
-	BasicService bs;
+	ExtendedService es;
     PcoaWindow frame = null;
 
     public PcoaOptionsToolbar(PcoaWindow _frame) {
@@ -45,8 +46,8 @@ public class PcoaOptionsToolbar extends JToolBar implements ItemListener{
         frame = _frame;
         
         try { 
-        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
-    	} catch (UnavailableServiceException e) { bs=null; } 
+        	es = (ExtendedService)ServiceManager.lookup("javax.jnlp.ExtendedService");
+    	} catch (UnavailableServiceException e) { es=null; } 
     	
         add(layoutLabel);
                 layout.add("None");
@@ -222,8 +223,11 @@ public class PcoaOptionsToolbar extends JToolBar implements ItemListener{
         add(distanceMetrics);
         
         try{
-        runButton.setIcon(new ImageIcon(new java.net.URL(bs.getCodeBase().toString() + "images/runpcoa.gif")));
-        } catch(java.net.MalformedURLException ex) {}
+        FileContents fc = es.openFile(new File("images/runpcoa.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        runButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
         runButton.setToolTipText("Run PCoA Analysis");
         runButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
