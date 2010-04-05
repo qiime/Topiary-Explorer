@@ -682,31 +682,28 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     try
                     {
                         curr = new File(line.substring(4, line.length()));
-                        FileContents fc = frame.es.openFile(curr);
-                        if(curr.exists())
-                        {
-                            switch(line.charAt(0))
-                            {
-                                case 't':
-                                    frame.treeWindow.loadTree(fc);
-                                    break;
-                                case 'o':
-                                    if(line.charAt(1) == 't')
-                                    {
-                                        this.loadOtuMetadata(fc);
-                                    }
-                                    else
-                                        this.loadOtuSampleMap(fc);
-                                    break;
-                                case 's':
-                                    this.loadSampleMetadata(fc);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                    catch(NullPointerException e)
+						FileContents fc = frame.es.openFile(curr);
+						switch(line.charAt(0))
+						{
+							case 't':
+								frame.treeWindow.loadTree(fc);
+								break;
+							case 'o':
+								if(line.charAt(1) == 't')
+								{
+									this.loadOtuMetadata(fc);
+								}
+								else
+									this.loadOtuSampleMap(fc);
+								break;
+							case 's':
+								this.loadSampleMetadata(fc);
+								break;
+							default:
+								break;
+						}
+					}
+					catch(NullPointerException e)
                     {
                         System.out.println(line);
                         break;
