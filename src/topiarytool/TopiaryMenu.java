@@ -136,6 +136,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         checkbox = new JCheckBoxMenuItem("PCoA Window");
         checkbox.addActionListener(this);
         viewMenu.add(checkbox);
+        checkbox = new JCheckBoxMenuItem("Console Window");
+        checkbox.addActionListener(this);
+        viewMenu.add(checkbox);
         
         //set up the "tree" submenus
         item = new JMenuItem("Beautify");
@@ -589,6 +592,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                   frame.treeWindow.setVisible(!frame.treeWindow.isVisible());
           } else if (e.getActionCommand().equals("PCoA Window")) {
                   frame.pcoaWindow.setVisible(!frame.pcoaWindow.isVisible());
+        }else if (e.getActionCommand().equals("PCoA Window")) {
+                frame.consoleWindow.setVisible(!frame.consoleWindow.isVisible());
         } else if (e.getActionCommand().equals("No coloring")) {
              frame.treeWindow.removeColor();
          } else if (e.getActionCommand().equals("Tip Labels...")) {
@@ -712,7 +717,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
             
             } catch(IOException e)
-                {System.out.println("Error opening project.");}
+                {
+                    System.out.println("Error opening project.");
+                    frame.consoleWindow.update("Error opening project.");
+                }
         }
     
     public void saveProject(){
@@ -721,20 +729,23 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 			String s = "tre ";
 			if(frame.treeFile != null)
 				s = s + frame.treeFile.getName();
-			s = s + "\notm ";
+			s = s + "otm ";
 			if(frame.otuMetadataFile != null)
 				s = s + frame.otuMetadataFile.getName();
-			s = s + "\nosm ";
+			s = s + "osm ";
 			if(frame.otuSampleMapFile != null) 
 				s = s + frame.otuSampleMapFile.getName();
-			s = s + "\nsam ";
+			s = s + "sam ";
 			if(frame.sampleMetadataFile != null)
 				s = s + frame.sampleMetadataFile.getName();
 			FileContents fc = frame.fss.saveFileDialog(null, null, 
 				new ByteArrayInputStream(s.getBytes()),null);
 		}
 		catch(IOException e)
-			{System.out.println("Error saving project.");}
+			{
+			    System.out.println("Error saving project.");
+			    frame.consoleWindow.update("Error saving project.");
+			}
     }
     
     /**
@@ -768,6 +779,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
+                
+                frame.consoleWindow.update("Unable to load " + ex.getMessage()+"");
             }
             if (frame.currTable == frame.otuMetadata) {
                 frame.treeWindow.removeColor();
@@ -824,6 +837,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
+                
+                frame.consoleWindow.update("Unable to load " + ex.getMessage() + "");
             }
             if (frame.currTable == frame.sampleMetadata) {
                 frame.treeWindow.removeColor();
@@ -876,6 +891,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
+                
+                frame.consoleWindow.update("Unable to load " + ex.getMessage());
             }
             frame.treeWindow.tree.loop();
             frame.otuSampleMapFile = inFile;
@@ -985,7 +1002,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 public void actionPerformed(ActionEvent e) {
                     //get the category to color by
                     String value = e.getActionCommand();
-                    System.out.println("*");
+/*                    System.out.println("*");*/
                     frame.currTable = frame.otuMetadata;
                     frame.treeWindow.colorByValue(value);
                 }

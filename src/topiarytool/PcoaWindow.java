@@ -59,6 +59,7 @@ public class PcoaWindow extends JFrame {
 	public void setAxes() {
 	    if (pcoa.spData == null) {
             JOptionPane.showMessageDialog(null, "PCOA analysis must be run first.", "Error", JOptionPane.ERROR_MESSAGE);
+            frame.consoleWindow.update("PCOA analysis must be run first.");
         } else {
             PCSelectDialog p = new PCSelectDialog(this);
             p.pack();
@@ -109,9 +110,11 @@ public class PcoaWindow extends JFrame {
 			o.close();
 			System.out.println("done");
 			pcoaOptionsToolbar.setStatus("Done writing.");
+			frame.consoleWindow.update("Done writing PCoA analysis.");
 
 		} catch (IOException e)  {
 			JOptionPane.showMessageDialog(null, "Unable to write data file PCoA analysis", "Error", JOptionPane.ERROR_MESSAGE);
+		    frame.consoleWindow.update("Unable to write data file PCoA analysis");
 		}
 
 		//delete data files if they already exist
@@ -143,12 +146,16 @@ public class PcoaWindow extends JFrame {
    			String line;
 			while((line = br.readLine()) != null) {
 				System.out.println(line);
+				frame.consoleWindow.update(line);
 			}
             int exitVal = pr.waitFor();
             System.out.println("Process Exit Value: " + exitVal);
+            frame.consoleWindow.update("Process Exit Value: " + exitVal);
 			System.out.println("done.");
+			frame.consoleWindow.update("done.");
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Unable to run python script for PCoA analysis", "Error", JOptionPane.ERROR_MESSAGE);
+		    frame.consoleWindow.update("Unable to run python script for PCoA analysis");
 		}
 
 
@@ -159,6 +166,7 @@ public class PcoaWindow extends JFrame {
 		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("sample_coords.txt"))));
 	  } catch (FileNotFoundException e) {
 	  	JOptionPane.showMessageDialog(null, "Error opening find sample_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	    frame.consoleWindow.update("Error opening find sample_coords.txt");
 	  }
 	  String line;
 	  float[][] samplec = new float[0][];
@@ -182,12 +190,14 @@ public class PcoaWindow extends JFrame {
 		}
 	  } catch (IOException e) {
 		JOptionPane.showMessageDialog(null, "Error reading sp_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	    frame.consoleWindow.update("Error reading sp_coords.txt");
 	  }
 
 	 try {
 		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("sp_coords.txt"))));
 	  } catch (FileNotFoundException e) {
 		JOptionPane.showMessageDialog(null, "Error opening sp_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	    frame.consoleWindow.update("Error opening sp_coords.txt");
 	  }
 	  float[][] spc = new float[0][];
 
@@ -210,13 +220,15 @@ public class PcoaWindow extends JFrame {
 		}
 	  } catch (IOException e) {
 		JOptionPane.showMessageDialog(null, "Error reading sp_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
-	  }
+	    frame.consoleWindow.update("Error reading sp_coords.txt");
+	}
 	  
 	  
 	  try {
 		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("evals.txt"))));
 	  } catch (FileNotFoundException e) {
 		JOptionPane.showMessageDialog(null, "Error opening evals.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	    frame.consoleWindow.update("Error opening evals.txt");
 	  }
 	  float[] evalsc = null;
 
@@ -234,12 +246,14 @@ public class PcoaWindow extends JFrame {
 		  evalsc = data;
 	  } catch (IOException e) {
 		JOptionPane.showMessageDialog(null, "Error reading evals.txt", "Error", JOptionPane.ERROR_MESSAGE);
+	    frame.consoleWindow.update("Error reading evals.txt");
 	  }
 	  
 	  
 
 	  pcoa.spData = new VertexData[spc.length];
 	  System.out.println((new Integer(spc.length)).toString() + " " + (new Integer(otuids.size())).toString());
+	  frame.consoleWindow.update((new Integer(spc.length)).toString() + " " + (new Integer(otuids.size())).toString());
 	  for (int i = 0; i < spc.length; i++) {
 		pcoa.spData[i] = new VertexData();
 		pcoa.spData[i].coords = spc[i];
@@ -338,6 +352,7 @@ public class PcoaWindow extends JFrame {
                 }
                 if (otuRowIndex == -1) {
                    JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+otuID+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                    frame.consoleWindow.update("ERROR: OTU ID "+otuID+" not found in OTU Metadata Table.");
                    return;
                 }
                 Object val = frame.otuMetadata.getValueAt(otuRowIndex, frame.colorColumnIndex);
@@ -367,6 +382,7 @@ public class PcoaWindow extends JFrame {
              if (rowIndex == -1) {
                 //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
                 System.out.println("ERROR: OTU ID "+otuID+" not found in OTU Metadata Table.");
+                frame.consoleWindow.update("ERROR: OTU ID "+otuID+" not found in OTU Metadata Table.");
                 //return;
                 continue;
              }
@@ -376,6 +392,7 @@ public class PcoaWindow extends JFrame {
              Color c = frame.colorMap.get(category);
              if (c == null) {
                 JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+                frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());
                 return;
              }
              v.groupColor = new ArrayList<Color>();
@@ -408,6 +425,7 @@ public class PcoaWindow extends JFrame {
              if (rowIndex == -1) {
                 //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
                 System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
+                frame.consoleWindow.update("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
                 //return;
                 continue;
              }
@@ -417,6 +435,7 @@ public class PcoaWindow extends JFrame {
              Color c = frame.colorMap.get(category);
              if (c == null) {
                 JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+                frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());
                 return;
              }
              v.groupColor = new ArrayList<Color>();
@@ -452,6 +471,7 @@ public class PcoaWindow extends JFrame {
                 }
                 if (sampleRowIndex == -1) {
                    JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                   frame.consoleWindow.update("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
                    return;
                 }
                 Object val = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.colorColumnIndex);

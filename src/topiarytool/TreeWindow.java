@@ -133,6 +133,7 @@ public class TreeWindow extends JFrame {
              frame.mainMenu.colorByMenu.setEnabled(true);
              this.setVisible(true);
              System.out.println("Done drawing tree.");
+             frame.consoleWindow.update("Done drawing tree. ");
              frame.treeFile = inFile;
          }
     }
@@ -146,6 +147,7 @@ public class TreeWindow extends JFrame {
         	FileContents fc = frame.fss.saveFileDialog(null,null,new ByteArrayInputStream(s.getBytes()),null);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error writing to file.", "Error", JOptionPane.ERROR_MESSAGE);
+            frame.consoleWindow.update("Error writing to file.");
         }
     }
     
@@ -220,6 +222,7 @@ public class TreeWindow extends JFrame {
            }
            if (rowIndex == -1) {
                JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+               frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.");
                return;
            }
            Object category = frame.otuMetadata.getValueAt(rowIndex, frame.colorColumnIndex);
@@ -228,6 +231,7 @@ public class TreeWindow extends JFrame {
            Color c = frame.colorMap.get(category);
            if (c == null) {
                JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+               frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());
                return;
            }
            //set the node to this color
@@ -257,6 +261,7 @@ public class TreeWindow extends JFrame {
              }
              if (rowIndex == -1) {
                 JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU-Sample Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU-Sample Table.");
                 return;
              }
              //get the row
@@ -282,6 +287,7 @@ public class TreeWindow extends JFrame {
                     //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
                     //return;
                     System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
+                    frame.consoleWindow.update("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
                     continue;
                  }
                  Object val = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.colorColumnIndex);
@@ -318,6 +324,7 @@ public class TreeWindow extends JFrame {
 
             if (String.class.isInstance(category)) {
                 JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" is not all numerical data and cannot be used for line widths.", "Error", JOptionPane.ERROR_MESSAGE);
+                frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" is not all numerical data and cannot be used for line widths.");
                 return;
             } else if (Integer.class.isInstance(category)) {
                 linevalue = (double) ( ((Integer)category).intValue());
@@ -347,6 +354,7 @@ public class TreeWindow extends JFrame {
              }
              if (rowIndex == -1) {
                 JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU-Sample Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU-Sample Table.");
                 return;
              }
              //get the row
@@ -373,6 +381,7 @@ public class TreeWindow extends JFrame {
                     //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
                     //return;
                     System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
+                    frame.consoleWindow.update("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
                     continue;
                  }
                  double linevalue = 0;
@@ -380,6 +389,7 @@ public class TreeWindow extends JFrame {
                  if (category == null) continue;
                  if (String.class.isInstance(category)) {
                      JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+category+" is not all numerical data and cannot be used for line widths.", "Error", JOptionPane.ERROR_MESSAGE);
+                     frame.consoleWindow.update("ERROR: Sample ID "+category+" is not all numerical data and cannot be used for line widths.");
                      return;
                  } else if (Integer.class.isInstance(category)) {
                      linevalue = (double) ( ((Integer)category).intValue());
@@ -410,6 +420,7 @@ public class TreeWindow extends JFrame {
          if(frame.otuMetadata == null)
          {
              JOptionPane.showMessageDialog(null, "No OTU metadata to use in tip labels.", "Error", JOptionPane.ERROR_MESSAGE);
+            frame.consoleWindow.update("No OTU metadata to use in tip labels.");
          }
          else
          {

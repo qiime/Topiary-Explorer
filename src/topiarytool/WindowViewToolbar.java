@@ -22,6 +22,7 @@ public class WindowViewToolbar extends JToolBar {
     JButton exportTreeButton = new JButton();
     JButton treeButton  = new JButton();
     JButton pcoaButton = new JButton();
+    JButton consoleButton = new JButton();
     
     ExtendedService es;
 
@@ -107,8 +108,22 @@ public class WindowViewToolbar extends JToolBar {
             }
         });
         
+        try{
+        FileContents fc = es.openFile(new File("images/consolewindow.gif"));
+        byte[] buffer = new byte[(int)fc.getLength()];
+        fc.getInputStream().read(buffer);
+        consoleButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}
+        consoleButton.setToolTipText("Console Window");
+        consoleButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+               frame.consoleWindow.setVisible(!frame.consoleWindow.isVisible());
+            }
+        });
+        
         add(treeButton);
         add(pcoaButton);
+        add(consoleButton);
         
         setFloatable(false);
     }

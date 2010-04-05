@@ -86,6 +86,7 @@ public class TreeVis extends PApplet {
          drawTree(root);
       } catch (Exception e) {
           System.out.println("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");
+          //frame.consoleWindow.update("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");
           e.printStackTrace();
       }
     }

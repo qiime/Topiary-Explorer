@@ -64,6 +64,7 @@ public class MainFrame extends JFrame {
     
     TreeWindow treeWindow = new TreeWindow(this);
     PcoaWindow pcoaWindow = new PcoaWindow(this);
+    ConsoleWindow consoleWindow = new ConsoleWindow(this);
     
     DbConnectWindow db_conn = new DbConnectWindow();
     DbSearchWindow db_search = new DbSearchWindow();
