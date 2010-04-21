@@ -73,7 +73,7 @@ public class TreeOptionsToolbar extends JToolBar {
             }
         });
         try{
-        FileContents fc = es.openFile(new File("images/mirror_horiz.gif"));
+        FileContents fc = es.openFile(new File("images/mirror_horz.gif"));
         byte[] buffer = new byte[(int)fc.getLength()];
         fc.getInputStream().read(buffer);
         mirrorhorzButton.setIcon(new ImageIcon(buffer));
