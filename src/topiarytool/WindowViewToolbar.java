@@ -95,7 +95,7 @@ public class WindowViewToolbar extends JToolBar {
             }
         });
         
-        try{
+/*        try{
         FileContents fc = es.openFile(new File("images/pcoawindow.gif"));
         byte[] buffer = new byte[(int)fc.getLength()];
         fc.getInputStream().read(buffer);
@@ -106,7 +106,7 @@ public class WindowViewToolbar extends JToolBar {
             public void actionPerformed(ActionEvent e) {
                frame.pcoaWindow.setVisible(!frame.pcoaWindow.isVisible());
             }
-        });
+        });*/
         
         try{
         FileContents fc = es.openFile(new File("images/consolewindow.gif"));
@@ -122,7 +122,7 @@ public class WindowViewToolbar extends JToolBar {
         });
         
         add(treeButton);
-        add(pcoaButton);
+/*        add(pcoaButton);*/
         add(consoleButton);
         
         setFloatable(false);

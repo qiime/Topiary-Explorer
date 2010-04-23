@@ -82,7 +82,7 @@ public class TreeVis extends PApplet {
           fireStateChanged();
       }
       //draw the tree
-      try {        
+      try {
          drawTree(root);
       } catch (Exception e) {
           System.out.println("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");
@@ -599,7 +599,7 @@ public class TreeVis extends PApplet {
           drawWedge(node, canvas);
         }
         else {
-          //if it's an internal, uncollapsed node, draw brances of the tree
+          //if it's an internal, uncollapsed node, draw branches of the tree
           drawBranches(node, canvas);
         }
       }

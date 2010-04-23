@@ -51,9 +51,6 @@ public class VerticalTreeToolbar extends JToolBar {
             }
         });
 
-       
-
-
         add(zoomSlider);
         add(zoomOutButton);
         setFloatable(false);

@@ -683,6 +683,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     {
                         curr = new File(line.substring(4, line.length()));
 						FileContents fc = frame.es.openFile(curr);
+						if(line.length() < 5)
+						{
+						    line = br.readLine();
+					        continue;
+				        }
+					        
 						switch(line.charAt(0))
 						{
 							case 't':
@@ -1002,6 +1008,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 /*                    System.out.println("*");*/
                     frame.currTable = frame.otuMetadata;
                     frame.treeWindow.colorByValue(value);
+                    
+                    TableColumn column = frame.colorKeyTable.getColumnModel().getColumn(0);
+                    column.setHeaderValue(value);
                 }
             });
             colorByOtuMetadataMenu.add(item);
@@ -1026,6 +1035,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     String value = e.getActionCommand();
                     frame.currTable = frame.sampleMetadata;
                     frame.treeWindow.colorByValue(value);
+                    
+                    TableColumn column = frame.colorKeyTable.getColumnModel().getColumn(0);
+                    column.setHeaderValue(value);
                 }
             });
             colorByGroup.add(item);
