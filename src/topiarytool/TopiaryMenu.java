@@ -949,23 +949,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    public void resetCollapseByMenu() {
        //NOTE: can only collapse on OTU metadata
        collapseByMenu.removeAll();
-       /*if (frame.otuMetadata != null) {
-                  ArrayList<String> data = frame.otuMetadata.getColumnNames();
-                  //start at 1 to skip ID column
-                  for (int i = 1; i < data.size(); i++) {
-                       String value = data.get(i);
-                       JMenuItem item = new JMenuItem(value);
-                       item.addActionListener(new ActionListener() {
-                           public void actionPerformed(ActionEvent e) {
-                               //get the category to color by
-                               String value = e.getActionCommand();
-                               frame.collapseByValue(value);
-                           }
-                       });
-                       collapseByMenu.add(item);
-                  }
-              }*/
-       collapseByMenu.add(new JSeparator());
        JMenuItem item = new JMenuItem("Uncollapse All");
        item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -987,6 +970,24 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
        });
        collapseByMenu.add(item);
+       collapseByMenu.add(new JSeparator());
+       
+       if (frame.otuMetadata != null) {
+          ArrayList<String> data = frame.otuMetadata.getColumnNames();
+          //start at 1 to skip ID column
+          for (int i = 1; i < data.size(); i++) {
+               String value = data.get(i);
+               item = new JMenuItem(value);
+               item.addActionListener(new ActionListener() {
+                   public void actionPerformed(ActionEvent e) {
+                       //get the category to color by
+                       String value = e.getActionCommand();
+                       frame.treeWindow.collapseByValue(value);
+                   }
+               });
+               collapseByMenu.add(item);
+          }
+      }
    }
 
    /**

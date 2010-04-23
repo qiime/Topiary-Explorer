@@ -49,7 +49,7 @@ public class ConsoleWindow extends JFrame{
     }
     
     public void update(String s) {
-        console.append(s);
+        console.append(s+"\n");
     }
 	// }}}
 }
