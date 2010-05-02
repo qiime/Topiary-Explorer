@@ -34,8 +34,9 @@ public class TreeVis extends PApplet {
 
     private double oldwidth =  0;
     private double oldheight = 0;
+    private double rootdepth = 0;
     
-    //the tree layour
+    //the tree layout
     private String treeLayout = "Rectangular";
 
     //should the labels be drawn or not?
@@ -448,6 +449,7 @@ public class TreeVis extends PApplet {
       setTOffsets(newRoot, 0);
       setROffsets(newRoot, 0);
       setRadialOffsets(newRoot);
+      rootdepth = root.depth();
 
       resetTreeX();
       resetTreeY();
@@ -589,7 +591,7 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
           collapsed = node.isCollapsed() || toScreenX(node.getXOffset()) > collapsedPixel;
       } else {
-          collapsed = node.isCollapsed() || node.getROffset()/root.depth() > collapsedPixel/getWidth();
+          collapsed = node.isCollapsed() || node.getROffset()/rootdepth > collapsedPixel/getWidth();
       }
 
       // Draw the branches first, so they get over-written by the nodes later
