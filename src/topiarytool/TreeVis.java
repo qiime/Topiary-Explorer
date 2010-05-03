@@ -23,6 +23,8 @@ public class TreeVis extends PApplet {
     // Pixels per branch
     private double yscale;
     
+    private double treerotation = 0;
+    
     //scaling for the line width
     private double lineWidthScale = 1;
 
@@ -84,7 +86,12 @@ public class TreeVis extends PApplet {
       }
       //draw the tree
       try {
+         g.pushMatrix();
+         g.translate((float)xstart, (float)ystart);
+         g.rotate((float)(treerotation*Math.PI/180.0));
+         g.translate((float)-xstart, (float)-ystart);
          drawTree(root);
+         g.popMatrix();
       } catch (Exception e) {
           System.out.println("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");
           //frame.consoleWindow.update("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");
@@ -156,6 +163,10 @@ public class TreeVis extends PApplet {
       } else {
         return (int) (root.depth()*xscale + 2*MARGIN);
       }      
+    }
+    
+    public void setRotate(double value) {
+    	treerotation = value;
     }
 
     //METHODS FOR TREE LISTENERS
@@ -775,11 +786,21 @@ public class TreeVis extends PApplet {
         }
         
         //make sure rotation is positive
+        double fullrotation = rotation + treerotation*Math.PI/180.0;
+        if (fullrotation < 0) {
+            fullrotation = fullrotation + 2*Math.PI;
+        }
+        if (fullrotation > 2*Math.PI) {
+        	fullrotation = fullrotation - 2*Math.PI;
+        }
         if (rotation < 0) {
             rotation = rotation + 2*Math.PI;
         }
+        if (rotation > 2*Math.PI) {
+        	rotation = fullrotation - 2*Math.PI;
+        }
         //draw all text rightside-up
-        if (rotation > Math.PI/2 && rotation < 3*Math.PI/2) {
+        if (fullrotation > Math.PI/2 && fullrotation < 3*Math.PI/2) {
             //add 180 degrees
             rotation = rotation + Math.PI;
             //draw on other size
@@ -1156,7 +1177,12 @@ public class TreeVis extends PApplet {
 		  canvas.beginDraw();
 		  canvas.textFont(currFont);
 		  background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
+          canvas.pushMatrix();
+          canvas.translate((float)xstart, (float)ystart);
+          canvas.rotate((float)(treerotation*Math.PI/180.0));
+          canvas.translate((float)-xstart, (float)-ystart);
 		  drawTree(root, canvas);
+          canvas.popMatrix();
 		  canvas.dispose();
 		  canvas.endDraw();
       } catch (java.io.IOException e) {}
@@ -1210,7 +1236,12 @@ public class TreeVis extends PApplet {
 		  canvas.beginDraw();
 		  canvas.textFont(currFont);
 		  canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
+          canvas.pushMatrix();
+          canvas.translate((float)xstart, (float)ystart);
+          canvas.rotate((float)(treerotation*Math.PI/180.0));
+          canvas.translate((float)-xstart, (float)-ystart);
 		  drawTree(root, canvas);
+          canvas.popMatrix();
 		  canvas.dispose();
 		  canvas.endDraw();
 	

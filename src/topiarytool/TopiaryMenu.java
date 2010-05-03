@@ -46,6 +46,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JMenu colorBySampleMetadataMenu = new JMenu("Sample Metadata");
     JMenu distanceMetricMenu = new JMenu("Distance Metric");
     JMenu lineWidthMenu = new JMenu("Line Width");
+    JMenu rotateMenu = new JMenu("Rotate");
     JMenu sampleShapeMenu = new JMenu("Sample Shape");
     JMenu otuShapeMenu = new JMenu("OTU Shape");
     JMenu lineWidthOtuMetadataMenu = new JMenu("OTU Metadata");
@@ -55,6 +56,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JMenu collapseByMenu = new JMenu("Collapse by");
     JRadioButtonMenuItem noColoringMenuItem = new JRadioButtonMenuItem("No coloring");
     JSlider lineWidthSlider = new JSlider(1, 1000, 20);
+    JSlider rotateSlider = new JSlider(0,359,0);
     JSlider pcoaLineWidthSlider = new JSlider(1, 1000, 10);
 
     ButtonGroup distanceMetricGroup = new ButtonGroup();
@@ -172,6 +174,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         radiobutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.treeWindow.tree.setTreeLayout("Rectangular");
+                rotateMenu.setEnabled(false);
             }
         });
         treeLayoutGroup.add(radiobutton);
@@ -182,6 +185,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         radiobutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.treeWindow.tree.setTreeLayout("Triangular");
+                rotateMenu.setEnabled(false);
             }
         });
         treeLayoutGroup.add(radiobutton);
@@ -193,6 +197,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         radiobutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.treeWindow.tree.setTreeLayout("Radial");
+                rotateMenu.setEnabled(true);
             }
         });
         treeLayoutGroup.add(radiobutton);
@@ -203,6 +208,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         radiobutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.treeWindow.tree.setTreeLayout("Polar");
+                rotateMenu.setEnabled(true);
             }
         });
         treeLayoutGroup.add(radiobutton);
@@ -233,6 +239,17 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         });
         lineWidthMenu.add(lineWidthSlider);
         treeMenu.add(lineWidthMenu);
+        
+        rotateSlider.addChangeListener(new ChangeListener() {
+        	public void stateChanged(ChangeEvent e) {
+        		if (rotateSlider.getValueIsAdjusting()) {
+        			syncTreeWithRotateSlider();
+        		}
+        	}
+        });
+        rotateMenu.add(rotateSlider);
+        rotateMenu.setEnabled(false);
+        treeMenu.add(rotateMenu);
         
         
         item = new JMenuItem("Background Color...");        
@@ -920,6 +937,16 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         value = value/20.0;
         frame.treeWindow.tree.setLineWidthScale(value);
         frame.treeWindow.tree.redraw();
+    }
+    
+    /**
+    *
+    */
+    public void syncTreeWithRotateSlider() {
+    	if (frame.treeWindow.tree.getTree() == null) return;
+    	double value = rotateSlider.getValue();
+    	frame.treeWindow.tree.setRotate(value);
+    	frame.treeWindow.tree.redraw();
     }
     
     /**
