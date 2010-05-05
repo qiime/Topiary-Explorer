@@ -803,26 +803,22 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		    String s = "";
 			ArrayList<String> lines = new ArrayList<String>();
 			lines.add(">>tre\n");
-			//s += ">>tre\n";
 			if(frame.treeFile != null)
 				lines.add(TopiaryFunctions.createNewickStringFromTree(frame.treeWindow.tree.getTree()));
 			if(frame.otuMetadata != null)
 			    {
 			        lines.add("\n>>otm\n");
 			        lines.addAll(frame.otuMetadata.toStrings());
-			        //s += "\n>>otm\n" + frame.otuMetadata.toString();
 		        }
 			if(frame.otuSampleMap != null) 
 			    {
 			        lines.add("\n>>osm\n"); 
 			        lines.addAll(frame.otuSampleMap.toStrings());
-			        //s += "\n>>osm\n" + frame.otuSampleMap.toString();
 		        }
 			if(frame.sampleMetadata != null)
 			{
-			    lines.add("\n>>sam\n"); 
+			    lines.add("\n>>sam\n");
 			    lines.addAll(frame.sampleMetadata.toStrings());
-			    //s += "\n>>sam\n" + frame.sampleMetadata.toString();
 		    }
 		    
 		    ByteArrayOutputStream b = new ByteArrayOutputStream();

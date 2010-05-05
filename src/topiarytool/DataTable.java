@@ -212,6 +212,7 @@ public class DataTable {
 	    
 	    for(String h : getColumnNames())
 	        lines.add(h + '\t');
+	    lines.add("\n");
 	    
 	    for(int i = 0; i < data.maxRow(); i++)
 	    {
@@ -223,7 +224,7 @@ public class DataTable {
 	            }
 	            catch(Exception e)
 	            {
-	                s += '0';
+	                //s += '\t';
 	            }
 	            s += '\t';
 	        }
