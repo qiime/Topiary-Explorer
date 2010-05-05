@@ -206,6 +206,34 @@ public class DataTable {
 	    return s.trim();
 	}
 	
+	public ArrayList<String> toStrings() {
+	    ArrayList<String> lines = new ArrayList<String>();
+	    String s = "";
+	    
+	    for(String h : getColumnNames())
+	        lines.add(h + '\t');
+	    
+	    for(int i = 0; i < data.maxRow(); i++)
+	    {
+	        s = "";
+	        for(int j = 0; j < data.maxCol(); j++)
+	        {
+	            try {
+	            s += getValueAt(i,j).toString();
+	            }
+	            catch(Exception e)
+	            {
+	                s += '0';
+	            }
+	            s += '\t';
+	        }
+	        s = s.trim();
+	        s += '\n';
+	        lines.add(s);
+	    }
+	    return lines;
+	}
+	
     private ArrayList<String> parseLine(String line) {
 		return new ArrayList<String>(Arrays.asList(line.split("\t")));
 	}

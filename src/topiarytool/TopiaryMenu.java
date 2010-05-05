@@ -731,6 +731,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                               }
                           });
                          frame.consoleWindow.update("Loaded OTU metadata.");
+                         resetColorByOtuMenu();
+                         resetLineWidthOtuMenu();
+                         resetCollapseByMenu();
+                         frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
                      }
                      // load otu sample map
                      if(data.containsKey("osm")){
@@ -755,15 +759,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                              }
                          });
                          frame.consoleWindow.update("Loaded sample metadata.");
+                         resetColorBySampleMenu();
+                         resetLineWidthSampleMenu();
                      }
                      
-                     resetColorByOtuMenu();
-                     resetLineWidthOtuMenu();
-                     resetCollapseByMenu();
-                     resetColorBySampleMenu();
-                     resetLineWidthSampleMenu();
                      frame.treeWindow.tree.loop();
-                     frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
                     frame.repaint();
                 }
             }
@@ -774,21 +774,64 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
         }
     
+/*    public void saveProject(){
+        try
+        {
+            String s = ">>tre\n";
+            if(frame.treeFile != null)
+                s = s + TopiaryFunctions.createNewickStringFromTree(frame.treeWindow.tree.getTree());
+            if(frame.otuMetadataFile != null)
+                s = s + "\n>>otm\n"+ frame.otuMetadata.toString();
+            if(frame.otuSampleMapFile != null) 
+                s = s + "\n>>osm\n" + frame.otuSampleMap.toString();
+            if(frame.sampleMetadataFile != null)
+                s = s + "\n>>sam\n" + frame.sampleMetadata.toString();
+                
+            FileContents fc = frame.fss.saveFileDialog(null, null, 
+                new ByteArrayInputStream(s.getBytes()),null);
+        }
+        catch(IOException e)
+            {
+                System.out.println("Error saving project.");
+                frame.consoleWindow.update("Error saving project.");
+            }
+    }*/
+    
     public void saveProject(){
 		try
 		{
-			String s = ">>tre\n";
+		    String s = "";
+			ArrayList<String> lines = new ArrayList<String>();
+			lines.add(">>tre\n");
+			//s += ">>tre\n";
 			if(frame.treeFile != null)
-				s = s + TopiaryFunctions.createNewickStringFromTree(frame.treeWindow.tree.getTree());
-			if(frame.otuMetadataFile != null)
-			    s = s + "\n>>otm\n"+ frame.otuMetadata.toString();
-			if(frame.otuSampleMapFile != null) 
-			    s = s + "\n>>osm\n" + frame.otuSampleMap.toString();
-			if(frame.sampleMetadataFile != null)
-			    s = s + "\n>>sam\n" + frame.sampleMetadata.toString();
+				lines.add(TopiaryFunctions.createNewickStringFromTree(frame.treeWindow.tree.getTree()));
+			if(frame.otuMetadata != null)
+			    {
+			        lines.add("\n>>otm\n");
+			        lines.addAll(frame.otuMetadata.toStrings());
+			        //s += "\n>>otm\n" + frame.otuMetadata.toString();
+		        }
+			if(frame.otuSampleMap != null) 
+			    {
+			        lines.add("\n>>osm\n"); 
+			        lines.addAll(frame.otuSampleMap.toStrings());
+			        //s += "\n>>osm\n" + frame.otuSampleMap.toString();
+		        }
+			if(frame.sampleMetadata != null)
+			{
+			    lines.add("\n>>sam\n"); 
+			    lines.addAll(frame.sampleMetadata.toStrings());
+			    //s += "\n>>sam\n" + frame.sampleMetadata.toString();
+		    }
+		    
+		    ByteArrayOutputStream b = new ByteArrayOutputStream();
+		    
+		    for(int i = 0; i < lines.size(); i++)
+		        b.write(lines.get(i).getBytes());
 			    
 			FileContents fc = frame.fss.saveFileDialog(null, null, 
-				new ByteArrayInputStream(s.getBytes()),null);
+				new ByteArrayInputStream(b.toByteArray()),null);
 		}
 		catch(IOException e)
 			{
@@ -839,7 +882,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             resetCollapseByMenu();
             //resetTipLabels();
             frame.treeWindow.tree.loop();
-            frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
+            //frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
             frame.otuMetadataFile = inFile;
        }
        frame.repaint();
@@ -895,7 +938,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             resetColorBySampleMenu();
             resetLineWidthSampleMenu();
             frame.treeWindow.tree.loop();
-            frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
+            //frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
             frame.sampleMetadataFile = inFile;
        }
        frame.repaint();
