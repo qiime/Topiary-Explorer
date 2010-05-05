@@ -27,6 +27,10 @@ class SparseTable {
         return data.get(new Point(row, col));
     }
     
+    public String getstr(int row, int col) {
+        return (String)data.get(new Point(row, col));
+    }
+    
     public void removeElements() {
         data.clear();
     }

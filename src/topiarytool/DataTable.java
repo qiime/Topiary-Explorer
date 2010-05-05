@@ -13,6 +13,10 @@ public class DataTable {
 		columnNames = new java.util.ArrayList<String>();
     }
     
+    public DataTable(ArrayList<String> lines){
+        loadData(lines);
+    }
+    
     public DataTable(mysqlConnect conn) {
         loadData(conn);
     }
@@ -38,6 +42,29 @@ public class DataTable {
 		int numCols = conn.colNames.size();
 		
 		columnNames = parseLine(conn.colNamesStr);
+    }
+    
+    public void loadData(ArrayList<String> lines) {
+        data = new SparseTable();
+        int c = 0;
+        String vals[];
+        Object val;
+        columnNames = parseLine(lines.get(0));
+        lines.remove(0);
+		for(int r = 0; r < lines.size(); r++) {
+		    vals = lines.get(r).split("\t");
+		    c = 0;
+		    for (String obj : vals) {
+		        val = obj;
+		        if (c!=0) {
+		            val = TopiaryFunctions.objectify(obj);
+		        }
+		        if (val != null) {
+		            data.add(r, c, val);
+		        }
+		        c = c + 1;
+		    }
+        }
     }
 
     public void loadData(InputStream is) throws IOException{
@@ -150,6 +177,33 @@ public class DataTable {
 	public void clearTable() {
 	    data = new SparseTable();
 	    ArrayList<String> columnNames = new ArrayList<String>();
+	}
+	
+	public String toString() {
+	    String s = "";
+	    
+	    for(String h : getColumnNames())
+	        s += h + '\t';
+	    
+	    s += '\n';
+	    
+	    for(int i = 0; i < data.maxRow(); i++)
+	    {
+	        for(int j = 0; j < data.maxCol(); j++)
+	        {
+	            try {
+	            s += getValueAt(i,j).toString();
+	            }
+	            catch(Exception e)
+	            {
+	                s += '0';
+	            }
+	            s += '\t';
+	        }
+	        s = s.trim();
+	        s += "\n";
+	    }
+	    return s.trim();
 	}
 	
     private ArrayList<String> parseLine(String line) {

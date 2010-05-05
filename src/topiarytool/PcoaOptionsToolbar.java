@@ -222,12 +222,13 @@ public class PcoaOptionsToolbar extends JToolBar implements ItemListener{
         
         add(distanceMetrics);
         
-        try{
+/*        try{
         FileContents fc = es.openFile(new File("images/runpcoa.gif"));
         byte[] buffer = new byte[(int)fc.getLength()];
         fc.getInputStream().read(buffer);
         runButton.setIcon(new ImageIcon(buffer));
-        } catch(java.io.IOException ex) {}
+        } catch(java.io.IOException ex) {}*/
+        runButton.setText("Run");
         runButton.setToolTipText("Run PCoA Analysis");
         runButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

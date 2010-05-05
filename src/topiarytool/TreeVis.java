@@ -54,7 +54,7 @@ public class TreeVis extends PApplet {
     private Set hilightedNodes = new java.util.HashSet();
 
     private List listeners = new java.util.ArrayList();
-    private PFont currFont = createFont("georgia", 12);
+    private PFont currFont = createFont("georgia", 9);
 
 
     /**

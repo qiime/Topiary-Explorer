@@ -39,12 +39,13 @@ public class WindowViewToolbar extends JToolBar {
         	es = (ExtendedService)ServiceManager.lookup("javax.jnlp.ExtendedService");
     	} catch (UnavailableServiceException e) { es=null; }   
     	
-        try{
+/*        try{
         FileContents fc = es.openFile(new File("images/newproject.gif"));
-        byte[] buffer = new byte[(int)fc.getLength()];
-        fc.getInputStream().read(buffer);
-        newTreeButton.setIcon(new ImageIcon(buffer));
-        } catch(java.io.IOException ex) {}
+                byte[] buffer = new byte[(int)fc.getLength()];
+                fc.getInputStream().read(buffer);
+                newTreeButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}*/
+        newTreeButton.setText("New");
         newTreeButton.setToolTipText("New Project");
         newTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -53,12 +54,13 @@ public class WindowViewToolbar extends JToolBar {
         });
         add(newTreeButton);
         
-        try {
+/*        try {
         FileContents fc = es.openFile(new File("images/opentree.gif"));
-        byte[] buffer = new byte[(int)fc.getLength()];
-        fc.getInputStream().read(buffer);
-        openTreeButton.setIcon(new ImageIcon(buffer));
-        } catch(java.io.IOException ex) {}
+                byte[] buffer = new byte[(int)fc.getLength()];
+                fc.getInputStream().read(buffer);
+                openTreeButton.setIcon(new ImageIcon(buffer));
+        } catch(java.io.IOException ex) {}*/
+        openTreeButton.setText("Open");
         openTreeButton.setToolTipText("Open Project");
         openTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -67,12 +69,13 @@ public class WindowViewToolbar extends JToolBar {
         });
         add(openTreeButton);
         
-        try{
+/*        try{
         FileContents fc = es.openFile(new File("images/savetree.gif"));
         byte[] buffer = new byte[(int)fc.getLength()];
         fc.getInputStream().read(buffer);
         saveTreeButton.setIcon(new ImageIcon(buffer));
-        } catch(java.io.IOException ex) {}
+        } catch(java.io.IOException ex) {}*/
+        saveTreeButton.setText("Save");
         saveTreeButton.setToolTipText("Save Project");
         saveTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -82,12 +85,13 @@ public class WindowViewToolbar extends JToolBar {
         add(saveTreeButton);
         addSeparator();
         
-        try{
+/*        try{
         FileContents fc = es.openFile(new File("images/treewindow.gif"));
         byte[] buffer = new byte[(int)fc.getLength()];
         fc.getInputStream().read(buffer);
         treeButton.setIcon(new ImageIcon(buffer));
-        } catch(java.io.IOException ex) {}
+        } catch(java.io.IOException ex) {}*/
+        treeButton.setText("Tree");
         treeButton.setToolTipText("Tree Window");
         treeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -108,12 +112,13 @@ public class WindowViewToolbar extends JToolBar {
             }
         });*/
         
-        try{
+/*        try{
         FileContents fc = es.openFile(new File("images/consolewindow.gif"));
         byte[] buffer = new byte[(int)fc.getLength()];
         fc.getInputStream().read(buffer);
         consoleButton.setIcon(new ImageIcon(buffer));
-        } catch(java.io.IOException ex) {}
+        } catch(java.io.IOException ex) {}*/
+        consoleButton.setText("Console");
         consoleButton.setToolTipText("Console Window");
         consoleButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

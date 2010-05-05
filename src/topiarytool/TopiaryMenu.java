@@ -590,7 +590,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
      public void actionPerformed(ActionEvent e) {
 
          if (e.getActionCommand().equals("Load Tree...")) {
-            frame.treeWindow.loadTree(null);
+            frame.treeWindow.loadTree();
          } else if (e.getActionCommand().equals("New Project...")) {
            newProject();
          } else if (e.getActionCommand().equals("Open Project...")) {
@@ -688,76 +688,105 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     public void openProject(){
         try {
 		    FileContents inFile = frame.fos.openFileDialog(null, null);
-		
-	    if(inFile != null)
-        {
-                BufferedReader br = new BufferedReader(new InputStreamReader(inFile.getInputStream()));
-                String line = br.readLine();
-                File curr = null;
-                while(line != "")
+
+    	        if(inFile != null)
                 {
-                    try
+                    BufferedReader br = new BufferedReader(new InputStreamReader(inFile.getInputStream()));
+                    String dataType = "";
+                    HashMap data = new HashMap();
+                    String line = br.readLine();
+                    while(line != null)
                     {
-                        curr = new File(line.substring(4, line.length()));
-						FileContents fc = frame.es.openFile(curr);
-						if(line.length() < 5)
-						{
-						    line = br.readLine();
-					        continue;
-				        }
-					        
-						switch(line.charAt(0))
-						{
-							case 't':
-								frame.treeWindow.loadTree(fc);
-								break;
-							case 'o':
-								if(line.charAt(1) == 't')
-								{
-									this.loadOtuMetadata(fc);
-								}
-								else
-									this.loadOtuSampleMap(fc);
-								break;
-							case 's':
-								this.loadSampleMetadata(fc);
-								break;
-							default:
-								break;
-						}
-					}
-					catch(NullPointerException e)
-                    {
-                        System.out.println(line);
-                        break;
+                        line = line.trim();
+                        if(line.startsWith(">>"))
+                        {
+                            dataType = line.substring(2,5);
+                            data.put(dataType, new ArrayList<String>());
+                        }
+                        else
+                            ((ArrayList<String>)data.get(dataType)).add(line);
+                        line = br.readLine();
                     }
-                line = br.readLine();
+                    br.close();
+                    
+                    
+                    frame.treeWindow.tree.noLoop();
+/*                    clearOtuMetadata();
+                    clearSampleMetadata();
+                    clearSampleMetadata();*/
+                    // load tree
+                    frame.treeWindow.loadTree(((ArrayList<String>)data.get("tre")).get(0));
+                    
+                    Object[] tables = null;
+                    
+                    // load otu metadata
+                     if(data.containsKey("otm")){
+                         //tables = loadDataTable(((ArrayList<String>)data.get("otm")));
+                         frame.otuMetadata = new DataTable(((ArrayList<String>)data.get("otm")));
+                         frame.otuMetadataTable.setModel(new SparseTableModel(frame.otuMetadata.getData(),
+                              frame.otuMetadata.getColumnNames()){
+                              //make it so the user can't edit the cells manually
+                              public boolean isCellEditable(int rowIndex, int colIndex) {
+                                  return false;
+                              }
+                          });
+                         frame.consoleWindow.update("Loaded OTU metadata.");
+                     }
+                     // load otu sample map
+                     if(data.containsKey("osm")){
+                         frame.otuSampleMap = new DataTable(((ArrayList<String>)data.get("osm")));
+                         frame.otuSampleMapTable.setModel(new SparseTableModel(frame.otuSampleMap.getData(),
+                             frame.otuSampleMap.getColumnNames()){
+                             //make it so the user can't edit the cells manually
+                             public boolean isCellEditable(int rowIndex, int colIndex) {
+                                 return false;
+                             }
+                         });
+                         frame.consoleWindow.update("Loaded OTU to sample map");
+                     }
+                     // load sample metadata
+                     if(data.containsKey("sam")){
+                         frame.sampleMetadata = new DataTable(((ArrayList<String>)data.get("sam")));
+                         frame.sampleMetadataTable.setModel(new SparseTableModel(frame.sampleMetadata.getData(),
+                             frame.sampleMetadata.getColumnNames()){
+                             //make it so the user can't edit the cells manually
+                             public boolean isCellEditable(int rowIndex, int colIndex) {
+                                 return false;
+                             }
+                         });
+                         frame.consoleWindow.update("Loaded sample metadata.");
+                     }
+                     
+                     resetColorByOtuMenu();
+                     resetLineWidthOtuMenu();
+                     resetCollapseByMenu();
+                     resetColorBySampleMenu();
+                     resetLineWidthSampleMenu();
+                     frame.treeWindow.tree.loop();
+                     frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
+                    frame.repaint();
                 }
-                br.close();
             }
-            
-            } catch(IOException e)
-                {
-                    System.out.println("Error opening project.");
-                    frame.consoleWindow.update("Error opening project.");
-                }
+            catch(IOException e)
+            {
+                System.out.println("Error opening project.");
+                frame.consoleWindow.update("Error opening project.");
+            }
         }
     
     public void saveProject(){
 		try
 		{
-			String s = "tre ";
+			String s = ">>tre\n";
 			if(frame.treeFile != null)
-				s = s + frame.treeFile.getName();
-			s = s + "otm ";
+				s = s + TopiaryFunctions.createNewickStringFromTree(frame.treeWindow.tree.getTree());
 			if(frame.otuMetadataFile != null)
-				s = s + frame.otuMetadataFile.getName();
-			s = s + "osm ";
+			    s = s + "\n>>otm\n"+ frame.otuMetadata.toString();
 			if(frame.otuSampleMapFile != null) 
-				s = s + frame.otuSampleMapFile.getName();
-			s = s + "sam ";
+			    s = s + "\n>>osm\n" + frame.otuSampleMap.toString();
 			if(frame.sampleMetadataFile != null)
-				s = s + frame.sampleMetadataFile.getName();
+			    s = s + "\n>>sam\n" + frame.sampleMetadata.toString();
+			    
 			FileContents fc = frame.fss.saveFileDialog(null, null, 
 				new ByteArrayInputStream(s.getBytes()),null);
 		}
@@ -800,7 +829,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
                 
-                frame.consoleWindow.update("Unable to load " + ex.getMessage()+"");
+                frame.consoleWindow.update("Unable to load " + ex.getMessage());
             }
             if (frame.currTable == frame.otuMetadata) {
                 frame.treeWindow.removeColor();

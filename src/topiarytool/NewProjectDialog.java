@@ -115,7 +115,9 @@ public class NewProjectDialog extends JFrame{
             temp = new File(treeFileField.getText());
             FileContents fc = frame.es.openFile(temp);
             frame.treeWindow.loadTree(fc);
-            } catch (IOException ex) {}
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
 	    }
     
 	    if(otuMetaField.getText().length() > 0)

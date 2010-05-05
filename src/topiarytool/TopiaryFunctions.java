@@ -159,10 +159,13 @@ public class TopiaryFunctions {
     public static Node createTreeFromNewickFile(FileContents file) {
       String newickString = "";
       try {
-        Scanner scanner = new Scanner(file.getInputStream());
-        scanner.useDelimiter("\\Z");
-        newickString = scanner.next();
-        scanner.close();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
+        String line = reader.readLine();
+        while(line != null)
+        {
+            newickString += line;
+            line = reader.readLine();
+        }
       }
       catch (IOException e) {
         JOptionPane.showMessageDialog(null, "Unable to load " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

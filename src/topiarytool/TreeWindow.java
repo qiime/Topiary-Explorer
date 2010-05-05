@@ -138,6 +138,48 @@ public class TreeWindow extends JFrame {
          }
     }
     
+    public void loadTree() {
+        FileContents inFile = null;
+        try {
+             inFile = frame.fos.openFileDialog(null,null);
+         } catch (java.io.IOException e) {}
+         if (inFile != null) {
+              tree.noLoop();
+              tree.setTree(TopiaryFunctions.createTreeFromNewickFile(inFile));
+              //make sure coloring is empty
+              removeColor();
+              treeToolbar.zoomSlider.setValue(0);
+              tree.loop();
+              collapseTree();
+
+              frame.mainMenu.treeMenu.setEnabled(true);
+              frame.mainMenu.nodeMenu.setEnabled(true);
+
+              frame.mainMenu.colorByMenu.setEnabled(true);
+              this.setVisible(true);
+              System.out.println("Done drawing tree.");
+              frame.consoleWindow.update("Done drawing tree. ");
+              frame.treeFile = inFile;
+          }
+    }
+    
+    public void loadTree(String treeString) {
+        tree.noLoop();
+        tree.setTree(TopiaryFunctions.createTreeFromNewickString(treeString));
+        removeColor();
+        treeToolbar.zoomSlider.setValue(0);
+        tree.loop();
+        collapseTree();
+        
+        frame.mainMenu.treeMenu.setEnabled(true);
+        frame.mainMenu.nodeMenu.setEnabled(true);
+
+        frame.mainMenu.colorByMenu.setEnabled(true);
+        this.setVisible(true);
+        System.out.println("Done drawing tree.");
+        frame.consoleWindow.update("Done drawing tree. ");
+    }
+    
     /**
     * Saves the current tree in newick format
     */
