@@ -725,13 +725,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                      if(data.containsKey("otm")){
                          //tables = loadDataTable(((ArrayList<String>)data.get("otm")));
                          frame.otuMetadata = new DataTable(((ArrayList<String>)data.get("otm")));
-                         frame.otuMetadataTable.setModel(new SparseTableModel(frame.otuMetadata.getData(),
-                              frame.otuMetadata.getColumnNames()){
-                              //make it so the user can't edit the cells manually
-                              public boolean isCellEditable(int rowIndex, int colIndex) {
-                                  return false;
-                              }
-                          });
+   
+ 					     SparseTableModel model = new SparseTableModel(frame.otuMetadata.getData(),
+						 frame.otuMetadata.getColumnNames());
+						 TableSorter sorter = new TableSorter(model, frame.otuMetadataTable.getTableHeader());
+						 frame.otuMetadataTable.setModel(sorter);
+                         
                          frame.consoleWindow.update("Loaded OTU metadata.");
                          resetColorByOtuMenu();
                          resetLineWidthOtuMenu();
@@ -741,25 +740,23 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                      // load otu sample map
                      if(data.containsKey("osm")){
                          frame.otuSampleMap = new DataTable(((ArrayList<String>)data.get("osm")));
-                         frame.otuSampleMapTable.setModel(new SparseTableModel(frame.otuSampleMap.getData(),
-                             frame.otuSampleMap.getColumnNames()){
-                             //make it so the user can't edit the cells manually
-                             public boolean isCellEditable(int rowIndex, int colIndex) {
-                                 return false;
-                             }
-                         });
+                         
+                         SparseTableModel model = new SparseTableModel(frame.otuSampleMap.getData(),
+						 frame.otuSampleMap.getColumnNames());
+						 TableSorter sorter = new TableSorter(model, frame.otuSampleMapTable.getTableHeader());
+						 frame.otuSampleMapTable.setModel(sorter);
+						 
                          frame.consoleWindow.update("Loaded OTU to sample map");
                      }
                      // load sample metadata
                      if(data.containsKey("sam")){
                          frame.sampleMetadata = new DataTable(((ArrayList<String>)data.get("sam")));
-                         frame.sampleMetadataTable.setModel(new SparseTableModel(frame.sampleMetadata.getData(),
-                             frame.sampleMetadata.getColumnNames()){
-                             //make it so the user can't edit the cells manually
-                             public boolean isCellEditable(int rowIndex, int colIndex) {
-                                 return false;
-                             }
-                         });
+                         
+                         SparseTableModel model = new SparseTableModel(frame.sampleMetadata.getData(),
+						 frame.sampleMetadata.getColumnNames());
+						 TableSorter sorter = new TableSorter(model, frame.sampleMetadataTable.getTableHeader());
+						 frame.sampleMetadataTable.setModel(sorter);
+						 
                          frame.consoleWindow.update("Loaded sample metadata.");
                          resetColorBySampleMenu();
                          resetLineWidthSampleMenu();
@@ -859,13 +856,13 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             try {
                 InputStream is = inFile.getInputStream();
                 frame.otuMetadata = new DataTable(is);
-                frame.otuMetadataTable.setModel(new SparseTableModel(frame.otuMetadata.getData(),
-                    frame.otuMetadata.getColumnNames()){
-                    //make it so the user can't edit the cells manually
-                    public boolean isCellEditable(int rowIndex, int colIndex) {
-                        return false;
-                    }
-                });
+                
+                                         
+                SparseTableModel model = new SparseTableModel(frame.otuMetadata.getData(),
+                frame.otuMetadata.getColumnNames());
+                TableSorter sorter = new TableSorter(model, frame.otuMetadataTable.getTableHeader());
+			    frame.otuMetadataTable.setModel(sorter);
+
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
@@ -917,13 +914,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             try {
                 InputStream is = inFile.getInputStream();
                 frame.sampleMetadata = new DataTable(is);
-                frame.sampleMetadataTable.setModel(new SparseTableModel(frame.sampleMetadata.getData(),
-                    frame.sampleMetadata.getColumnNames()){
-                    //make it so the user can't edit the cells manually
-                    public boolean isCellEditable(int rowIndex, int colIndex) {
-                        return false;
-                    }
-                });
+                
+                SparseTableModel model = new SparseTableModel(frame.sampleMetadata.getData(),
+                frame.sampleMetadata.getColumnNames());
+                TableSorter sorter = new TableSorter(model, frame.sampleMetadataTable.getTableHeader());
+			    frame.sampleMetadataTable.setModel(sorter);
+			    
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
@@ -971,13 +967,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             try {
                 InputStream is = inFile.getInputStream();
                 frame.otuSampleMap = new DataTable(is);
-                frame.otuSampleMapTable.setModel(new SparseTableModel(frame.otuSampleMap.getData(),
-                    frame.otuSampleMap.getColumnNames()){
-                    //make it so the user can't edit the cells manually
-                    public boolean isCellEditable(int rowIndex, int colIndex) {
-                        return false;
-                    }
-                });
+                
+                SparseTableModel model = new SparseTableModel(frame.otuSampleMap.getData(),
+                frame.otuSampleMap.getColumnNames());
+                TableSorter sorter = new TableSorter(model, frame.otuSampleMapTable.getTableHeader());
+			    frame.otuSampleMapTable.setModel(sorter);
+
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();

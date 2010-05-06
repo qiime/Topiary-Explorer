@@ -265,13 +265,13 @@ public class MainFrame extends JFrame {
          //tabbedPane.setSelectedIndex(0);
          dataPane.setSelectedIndex(3);
          sampleMetadata = new DataTable(db_conn.c);
-         sampleMetadataTable.setModel(new SparseTableModel(sampleMetadata.getData(),
-         sampleMetadata.getColumnNames()){
-         //make it so the user can't edit the cells manually
-         public boolean isCellEditable(int rowIndex, int colIndex) {
-             return false;
-             }
-         });
+         
+         SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
+		 	sampleMetadata.getColumnNames());
+		 TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
+		 sampleMetadataTable.setModel(sorter);
+						 
+						 
          if (currTable == otuMetadata) {
              treeWindow.removeColor();
          }
@@ -285,13 +285,13 @@ public class MainFrame extends JFrame {
           //tabbedPane.setSelectedIndex(0);
           dataPane.setSelectedIndex(0);
           database = new DataTable(db_conn.c);
-          databaseTable.setModel(new SparseTableModel(sampleMetadata.getData(),
-          database.getColumnNames()){
-          //make it so the user can't edit the cells manually
-          public boolean isCellEditable(int rowIndex, int colIndex) {
-              return false;
-              }
-          });
+          
+          
+          SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
+		  	sampleMetadata.getColumnNames());
+		  TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
+		  databaseTable.setModel(sorter);
+		 
       }
      
      public void resetButtonPressed() {

@@ -39,5 +39,9 @@ class SparseTableModel extends AbstractTableModel {
   public void setValueAt(Object value, int row, int column) {
       lookup.add(row, column, value);
   }
+  
+  public boolean isCellEditable(int rowIndex, int colIndex) {
+  	  return false;
+  }
 
 }
