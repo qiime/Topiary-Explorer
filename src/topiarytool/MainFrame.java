@@ -49,10 +49,10 @@ public class MainFrame extends JFrame {
     JScrollPane otuSampleMapScrollPane = new JScrollPane();
     JScrollPane sampleMetadataScrollPane = new JScrollPane();
     JScrollPane colorKeyScrollPane = new JScrollPane();  
-    JTable databaseTable = new JTable();  
-    JTable otuMetadataTable = new JTable();
-    JTable otuSampleMapTable = new JTable();
-    JTable sampleMetadataTable = new JTable();
+    JTable databaseTable = new JTable(new SparseTableModel());  
+    JTable otuMetadataTable = new JTable(new SparseTableModel());
+    JTable otuSampleMapTable = new JTable(new SparseTableModel());
+    JTable sampleMetadataTable = new JTable(new SparseTableModel());
     JTable colorKeyTable = new JTable();
     JButton interpolateButton = new JButton("Interpolate");
     NewProjectDialog newProjectChooser = null;
@@ -70,10 +70,10 @@ public class MainFrame extends JFrame {
     DbSearchWindow db_search = new DbSearchWindow();
 
     //Variables that hold the data tables
-    DataTable otuMetadata = null;
-    DataTable sampleMetadata = null;
-    DataTable otuSampleMap = null;
-    DataTable database = null;
+    DataTable otuMetadata = new DataTable();
+    DataTable sampleMetadata = new DataTable();
+    DataTable otuSampleMap = new DataTable();
+    DataTable database = new DataTable();
 
     //Holds the current coloring information
     TreeMap<Object, Color> colorMap = new TreeMap<Object, Color>();

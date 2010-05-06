@@ -10,11 +10,17 @@ class SparseTableModel extends AbstractTableModel {
 
   private final ArrayList<String> headers;
   
+  public SparseTableModel() {
+  	headers = new ArrayList<String>();
+  	headers.add("");
+  	lookup = new SparseTable();
+  }
+
   public SparseTableModel(SparseTable table, ArrayList<String> columnHeaders) {
     headers = columnHeaders;
     lookup = table;
   }
-
+  
   public void clearTable() {
       lookup.removeElements();
       headers.removeAll(headers);
