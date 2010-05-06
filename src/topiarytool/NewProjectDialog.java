@@ -46,6 +46,13 @@ public class NewProjectDialog extends JFrame{
     
     JButton okButton = new JButton("Create Project");
     JButton cancelButton = new JButton("Cancel");
+    
+    //FileContents objects for each file
+    FileContents treeFile = null;
+    FileContents otuMetadataFile = null;
+    FileContents sampleMetadataFile = null;
+    FileContents otuSampleMapFile = null;
+    
 	// {{{ newProjectDialog constructor
     /**
      * 
@@ -65,22 +72,22 @@ public class NewProjectDialog extends JFrame{
         
         treePanel.add(treeFileLabel);
         treePanel.add(treeFileField);
-        treePanel.add(new BrowseButton(this, treeFileField));
+        treePanel.add(new BrowseButton(this, treeFileField, "tree"));
         mainPanel.add(treePanel);
         
         otuMetaPanel.add(otuMetaLabel);
         otuMetaPanel.add(otuMetaField);
-        otuMetaPanel.add(new BrowseButton(this, otuMetaField));
+        otuMetaPanel.add(new BrowseButton(this, otuMetaField, "otuMetadata"));
         mainPanel.add(otuMetaPanel);
         
         otuSamplePanel.add(otuSampleLabel);
         otuSamplePanel.add(otuSampleField);
-        otuSamplePanel.add(new BrowseButton(this, otuSampleField));
+        otuSamplePanel.add(new BrowseButton(this, otuSampleField, "otuSampleMap"));
         mainPanel.add(otuSamplePanel);
         
         sampleMetaPanel.add(sampleMetaLabel);
         sampleMetaPanel.add(sampleMetaField);
-        sampleMetaPanel.add(new BrowseButton(this, sampleMetaField));
+        sampleMetaPanel.add(new BrowseButton(this, sampleMetaField, "sampleMetadata"));
         mainPanel.add(sampleMetaPanel);
         
         this.add(mainPanel, BorderLayout.CENTER);
@@ -110,46 +117,29 @@ public class NewProjectDialog extends JFrame{
 	public boolean okButtonPressed() {
 	    File temp = null;
         
-	    if(treeFileField.getText() != "")
-	    {   try {
-            temp = new File(treeFileField.getText());
-            FileContents fc = frame.es.openFile(temp);
-            frame.treeWindow.loadTree(fc);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
+	    if(treeFile!=null)
+	    {
+            frame.treeWindow.loadTree(treeFile);
 	    }
     
-	    if(otuMetaField.getText().length() > 0)
+	    if(otuMetadataFile != null)
 	    {
-	    	try {
-            temp = new File(otuMetaField.getText());
-            FileContents fc = frame.es.openFile(temp);
-            frame.mainMenu.loadOtuMetadata(fc); 
-            } catch (IOException ex) {}
-	    }
+            frame.mainMenu.loadOtuMetadata(otuMetadataFile); 	    
+        }
       else
         {frame.mainMenu.clearOtuMetadata();}
 	        
         
-	    if(otuSampleField.getText().length() > 0)
+	    if(otuSampleMapFile!=null)
 	    {
-	    	try {
-            temp = new File(otuSampleField.getText());
-            FileContents fc = frame.es.openFile(temp);
-            frame.mainMenu.loadOtuSampleMap(fc); 
-            } catch (IOException ex) {}
+            frame.mainMenu.loadOtuSampleMap(otuSampleMapFile); 
 	    }
       else
             {frame.mainMenu.clearOtuSampleMap();}
     
-	    if(sampleMetaField.getText().length() > 0)
+	    if(sampleMetadataFile!=null)
 	    {
-	    	try{
-            temp = new File(sampleMetaField.getText());
-            FileContents fc = frame.es.openFile(temp);
-            frame.mainMenu.loadSampleMetadata(fc); 
-            } catch (IOException ex) {}
+            frame.mainMenu.loadSampleMetadata(sampleMetadataFile); 
 	    }
       else
             {frame.mainMenu.clearSampleMetadata();}

@@ -27,20 +27,59 @@ public class BrowseButton extends JButton{
     /**
      * 
      */
-    public BrowseButton(NewProjectDialog _frame, JTextField _partner) {
+    public BrowseButton(NewProjectDialog _frame, JTextField _partner, String fileType) {
         frame = _frame;
         partner = _partner;
         this.setText("Browse...");
-        this.addActionListener(new ActionListener() {
-               public void actionPerformed(ActionEvent e) {
-                   fl = buttonPressed();
-                   if(fl != null) {
-                       try {
-                       	  partner.setText(fl.getName());
-                       } catch (IOException ex) {}
-                   }
-               }
-        });
+        if (fileType.equals("tree")) {
+			this.addActionListener(new ActionListener() {
+				   public void actionPerformed(ActionEvent e) {
+					   fl = buttonPressed();
+					   if(fl != null) {
+						   try {
+							  partner.setText(fl.getName());
+							  frame.treeFile = fl;
+						   } catch (IOException ex) {}
+					   }
+				   }
+			});
+		} else if (fileType.equals("otuMetadata")) {
+			this.addActionListener(new ActionListener() {
+				   public void actionPerformed(ActionEvent e) {
+					   fl = buttonPressed();
+					   if(fl != null) {
+						   try {
+							  partner.setText(fl.getName());
+							  frame.otuMetadataFile = fl;
+						   } catch (IOException ex) {}
+					   }
+				   }
+			});
+		} else if (fileType.equals("sampleMetadata")) {
+			this.addActionListener(new ActionListener() {
+				   public void actionPerformed(ActionEvent e) {
+					   fl = buttonPressed();
+					   if(fl != null) {
+						   try {
+							  partner.setText(fl.getName());
+							  frame.sampleMetadataFile = fl;
+						   } catch (IOException ex) {}
+					   }
+				   }
+			});
+		} else if (fileType.equals("otuSampleMap")) {
+			this.addActionListener(new ActionListener() {
+				   public void actionPerformed(ActionEvent e) {
+					   fl = buttonPressed();
+					   if(fl != null) {
+						   try {
+							  partner.setText(fl.getName());
+							  frame.otuSampleMapFile = fl;
+						   } catch (IOException ex) {}
+					   }
+				   }
+			});
+		}
     }
     // }}}
     
