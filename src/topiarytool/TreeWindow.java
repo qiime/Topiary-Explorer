@@ -39,7 +39,7 @@ public class TreeWindow extends JFrame {
 	     treeToolbar = new TreeToolbar(this);
 	     verticalTreeToolbar = new VerticalTreeToolbar(this);
 	     collapseTreeToolbar = new CollapseTreeToolbar(this);
-	     treeOpsToolbar = new TreeOptionsToolbar(this);
+	     treeOpsToolbar = new TreeOptionsToolbar(this, frame);
 	     
 	     Container pane = getContentPane();
          pane.setLayout(new BorderLayout());

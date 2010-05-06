@@ -80,6 +80,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 
     JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels...");
     JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");
+    
+    JRadioButtonMenuItem rectangularradiobutton = new JRadioButtonMenuItem("Rectangular");
+    JRadioButtonMenuItem triangularradiobutton = new JRadioButtonMenuItem("Triangular");
+    JRadioButtonMenuItem radialradiobutton = new JRadioButtonMenuItem("Radial");
+    JRadioButtonMenuItem polarradiobutton = new JRadioButtonMenuItem("Polar");
+
 
     /**
      * Constructor.  Sets up the menu.
@@ -168,51 +174,47 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         
         
         JMenu layout = new JMenu("Layout");
-        JRadioButtonMenuItem radiobutton;
-        radiobutton = new JRadioButtonMenuItem("Rectangular");
-        radiobutton.setSelected(true);
-        radiobutton.addActionListener(new ActionListener() {
+        rectangularradiobutton.setSelected(true);
+        rectangularradiobutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.treeWindow.tree.setTreeLayout("Rectangular");
                 rotateMenu.setEnabled(false);
             }
         });
-        treeLayoutGroup.add(radiobutton);
-        layout.add(radiobutton);
+        treeLayoutGroup.add(rectangularradiobutton);
+        layout.add(rectangularradiobutton);
         
-        radiobutton = new JRadioButtonMenuItem("Triangular");
-        radiobutton.setSelected(true);
-        radiobutton.addActionListener(new ActionListener() {
+        triangularradiobutton.setSelected(true);
+        triangularradiobutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.treeWindow.tree.setTreeLayout("Triangular");
                 rotateMenu.setEnabled(false);
             }
         });
-        treeLayoutGroup.add(radiobutton);
-        layout.add(radiobutton);
+        treeLayoutGroup.add(triangularradiobutton);
+        layout.add(triangularradiobutton);
         
         
-        radiobutton = new JRadioButtonMenuItem("Radial");
-        radiobutton.setSelected(true);
-        radiobutton.addActionListener(new ActionListener() {
+        radialradiobutton = new JRadioButtonMenuItem("Radial");
+        radialradiobutton.setSelected(true);
+        radialradiobutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.treeWindow.tree.setTreeLayout("Radial");
                 rotateMenu.setEnabled(true);
             }
         });
-        treeLayoutGroup.add(radiobutton);
-        layout.add(radiobutton);
+        treeLayoutGroup.add(radialradiobutton);
+        layout.add(radialradiobutton);
         
-        radiobutton = new JRadioButtonMenuItem("Polar");
-        radiobutton.setSelected(true);
-        radiobutton.addActionListener(new ActionListener() {
+        polarradiobutton.setSelected(true);
+        polarradiobutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.treeWindow.tree.setTreeLayout("Polar");
                 rotateMenu.setEnabled(true);
             }
         });
-        treeLayoutGroup.add(radiobutton);
-        layout.add(radiobutton);
+        treeLayoutGroup.add(polarradiobutton);
+        layout.add(polarradiobutton);
         
         
         treeMenu.add(layout);  

@@ -24,10 +24,12 @@ public class TreeOptionsToolbar extends JToolBar {
 	ExtendedService es;
 	
     TreeWindow frame = null;
+    MainFrame mainframe = null;
 
-    public TreeOptionsToolbar(TreeWindow _frame) {
+    public TreeOptionsToolbar(TreeWindow _frame, MainFrame _mainframe) {
         super(JToolBar.HORIZONTAL);
         frame = _frame;
+        mainframe = _mainframe;
         
         try { 
         	es = (ExtendedService)ServiceManager.lookup("javax.jnlp.ExtendedService");
@@ -103,6 +105,10 @@ public class TreeOptionsToolbar extends JToolBar {
         rectButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.tree.setTreeLayout("Rectangular");
+                mainframe.mainMenu.rectangularradiobutton.setSelected(true);
+                mainframe.mainMenu.rotateSlider.setValue(0);
+                mainframe.mainMenu.syncTreeWithRotateSlider();
+                mainframe.mainMenu.rotateMenu.setEnabled(false);
             }
         });
         /*try{
@@ -116,6 +122,10 @@ public class TreeOptionsToolbar extends JToolBar {
         triButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.tree.setTreeLayout("Triangular");
+                mainframe.mainMenu.triangularradiobutton.setSelected(true);
+                mainframe.mainMenu.rotateSlider.setValue(0);
+                mainframe.mainMenu.syncTreeWithRotateSlider();
+                mainframe.mainMenu.rotateMenu.setEnabled(false);
             }
         });
         /*try{
@@ -129,6 +139,8 @@ public class TreeOptionsToolbar extends JToolBar {
         radialButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.tree.setTreeLayout("Radial");
+                mainframe.mainMenu.radialradiobutton.setSelected(true);
+                mainframe.mainMenu.rotateMenu.setEnabled(true);
             }
         });
 /*        try{
@@ -142,6 +154,8 @@ public class TreeOptionsToolbar extends JToolBar {
         polarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.tree.setTreeLayout("Polar");
+                mainframe.mainMenu.polarradiobutton.setSelected(true);
+                mainframe.mainMenu.rotateMenu.setEnabled(true);
             }
         });
         add(rectButton);
