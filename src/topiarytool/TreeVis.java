@@ -987,8 +987,8 @@ public class TreeVis extends PApplet {
           //draw the wedge
           canvas.quad((float)toScreenX(x), (float)toScreenY(bottom), //center to bottom
             (float)toScreenX(x),  (float)toScreenY(top),  //center to top
-            (float)toScreenX(x+longest),  (float)toScreenY(top),  //top to longest branch length
-            (float)toScreenX(x+shortest),  (float)toScreenY(bottom) );  //bottom to shortest branch length
+            (float)toScreenX(x+shortest),  (float)toScreenY(top),  //top to longest branch length
+            (float)toScreenX(x+longest),  (float)toScreenY(bottom) );  //bottom to shortest branch length
     
           //create white background for text
           canvas.fill(255);
@@ -1012,8 +1012,8 @@ public class TreeVis extends PApplet {
 
           //draw the wedge
           canvas.triangle((float)toScreenX(x), (float)toScreenY(y), //center to bottom
-            (float)toScreenX(x+longest),  (float)toScreenY(top),  //top to longest branch length
-            (float)toScreenX(x+shortest),  (float)toScreenY(bottom) );  //bottom to shortest branch length
+            (float)toScreenX(x+shortest),  (float)toScreenY(top),  //top to longest branch length
+            (float)toScreenX(x+longest),  (float)toScreenY(bottom) );  //bottom to shortest branch length
     
           //create white background for text
           canvas.fill(255);
