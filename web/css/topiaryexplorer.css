@@ -1,0 +1,96 @@
+<style type="text/css">
+
+body {
+}
+
+a {
+    text-decoration: none;
+}
+
+img.screenshot {
+    width: 45%;
+    height: 45%;
+}
+
+div {
+    font-family: sans-serif;
+}
+
+div.rightjust {
+    float: right;
+}
+
+div.wrapper {
+    width: 80%;
+}
+
+div.bodywrapper {
+    width: 100%;
+    background-color: #ddd;
+    float:left;
+    padding: 5px;
+}
+
+div.col {
+    width: 31.5%;
+    float: left;
+    padding-left: .5em;
+    padding-right: .5em;
+}
+
+div.bottomwrapper {
+    float: left;
+    width: 100%;
+    background-color: white;
+}
+
+div.footerwrapper {
+    width: 100%;
+    text-align: center;
+}
+
+h2 {
+    margin: 0px;
+}
+
+p {
+    padding-right: 1em;
+    padding-left: 1em;
+}
+
+p.blurb {
+    border-right: 1px solid black;
+    padding-left: auto;
+}
+
+p.code {
+    background-color: #ddd;
+    font-family: monospace;
+    padding-left: 2em;
+}
+
+img {
+    border: none;
+}
+
+/* Clearfix */
+.clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+
+.clearfix {
+    display: inline-block;
+}
+
+html[xmlns] .clearfix {
+    display: block;
+}
+
+* html .clearfix {
+    height: 1%;
+}
