@@ -126,24 +126,30 @@ public class TreeVis extends PApplet {
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
       if (root==null) return 0;
+      if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
+      	return (int) (root.depth()*yscale - ystart);
+      }
       return (int) -(ystart-MARGIN);
     }
     public void setVerticalScrollPosition(int value) {
       ystart = -value + MARGIN;
       if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-        ystart = ystart + getHeight()*0.5;
+      	ystart =  root.depth()*yscale - value;
       }
       fireStateChanged();
       redraw();
     }
     public int getCurrentHorizontalScrollPosition() {
       if (root==null) return 0;
+      if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
+      	return (int) (root.depth()*xscale - xstart);
+      }
       return (int) -(xstart-MARGIN);
     }
     public void setHorizontalScrollPosition(int value) {
       xstart = -value + MARGIN;
       if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-        xstart = xstart + getWidth()*0.5;
+      	xstart =  root.depth()*xscale - value;
       }
       fireStateChanged();
       redraw();
@@ -153,7 +159,7 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
         return (int) (root.getNumberOfLeaves()*yscale + 2*MARGIN);
       } else {
-        return (int) (root.depth()*yscale + 2*MARGIN);
+        return (int) (2*root.depth()*yscale);
       }
     }
     public int getMaxHorizontalScrollPosition() {
@@ -161,7 +167,7 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
         return (int) (root.depth()*xscale + MARGIN + TREEMARGIN);
       } else {
-        return (int) (root.depth()*xscale + 2*MARGIN);
+        return (int) (2*root.depth()*xscale);
       }      
     }
     
@@ -349,6 +355,7 @@ public class TreeVis extends PApplet {
      * Ensures that the tree is not scrolled out of its bounds, and resets it back if it is
      */
     public void checkBounds() {
+    	
       //if there's no tree, we can't check the bounds
       if (root==null) return;
 

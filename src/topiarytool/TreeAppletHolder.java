@@ -85,14 +85,14 @@ public class TreeAppletHolder extends JComponent {
 		});
 	}
 
-	private void syncScrollbarsWithTree() {
+	public void syncScrollbarsWithTree() {
 		int newValue = tree.getCurrentVerticalScrollPosition();
 		verticalScroll.setMaximum(tree.getMaxVerticalScrollPosition());
 		verticalScroll.setValue(newValue);
 		verticalScroll.setVisibleAmount(tree.getHeight());
 		verticalScroll.setBlockIncrement(tree.getHeight()*9/10);
 		verticalScroll.setUnitIncrement(tree.getHeight()/10);
-//		System.out.println(verticalScroll.getValue() + "; " + verticalScroll.getMaximum());
+		//System.out.println(verticalScroll.getValue() + "; " + verticalScroll.getMaximum());
 
 		newValue = tree.getCurrentHorizontalScrollPosition();
 		horizontalScroll.setMaximum(tree.getMaxHorizontalScrollPosition());
@@ -100,6 +100,6 @@ public class TreeAppletHolder extends JComponent {
 		horizontalScroll.setVisibleAmount(tree.getWidth());
 		horizontalScroll.setBlockIncrement(tree.getWidth()*9/10);
 		horizontalScroll.setUnitIncrement(tree.getWidth()/10);
-//		System.out.println(horizontalScroll.getValue() + "; " + horizontalScroll.getMaximum());
+		//System.out.println(horizontalScroll.getValue() + "; " + horizontalScroll.getMaximum());
 	}
 }

@@ -135,6 +135,8 @@ public class TreeWindow extends JFrame {
              System.out.println("Done drawing tree.");
              frame.consoleWindow.update("Done drawing tree. ");
              frame.treeFile = inFile;
+             
+             treeHolder.syncScrollbarsWithTree();
          }
     }
     
@@ -160,6 +162,8 @@ public class TreeWindow extends JFrame {
               System.out.println("Done drawing tree.");
               frame.consoleWindow.update("Done drawing tree. ");
               frame.treeFile = inFile;
+              
+              treeHolder.syncScrollbarsWithTree();
           }
     }
     

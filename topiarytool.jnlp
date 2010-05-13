@@ -15,11 +15,11 @@
   
 <!--
   This is what you need to enable to get rid of the "Java App Window" warnings.
-  But then you also need to sign all the code... --> 
+  But then you also need to sign all the code... 
   <security>
       <all-permissions/>
   </security>
-  
+  --> 
   
   <resources>
     <j2se version="1.5+"  max-heap-size="128m" />
