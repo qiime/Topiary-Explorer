@@ -17,7 +17,7 @@ public class DataTable {
         loadData(lines);
     }
     
-    public DataTable(mysqlConnect conn) {
+    public DataTable(dbConnect conn) {
         loadData(conn);
     }
 
@@ -25,7 +25,7 @@ public class DataTable {
         loadData(is);
     }
     
-    public void loadData(mysqlConnect conn) {
+    public void loadData(dbConnect conn) {
         data = new SparseTable();
         int c = 0;
         for(int r = 0; r < conn.resultLines.size(); r++) {
@@ -40,7 +40,6 @@ public class DataTable {
 		    }
         }
 		int numCols = conn.colNames.size();
-		
 		columnNames = parseLine(conn.colNamesStr);
     }
     
@@ -211,8 +210,9 @@ public class DataTable {
 	    String s = "";
 	    
 	    for(String h : getColumnNames())
-	        lines.add(h + '\t');
-	    lines.add("\n");
+	        s += h + '\t';
+	    s += "\n";
+	    lines.add(s);
 	    
 	    for(int i = 0; i < data.maxRow(); i++)
 	    {

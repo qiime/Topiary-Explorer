@@ -737,6 +737,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                          resetLineWidthOtuMenu();
                          resetCollapseByMenu();
                          frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
+                         frame.dataPane.setSelectedIndex(1);
                      }
                      // load otu sample map
                      if(data.containsKey("osm")){
@@ -748,6 +749,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 						 frame.otuSampleMapTable.setModel(sorter);
 						 
                          frame.consoleWindow.update("Loaded OTU to sample map");
+                         frame.dataPane.setSelectedIndex(2);
                      }
                      // load sample metadata
                      if(data.containsKey("sam")){
@@ -761,6 +763,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                          frame.consoleWindow.update("Loaded sample metadata.");
                          resetColorBySampleMenu();
                          resetLineWidthSampleMenu();
+                         frame.dataPane.setSelectedIndex(3);
                      }
                      
                      frame.treeWindow.tree.loop();
@@ -857,8 +860,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             try {
                 InputStream is = inFile.getInputStream();
                 frame.otuMetadata = new DataTable(is);
-                
-                                         
                 SparseTableModel model = new SparseTableModel(frame.otuMetadata.getData(),
                 frame.otuMetadata.getColumnNames());
                 TableSorter sorter = new TableSorter(model, frame.otuMetadataTable.getTableHeader());

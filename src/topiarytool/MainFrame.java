@@ -54,6 +54,9 @@ public class MainFrame extends JFrame {
     JTable otuSampleMapTable = new JTable(new SparseTableModel());
     JTable sampleMetadataTable = new JTable(new SparseTableModel());
     JTable colorKeyTable = new JTable();
+    JButton back = new JButton("<<");
+    JButton showData = new JButton("Show Table");
+    JButton setAs = new JButton("Set As...");
     JButton interpolateButton = new JButton("Interpolate");
     NewProjectDialog newProjectChooser = null;
     JLabel databaseStatus = new JLabel("Database not connected.");
@@ -119,16 +122,43 @@ public class MainFrame extends JFrame {
         colorPanel.setPreferredSize(new Dimension(200,600));
         
         databasePanel.setLayout(new BorderLayout());
+        databaseTopPanel.setLayout(new GridLayout(1,5));
+        back.setEnabled(false);
+        back.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                showAllTables();
+            }
+        });
+        databaseTopPanel.add(back);
+        databaseTopPanel.add(new JLabel(""));
+        databaseTopPanel.add(new JLabel(""));
+        showData.setEnabled(false);
+        showData.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                showSelectedTable();
+            }
+        });
+        
+        databaseTopPanel.add(showData);
+        setAs.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                setDatabaseResultsAs();
+            }
+        });
+        setAs.setEnabled(false);
+        databaseTopPanel.add(setAs);
+        databasePanel.add(databaseTopPanel, BorderLayout.NORTH);
+        
         databaseScrollPane = new JScrollPane(databaseTable);
         databasePanel.add(databaseScrollPane, BorderLayout.CENTER);
-        databaseBottomPanel.setLayout(new GridLayout(1,2));
-        //databaseBottomPanel.add(databaseStatus);
-        /*db_conn.connect_button.addActionListener(new ActionListener() {
+        databaseBottomPanel.setLayout(new BorderLayout());
+        databaseBottomPanel.add(databaseStatus, BorderLayout.SOUTH);
+        db_conn.connect_button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         connectButtonPressed();
                     }
-                });*/
-/*        databaseBottomPanel.add(db_conn);*/
+                });
+        databaseBottomPanel.add(db_conn, BorderLayout.CENTER);
 
         databaseTabPane.addTab("Connect", databaseBottomPanel);
         databaseTabPane.addTab("Search", db_search);
@@ -147,8 +177,9 @@ public class MainFrame extends JFrame {
         databaseTabPane.setEnabledAt(1, false);
 
         databaseTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        //databasePane.addTab("Database", dataPanel);
+        databasePanel.add(databaseTabPane, BorderLayout.SOUTH);
         dataPane.addTab("Database", databasePanel);
-        //dataPane.add(databaseTabPane, BorderLayout.SOUTH);
         
         otuMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         //otuMetadataTable.setAutoCreateRowSorter(true);
@@ -167,14 +198,10 @@ public class MainFrame extends JFrame {
         //sampleMetadataTable.setAutoCreateRowSorter(true);
         sampleMetadataScrollPane = new JScrollPane(sampleMetadataTable);
         dataPane.addTab("Sample Metadata", sampleMetadataScrollPane);
-        dataPane.setSelectedIndex(1);
-        dataPane.setEnabledAt(0, false);
+        dataPane.setSelectedIndex(0);
         
         dataPanel.setLayout(new BorderLayout());
         dataPanel.add(dataPane, BorderLayout.CENTER);
-        //databaseTabPane.setEnabled(false);
-        //dataPanel.add(databaseTabPane, BorderLayout.SOUTH);
-        //tabbedPane.addTab("Data", dataPanel);
 
         //set up toolbar area
         toolbarPane.setLayout(new FlowLayout());
@@ -222,6 +249,117 @@ public class MainFrame extends JFrame {
          repaint();
      }*/
      
+     public void showAllTables() {
+         db_conn.c.getAvailableTables();
+          
+          database = new DataTable(db_conn.c);
+          SparseTableModel model = new SparseTableModel(database.getData(),
+  		 	database.getColumnNames());
+  		 TableSorter sorter = new TableSorter(model, databaseTable.getTableHeader());
+  		 databaseTable.setModel(sorter);
+  		 back.setEnabled(false);
+  		 setAs.setEnabled(false);
+  		 showData.setEnabled(true);
+     }
+     
+     public void setDatabaseResultsAs() {
+         Object[] possibilities = {"Otu Sample Map", "Otu Metadata", "Sample Metadata"};
+         String tableName = (String)JOptionPane.showInputDialog(
+                             this,
+                             "Use database results in which table?",
+                             "Customized Dialog",
+                             JOptionPane.PLAIN_MESSAGE,
+                             null,
+                             possibilities,
+                             possibilities[1]);
+
+         //If a string was returned, say so.
+         if (tableName != null) {
+             SparseTableModel model = null;
+             TableSorter sorter = null;
+             switch(tableName.charAt(4))
+             {
+                 case 'S':
+                    otuSampleMap = new DataTable(database.toStrings());
+                  
+                    model = new SparseTableModel(otuSampleMap.getData(),
+					 otuSampleMap.getColumnNames());
+					 sorter = new TableSorter(model, otuSampleMapTable.getTableHeader());
+					 otuSampleMapTable.setModel(sorter);
+					 dataPane.setSelectedIndex(2);
+                    break;
+                 case 'M':
+                  otuMetadata = new DataTable(database.toStrings());
+
+				     model = new SparseTableModel(otuMetadata.getData(),
+					 otuMetadata.getColumnNames());
+					 sorter = new TableSorter(model, otuMetadataTable.getTableHeader());
+					 otuMetadataTable.setModel(sorter);
+					 mainMenu.resetColorByOtuMenu();
+                      mainMenu.resetLineWidthOtuMenu();
+                      mainMenu.resetCollapseByMenu();
+                      dataPane.setSelectedIndex(1);
+                    break;
+                 case 'l':
+                 sampleMetadata = new DataTable(database.toStrings());
+                  
+                  model = new SparseTableModel(sampleMetadata.getData(),
+					 sampleMetadata.getColumnNames());
+					  sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
+					 sampleMetadataTable.setModel(sorter);
+					 mainMenu.resetColorBySampleMenu();
+                      mainMenu.resetLineWidthSampleMenu();
+                      dataPane.setSelectedIndex(3);
+                    break;
+                 default:
+             }
+             back.setEnabled(true);
+             showData.setEnabled(false);
+         }
+     }
+     
+     public void showSelectedTable() {
+         String tableName = "";
+         int rowIndexStart = databaseTable.getSelectedRow();
+          if(rowIndexStart != -1)
+          {
+              int rowIndexEnd = databaseTable.getSelectionModel().getMaxSelectionIndex();
+              int colIndexStart = databaseTable.getSelectedColumn();
+              int colIndexEnd = databaseTable.getColumnModel().getSelectionModel().getMaxSelectionIndex();
+              String[] headers = database.getColumnNames().toArray(new String[0]);
+              String temp = "";
+              ArrayList<String> ops = new ArrayList<String>();
+              // Check each cell in the range
+              for (int r=rowIndexStart; r<=rowIndexEnd; r++) {
+                  for (int c=colIndexStart; c<=colIndexEnd; c++) {
+                      if (databaseTable.isCellSelected(r, c)) {
+                          // cell is selected
+                          tableName = databaseTable.getValueAt(r,c).toString();
+                      }
+                  }
+              }
+              if(db_conn.c.getDataFromTable(tableName))
+              {
+                  database = new DataTable(db_conn.c);
+                   SparseTableModel model = new SparseTableModel(database.getData(),
+           		 	database.getColumnNames());
+           		 TableSorter sorter = new TableSorter(model, databaseTable.getTableHeader());
+           		 databaseTable.setModel(sorter);
+           		 setAs.setEnabled(true);
+           		 back.setEnabled(true);
+           		 showData.setEnabled(false);
+       		 }
+       		 else
+       		 {
+       		     JOptionPane.showMessageDialog(null, "ERROR: problem loading data from table("+tableName+").", "Error", JOptionPane.ERROR_MESSAGE);
+       		 }
+         }
+         else
+         {
+             JOptionPane.showMessageDialog(null, "ERROR: no table selected.", "Error", JOptionPane.ERROR_MESSAGE);
+         }
+     }
+     
      public void searchButtonPressed() {
          int rowIndexStart = sampleMetadataTable.getSelectedRow();
          if(rowIndexStart != -1)
@@ -254,24 +392,24 @@ public class MainFrame extends JFrame {
                  useor = false;
 
              db_conn.c.setData(setOpsarry, useor);
-             getMetadataFromConn();
+             //getMetadataFromConn();
          }
          else
              JOptionPane.showMessageDialog(null, "ERROR: no metadata columns are selected.", "Error", JOptionPane.ERROR_MESSAGE);
       }
      
-     public void getMetadataFromConn() {
+/*     public void getMetadataFromConn() {
          treeWindow.tree.noLoop();
          //tabbedPane.setSelectedIndex(0);
          dataPane.setSelectedIndex(3);
          sampleMetadata = new DataTable(db_conn.c);
          
          SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
-		 	sampleMetadata.getColumnNames());
-		 TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
-		 sampleMetadataTable.setModel(sorter);
-						 
-						 
+            sampleMetadata.getColumnNames());
+         TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
+         sampleMetadataTable.setModel(sorter);
+                         
+                         
          if (currTable == otuMetadata) {
              treeWindow.removeColor();
          }
@@ -279,47 +417,66 @@ public class MainFrame extends JFrame {
          //sampleMetadataScrollPane = new JScrollPane(sampleMetadataTable);
          mainMenu.resetColorBySampleMenu();
          treeWindow.tree.loop();
-     }
+     }*/
      
-     public void setDatabaseTables() {
+/*     public void setDatabaseTables() {
           //tabbedPane.setSelectedIndex(0);
           dataPane.setSelectedIndex(0);
           database = new DataTable(db_conn.c);
           
           
           SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
-		  	sampleMetadata.getColumnNames());
-		  TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
-		  databaseTable.setModel(sorter);
-		 
-      }
+            sampleMetadata.getColumnNames());
+          TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
+          databaseTable.setModel(sorter);
+         
+      }*/
      
      public void resetButtonPressed() {
-         db_conn.c.reset();
-         db_conn.c.setData();
-         getMetadataFromConn();
+         //db_conn.c.reset();
+         //db_conn.c.setData();
      }
      
      public void connectButtonPressed() {
          if(db_conn.connect_button.getText() == "Connect")
          {
+             databaseStatus.setText("Trying to connect to database...");
              if(connectToDB())
              {
-                 db_conn.db_name_field.disable();
+                 showData.setEnabled(true);
+                 db_conn.db_field.disable();
+                 db_conn.sv_field.disable();
                  db_conn.un_field.disable();
                  db_conn.pw_field.disable();
                  db_conn.connect_button.setText("Disconnect");
                  resetButtonPressed();
                  databaseTabPane.setEnabledAt(1, true);
+                 databaseStatus.setText("Connected to "+db_conn.db_field.getText()+" on " + db_conn.sv_field.getText());
+                 
+                 db_conn.c.getAvailableTables();
+                 //System.out.println(db_conn.c.toString());
+                 
+                 database = new DataTable(db_conn.c);
+                 SparseTableModel model = new SparseTableModel(database.getData(),
+         		 	database.getColumnNames());
+         		 TableSorter sorter = new TableSorter(model, databaseTable.getTableHeader());
+         		 databaseTable.setModel(sorter);
              }
              else
+             {
                  JOptionPane.showMessageDialog(null, "ERROR: could not connect to database.", "Error", JOptionPane.ERROR_MESSAGE);
+                 databaseStatus.setText("Database connection failed.");
+            }
              
          }
          else
          {
              db_conn.c.close_connection();
-             db_conn.db_name_field.enable();
+             back.setEnabled(false);
+             showData.setEnabled(false);
+             setAs.setEnabled(false);
+             db_conn.db_field.enable();
+             db_conn.sv_field.enable();
              db_conn.un_field.enable();
              db_conn.pw_field.enable();
              db_conn.connect_button.setText("Connect");
@@ -328,16 +485,12 @@ public class MainFrame extends JFrame {
      }
 
      public Boolean connectToDB() {
-         String url = db_conn.db_name_field.getText();
-         String un = db_conn.un_field.getText();
-         String pw = db_conn.pw_field.getText();
-
-        db_conn.c = new mysqlConnect(un,pw,url);
-        Boolean success = db_conn.c.makeConnection();
-        if(success)
-            db_conn.c.setData();
-        
-        return success;
+        String db = db_conn.db_field.getText();
+        String sv = db_conn.sv_field.getText();
+        String un = db_conn.un_field.getText();
+        String pw = db_conn.pw_field.getText();
+        db_conn.c = new dbConnect(un,pw,db,sv);  
+        return db_conn.c.makeConnection();
      }
 
      /**

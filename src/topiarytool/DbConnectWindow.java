@@ -14,14 +14,16 @@ import javax.swing.event.*;
  * @author megumi
  */
 public class DbConnectWindow extends JPanel {
-    mysqlConnect c;
+    dbConnect c;
     JPanel mainPanel = new JPanel();
     JPanel inputPanel = new JPanel();
     JPanel buttonPanel = new JPanel();
     JTextField un_field = new JTextField(20);
-    JTextField db_name_field = new JTextField("jdbc:mysql://127.0.0.1/topiarytool");
+    JTextField db_field = new JTextField(20);
+    JTextField sv_field = new JTextField(20);
     JPasswordField pw_field = new JPasswordField(20);
-    JLabel db_name_label = new JLabel("Database URL: ");
+    JLabel db_label = new JLabel("Database: ");
+    JLabel sv_label = new JLabel("Server: ");
     JLabel un_label = new JLabel("Username: ");
     JLabel pw_label = new JLabel("Password: ");
     JButton connect_button = new JButton("Connect");
@@ -33,9 +35,11 @@ public class DbConnectWindow extends JPanel {
     private void initComponents() {
         this.setSize(new Dimension(300,150));
         mainPanel.setLayout(new BorderLayout());
-        inputPanel.setLayout(new GridLayout(3,2));
-        inputPanel.add(db_name_label);
-        inputPanel.add(db_name_field);
+        inputPanel.setLayout(new GridLayout(4,2));
+        inputPanel.add(sv_label);
+        inputPanel.add(sv_field);
+        inputPanel.add(db_label);
+        inputPanel.add(db_field);
         inputPanel.add(un_label);
         inputPanel.add(un_field);
         inputPanel.add(pw_label);

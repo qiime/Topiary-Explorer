@@ -1,31 +1,31 @@
 package topiarytool;
 
-// location of test database: usr/local/mysql-5.1.30-osx10.5-x86/data/topiarytool
 import java.sql.*;
 import java.lang.*;
 import java.util.*;
-//import oracle.jdbc.pool.OracleDataSource;
+import oracle.jdbc.pool.*;
 
 public class dbConnect
 {
     String userName = "";
     String password = "";
-    String url = "";
-    String connect_string = "";
+    String databaseName = "";
+    String serverName = "";
+    String currentTable = "";
     Connection conn = null;
     ResultSet res = null;
     ArrayList<String> resultLines = new ArrayList<String>();
     ArrayList<String> colNames = new ArrayList<String>();
     String colNamesStr = new String();
-    //OracleDataSource ods = null;// new OracleDataSource();
-    //ods.setURL(connect_string);
+    OracleDataSource ods = null;// new OracleDataSource();
+    Statement stmt = null;
     
-    public dbConnect(String un, String pw, String ur)
+    public dbConnect(String un, String pw, String dbName, String svName)
     {
         userName = un;
         password = pw;
-        url = ur;
-        connect_string = "";//"jdbc:oracle:thin:hr/hr@//localhost:1521/orcl.oracle.com";
+        databaseName = dbName;
+        serverName = svName;
     }
     
     public ArrayList<String> getResultLines()
@@ -35,16 +35,18 @@ public class dbConnect
     
     public void getAvailableTables()
     {
-        Statement stmt = null;
+        reset();
+        stmt = null;
 
           try {
               stmt = conn.createStatement();
-              this.res = stmt.executeQuery("SHOW TABLES");
+              this.res = stmt.executeQuery("select object_name from user_objects where object_type = 'TABLE'");
               parseResultSet();
               }
               // Now do something with the ResultSet ....
           catch (SQLException ex){
               // handle any errors
+              System.out.println("getavailabletables");
               System.out.println("SQLException: " + ex.getMessage());
               System.out.println("SQLState: " + ex.getSQLState());
               System.out.println("VendorError: " + ex.getErrorCode());
@@ -66,6 +68,43 @@ public class dbConnect
           }
     }
     
+    public boolean getDataFromTable(String tableName) {
+        reset();
+        currentTable = tableName;
+        boolean success = false;
+
+          try {
+              stmt = conn.createStatement();
+              this.res = stmt.executeQuery("select * from " + tableName);
+              parseResultSet();
+              success = true;
+              }
+              // Now do something with the ResultSet ....
+          catch (SQLException ex){
+              // handle any errors
+              System.out.println("getdatafromtable");
+              System.out.println("SQLException: " + ex.getMessage());
+              System.out.println("SQLState: " + ex.getSQLState());
+              System.out.println("VendorError: " + ex.getErrorCode());
+          }
+
+          // close SQL connections
+          if (this.res != null) {
+              try {
+                  this.res.close();
+              } catch (SQLException sqlEx) { } // ignore
+              this.res = null;
+          }
+
+          if (stmt != null) {
+              try {
+                  stmt.close();
+              } catch (SQLException sqlEx) { } // ignore
+              stmt = null;
+          }
+          return success;
+    }
+    
     public void setData()
     {
         reset();
@@ -80,7 +119,7 @@ public class dbConnect
     
     public void setResultSet(String[] options, Boolean useor)
     {
-        Statement stmt = null;
+        stmt = null;
         String query = "SELECT * FROM test_mapping";
         if(options != null){
             query += " WHERE ";
@@ -105,6 +144,7 @@ public class dbConnect
               // Now do something with the ResultSet ....
           catch (SQLException ex){
               // handle any errors
+              System.out.println("setresultset");
               System.out.println("SQLException: " + ex.getMessage());
               System.out.println("SQLState: " + ex.getSQLState());
               System.out.println("VendorError: " + ex.getErrorCode());
@@ -128,7 +168,7 @@ public class dbConnect
     
     public void setResultSet()
     {
-        Statement stmt = null;
+        stmt = null;
 
           try {
               stmt = conn.createStatement();
@@ -138,6 +178,7 @@ public class dbConnect
               // Now do something with the ResultSet ....
           catch (SQLException ex){
               // handle any errors
+              System.out.println("setresultset()");
               System.out.println("SQLException: " + ex.getMessage());
               System.out.println("SQLState: " + ex.getSQLState());
               System.out.println("VendorError: " + ex.getErrorCode());
@@ -183,25 +224,25 @@ public class dbConnect
         }
     }
     
-    public Boolean makeConnection()
+    public Boolean makeConnection() //throws ClassNotFoundException, SQLException
     {
         try
            {
-               //ods.setURL(connect_string); 
+               ods = new OracleDataSource();
+               ods.setDriverType("thin");
+               ods.setServerName(serverName);
+               ods.setPortNumber(1521);
+               ods.setDatabaseName(databaseName);
+               ods.setUser(userName);
+               ods.setPassword(password);
              // Connect to the databse
-             //output.append ("Connecting to " + connect_string + "\n");
-             //this.conn = ods.getConnection ();
-             
-             //output.append ("Connected\n");
-               /*Class.forName ("com.mysql.jdbc.Driver").newInstance();
-                              this.conn = DriverManager.getConnection (this.url, this.userName, this.password);
-                              System.out.println ("Database connection established");*/
-               return true;
+             this.conn = ods.getConnection();
+             return true;
            }
            catch (Exception e)
            {
                System.err.println(e);
-               System.err.println ("Cannot connect to database server");
+               System.err.println("Cannot connect to database server");
                return false;
            }
     }
@@ -211,6 +252,20 @@ public class dbConnect
         resultLines = new ArrayList<String>();
         colNames = new ArrayList<String>();
         colNamesStr = new String();
+        // close SQL connections
+          if (this.res != null) {
+              try {
+                  this.res.close();
+              } catch (SQLException sqlEx) { } // ignore
+              this.res = null;
+          }
+
+          if (stmt != null) {
+              try {
+                  stmt.close();
+              } catch (SQLException sqlEx) { } // ignore
+              stmt = null;
+          }
     }
     
     public void close_connection()
@@ -238,10 +293,11 @@ public class dbConnect
         return lines;
     }
     
-   public static void main (String[] args)
-   {
-        mysqlConnect c = new mysqlConnect("root","desudesu","jdbc:mysql://127.0.0.1/topiarytool");
-        c.getAvailableTables();
-        System.out.println(c.toString());          
-   }
+    public static void main (String[] args)
+    {
+         dbConnect c = new dbConnect("meg","omgwtfbbq","microbe","microbiome1.colorado.edu");
+         c.makeConnection();
+         c.getAvailableTables();
+         System.out.println(c.toString());
+    }
 }

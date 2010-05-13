@@ -20,7 +20,7 @@
 			<fileset dir="build/classes" />
 			<manifest>
 				<attribute name="Main-Class" value="topiarytool.TopiaryTool" />
-                <attribute name="Class-Path" value="lib/core.jar lib/gluegen-rt-natives-linux-amd64.jar lib/gluegen-rt-natives-linux-i586.jar lib/gluegen-rt-natives-macosx-ppc.jar lib/gluegen-rt-natives-macosx-universal.jar lib/gluegen-rt-natives-windows-amd64.jar lib/gluegen-rt-natives-windows-i586.jar lib/gluegen-rt.jar lib/itext.jar lib/jogl-natives-linux-amd64.jar lib/jogl-natives-linux-i586.jar lib/jogl-natives-macosx-ppc.jar lib/jogl-natives-macosx-universal.jar lib/jogl-natives-windows-amd64.jar lib/jogl-natives-windows-i586.jar lib/jogl.jar lib/opengl.jar lib/pdf.jar lib/mysql-connector-java-5.1.10-bin.jar lib/javaws.jar" />
+                <attribute name="Class-Path" value="lib/core.jar lib/gluegen-rt-natives-linux-amd64.jar lib/gluegen-rt-natives-linux-i586.jar lib/gluegen-rt-natives-macosx-ppc.jar lib/gluegen-rt-natives-macosx-universal.jar lib/gluegen-rt-natives-windows-amd64.jar lib/gluegen-rt-natives-windows-i586.jar lib/gluegen-rt.jar lib/itext.jar lib/jogl-natives-linux-amd64.jar lib/jogl-natives-linux-i586.jar lib/jogl-natives-macosx-ppc.jar lib/jogl-natives-macosx-universal.jar lib/jogl-natives-windows-amd64.jar lib/jogl-natives-windows-i586.jar lib/jogl.jar lib/opengl.jar lib/pdf.jar lib/mysql-connector-java-5.1.10-bin.jar lib/javaws.jar lib/ojdbc14.jar lib/classes12.jar" />
 			</manifest>
 		</jar>
 	</target>

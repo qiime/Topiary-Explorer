@@ -29,7 +29,7 @@
 	<jar href="lib/core.jar" />
 	<jar href="lib/itext.jar" />
 	<jar href="lib/pdf.jar" />
-	<jar href="lib/mysql-connector-java-5.1.10-bin.jar" />
+	<jar href="lib/ojdbc14.jar" />
   </resources>
   
   <application-desc main-class="topiarytool.TopiaryTool" />
