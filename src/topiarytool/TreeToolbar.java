@@ -12,7 +12,7 @@ public class TreeToolbar extends JToolBar {
 
     JButton zoomOutButton  = new JButton("-");
     JButton zoomInButton = new JButton("+");
-    JSlider zoomSlider = new JSlider(0, 8, 0);
+    JSlider zoomSlider = new JSlider(0, 20, 0);
     JTextField search = new JTextField();
     JPanel spacer1 = new JPanel();    
     TreeWindow frame = null;

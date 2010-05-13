@@ -12,7 +12,7 @@ public class VerticalTreeToolbar extends JToolBar {
 
     JButton zoomOutButton  = new JButton("-");
     JButton zoomInButton = new JButton("+");
-    JSlider zoomSlider = new JSlider(JSlider.VERTICAL, 0, 8, 0);
+    JSlider zoomSlider = new JSlider(JSlider.VERTICAL, 0, 20, 0);
     JPanel spacer1 = new JPanel();
 
     TreeWindow frame = null;
