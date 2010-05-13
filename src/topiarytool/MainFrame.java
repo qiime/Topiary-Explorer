@@ -69,8 +69,8 @@ public class MainFrame extends JFrame {
     PcoaWindow pcoaWindow = new PcoaWindow(this);
     ConsoleWindow consoleWindow = new ConsoleWindow(this);
     
-    DbConnectWindow db_conn = new DbConnectWindow();
-    DbSearchWindow db_search = new DbSearchWindow();
+    DbConnectWindow db_conn = new DbConnectWindow(this);
+    DbSearchWindow db_search = new DbSearchWindow(this);
 
     //Variables that hold the data tables
     DataTable otuMetadata = new DataTable();
@@ -153,30 +153,16 @@ public class MainFrame extends JFrame {
         databasePanel.add(databaseScrollPane, BorderLayout.CENTER);
         databaseBottomPanel.setLayout(new BorderLayout());
         databaseBottomPanel.add(databaseStatus, BorderLayout.SOUTH);
-        db_conn.connect_button.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        connectButtonPressed();
-                    }
-                });
         databaseBottomPanel.add(db_conn, BorderLayout.CENTER);
 
         databaseTabPane.addTab("Connect", databaseBottomPanel);
         databaseTabPane.addTab("Search", db_search);
         
-        db_search.searchButton.addActionListener(new ActionListener() {
-           public void actionPerformed(ActionEvent e){
-               searchButtonPressed();
-           }
-        });
-        db_search.resetButton.addActionListener(new ActionListener() {
-           public void actionPerformed(ActionEvent e){
-               resetButtonPressed();
-           } 
-        });
-        
         databaseTabPane.setEnabledAt(1, false);
 
         databaseTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        databaseTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
         //databasePane.addTab("Database", dataPanel);
         databasePanel.add(databaseTabPane, BorderLayout.SOUTH);
         dataPane.addTab("Database", databasePanel);
@@ -232,31 +218,17 @@ public class MainFrame extends JFrame {
     	} catch (UnavailableServiceException e) { bs=null; }   
      }
      
-/*     public void clearProject() {
-         mainMenu.clearOtuMetadata();
-         mainMenu.clearOtuSampleMap();
-         mainMenu.clearSampleMetadata();
-         if(treeWindow != null)
-         {
-             treeWindow.dispose();
-             treeWindow = new TreeWindow(this);
-         }
-         if(pcoaWindow != null)
-         {
-             pcoaWindow.dispose();
-             pcoaWindow = new PcoaWindow(this);
-        }
-         repaint();
-     }*/
+     public void resetDatabaseTable() {
+         database = new DataTable(db_conn.c);
+         SparseTableModel model = new SparseTableModel(database.getData(),
+   		 	database.getColumnNames());
+   		 TableSorter sorter = new TableSorter(model, databaseTable.getTableHeader());
+   		 databaseTable.setModel(sorter);
+     }
      
      public void showAllTables() {
          db_conn.c.getAvailableTables();
-          
-          database = new DataTable(db_conn.c);
-          SparseTableModel model = new SparseTableModel(database.getData(),
-  		 	database.getColumnNames());
-  		 TableSorter sorter = new TableSorter(model, databaseTable.getTableHeader());
-  		 databaseTable.setModel(sorter);
+         resetDatabaseTable();
   		 back.setEnabled(false);
   		 setAs.setEnabled(false);
   		 showData.setEnabled(true);
@@ -340,11 +312,7 @@ public class MainFrame extends JFrame {
               }
               if(db_conn.c.getDataFromTable(tableName))
               {
-                  database = new DataTable(db_conn.c);
-                   SparseTableModel model = new SparseTableModel(database.getData(),
-           		 	database.getColumnNames());
-           		 TableSorter sorter = new TableSorter(model, databaseTable.getTableHeader());
-           		 databaseTable.setModel(sorter);
+                 resetDatabaseTable();
            		 setAs.setEnabled(true);
            		 back.setEnabled(true);
            		 showData.setEnabled(false);
@@ -360,138 +328,6 @@ public class MainFrame extends JFrame {
          }
      }
      
-     public void searchButtonPressed() {
-         int rowIndexStart = sampleMetadataTable.getSelectedRow();
-         if(rowIndexStart != -1)
-         {
-             int rowIndexEnd = sampleMetadataTable.getSelectionModel().getMaxSelectionIndex();
-             int colIndexStart = sampleMetadataTable.getSelectedColumn();
-             int colIndexEnd = sampleMetadataTable.getColumnModel().getSelectionModel().getMaxSelectionIndex();
-             String[] headers = sampleMetadata.getColumnNames().toArray(new String[0]);
-             String temp = "";
-             ArrayList<String> ops = new ArrayList<String>();
-             // Check each cell in the range
-             for (int r=rowIndexStart; r<=rowIndexEnd; r++) {
-                 for (int c=colIndexStart; c<=colIndexEnd; c++) {
-                     if (sampleMetadataTable.isCellSelected(r, c)) {
-                         // cell is selected
-                         temp = "";
-                         temp += headers[c] + " = ";
-                         temp += "\'" + sampleMetadataTable.getValueAt(r,c).toString() + "\'";
-                         ops.add(temp);
-                     }
-                 }
-             }
-
-             Set<String> setOps = new HashSet<String>(ops);
-             String[] setOpsarry = new String[setOps.size()];
-             setOps.toArray(setOpsarry);
-         
-             Boolean useor = true;
-             if(db_search.andRadioButton.isSelected() == true)
-                 useor = false;
-
-             db_conn.c.setData(setOpsarry, useor);
-             //getMetadataFromConn();
-         }
-         else
-             JOptionPane.showMessageDialog(null, "ERROR: no metadata columns are selected.", "Error", JOptionPane.ERROR_MESSAGE);
-      }
-     
-/*     public void getMetadataFromConn() {
-         treeWindow.tree.noLoop();
-         //tabbedPane.setSelectedIndex(0);
-         dataPane.setSelectedIndex(3);
-         sampleMetadata = new DataTable(db_conn.c);
-         
-         SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
-            sampleMetadata.getColumnNames());
-         TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
-         sampleMetadataTable.setModel(sorter);
-                         
-                         
-         if (currTable == otuMetadata) {
-             treeWindow.removeColor();
-         }
-         sampleMetadataTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-         //sampleMetadataScrollPane = new JScrollPane(sampleMetadataTable);
-         mainMenu.resetColorBySampleMenu();
-         treeWindow.tree.loop();
-     }*/
-     
-/*     public void setDatabaseTables() {
-          //tabbedPane.setSelectedIndex(0);
-          dataPane.setSelectedIndex(0);
-          database = new DataTable(db_conn.c);
-          
-          
-          SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
-            sampleMetadata.getColumnNames());
-          TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
-          databaseTable.setModel(sorter);
-         
-      }*/
-     
-     public void resetButtonPressed() {
-         //db_conn.c.reset();
-         //db_conn.c.setData();
-     }
-     
-     public void connectButtonPressed() {
-         if(db_conn.connect_button.getText() == "Connect")
-         {
-             databaseStatus.setText("Trying to connect to database...");
-             if(connectToDB())
-             {
-                 showData.setEnabled(true);
-                 db_conn.db_field.disable();
-                 db_conn.sv_field.disable();
-                 db_conn.un_field.disable();
-                 db_conn.pw_field.disable();
-                 db_conn.connect_button.setText("Disconnect");
-                 resetButtonPressed();
-                 databaseTabPane.setEnabledAt(1, true);
-                 databaseStatus.setText("Connected to "+db_conn.db_field.getText()+" on " + db_conn.sv_field.getText());
-                 
-                 db_conn.c.getAvailableTables();
-                 //System.out.println(db_conn.c.toString());
-                 
-                 database = new DataTable(db_conn.c);
-                 SparseTableModel model = new SparseTableModel(database.getData(),
-         		 	database.getColumnNames());
-         		 TableSorter sorter = new TableSorter(model, databaseTable.getTableHeader());
-         		 databaseTable.setModel(sorter);
-             }
-             else
-             {
-                 JOptionPane.showMessageDialog(null, "ERROR: could not connect to database.", "Error", JOptionPane.ERROR_MESSAGE);
-                 databaseStatus.setText("Database connection failed.");
-            }
-             
-         }
-         else
-         {
-             db_conn.c.close_connection();
-             back.setEnabled(false);
-             showData.setEnabled(false);
-             setAs.setEnabled(false);
-             db_conn.db_field.enable();
-             db_conn.sv_field.enable();
-             db_conn.un_field.enable();
-             db_conn.pw_field.enable();
-             db_conn.connect_button.setText("Connect");
-             databaseTabPane.setEnabledAt(1, false);
-         }
-     }
-
-     public Boolean connectToDB() {
-        String db = db_conn.db_field.getText();
-        String sv = db_conn.sv_field.getText();
-        String un = db_conn.un_field.getText();
-        String pw = db_conn.pw_field.getText();
-        db_conn.c = new dbConnect(un,pw,db,sv);  
-        return db_conn.c.makeConnection();
-     }
 
      /**
       * Syncs the colorKeyTable with colorMap

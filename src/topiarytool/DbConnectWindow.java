@@ -15,6 +15,7 @@ import javax.swing.event.*;
  */
 public class DbConnectWindow extends JPanel {
     dbConnect c;
+    MainFrame frame = null;
     JPanel mainPanel = new JPanel();
     JPanel inputPanel = new JPanel();
     JPanel buttonPanel = new JPanel();
@@ -28,7 +29,8 @@ public class DbConnectWindow extends JPanel {
     JLabel pw_label = new JLabel("Password: ");
     JButton connect_button = new JButton("Connect");
     
-    public DbConnectWindow() {
+    public DbConnectWindow(MainFrame _frame) {
+        frame = _frame;
         initComponents();
     }
 
@@ -48,23 +50,65 @@ public class DbConnectWindow extends JPanel {
         buttonPanel.setLayout(new GridLayout(1,3));
         buttonPanel.add(new JLabel(""));
         buttonPanel.add(new JLabel(""));
+        connect_button.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        connectButtonPressed();
+                    }
+                });
         buttonPanel.add(connect_button);
-        
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         this.add(mainPanel, BorderLayout.CENTER);
         //this.show();
     }// </editor-fold>                        
 
-    /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new DbConnectWindow().setVisible(true);
+    public void connectButtonPressed() {
+         if(connect_button.getText() == "Connect")
+         {
+             frame.databaseStatus.setText("Trying to connect to database...");
+             if(connectToDB())
+             {
+                 frame.showData.setEnabled(true);
+                 db_field.disable();
+                 sv_field.disable();
+                 un_field.disable();
+                 pw_field.disable();
+                 connect_button.setText("Disconnect");
+                 frame.databaseTabPane.setEnabledAt(1, true);
+                 frame.databaseStatus.setText("Connected to "+db_field.getText()+" on " + sv_field.getText());
+                 
+                 c.getAvailableTables();
+                 frame.resetDatabaseTable();
+             }
+             else
+             {
+                 JOptionPane.showMessageDialog(null, "ERROR: could not connect to database.", "Error", JOptionPane.ERROR_MESSAGE);
+                 frame.databaseStatus.setText("Database connection failed.");
             }
-        });
-    }
+             
+         }
+         else
+         {
+             c.close_connection();
+             frame.back.setEnabled(false);
+             frame.showData.setEnabled(false);
+             frame.setAs.setEnabled(false);
+             db_field.enable();
+             sv_field.enable();
+             un_field.enable();
+             pw_field.enable();
+             connect_button.setText("Connect");
+             frame.databaseTabPane.setEnabledAt(1, false);
+         }
+     }
+     
+     public Boolean connectToDB() {
+        String db = db_field.getText();
+        String sv = sv_field.getText();
+        String un = un_field.getText();
+        String pw = pw_field.getText();
+        c = new dbConnect(un,pw,db,sv);  
+        return c.makeConnection();
+     }
 
 }

@@ -37,6 +37,7 @@ public class dbConnect
     {
         reset();
         stmt = null;
+        currentTable = "";
 
           try {
               stmt = conn.createStatement();
@@ -105,41 +106,21 @@ public class dbConnect
           return success;
     }
     
-    public void setData()
+    public void resetCurrentTable()
     {
-        reset();
-        this.setResultSet();
+        getDataFromTable(currentTable);
     }
     
-    public void setData(String[] options, Boolean useor)
+    public boolean searchCurrentTable(String query)
     {
         reset();
-        this.setResultSet(options, useor);
-    }
-    
-    public void setResultSet(String[] options, Boolean useor)
-    {
         stmt = null;
-        String query = "SELECT * FROM test_mapping";
-        if(options != null){
-            query += " WHERE ";
-            for(int i = 0; i < options.length-1; i ++)
-            {
-                query += options[i];
-                if(useor)
-                    {
-                        query += " OR ";
-                    }
-                else
-                    query += " AND ";
-            }
-            query += options[options.length-1];
-        }
-        System.out.println(query);
+        boolean success = false;
           try {
               stmt = conn.createStatement();
               this.res = stmt.executeQuery(query);
               parseResultSet();
+              success = true;
               }
               // Now do something with the ResultSet ....
           catch (SQLException ex){
@@ -164,40 +145,7 @@ public class dbConnect
               } catch (SQLException sqlEx) { } // ignore
               stmt = null;
           }
-    }
-    
-    public void setResultSet()
-    {
-        stmt = null;
-
-          try {
-              stmt = conn.createStatement();
-              this.res = stmt.executeQuery("SELECT * FROM test_mapping");
-              parseResultSet();
-              }
-              // Now do something with the ResultSet ....
-          catch (SQLException ex){
-              // handle any errors
-              System.out.println("setresultset()");
-              System.out.println("SQLException: " + ex.getMessage());
-              System.out.println("SQLState: " + ex.getSQLState());
-              System.out.println("VendorError: " + ex.getErrorCode());
-          }
-
-          // close SQL connections
-          if (this.res != null) {
-              try {
-                  this.res.close();
-              } catch (SQLException sqlEx) { } // ignore
-              this.res = null;
-          }
-
-          if (stmt != null) {
-              try {
-                  stmt.close();
-              } catch (SQLException sqlEx) { } // ignore
-              stmt = null;
-          }
+        return success;
     }
     
     public void parseResultSet() throws java.sql.SQLException
