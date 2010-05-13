@@ -670,7 +670,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
          } else if (e.getActionCommand().equals("Export Tree Screen Capture...") && frame.treeWindow.tree.getTree()!= null)  {
              frame.treeWindow.tree.noLoop();
              try {
-                 FileContents fc = frame.fos.openFileDialog(null, null);
+             	 byte[] b = new byte[0];
+                 FileContents fc = frame.fss.saveFileDialog(null,null,new ByteArrayInputStream(b),null);
 			 	 frame.treeWindow.tree.exportScreenCapture(fc);
 			 } catch(IOException ex){}
              frame.treeWindow.tree.loop();
