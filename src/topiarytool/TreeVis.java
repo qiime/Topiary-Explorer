@@ -6,6 +6,8 @@ import java.util.*;
 import java.awt.Color;
 import javax.jnlp.*;
 import java.io.*;
+import java.awt.image.*;
+import javax.imageio.*;
 
 public class TreeVis extends PApplet {
 
@@ -1180,19 +1182,24 @@ public class TreeVis extends PApplet {
     public void exportScreenCapture(FileContents fc) {
       try {
 		  String filename = fc.getName();
-		  PGraphics canvas = createGraphics(width, height, PDF, filename);
+		  PGraphics canvas = createGraphics(width, height, JAVA2D);
 		  canvas.beginDraw();
 		  canvas.textFont(currFont);
-		  background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
+		  canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
           canvas.pushMatrix();
           canvas.translate((float)xstart, (float)ystart);
           canvas.rotate((float)(treerotation*Math.PI/180.0));
           canvas.translate((float)-xstart, (float)-ystart);
 		  drawTree(root, canvas);
           canvas.popMatrix();
-		  canvas.dispose();
 		  canvas.endDraw();
-      } catch (java.io.IOException e) {}
+		  java.awt.image.BufferedImage img = (BufferedImage)canvas.getImage();
+		  String[] formatNames = ImageIO.getWriterFormatNames();
+		  fc.setMaxLength(100000);
+		  OutputStream os = fc.getOutputStream(true);
+		  ImageIO.write(img, "PNG", os);
+          canvas.dispose();
+      } catch (java.io.IOException e) {e.printStackTrace(); }
     }
 
     /**
@@ -1235,7 +1242,7 @@ public class TreeVis extends PApplet {
 			  ystart = dims[1]*0.5;
 		  }
 		  
-		  PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), PDF, file.getName());
+		  PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), JAVA2D);
 	
 		  setCollapsedPixel((float)(getCollapsedPixel()*(xscale/oldXScale)));
 	
@@ -1249,8 +1256,16 @@ public class TreeVis extends PApplet {
           canvas.translate((float)-xstart, (float)-ystart);
 		  drawTree(root, canvas);
           canvas.popMatrix();
-		  canvas.dispose();
 		  canvas.endDraw();
+
+
+          java.awt.image.BufferedImage img = (BufferedImage)canvas.getImage();
+          file.setMaxLength(100000);
+          OutputStream os = file.getOutputStream(true);
+          ImageIO.write(img, "PNG", os);
+                    
+
+		  canvas.dispose();
 	
 		  //go back to how it was
 		  xscale = oldXScale;
