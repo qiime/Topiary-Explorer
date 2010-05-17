@@ -162,6 +162,7 @@ public class MainFrame extends JFrame {
 
         databaseTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         databaseTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        databaseTable.setCellSelectionEnabled(true);
 
         //databasePane.addTab("Database", dataPanel);
         databasePanel.add(databaseTabPane, BorderLayout.SOUTH);

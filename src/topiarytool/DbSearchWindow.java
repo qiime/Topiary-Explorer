@@ -12,7 +12,7 @@ import javax.swing.table.*;
 
 /**
  *
- * @author megumi
+ * @author meg
  */
 public class DbSearchWindow extends JPanel {
     MainFrame frame = null;
@@ -32,6 +32,7 @@ public class DbSearchWindow extends JPanel {
     JTextField query = new JTextField(30);
     JButton updatequery = new JButton("Update");
     JPanel querypanel = new JPanel(new BorderLayout());
+    JLabel querylabel = new JLabel("You can enter an SQL query or generate one by clicking on values of interest.");
     
     public DbSearchWindow(MainFrame _frame) {
         frame = _frame;
@@ -42,6 +43,8 @@ public class DbSearchWindow extends JPanel {
         this.setSize(new Dimension(400,150));
         mainPanel.setLayout(new BorderLayout());
         
+        querypanel.add(querylabel, BorderLayout.NORTH);
+        query.setToolTipText("Enter an SQL query");
         querypanel.add(query, BorderLayout.CENTER);
         updatequery.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e){
@@ -91,6 +94,7 @@ public class DbSearchWindow extends JPanel {
              if(frame.db_conn.c.searchCurrentTable(query.getText()))
              {
                  frame.resetDatabaseTable();
+                 frame.back.setEnabled(true);
              }
          }
       }

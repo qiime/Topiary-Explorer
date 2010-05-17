@@ -11,7 +11,7 @@ import javax.swing.event.*;
 
 /**
  *
- * @author megumi
+ * @author meg
  */
 public class DbConnectWindow extends JPanel {
     dbConnect c;
@@ -98,6 +98,7 @@ public class DbConnectWindow extends JPanel {
              un_field.enable();
              pw_field.enable();
              connect_button.setText("Connect");
+             frame.databaseStatus.setText("No database connected.");
              frame.databaseTabPane.setEnabledAt(1, false);
          }
      }

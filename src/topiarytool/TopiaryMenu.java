@@ -879,7 +879,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             resetCollapseByMenu();
             //resetTipLabels();
             frame.treeWindow.tree.loop();
-            //frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
+            frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());
             frame.otuMetadataFile = inFile;
        }
        frame.repaint();
