@@ -103,6 +103,7 @@ public class MainFrame extends JFrame {
         //set up the menu bar
         setJMenuBar(mainMenu);
 
+
         //set up the color panel
         colorPanel.setLayout(new BoxLayout(colorPanel, BoxLayout.PAGE_AXIS));
         JLabel label = new JLabel("Color Key");

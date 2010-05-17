@@ -16,7 +16,7 @@ import javax.jnlp.*;
  * TreeWindow is the window that contains the tree visualization.
  */
 
-public class TreeWindow extends JFrame {
+public class TreeWindow extends JFrame implements KeyListener{
     MainFrame frame = null;
     TreeAppletHolder treeHolder = null;
     TreeVis tree = new TreeVis();
@@ -28,6 +28,7 @@ public class TreeWindow extends JFrame {
     Node clickedNode = null;
     JPopupMenu treePopupMenu = new JPopupMenu();
     TipLabelCustomizer tlc = null;
+    Set keys = new java.util.HashSet();
     
     /**
     * Class Constructor
@@ -35,6 +36,7 @@ public class TreeWindow extends JFrame {
 	 public TreeWindow(MainFrame _frame) {
 	     this.setSize(new Dimension(900,700));
 	     frame = _frame;
+	     tree.addKeyListener(this);
 	     treeHolder = new TreeAppletHolder(tree, this);
 	     treeToolbar = new TreeToolbar(this);
 	     verticalTreeToolbar = new VerticalTreeToolbar(this);
@@ -108,6 +110,29 @@ public class TreeWindow extends JFrame {
 	     pane.add(treeOpsToolbar, BorderLayout.NORTH);
 	     pane.add(treePanel, BorderLayout.CENTER);
 	}
+	
+	public void keyTyped(KeyEvent key) {
+	}
+	
+	public void keyReleased(KeyEvent key) {
+       }
+
+    public void keyPressed(KeyEvent key) {
+	    if(key.getKeyCode() == 61)
+	    {
+	        treeToolbar.zoomSlider.setValue(treeToolbar.zoomSlider.getValue() + 1);
+	        treeToolbar.syncTreeWithZoomSlider();
+            verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() + 1);
+            verticalTreeToolbar.syncTreeWithZoomSlider();
+	    }
+	    if(key.getKeyCode() == 45)
+	    {
+	        treeToolbar.zoomSlider.setValue(treeToolbar.zoomSlider.getValue() - 1);
+	        treeToolbar.syncTreeWithZoomSlider();
+            verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() - 1);
+            verticalTreeToolbar.syncTreeWithZoomSlider();
+	    }
+    }
 	
 	/**
     * Loads a new tree from the selected file
@@ -255,34 +280,35 @@ public class TreeWindow extends JFrame {
 	public void recolorTreeByOtu() {
        //loop over each node
        for (Node n : tree.getTree().getLeaves()){
-           //get the node's name
-           String nodeName = n.getName();
-           //get the row of the OTU metadata table with this name
-           int rowIndex = -1;
-           for (int i = 0; i < frame.otuMetadata.getData().maxRow(); i++) {
-               String val = (String)frame.otuMetadata.getData().get(i,0);
-               if (val.equals(nodeName)) {
-                   rowIndex = i;
-                   break;
+               //get the node's name
+               String nodeName = n.getName();
+               //get the row of the OTU metadata table with this name
+               int rowIndex = -1;
+               for (int i = 0; i < frame.otuMetadata.getData().maxRow(); i++) {
+                   String val = (String)frame.otuMetadata.getData().get(i,0);
+                   if (val.equals(nodeName)) {
+                       rowIndex = i;
+                       break;
+                   }
                }
-           }
-           if (rowIndex == -1) {
-               JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
-               frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.");
-               return;
-           }
-           Object category = frame.otuMetadata.getValueAt(rowIndex, frame.colorColumnIndex);
-           if (category == null) continue;
-           //get the color for this category
-           Color c = frame.colorMap.get(category);
-           if (c == null) {
-               JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
-               frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());
-               return;
-           }
-           //set the node to this color
-           n.clearColor();
-           n.addColor(c, 1.0);
+               if (rowIndex == -1) {
+                   JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                   frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.");
+                   return;
+               }
+               Object category = frame.otuMetadata.getValueAt(rowIndex, frame.colorColumnIndex);
+               if (category == null) continue;
+               //get the color for this category
+               Color c = frame.colorMap.get(category);
+               if (c == null) {
+                   JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+                   frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());
+                   return;
+               }
+               //set the node to this color
+               n.clearColor();
+               n.addColor(c, 1.0);
+           
        }
        tree.getTree().updateColorFromChildren();
        frame.repaint();
@@ -295,50 +321,52 @@ public class TreeWindow extends JFrame {
          //loop over each node
          for (Node n : tree.getTree().getLeaves()) {
              //get the node's name
-             String nodeName = n.getName();
-             //get the row of the OTU-Sample map with this name
-             int rowIndex = -1;
-             for (int i = 0; i < frame.otuSampleMap.getData().maxRow(); i++) {
-                String val = (String)frame.otuSampleMap.getData().get(i,0);
-                if (val.equals(nodeName)) {
-                    rowIndex = i;
-                    break;
-                }
-             }
-             if (rowIndex == -1) {
-                JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU-Sample Table.", "Error", JOptionPane.ERROR_MESSAGE);
-                frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU-Sample Table.");
-                return;
-             }
-             //get the row
-             ArrayList<Object> row = frame.otuSampleMap.getRow(rowIndex);
-             n.clearColor();
-             //for each non-zero column value (starting after the ID column)
-             for (int i = 1; i < row.size(); i++) {
-                 Object value = row.get(i);
-                 //if it's not an Integer, skip it
-                 if (!(value instanceof Integer)) continue;
-                 Integer weight = (Integer)value;
-                 if (weight == 0) continue;
-                 String sampleID = frame.otuSampleMap.getColumnName(i);
-                 //find the row that has this sampleID
-                 int sampleRowIndex = -1;
-                 for (int j = 0; j < frame.sampleMetadata.getData().maxRow(); j++) {
-                    if (frame.sampleMetadata.getData().get(j,0).equals(sampleID)) {
-                        sampleRowIndex = j;
+             
+                 String nodeName = n.getName();
+                 //get the row of the OTU-Sample map with this name
+                 int rowIndex = -1;
+                 for (int i = 0; i < frame.otuSampleMap.getData().maxRow(); i++) {
+                    String val = (String)frame.otuSampleMap.getData().get(i,0);
+                    if (val.equals(nodeName)) {
+                        rowIndex = i;
                         break;
                     }
                  }
-                 if (sampleRowIndex == -1) {
-                    //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
-                    //return;
-                    System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
-                    frame.consoleWindow.update("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
-                    continue;
+                 if (rowIndex == -1) {
+                    JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU-Sample Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                    frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU-Sample Table.");
+                    return;
                  }
-                 Object val = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.colorColumnIndex);
-                 if (val == null) continue;
-                 n.addColor(frame.colorMap.get(val), weight);
+                 //get the row
+                 ArrayList<Object> row = frame.otuSampleMap.getRow(rowIndex);
+                 n.clearColor();
+                 //for each non-zero column value (starting after the ID column)
+                 for (int i = 1; i < row.size(); i++) {
+                     Object value = row.get(i);
+                     //if it's not an Integer, skip it
+                     if (!(value instanceof Integer)) continue;
+                     Integer weight = (Integer)value;
+                     if (weight == 0) continue;
+                     String sampleID = frame.otuSampleMap.getColumnName(i);
+                     //find the row that has this sampleID
+                     int sampleRowIndex = -1;
+                     for (int j = 0; j < frame.sampleMetadata.getData().maxRow(); j++) {
+                        if (frame.sampleMetadata.getData().get(j,0).equals(sampleID)) {
+                            sampleRowIndex = j;
+                            break;
+                        }
+                     }
+                     if (sampleRowIndex == -1) {
+                        //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
+                        //return;
+                        System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
+                        frame.consoleWindow.update("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
+                        continue;
+                     }
+                     Object val = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.colorColumnIndex);
+                     if (val == null) continue;
+                     n.addColor(frame.colorMap.get(val), weight);
+                 
              }
          }
          tree.getTree().updateColorFromChildren();
@@ -611,12 +639,13 @@ public class TreeWindow extends JFrame {
           ((ColorTableModel)frame.colorKeyTable.getModel()).clearTable();
           frame.colorKeyTable.repaint();
           //reset the node colors
-          if (tree.getTree() != null) {
+          //if (tree.getTree() != null) {
               for (Node n : tree.getTree().getLeaves()) {
-                  n.clearColor();
+                  n.noColor();
               }
               tree.getTree().updateColorFromChildren();
-          }
+          //}
+          this.repaint();
 
           //reset the pcoa vertex colors
           if (frame.pcoaWindow.pcoa.sampleData != null) {
