@@ -31,6 +31,7 @@ public class Node {
   private double minimumRXOffset = 0;
   
   //parallel arrays of colors and the weight to be drawn with each
+  private boolean colored = true;
   private ArrayList<Color> groupColor = new ArrayList<Color>();
   private ArrayList<Double> groupWeight = new ArrayList<Double>();
   
@@ -112,7 +113,7 @@ public class Node {
    */
  public Color getColor() {
     //if there's no color, use black
-    if (groupWeight.size() == 0) {
+    if (!colored) {
         return new Color(0,0,0);
     }
     double r,g,b;
@@ -157,6 +158,10 @@ public class Node {
       result.add(this);
       return result;
   }
+  
+  public void noColor() {
+    colored = false;
+  }
 
   public void clearColor() {
     groupWeight = new ArrayList<Double>();
@@ -166,6 +171,7 @@ public class Node {
   public void addColor(Color c, double w) {
       groupWeight.add(new Double(w));
       groupColor.add(c);
+      colored = true;
   }
 
   /**
