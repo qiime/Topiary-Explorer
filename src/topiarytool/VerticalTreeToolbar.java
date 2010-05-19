@@ -27,6 +27,7 @@ public class VerticalTreeToolbar extends JToolBar {
 
             public void actionPerformed(ActionEvent arg0) {
                 zoomSlider.setValue(zoomSlider.getValue() - 1);
+                frame.tree.changeFontSize(frame.tree.getFontSize()-1);
                 syncTreeWithZoomSlider();
             }
 
@@ -35,6 +36,7 @@ public class VerticalTreeToolbar extends JToolBar {
 
             public void actionPerformed(ActionEvent arg0) {
                 zoomSlider.setValue(zoomSlider.getValue() + 1);
+                frame.tree.changeFontSize(frame.tree.getFontSize()+1);
                 syncTreeWithZoomSlider();
             }
 

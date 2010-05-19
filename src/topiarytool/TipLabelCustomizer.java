@@ -145,7 +145,8 @@ public class TipLabelCustomizer extends JFrame {
                     continue;
                 }
                 Object category = frame.otuMetadata.getValueAt(rowIndex, colIndex);
-                vals.add(category.toString());
+                if(category != null)
+                    vals.add(category.toString());
             }
             if(vals.size() != 0){
                 for(int i = 0; i < vals.size()-1; i++)

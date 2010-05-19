@@ -56,7 +56,8 @@ public class TreeVis extends PApplet {
     private Set hilightedNodes = new java.util.HashSet();
 
     private List listeners = new java.util.ArrayList();
-    private PFont currFont = createFont("georgia", 9);
+    private int fntpnt = 12;
+    private PFont currFont = createFont("georgia", fntpnt);
 
 
     /**
@@ -446,6 +447,15 @@ public class TreeVis extends PApplet {
       }
     }
 
+    public void changeFontSize(int size) {
+        currFont = createFont("georgia", size);
+        textFont(currFont);
+        fntpnt = size;
+    }
+    
+    public int getFontSize() {
+        return fntpnt;
+    }
 
     /**
      * Replace the entire tree, recalculating cached values
@@ -453,7 +463,14 @@ public class TreeVis extends PApplet {
      * @param  newRoot  the Node object that is the root of the new tree
      */
     public void setTree(Node newRoot) {
-    
+      fntpnt = 12;
+      int treeSize = newRoot.getNumberOfLeaves();
+      if( treeSize > 50)
+      {
+          fntpnt = Math.max(fntpnt / treeSize, 1);
+      }
+      currFont = createFont("georgia", fntpnt);
+      textFont(currFont);
       //add to the margin the longest node labels
       float width = 0;
       String s = newRoot.getLongestLabel();
@@ -962,7 +979,7 @@ public class TreeVis extends PApplet {
      * @param  canvas  the PGraphics object to draw to
      */
     private void drawWedge(Node node, PGraphics canvas) {
-    
+      textFont(createFont("georgia", 12));
       double x = node.getXOffset();
       double y = node.getYOffset();
       if (treeLayout.equals("Radial")) {
@@ -1009,6 +1026,7 @@ public class TreeVis extends PApplet {
           // write in the text (number of OTUs contained) in black
           canvas.fill(0);
           canvas.stroke(0);
+          
           canvas.text(str(node.getNumberOfLeaves()), (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+5));
       } else if (treeLayout.equals("Triangular")) {
           // find heights for wedge
@@ -1034,6 +1052,7 @@ public class TreeVis extends PApplet {
           // write in the text (number of OTUs contained) in black
           canvas.fill(0);
           canvas.stroke(0);
+          
           canvas.text(str(node.getNumberOfLeaves()), (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+5));
       
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
@@ -1062,6 +1081,7 @@ public class TreeVis extends PApplet {
           canvas.stroke(0);
           canvas.text(str(node.getNumberOfLeaves()), (float)(toScreenX(x)+5), (float)(toScreenY(y)+5)); 
       }
+      textFont(currFont);
     }
 
 

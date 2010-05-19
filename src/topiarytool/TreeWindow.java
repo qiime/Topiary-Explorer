@@ -123,6 +123,7 @@ public class TreeWindow extends JFrame implements KeyListener{
 	        treeToolbar.zoomSlider.setValue(treeToolbar.zoomSlider.getValue() + 1);
 	        treeToolbar.syncTreeWithZoomSlider();
             verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() + 1);
+            tree.changeFontSize(Math.min(tree.getFontSize()+1,32));
             verticalTreeToolbar.syncTreeWithZoomSlider();
 	    }
 	    if(key.getKeyCode() == 45)
@@ -130,6 +131,7 @@ public class TreeWindow extends JFrame implements KeyListener{
 	        treeToolbar.zoomSlider.setValue(treeToolbar.zoomSlider.getValue() - 1);
 	        treeToolbar.syncTreeWithZoomSlider();
             verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() - 1);
+            tree.changeFontSize(Math.max(tree.getFontSize()-1,1));
             verticalTreeToolbar.syncTreeWithZoomSlider();
 	    }
     }
