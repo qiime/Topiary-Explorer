@@ -1215,7 +1215,7 @@ public class TreeVis extends PApplet {
 		  canvas.endDraw();
 		  java.awt.image.BufferedImage img = (BufferedImage)canvas.getImage();
 		  String[] formatNames = ImageIO.getWriterFormatNames();
-		  fc.setMaxLength(100000);
+		  fc.setMaxLength(10000000);
 		  OutputStream os = fc.getOutputStream(true);
 		  ImageIO.write(img, "PNG", os);
           canvas.dispose();

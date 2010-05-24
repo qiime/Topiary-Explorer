@@ -94,6 +94,9 @@ if dist_metric == "Custom...":
 else:
     #create distance matrix
     distance_matrix = dist_functions[dist_metric](ptmtx)
+o = open("distmtx.txt", 'w')
+o.write(distance_matrix)
+o.close();
 print("1")
 aa = pcoa.principal_coordinates_analysis(distance_matrix)
 sample_coords = aa[0].transpose()

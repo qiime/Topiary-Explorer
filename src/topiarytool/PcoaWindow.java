@@ -12,6 +12,8 @@ import javax.swing.table.*;
 import java.io.*;
 import javax.swing.table.*;
 import javax.jnlp.*;
+import java.io.*;
+import java.net.*;
 
 /**
  * PcoaWindow is the window that contains the PCoA visualization.
@@ -73,6 +75,7 @@ public class PcoaWindow extends JFrame {
     */
 	public void runPcoaAnalysis() {
 
+		System.out.println(frame.bs.getCodeBase().toString());
         //set view
         this.setVisible(true);
 
@@ -80,91 +83,130 @@ public class PcoaWindow extends JFrame {
 		ArrayList<String> sampleids = new ArrayList<String>();
 
 		//Write the data to file
-		SparseTableModel model = (SparseTableModel) frame.otuSampleMapTable.getModel();
+		SparseTableModel model = (SparseTableModel) ((TableSorter)frame.otuSampleMapTable.getModel()).getTableModel();
 		//get the column names
 		for (int i = 1; i < frame.otuSampleMapTable.getColumnCount(); i++) {
 			sampleids.add((String) frame.otuSampleMapTable.getColumnName(i));
 		}
-		try {
-			System.out.println("writing...");
-			pcoaOptionsToolbar.setStatus("Writing...");
-			BufferedWriter o = new BufferedWriter(new FileWriter("data.txt"));
-			o.write("[");
-			for (int i = 0; i < frame.otuSampleMapTable.getRowCount(); i++) {
-				o.write("[");
-				//skip first col, which is OTU ID
-				Object val = frame.otuSampleMapTable.getValueAt(i,0);
-				if (val==null) { val = new Integer(0); }
-				otuids.add(val.toString());
-				for (int j = 1; j < frame.otuSampleMapTable.getColumnCount(); j++) {
-					Object data = frame.otuSampleMapTable.getValueAt(i, j);
-                    if (data==null) {data = new Integer(0);}
-					if (data instanceof Integer) {
-						if (j > 1) {o.write(", ");}
-						o.write(data.toString());
-					}
+		StringBuilder datastrb = new StringBuilder();
+		System.out.println("Setting up data string...");
+		pcoaOptionsToolbar.setStatus("Setting up data string...");
+		datastrb.append("[");
+		for (int i = 0; i < frame.otuSampleMapTable.getRowCount(); i++) {
+			datastrb.append("[");
+			//skip first col, which is OTU ID
+			Object val = frame.otuSampleMapTable.getValueAt(i,0);
+			if (val==null) { val = new Integer(0); }
+			otuids.add(val.toString());
+			for (int j = 1; j < frame.otuSampleMapTable.getColumnCount(); j++) {
+				Object data = frame.otuSampleMapTable.getValueAt(i, j);
+				if (data==null || data.equals("")) {data = new Integer(0);}
+				if (data instanceof Integer) {
+					if (j > 1) {datastrb.append(", ");}
+					datastrb.append(data.toString());
 				}
-				o.write("],\n");
 			}
-			o.write("]");
-			o.close();
-			System.out.println("done");
-			pcoaOptionsToolbar.setStatus("Done writing.");
-			frame.consoleWindow.update("Done writing PCoA analysis.");
-
-		} catch (IOException e)  {
-			JOptionPane.showMessageDialog(null, "Unable to write data file PCoA analysis", "Error", JOptionPane.ERROR_MESSAGE);
-		    frame.consoleWindow.update("Unable to write data file PCoA analysis");
+			datastrb.append("],");
 		}
-
-		//delete data files if they already exist
-		File sample_coords = new File("sample_coords.txt");
-		sample_coords.delete();
-		File sp_coords = new File("sp_coords.txt");
-		sp_coords.delete();
-
-		System.out.println("running analysis...");
-		pcoaOptionsToolbar.setStatus("Running analysis...");
+		datastrb.append("]");
+		String datastr = datastrb.toString();
+		System.out.println("done");
+		pcoaOptionsToolbar.setStatus("Writing to server...");
+		Socket socket = null;
+		PrintWriter out = null;
+		BufferedReader in = null;
 		try {
-			//get the distance metric from combo box
-			
-            String dist_metric = pcoaOptionsToolbar.distanceMetrics.getSelectedItem(); 
-
-            //is the distance metric "Custom..."?
-			if (dist_metric.equals("Load from file")) {
-				//allow use to select file for distance matrix
-				
-				try {
-					FileContents fc = frame.fos.openFileDialog(null,null);
-					dist_metric += " " + fc.getName();
-				} catch (IOException ex) {}
-			}
-
-			//run python scripts to calculate PCoA
-			Process pr = Runtime.getRuntime().exec("python l19test.py " + dist_metric);
-            BufferedReader br = new BufferedReader(new InputStreamReader(pr.getErrorStream()));
-   			String line;
-			while((line = br.readLine()) != null) {
-				System.out.println(line);
-				frame.consoleWindow.update(line);
-			}
-            int exitVal = pr.waitFor();
-            System.out.println("Process Exit Value: " + exitVal);
-            frame.consoleWindow.update("Process Exit Value: " + exitVal);
-			System.out.println("done.");
-			frame.consoleWindow.update("done.");
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Unable to run python script for PCoA analysis", "Error", JOptionPane.ERROR_MESSAGE);
-		    frame.consoleWindow.update("Unable to run python script for PCoA analysis");
+			socket = new Socket(java.net.InetAddress.getLocalHost(), 4444);
+		
+		out = new PrintWriter(socket.getOutputStream(), true);
+		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		} catch(Exception ex){
+			System.out.println("Unable to open connection to socket.");
 		}
+		//write to server
+		out.println(datastr);
+		//get the distance metric from combo box
+		
+		String dist_metric = pcoaOptionsToolbar.distanceMetrics.getSelectedItem(); 
+
+		//is the distance metric "Custom..."?
+		if (dist_metric.equals("Load from file")) {
+			//allow use to select file for distance matrix
+			
+			try {
+				FileContents fc = frame.fos.openFileDialog(null,null);
+				byte[] b = new byte[100000];
+				fc.getInputStream().read(b);
+				dist_metric = new String(b);
+			} catch (IOException ex) {System.out.println("Error reading distance metric from file");}
+		}
+		out.println(dist_metric);
+		
+		frame.consoleWindow.update("Done writing PCoA analysis.");
+
+
+	
+	    // receive data files
+	    try{
+			int bytesRead;
+			int current = 0;
+			byte [] mybytearray  = new byte [100000];
+			DataInputStream is = new DataInputStream(socket.getInputStream());
+			
+			//read file length
+			int fileLen1 = is.readInt();
+			System.out.println(fileLen1);
+			
+			//read first file
+			FileContents fout = frame.es.openFile(new File("sp_coords.txt"));
+			OutputStream fo = fout.getOutputStream(true);
+			BufferedOutputStream bos = new BufferedOutputStream(fo);
+			is.read(mybytearray, 0, fileLen1);
+			//is.skipBytes(fileLen1);
+			bos.write(mybytearray, 0, fileLen1);
+			bos.flush();
+			bos.close();
+			
+			//read file length
+			int fileLen2 = is.readInt();
+			System.out.println(fileLen2);
+			
+			//read second file
+			fout = frame.es.openFile(new File("sample_coords.txt"));
+			fo = fout.getOutputStream(true);
+			bos = new BufferedOutputStream(fo);
+			is.read(mybytearray, 0, fileLen2);
+			bos.write(mybytearray, 0, fileLen2);
+			//is.skipBytes(fileLen2);
+			bos.flush();
+			bos.close();
+			
+			//read file length
+			int fileLen3 = is.readInt();
+			System.out.println(fileLen3);
+			
+			//read third file
+			fout = frame.es.openFile(new File("evals.txt"));
+			fo = fout.getOutputStream(true);
+			bos = new BufferedOutputStream(fo);
+			is.read(mybytearray,0, fileLen3);
+			bos.write(mybytearray, 0, fileLen3);
+			//is.skipBytes(fileLen3);
+			bos.flush();
+			bos.close();
+			
+    	} catch(Exception ex) {
+    		System.out.println("Unable to receive data files:");
+    		ex.printStackTrace();
+    	}
 
 
 	  System.out.println("loading data files...");
 	  pcoaOptionsToolbar.setStatus("Loading data files...");
 	  BufferedReader br = null;
 	  try {
-		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("sample_coords.txt"))));
-	  } catch (FileNotFoundException e) {
+		br = new BufferedReader(new InputStreamReader(frame.es.openFile(new File("sample_coords.txt")).getInputStream()));
+	  } catch (Exception e) {
 	  	JOptionPane.showMessageDialog(null, "Error opening find sample_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
 	    frame.consoleWindow.update("Error opening find sample_coords.txt");
 	  }
@@ -194,8 +236,8 @@ public class PcoaWindow extends JFrame {
 	  }
 
 	 try {
-		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("sp_coords.txt"))));
-	  } catch (FileNotFoundException e) {
+		br = new BufferedReader(new InputStreamReader(frame.es.openFile(new File("sp_coords.txt")).getInputStream()));
+	  } catch (Exception e) {
 		JOptionPane.showMessageDialog(null, "Error opening sp_coords.txt", "Error", JOptionPane.ERROR_MESSAGE);
 	    frame.consoleWindow.update("Error opening sp_coords.txt");
 	  }
@@ -225,8 +267,8 @@ public class PcoaWindow extends JFrame {
 	  
 	  
 	  try {
-		br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("evals.txt"))));
-	  } catch (FileNotFoundException e) {
+		br = new BufferedReader(new InputStreamReader(frame.es.openFile(new File("evals.txt")).getInputStream()));
+	  } catch (Exception e) {
 		JOptionPane.showMessageDialog(null, "Error opening evals.txt", "Error", JOptionPane.ERROR_MESSAGE);
 	    frame.consoleWindow.update("Error opening evals.txt");
 	  }
@@ -286,7 +328,7 @@ public class PcoaWindow extends JFrame {
 	  for (int i = 0; i < spc.length; i++) {
 	  	for (int j = 0; j < samplec.length; j++) {
 	  	    Object val = frame.otuSampleMapTable.getValueAt(i,j+1);
-	  	    if (val==null) {val=new Integer(0);}
+	  	    if (val==null || val.equals("")) {val=new Integer(0);}
 	  		float weight = (float) ((Integer)val);
 	  		if (weight != 0) {
 	  			float[][] t = new float[links.length+1][];
