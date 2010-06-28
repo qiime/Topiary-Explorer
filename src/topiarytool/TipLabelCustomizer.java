@@ -121,6 +121,7 @@ public class TipLabelCustomizer extends JFrame {
         }
 
         for(Node n :treeWindow.tree.getTree().getNodes()) {
+            n.setDrawLabel(true);
             String name = "";
             ArrayList<String> vals = new ArrayList<String>();
             for(String o : ops)

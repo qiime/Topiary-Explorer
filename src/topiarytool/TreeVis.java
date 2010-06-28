@@ -846,14 +846,14 @@ public class TreeVis extends PApplet {
      
       
       if (node.isLeaf()) {
-        if (drawExternalNodeLabels && node.getLabel().length() > 0) {
+        if (drawExternalNodeLabels && node.getLabel().length() > 0 && node.getDrawLabel()) {
             //canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
             canvas.fill(0);
             canvas.stroke(0);
             canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
         }
       } else {
-          if (drawInternalNodeLabels && node.getLabel().length() > 0) {
+          if (drawInternalNodeLabels && node.getLabel().length() > 0 && node.getDrawLabel()) {
             //canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
             canvas.fill(0);
             canvas.stroke(0);

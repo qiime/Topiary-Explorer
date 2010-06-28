@@ -65,6 +65,7 @@ public class MainFrame extends JFrame {
     Container toolbarPane = new Container();
     WindowViewToolbar windowToolbar = new WindowViewToolbar(this);
     
+    ArrayList<TreeWindow> treeWindows = new ArrayList<TreeWindow>();
     TreeWindow treeWindow = new TreeWindow(this);
     PcoaWindow pcoaWindow = new PcoaWindow(this);
     ConsoleWindow consoleWindow = new ConsoleWindow(this);
@@ -220,6 +221,40 @@ public class MainFrame extends JFrame {
     	} catch (UnavailableServiceException e) { bs=null; }   
      }
      
+     public void newTreeWindow() {
+         TreeWindow tempTreeWindow = new TreeWindow(this);
+         tempTreeWindow.loadTree();
+         treeWindows.add(tempTreeWindow);
+         resetOtuMenus();
+         resetSampleMenus();
+     }
+     
+     public void newTreeWindow(String treeString) {
+          TreeWindow tempTreeWindow = new TreeWindow(this);
+          tempTreeWindow.loadTree(treeString);
+          treeWindows.add(tempTreeWindow);
+      }
+     
+     public void resetOtuMenus() {
+         for(TreeWindow w : treeWindows)
+         {
+/*             System.out.println("got here");*/
+              w.resetLineWidthOtuMenu();
+              w.resetCollapseByMenu();
+              w.colorBy.resetColorByOtuMenu();
+          }
+     }
+     
+     public void resetSampleMenus() {
+          for(TreeWindow w : treeWindows)
+          {
+               w.resetLineWidthSampleMenu();
+               w.resetCollapseByMenu();
+               w.colorBy.resetColorBySampleMenu();
+               w.resetLineWidthSampleMenu();
+           }
+      }
+     
      public void resetDatabaseTable() {
          database = new DataTable(db_conn.c);
          SparseTableModel model = new SparseTableModel(database.getData(),
@@ -254,37 +289,34 @@ public class MainFrame extends JFrame {
              switch(tableName.charAt(4))
              {
                  case 'S':
-                    otuSampleMap = new DataTable(database.toStrings());
+                     otuSampleMap = new DataTable(database.toStrings());
                   
-                    model = new SparseTableModel(otuSampleMap.getData(),
+                     model = new SparseTableModel(otuSampleMap.getData(),
 					 otuSampleMap.getColumnNames());
 					 sorter = new TableSorter(model, otuSampleMapTable.getTableHeader());
 					 otuSampleMapTable.setModel(sorter);
 					 dataPane.setSelectedIndex(2);
-                    break;
+                     break;
                  case 'M':
-                  otuMetadata = new DataTable(database.toStrings());
-
+                     otuMetadata = new DataTable(database.toStrings());
 				     model = new SparseTableModel(otuMetadata.getData(),
 					 otuMetadata.getColumnNames());
 					 sorter = new TableSorter(model, otuMetadataTable.getTableHeader());
 					 otuMetadataTable.setModel(sorter);
-					 mainMenu.resetColorByOtuMenu();
-                      mainMenu.resetLineWidthOtuMenu();
-                      mainMenu.resetCollapseByMenu();
-                      dataPane.setSelectedIndex(1);
-                    break;
+/*                   resetColorByOtuMenus();*/
+                     resetOtuMenus();
+                     dataPane.setSelectedIndex(1);
+                     break;
                  case 'l':
-                 sampleMetadata = new DataTable(database.toStrings());
+                     sampleMetadata = new DataTable(database.toStrings());
                   
-                  model = new SparseTableModel(sampleMetadata.getData(),
-					 sampleMetadata.getColumnNames());
-					  sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
-					 sampleMetadataTable.setModel(sorter);
-					 mainMenu.resetColorBySampleMenu();
-                      mainMenu.resetLineWidthSampleMenu();
-                      dataPane.setSelectedIndex(3);
-                    break;
+                     model = new SparseTableModel(sampleMetadata.getData(),
+    				 sampleMetadata.getColumnNames());
+    				 sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
+    				 sampleMetadataTable.setModel(sorter);
+                     resetSampleMenus();
+                     dataPane.setSelectedIndex(3);
+                     break;
                  default:
              }
              back.setEnabled(true);
@@ -391,9 +423,11 @@ public class MainFrame extends JFrame {
      
      public void resetLineWidths() {
          if (currTable != null && currTable == otuMetadata) {
-             treeWindow.resetLineWidthsByOtu();
+             for(int i = 0; i < treeWindows.size(); i++)
+                 treeWindows.get(i).resetLineWidthsByOtu();
          } else if (currTable != null && currTable == sampleMetadata) {
-             treeWindow.resetLineWidthsBySample();
+             for(int i = 0; i < treeWindows.size(); i++)
+                  treeWindows.get(i).resetLineWidthsByOtu();
          } else {
              //it's null; don't do anything
          }     
@@ -401,10 +435,12 @@ public class MainFrame extends JFrame {
 
      public void recolor() {
          if (currTable != null && currTable == otuMetadata) {
-             treeWindow.recolorTreeByOtu();
+             for(int i = 0; i < treeWindows.size(); i++)
+                  treeWindows.get(i).recolorTreeByOtu();
              pcoaWindow.recolorPcoaByOtu();
          } else if (currTable != null && currTable == sampleMetadata) {
-             treeWindow.recolorTreeBySample();
+             for(int i = 0; i < treeWindows.size(); i++)
+                  treeWindows.get(i).recolorTreeBySample();
              pcoaWindow.recolorPcoaBySample();
          } else {
              //it's null; don't do anything

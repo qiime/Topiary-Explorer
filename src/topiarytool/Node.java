@@ -21,6 +21,7 @@ public class Node {
   private double rxoffset = 0;
   private double ryoffset = 0;
   private boolean drawPie = false; //should a pie chart be drawn for this node?
+  private boolean drawLabel = false;
   private double maximumYOffset = 0;
   private double minimumYOffset = 0;
   private double maximumTOffset = 0;
@@ -54,6 +55,8 @@ public class Node {
   public boolean isLeaf() { return nodes.size() == 0; }
   public void setDrawPie(boolean b) { drawPie = b; }
   public boolean getDrawPie() { return drawPie; }
+  public void setDrawLabel(boolean b) { drawLabel = b; }
+  public boolean getDrawLabel() { return drawLabel; }
   public ArrayList<Color> getGroupColor() { return groupColor; }
   public ArrayList<Double> getGroupFraction() { return groupWeight; }
   public boolean isCollapsed() { return collapsed; }

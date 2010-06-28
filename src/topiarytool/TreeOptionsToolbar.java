@@ -11,6 +11,7 @@ import java.io.*;
 
 public class TreeOptionsToolbar extends JToolBar {
 
+    JButton tipLabelsButton = new JButton();
     JButton collapseButton  = new JButton();
     JButton expandButton = new JButton();
     JButton mirrorvertButton = new JButton();
@@ -41,6 +42,14 @@ public class TreeOptionsToolbar extends JToolBar {
                 fc.getInputStream().read(buffer);
                 collapseButton.setIcon(new ImageIcon(buffer));
         } catch(java.io.IOException ex) {}*/
+        tipLabelsButton.setText("Tip Labels");
+        tipLabelsButton.setToolTipText("Show Tip Labels");
+        tipLabelsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.showTips = !frame.showTips;
+                frame.tipLabels();
+            }
+        });
         collapseButton.setText("Collapse");
         collapseButton.setToolTipText("Collapse");
         collapseButton.addActionListener(new ActionListener() {
@@ -61,6 +70,7 @@ public class TreeOptionsToolbar extends JToolBar {
                 frame.uncollapseTree();
             }
         });
+        add(tipLabelsButton);
         add(collapseButton);
         add(expandButton);
         addSeparator();

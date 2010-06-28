@@ -22,7 +22,6 @@ public class VerticalTreeToolbar extends JToolBar {
         super(JToolBar.VERTICAL);
         
         frame = _frame;
-
         zoomOutButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {

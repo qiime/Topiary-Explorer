@@ -16,7 +16,33 @@ import javax.jnlp.*;
  * TreeWindow is the window that contains the tree visualization.
  */
 
-public class TreeWindow extends JFrame implements KeyListener{
+public class TreeWindow extends TopiaryWindow implements KeyListener, ActionListener{
+    JMenuBar topMenu = new JMenuBar();
+    JMenu treeMenu = new JMenu("Options");
+    JMenu nodeMenu = new JMenu("Node");
+    JMenu lineWidthMenu = new JMenu("Line Width");
+    JMenu rotateMenu = new JMenu("Rotate");
+    JMenu collapseByMenu = new JMenu("Collapse by");
+    ColorByMenu colorBy;// = new ColorByMenu();
+    JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels...");
+    JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");
+    
+    JRadioButtonMenuItem rectangularradiobutton = new JRadioButtonMenuItem("Rectangular");
+    JRadioButtonMenuItem triangularradiobutton = new JRadioButtonMenuItem("Triangular");
+    JRadioButtonMenuItem radialradiobutton = new JRadioButtonMenuItem("Radial");
+    JRadioButtonMenuItem polarradiobutton = new JRadioButtonMenuItem("Polar");
+    
+    JSlider lineWidthSlider = new JSlider(1, 1000, 20);
+    JSlider rotateSlider = new JSlider(0,359,0);
+    
+    ButtonGroup treeLayoutGroup = new ButtonGroup();
+    ButtonGroup lineWidthGroup = new ButtonGroup();
+    JRadioButtonMenuItem uniformLineWidthItem = new JRadioButtonMenuItem("Uniform");
+    JMenu lineWidthSampleMetadataMenu = new JMenu("Sample Metadata");
+    JMenu lineWidthOtuMetadataMenu = new JMenu("OTU Metadata");
+    
+    JMenuItem item;
+    
     MainFrame frame = null;
     TreeAppletHolder treeHolder = null;
     TreeVis tree = new TreeVis();
@@ -29,13 +55,16 @@ public class TreeWindow extends JFrame implements KeyListener{
     JPopupMenu treePopupMenu = new JPopupMenu();
     TipLabelCustomizer tlc = null;
     Set keys = new java.util.HashSet();
+    boolean showTips = false;
     
     /**
     * Class Constructor
     */
 	 public TreeWindow(MainFrame _frame) {
+	     super(_frame);
 	     this.setSize(new Dimension(900,700));
-	     frame = _frame;
+         frame = _frame;
+         colorBy = new ColorByMenu(frame, this);
 	     tree.addKeyListener(this);
 	     treeHolder = new TreeAppletHolder(tree, this);
 	     treeToolbar = new TreeToolbar(this);
@@ -62,7 +91,7 @@ public class TreeWindow extends JFrame implements KeyListener{
  		});
 	     
 	     //set up the tree pop-up menu
-         JMenuItem item = new JMenuItem("Collapse/Expand");
+         item = new JMenuItem("Collapse/Expand");
          item.addActionListener(new ActionListener() {
              public void actionPerformed(ActionEvent e) {
                  clickedNode.setCollapsed(!clickedNode.isCollapsed());
@@ -84,6 +113,13 @@ public class TreeWindow extends JFrame implements KeyListener{
              }
          });
          treePopupMenu.add(item);
+         item = new JMenuItem("Toggle Node Label");
+          item.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent arg0) {
+                  clickedNode.setDrawLabel(!clickedNode.getDrawLabel());
+              }
+          });
+          treePopupMenu.add(item);
 
          tree.addMouseListener(new java.awt.event.MouseAdapter() {
  			public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -103,13 +139,241 @@ public class TreeWindow extends JFrame implements KeyListener{
          });
          
          treePanel.setLayout(new BorderLayout());
-         treePanel.add(treeToolbar, BorderLayout.PAGE_START);
+         treePanel.add(treeToolbar, BorderLayout.PAGE_END);
          treePanel.add(verticalTreeToolbar, BorderLayout.LINE_START);
          treePanel.add(treeHolder, BorderLayout.CENTER);
-         treePanel.add(collapseTreeToolbar, BorderLayout.PAGE_END);
+         treePanel.add(collapseTreeToolbar, BorderLayout.PAGE_START);
 	     pane.add(treeOpsToolbar, BorderLayout.NORTH);
+	     
+	     //set up the "node" submenus
+         item = new JMenuItem("Collapse/Expand");
+         item.addActionListener(this);
+         nodeMenu.add(item);
+         item = new JMenuItem("Collapse/Expand All Children");
+         item.addActionListener(this);
+         nodeMenu.add(item);
+         item = new JMenuItem("Rotate (Swap Children)");
+         item.addActionListener(this);
+         nodeMenu.add(item);
+         item = new JCheckBoxMenuItem("Pie Chart");
+         item.addActionListener(this);
+         nodeMenu.add(item);
+         item = new JCheckBoxMenuItem("Node Label");
+         item.addActionListener(this);
+         nodeMenu.add(item);
+	     
+	     item = new JMenuItem("Save Tree...");
+         item.addActionListener(this);
+         treeMenu.add(item);
+         treeMenu.add(new JSeparator());
+         item = new JMenuItem("Export Tree Image...");
+         item.addActionListener(this);
+         treeMenu.add(item);
+         item = new JMenuItem("Export Tree Screen Capture...");
+         item.addActionListener(this);
+         treeMenu.add(item);
+         treeMenu.add(new JSeparator());
+	     
+	     //set up the "tree" submenus
+	     JMenuItem item;
+         item = new JMenuItem("Beautify");
+         item.addActionListener(this);
+         treeMenu.add(item);
+         item = new JMenuItem("Recenter");
+         item.addActionListener(this);
+         treeMenu.add(item);
+         item = new JMenuItem("Mirror left/right");
+         item.addActionListener(this);
+         treeMenu.add(item);
+         item = new JMenuItem("Mirror up/down");
+         item.addActionListener(this);
+         treeMenu.add(item);
+         resetCollapseByMenu();
+         treeMenu.add(collapseByMenu);
+         JMenu sortBy = new JMenu("Sort by");
+         item = new JMenuItem("Number of OTUs");
+         item.addActionListener(this);
+         sortBy.add(item);
+         item = new JMenuItem("Number of immediate children");
+         item.addActionListener(this);
+         sortBy.add(item);
+         treeMenu.add(sortBy);
+
+
+         JMenu layout = new JMenu("Layout");
+         rectangularradiobutton.setSelected(true);
+         rectangularradiobutton.addActionListener(new ActionListener() {
+             public void actionPerformed(ActionEvent e) {
+                 tree.setTreeLayout("Rectangular");
+                 rotateMenu.setEnabled(false);
+             }
+         });
+         treeLayoutGroup.add(rectangularradiobutton);
+         layout.add(rectangularradiobutton);
+
+         triangularradiobutton.setSelected(true);
+         triangularradiobutton.addActionListener(new ActionListener() {
+             public void actionPerformed(ActionEvent e) {
+                 tree.setTreeLayout("Triangular");
+                 rotateMenu.setEnabled(false);
+             }
+         });
+         treeLayoutGroup.add(triangularradiobutton);
+         layout.add(triangularradiobutton);
+
+
+         radialradiobutton = new JRadioButtonMenuItem("Radial");
+         radialradiobutton.setSelected(true);
+         radialradiobutton.addActionListener(new ActionListener() {
+             public void actionPerformed(ActionEvent e) {
+                 tree.setTreeLayout("Radial");
+                 rotateMenu.setEnabled(true);
+             }
+         });
+         treeLayoutGroup.add(radialradiobutton);
+         layout.add(radialradiobutton);
+
+         polarradiobutton.setSelected(true);
+         polarradiobutton.addActionListener(new ActionListener() {
+             public void actionPerformed(ActionEvent e) {
+                 tree.setTreeLayout("Polar");
+                 rotateMenu.setEnabled(true);
+             }
+         });
+         treeLayoutGroup.add(polarradiobutton);
+         layout.add(polarradiobutton);
+
+
+         treeMenu.add(layout);  
+
+         lineWidthMenu.add(lineWidthOtuMetadataMenu);
+         lineWidthMenu.add(lineWidthSampleMetadataMenu);
+         lineWidthGroup.add(uniformLineWidthItem);
+         uniformLineWidthItem.setSelected(true);
+         uniformLineWidthItem.addActionListener(new ActionListener() {
+             public void actionPerformed(ActionEvent e) {
+                 for (Node n : tree.getTree().getNodes()) {
+                     n.setLineWidth(1);
+                 }
+                 syncTreeWithLineWidthSlider();
+             }
+         });
+         lineWidthMenu.add(uniformLineWidthItem);
+         lineWidthSlider.addChangeListener(new ChangeListener() {
+             public void stateChanged(ChangeEvent e) {
+                 if (lineWidthSlider.getValueIsAdjusting()){
+                     syncTreeWithLineWidthSlider();
+                 }
+             }
+         });
+         lineWidthMenu.add(lineWidthSlider);
+         treeMenu.add(lineWidthMenu);
+
+         rotateSlider.addChangeListener(new ChangeListener() {
+         	public void stateChanged(ChangeEvent e) {
+         		if (rotateSlider.getValueIsAdjusting()) {
+         			syncTreeWithRotateSlider();
+         		}
+         	}
+         });
+         rotateMenu.add(rotateSlider);
+         rotateMenu.setEnabled(false);
+         treeMenu.add(rotateMenu);
+
+
+         item = new JMenuItem("Background Color...");        
+         item.addActionListener(new ActionListener() {        
+             public void actionPerformed(ActionEvent e) {
+                 JColorChooser colorChooser = new JColorChooser();
+                 Color c = colorChooser.showDialog(frame, "Pick a Color", tree.getBackgroundColor());
+                 tree.setBackgroundColor(c);
+             }
+         });
+         treeMenu.add(item);
+
+         externalLabelsMenuItem.setSelected(false);
+         externalLabelsMenuItem.addActionListener(this);
+         internalLabelsMenuItem.setSelected(false);
+         internalLabelsMenuItem.addActionListener(this);
+         treeMenu.add(externalLabelsMenuItem);
+         treeMenu.add(internalLabelsMenuItem);
+	     topMenu.add(treeMenu);
+	     topMenu.add(nodeMenu);
+	     topMenu.add(colorBy);
+	     
+	     setJMenuBar(topMenu);
 	     pane.add(treePanel, BorderLayout.CENTER);
 	}
+	
+	public void actionPerformed(ActionEvent e) {
+	    if (e.getActionCommand().equals("Save Tree...")) {
+             saveTree();
+         }    else if (e.getActionCommand().equals("Tip Labels...")) {
+                  setTipLabels(externalLabelsMenuItem.getState());
+              } else if (e.getActionCommand().equals("Internal Node Labels")) {
+                  tree.setDrawInternalNodeLabels(internalLabelsMenuItem.getState());
+              } else if (e.getActionCommand().equals("Collapse/Expand")) {
+                  if (frame.clickedNode != null) {
+                     frame.clickedNode.setCollapsed(!frame.clickedNode.isCollapsed());
+                  }
+              }
+              else if (e.getActionCommand().equals("Beautify")) {
+                   tree.getTree().sortByBranchLength();
+                   tree.setYOffsets(tree.getTree(), 0);
+                   tree.setTOffsets(tree.getTree(), 0);
+                   tree.setROffsets(tree.getTree(), 0);
+                   tree.setRadialOffsets(tree.getTree());
+               }
+               else if (e.getActionCommand().equals("Collapse/Expand All Children")) {
+                   if (frame.clickedNode != null) {
+                      ArrayList<Node> children = frame.clickedNode.getNodes();
+                      for(Node n: children)
+                          {n.setCollapsed(!n.isCollapsed());}
+                      frame.clickedNode.setCollapsed(!frame.clickedNode.isCollapsed());
+                   }
+              } else if (e.getActionCommand().equals("Rotate (Swap Children)")) {
+                  if (frame.clickedNode != null) {
+                     frame.clickedNode.rotate();
+                     tree.setYOffsets(tree.getTree(), 0);
+                  }
+              } else if (e.getActionCommand().equals("Pie Chart")) {
+                  if (frame.clickedNode != null) {
+                     frame.clickedNode.setDrawPie(!frame.clickedNode.getDrawPie());
+                     }
+             } else if (e.getActionCommand().equals("Node Label")) {
+                       if (frame.clickedNode != null) {
+                          frame.clickedNode.setDrawLabel(!frame.clickedNode.getDrawLabel());
+                       }
+              } else if (e.getActionCommand().equals("Recenter")) {
+                  recenter();
+              } else if (e.getActionCommand().equals("Mirror left/right")) {
+                 mirrorHorz();
+              } else if (e.getActionCommand().equals("Mirror up/down")) {
+                  mirrorVert();
+              } else if (e.getActionCommand().equals("Number of OTUs")) {
+                  tree.getTree().sortByNumberOfOtus();
+                  tree.setYOffsets(tree.getTree(), 0);
+                  tree.setTOffsets(tree.getTree(), 0);
+                  tree.setROffsets(tree.getTree(), 0);
+                  tree.setRadialOffsets(tree.getTree());
+              } else if (e.getActionCommand().equals("Number of immediate children")) {
+                  tree.getTree().sortByNumberOfChildren();
+                  tree.setYOffsets(tree.getTree(), 0);
+                  tree.setTOffsets(tree.getTree(), 0);
+                  tree.setROffsets(tree.getTree(), 0);
+                  tree.setRadialOffsets(tree.getTree());
+              } else if (e.getActionCommand().equals("Export Tree Image...") && tree.getTree()!= null) {
+                 exportTreeImage();
+              } else if (e.getActionCommand().equals("Export Tree Screen Capture...") && tree.getTree()!= null)  {
+                  tree.noLoop();
+                  try {
+                  	 byte[] b = new byte[0];
+                      FileContents fc = frame.fss.saveFileDialog(null,null,new ByteArrayInputStream(b),null);
+     			 	 tree.exportScreenCapture(fc);
+     			 } catch(IOException ex){}
+                  tree.loop();
+              }
+    }
 	
 	public void keyTyped(KeyEvent key) {
 	}
@@ -154,10 +418,10 @@ public class TreeWindow extends JFrame implements KeyListener{
              tree.loop();
              collapseTree();
              
-             frame.mainMenu.treeMenu.setEnabled(true);
-             frame.mainMenu.nodeMenu.setEnabled(true);
+/*             treeMenu.setEnabled(true);
+             nodeMenu.setEnabled(true);*/
 
-             frame.mainMenu.colorByMenu.setEnabled(true);
+             colorBy.setEnabled(true);
              this.setVisible(true);
              System.out.println("Done drawing tree.");
              frame.consoleWindow.update("Done drawing tree. ");
@@ -181,10 +445,10 @@ public class TreeWindow extends JFrame implements KeyListener{
               tree.loop();
               collapseTree();
 
-              frame.mainMenu.treeMenu.setEnabled(true);
-              frame.mainMenu.nodeMenu.setEnabled(true);
+/*              frame.mainMenu.treeMenu.setEnabled(true);
+              frame.mainMenu.nodeMenu.setEnabled(true);*/
 
-              frame.mainMenu.colorByMenu.setEnabled(true);
+              colorBy.setEnabled(true);
               this.setVisible(true);
               System.out.println("Done drawing tree.");
               frame.consoleWindow.update("Done drawing tree. ");
@@ -202,10 +466,10 @@ public class TreeWindow extends JFrame implements KeyListener{
         tree.loop();
         collapseTree();
         
-        frame.mainMenu.treeMenu.setEnabled(true);
-        frame.mainMenu.nodeMenu.setEnabled(true);
+/*        frame.mainMenu.treeMenu.setEnabled(true);
+        frame.mainMenu.nodeMenu.setEnabled(true);*/
 
-        frame.mainMenu.colorByMenu.setEnabled(true);
+        colorBy.setEnabled(true);
         this.setVisible(true);
         System.out.println("Done drawing tree.");
         frame.consoleWindow.update("Done drawing tree. ");
@@ -480,6 +744,10 @@ public class TreeWindow extends JFrame implements KeyListener{
          tree.getTree().updateLineWidthsFromChildren();
      }
      
+     public void tipLabels() {
+         setTipLabels(showTips);
+     }
+     
      /**
      * Resets tipLabelCustomizer object based on new OTU metadata
      */
@@ -500,47 +768,13 @@ public class TreeWindow extends JFrame implements KeyListener{
          }
          else
          {
+             externalLabelsMenuItem.setState(state);
              if(tlc == null) {resetTipLabelCustomizer(state);}
              tlc.setVisible(state);
         }
         tree.setDrawExternalNodeLabels(state);
         frame.repaint();
      }
-     
-     
-     public void colorByValue(String value) {
-
-         //get the column that this category is
-         int colIndex = frame.currTable.getColumnNames().indexOf(value);
-         if (colIndex == -1) {
-             //JOptionPane.showMessageDialog(null, "ERROR: Column "+value+" not found in table.", "Error", JOptionPane.ERROR_MESSAGE);
-
-             return;
-         }
-
-         //get all unique values in this column
-         ArrayList<Object> column = frame.currTable.getColumn(colIndex);
-         while (column.contains(null)) column.remove(null);
-         TreeSet<Object> uniqueVals = new TreeSet<Object>(column);
-         //set up the colorMap
-         frame.colorMap = new TreeMap<Object, Color>();
-         float[] hsbvals = new float[3];
-         hsbvals[0] = 0;
-         hsbvals[1] = 1;
-         hsbvals[2] = 1;
-         Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
-         for (Object val : uniqueVals) {
-             frame.colorMap.put(val, color);
-             hsbvals[0] += (1.0/uniqueVals.size());
-             color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
-         }
-         frame.syncColorKeyTable();
-
-         frame.colorColumnIndex =  colIndex;
-         frame.recolor();
-         //color tree from leaves
-         tree.getTree().updateColorFromChildren();
-      }
 
       public void setLineWidthByValue(String value) {
          //get the column that this category is
@@ -635,31 +869,177 @@ public class TreeWindow extends JFrame implements KeyListener{
  	 }
 
       public void removeColor() {
-          //reset the colorMap
-          frame.colorMap = new TreeMap<Object, Color>();
-          //reset the colorKeyTable
-          ((ColorTableModel)frame.colorKeyTable.getModel()).clearTable();
-          frame.colorKeyTable.repaint();
-          //reset the node colors
-          //if (tree.getTree() != null) {
-              for (Node n : tree.getTree().getLeaves()) {
-                  n.noColor();
-              }
-              tree.getTree().updateColorFromChildren();
-          //}
-          this.repaint();
+                    //reset the colorMap
+                    frame.colorMap = new TreeMap<Object, Color>();
+                    //reset the colorKeyTable
+                    ((ColorTableModel)frame.colorKeyTable.getModel()).clearTable();
+                    frame.colorKeyTable.repaint();
+                    //reset the node colors
+                    //if (tree.getTree() != null) {
+                        for (Node n : tree.getTree().getLeaves()) {
+                            n.noColor();
+                        }
+                        tree.getTree().updateColorFromChildren();
+                    //}
+                    this.repaint();
 
-          //reset the pcoa vertex colors
-          if (frame.pcoaWindow.pcoa.sampleData != null) {
-              for (VertexData v : frame.pcoaWindow.pcoa.sampleData) {
-                  v.clearColor();
-              }
-          }
-          if (frame.pcoaWindow.pcoa.spData != null) {
-              for (VertexData v : frame.pcoaWindow.pcoa.spData) {
-                  v.clearColor();
-              }
-          }
+                    //reset the pcoa vertex colors
+                    if (frame.pcoaWindow.pcoa.sampleData != null) {
+                        for (VertexData v : frame.pcoaWindow.pcoa.sampleData) {
+                            v.clearColor();
+                        }
+                    }
+                    if (frame.pcoaWindow.pcoa.spData != null) {
+                        for (VertexData v : frame.pcoaWindow.pcoa.spData) {
+                            v.clearColor();
+                        }
+                    }
 
-      }
+                }
+                
+                public void colorByValue(String value) {
+
+                     //get the column that this category is
+                     int colIndex = frame.currTable.getColumnNames().indexOf(value);
+                     if (colIndex == -1) {
+                         //JOptionPane.showMessageDialog(null, "ERROR: Column "+value+" not found in table.", "Error", JOptionPane.ERROR_MESSAGE);
+
+                         return;
+                     }
+
+                     //get all unique values in this column
+                     ArrayList<Object> column = frame.currTable.getColumn(colIndex);
+                     while (column.contains(null)) column.remove(null);
+                     TreeSet<Object> uniqueVals = new TreeSet<Object>(column);
+                     //set up the colorMap
+                     frame.colorMap = new TreeMap<Object, Color>();
+                     float[] hsbvals = new float[3];
+                     hsbvals[0] = 0;
+                     hsbvals[1] = 1;
+                     hsbvals[2] = 1;
+                     Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
+                     for (Object val : uniqueVals) {
+                         frame.colorMap.put(val, color);
+                         hsbvals[0] += (1.0/uniqueVals.size());
+                         color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
+                     }
+                     frame.syncColorKeyTable();
+
+                     frame.colorColumnIndex =  colIndex;
+                     frame.recolor();
+                     //color tree from leaves
+                     tree.getTree().updateColorFromChildren();
+                  }
+      /**
+        * 
+        */
+         public void syncTreeWithLineWidthSlider() {
+             if (tree.getTree() == null) return;
+             double value = lineWidthSlider.getValue();
+             value = value/20.0;
+             tree.setLineWidthScale(value);
+             tree.redraw();
+         }
+
+         /**
+         *
+         */
+         public void syncTreeWithRotateSlider() {
+         	if (tree.getTree() == null) return;
+         	double value = rotateSlider.getValue();
+         	tree.setRotate(value);
+         	tree.redraw();
+         }
+         
+         public void resetLineWidthOtuMenu() {
+            uniformLineWidthItem.setSelected(true);
+            lineWidthOtuMetadataMenu.removeAll();
+            ArrayList<String> data = frame.otuMetadata.getColumnNames();
+            //start at 1 to skip ID column
+            for (int i = 1; i < data.size(); i++) {
+                 String value = data.get(i);
+                 item = new JRadioButtonMenuItem(value);
+                 lineWidthGroup.add(item);
+                 item.addActionListener(new ActionListener() {
+                     public void actionPerformed(ActionEvent e) {
+                         //get the category to color by
+                         String value = e.getActionCommand();
+                         System.out.println("*");
+                         frame.currTable = frame.otuMetadata;
+                         frame.treeWindow.setLineWidthByValue(value);
+                     }
+                 });
+                 lineWidthOtuMetadataMenu.add(item);
+            }
+        }
+        
+        public void resetLineWidthSampleMenu() {
+               uniformLineWidthItem.setSelected(true);
+               lineWidthSampleMetadataMenu.removeAll();
+               ArrayList<String> data = frame.sampleMetadata.getColumnNames();
+               //start at 1 to skip ID column
+               for (int i = 1; i < data.size(); i++) {
+                    String value = data.get(i);
+                    JRadioButtonMenuItem item = new JRadioButtonMenuItem(value);
+                    item.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            //get the category to color by
+                            String value = e.getActionCommand();
+                            frame.currTable = frame.sampleMetadata;
+                            frame.treeWindow.setLineWidthByValue(value);
+                        }
+                    });
+                    lineWidthGroup.add(item);
+                    lineWidthSampleMetadataMenu.add(item);
+               }
+           }
+        
+        
+         /**
+         * Resets collapse by menu when new OTU or Sample metadata
+         * files are loaded
+         */
+        public void resetCollapseByMenu() {
+            //NOTE: can only collapse on OTU metadata
+            collapseByMenu.removeAll();
+            JMenuItem item = new JMenuItem("Uncollapse All");
+            item.addActionListener(new ActionListener() {
+                 public void actionPerformed(ActionEvent e) {
+                     frame.treeWindow.uncollapseTree();
+                 }
+            });
+            collapseByMenu.add(item);
+            item = new JMenuItem("Collapse All");
+            item.addActionListener(new ActionListener() {
+                 public void actionPerformed(ActionEvent e) {
+                     frame.treeWindow.collapseTree();
+                 }
+            });
+            collapseByMenu.add(item);
+            item = new JMenuItem("Internal Node Labels");
+            item.addActionListener(new ActionListener() {
+                 public void actionPerformed(ActionEvent e) {
+                     frame.treeWindow.collapseTreeByInternalNodeLabels();
+                 }
+            });
+            collapseByMenu.add(item);
+            collapseByMenu.add(new JSeparator());
+
+            if (frame.otuMetadata != null) {
+                   ArrayList<String> data = frame.otuMetadata.getColumnNames();
+                   //start at 1 to skip ID column
+                   for (int i = 1; i < data.size(); i++) {
+                        String value = data.get(i);
+                        item = new JMenuItem(value);
+                        item.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                                //get the category to color by
+                                String value = e.getActionCommand();
+                                frame.treeWindow.collapseByValue(value);
+                            }
+                        });
+                        collapseByMenu.add(item);
+                   }
+               }
+        }
 }
