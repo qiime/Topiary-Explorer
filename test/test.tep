@@ -1,0 +1,47 @@
+>>tre
+(a:0.10000000149011612,b:0.20000000298023224,(c:0.30000001192092896,d:0.4000000059604645,((e:0.10000000149011612,f:0.20000000298023224,(g:0.30000001192092896,h:0.4000000059604645,i:0.10000000149011612):0.5):0.0):0.8999999761581421):0.5):0.0
+>>otm
+otuid	cat1	cat2	Consensus Lineage	
+a	h	8	Bacteria; Actinobacteria; Actinobacteridae; Propionibacterineae; Propionibacterium
+b	h	7	Bacteria; Actinobacteria; Actinobacteridae; Gordoniaceae; Corynebacteriaceae
+c	y	4	Bacteria; Actinobacteria; Actinobacteridae
+d	n	8	Bacteria; Actinobacteria; Actinobacteridae; Gordoniaceae
+e	k	7	Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales
+f	n	7	Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadaceae
+g	n	8	Bacteria; Proteobacteria; Gammaproteobacteria; Moraxellaceae
+h	n	4	Bacteria; Firmicutes; Alicyclobacillaceae; Alicyclobacillus; Bacillales
+i	n	7	Bacteria; Actinobacteria; Actinobacteridae
+
+>>osm
+otuid	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	
+a	7	4	2	1
+b	1	2	4	7	8	7	4	2	1
+c						1	2	4	7	8	7	4	2	1
+d											1	2	4	7	8	7	4	2	1
+e																1	2	4	7
+f		1	1
+g							2	1
+h												3	1
+i																	4	1
+
+>>sam
+sample ID	cat1	cat2	
+1	1	a
+2	2	s
+3	2	f
+4	2	q
+5	3	v
+6	5	t
+7	5	u
+8	2	u
+9		u
+10	9	a
+11	6	n
+12	5	s
+13	4	d
+14	8	u
+15	9	f
+16	9	w
+17	5	w
+18	3	u
+19	4	s
