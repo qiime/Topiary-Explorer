@@ -13,6 +13,8 @@ public class Node {
 
   private String label = "";
   private String name = "";
+  private String lineage = "";
+  private String consensusLineage = "";
   private double branchlength = 0;
   private double yoffset = 0;
   private double xoffset = 0;
@@ -49,6 +51,8 @@ public class Node {
     label = _label;
     name = _label;
     branchlength = _branchlength;
+    
+    /*setConsensusLineage();*/
   }
 
   //GETTERS AND SETTERS
@@ -66,6 +70,10 @@ public class Node {
   public double getBranchLength() { return branchlength; }
   public void setName(String s) { name = s; }
   public String getName() { return name; }
+  public void setLineage(String s) { lineage = s; }
+  public String getLineage() { return lineage; }
+  public void setConsensusLineage() { consensusLineage = getConsensusLineage(); }
+/*  public String getConsensusLineage() { return consensusLineage; }*/
   public void setBranchLength(double f) { if (f >= 0) branchlength = f; }
   public double getYOffset() { return yoffset; }
   public double getXOffset() { return xoffset; }
@@ -98,6 +106,87 @@ public class Node {
   public void setMaximumRXOffset(double f) { maximumRXOffset = f; }  
   public double getLineWidth() { return lineWidth; }
   public void setLineWidth(double f) { lineWidth = f; }
+  
+  public String getConsensusLineage() {        
+      if(nodes.size() == 0)
+        return lineage;
+      
+      ArrayList<String> currLabels = new ArrayList<String>();
+      for(Node n: nodes)
+      {
+          String l = n.getConsensusLineage();
+/*          for(int i = 0; i < n.getNumberOfLeaves(); i++)*/
+            currLabels.add(l);
+      }
+      
+      String consensusLineage = "";
+      ArrayList<String> curr = new ArrayList<String>();
+      ArrayList<String> newLabels = new ArrayList<String>();
+      String test = currLabels.get(0);
+      boolean loop = true;
+      
+      while(test.indexOf(";") != -1 && loop)
+      {
+          curr = new ArrayList<String>();
+          newLabels = new ArrayList<String>();
+          for(String l: currLabels)
+          {
+              try {
+              curr.add(l.substring(0,l.indexOf(";")));
+              newLabels.add(l.substring(l.indexOf(";")+1, l.length()));
+            }
+          catch(StringIndexOutOfBoundsException e)
+            {
+                loop = false;
+                break;
+            }
+          }
+          
+          if(!loop)
+            break;
+          
+          HashSet testSet = new HashSet(curr);
+      
+          if(testSet.size() == 1) // if the set only has one element, all names are the same
+          {
+              consensusLineage += curr.get(0) + ";";
+              currLabels = newLabels;
+          }
+          else
+          {
+              HashMap counts = new HashMap();
+              for(String s: curr)
+              {
+                  if(!counts.containsKey(s))
+                    counts.put(s,0);
+                  
+                  counts.put(s, ((Number)counts.get(s)).intValue() + 1);
+              }
+              
+              double max = 0;
+              String maxStr = "";
+              for(Object s : counts.keySet())
+              {
+                  if(((Number)counts.get(s)).doubleValue() > max)
+                  {
+                      max = ((Number)counts.get(s)).doubleValue();
+                      maxStr = (String)s;
+                  }
+              }
+              
+              if(max/curr.size() > .5)
+              {
+                  consensusLineage += maxStr + ";";
+                  currLabels = newLabels;
+              }
+              else
+                break;
+          }
+          test = currLabels.get(0);
+      }
+      
+      return consensusLineage;
+  }
   
   public int getNumberOfLeaves() {
       int total = 0;

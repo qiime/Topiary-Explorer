@@ -584,9 +584,14 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		{
 		    String s = "";
 			ArrayList<String> lines = new ArrayList<String>();
-			lines.add(">>tre\n");
-			if(frame.treeFile != null)
-				lines.add(TopiaryFunctions.createNewickStringFromTree(frame.treeWindow.tree.getTree()));
+			if(frame.treeWindows.size() != 0)
+            {
+                for(TreeWindow w : frame.treeWindows)
+                {
+			        lines.add(">>tre\n");
+        		    lines.add(TopiaryFunctions.createNewickStringFromTree(w.tree.getTree()));
+    	        }
+		    }
 			if(frame.otuMetadata != null)
 			    {
 			        lines.add("\n>>otm\n");

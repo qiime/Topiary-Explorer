@@ -1001,6 +1001,14 @@ public class TreeVis extends PApplet {
       double shortest = node.shortestRootToTipDistance() - node.getBranchLength();
     
       if (treeLayout.equals("Rectangular")) {      
+          
+          String s = "";
+          if(node.getConsensusLineage().length() > 0)
+          {
+              s = node.getConsensusLineage();
+          }
+          else
+            s = ""+node.getNumberOfLeaves();
 
           // find heights for wedge
           double top = node.getMaximumYOffset()-y;
@@ -1020,15 +1028,23 @@ public class TreeVis extends PApplet {
           canvas.fill(255);
           canvas.stroke(255);
           canvas.quad((float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+7),
-            (float)(toScreenX(x)+5+textWidth(str(node.getNumberOfLeaves()))), (float)(toScreenY((top+bottom)/2)+7),
-            (float)(toScreenX(x)+5+textWidth(str(node.getNumberOfLeaves()))), (float)(toScreenY((top+bottom)/2)-3),
+            (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY((top+bottom)/2)+7),
+            (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY((top+bottom)/2)-3),
             (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)-3));
           // write in the text (number of OTUs contained) in black
           canvas.fill(0);
           canvas.stroke(0);
           
-          canvas.text(str(node.getNumberOfLeaves()), (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+5));
+          canvas.text(s, (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+5));
       } else if (treeLayout.equals("Triangular")) {
+          String s = "";
+            if(node.getConsensusLineage().length() > 0)
+            {
+                s = node.getConsensusLineage();
+            }
+            else
+              s = ""+node.getNumberOfLeaves();
+          
           // find heights for wedge
           double top = node.getMaximumYOffset()-y;
           double bottom = y-node.getMinimumYOffset();
@@ -1046,17 +1062,24 @@ public class TreeVis extends PApplet {
           canvas.fill(255);
           canvas.stroke(255);
           canvas.quad((float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+7),
-            (float)(toScreenX(x)+5+textWidth(str(node.getNumberOfLeaves()))), (float)(toScreenY((top+bottom)/2)+7),
-            (float)(toScreenX(x)+5+textWidth(str(node.getNumberOfLeaves()))), (float)(toScreenY((top+bottom)/2)-3),
+            (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY((top+bottom)/2)+7),
+            (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY((top+bottom)/2)-3),
             (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)-3));
           // write in the text (number of OTUs contained) in black
           canvas.fill(0);
           canvas.stroke(0);
           
-          canvas.text(str(node.getNumberOfLeaves()), (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+5));
+          canvas.text(s, (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+5));
       
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-          
+          String s = "";
+              if(node.getConsensusLineage().length() > 0)
+              {
+                  s = node.getConsensusLineage();
+              }
+              else
+                s = ""+node.getNumberOfLeaves();
+                
           double maxt = node.getMaximumTOffset();
           double mint = node.getMinimumTOffset();
           double x1 = node.getParent().getRXOffset() + shortest * Math.cos(mint);
@@ -1073,13 +1096,13 @@ public class TreeVis extends PApplet {
           canvas.fill(255);
           canvas.stroke(255);
           canvas.quad((float)(toScreenX(x)+5), (float)(toScreenY(y)+7),
-            (float)(toScreenX(x)+5+textWidth(str(node.getNumberOfLeaves()))), (float)(toScreenY(y)+7),
-            (float)(toScreenX(x)+5+textWidth(str(node.getNumberOfLeaves()))), (float)(toScreenY(y)-3),
+            (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY(y)+7),
+            (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY(y)-3),
             (float)(toScreenX(x)+5), (float)(toScreenY(y)-3));
           // write in the text (number of OTUs contained) in black
           canvas.fill(0);
           canvas.stroke(0);
-          canvas.text(str(node.getNumberOfLeaves()), (float)(toScreenX(x)+5), (float)(toScreenY(y)+5)); 
+          canvas.text(s, (float)(toScreenX(x)+5), (float)(toScreenY(y)+5)); 
       }
       textFont(currFont);
     }

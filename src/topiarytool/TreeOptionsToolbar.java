@@ -10,7 +10,7 @@ import javax.jnlp.*;
 import java.io.*;
 
 public class TreeOptionsToolbar extends JToolBar {
-
+    JButton consensusButton = new JButton();
     JButton tipLabelsButton = new JButton();
     JButton collapseButton  = new JButton();
     JButton expandButton = new JButton();
@@ -42,6 +42,15 @@ public class TreeOptionsToolbar extends JToolBar {
                 fc.getInputStream().read(buffer);
                 collapseButton.setIcon(new ImageIcon(buffer));
         } catch(java.io.IOException ex) {}*/
+        
+        consensusButton.setText("Consensus Collapsing");
+        consensusButton.setToolTipText("Consensus Collapsing");
+        consensusButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.tree.getTree().setConsensusLineage();
+            }
+        });
+        
         tipLabelsButton.setText("Tip Labels");
         tipLabelsButton.setToolTipText("Show Tip Labels");
         tipLabelsButton.addActionListener(new ActionListener() {
@@ -50,6 +59,9 @@ public class TreeOptionsToolbar extends JToolBar {
                 frame.tipLabels();
             }
         });
+/*        add(consensusButton);*/
+        add(tipLabelsButton);
+         addSeparator();
         collapseButton.setText("Collapse");
         collapseButton.setToolTipText("Collapse");
         collapseButton.addActionListener(new ActionListener() {
@@ -70,7 +82,6 @@ public class TreeOptionsToolbar extends JToolBar {
                 frame.uncollapseTree();
             }
         });
-        add(tipLabelsButton);
         add(collapseButton);
         add(expandButton);
         addSeparator();
@@ -115,10 +126,10 @@ public class TreeOptionsToolbar extends JToolBar {
         rectButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.tree.setTreeLayout("Rectangular");
-                mainframe.mainMenu.rectangularradiobutton.setSelected(true);
-                mainframe.mainMenu.rotateSlider.setValue(0);
-                mainframe.mainMenu.syncTreeWithRotateSlider();
-                mainframe.mainMenu.rotateMenu.setEnabled(false);
+                frame.rectangularradiobutton.setSelected(true);
+                frame.rotateSlider.setValue(0);
+                frame.syncTreeWithRotateSlider();
+                frame.rotateMenu.setEnabled(false);
             }
         });
         /*try{
@@ -132,10 +143,10 @@ public class TreeOptionsToolbar extends JToolBar {
         triButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.tree.setTreeLayout("Triangular");
-                mainframe.mainMenu.triangularradiobutton.setSelected(true);
-                mainframe.mainMenu.rotateSlider.setValue(0);
-                mainframe.mainMenu.syncTreeWithRotateSlider();
-                mainframe.mainMenu.rotateMenu.setEnabled(false);
+                frame.triangularradiobutton.setSelected(true);
+                frame.rotateSlider.setValue(0);
+                frame.syncTreeWithRotateSlider();
+                frame.rotateMenu.setEnabled(false);
             }
         });
         /*try{
@@ -149,8 +160,8 @@ public class TreeOptionsToolbar extends JToolBar {
         radialButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.tree.setTreeLayout("Radial");
-                mainframe.mainMenu.radialradiobutton.setSelected(true);
-                mainframe.mainMenu.rotateMenu.setEnabled(true);
+                frame.radialradiobutton.setSelected(true);
+                frame.rotateMenu.setEnabled(true);
             }
         });
 /*        try{
@@ -164,8 +175,8 @@ public class TreeOptionsToolbar extends JToolBar {
         polarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.tree.setTreeLayout("Polar");
-                mainframe.mainMenu.polarradiobutton.setSelected(true);
-                mainframe.mainMenu.rotateMenu.setEnabled(true);
+                frame.polarradiobutton.setSelected(true);
+                frame.rotateMenu.setEnabled(true);
             }
         });
         add(rectButton);

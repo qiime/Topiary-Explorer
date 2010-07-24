@@ -1,10 +1,10 @@
-#otuid	cat1	cat2
-a	h	8
-b	h	7
-c	y	4
-d	n	8
-e	k	7
-f	n	7
-g	n	8
-h	n	4
-i	n	7
+#otuid	cat1	cat2	Consensus Lineage
+a	h	8	Bacteria; Actinobacteria; Actinobacteridae; Propionibacterineae; Propionibacterium
+b	h	7	Bacteria; Actinobacteria; Actinobacteridae; Gordoniaceae; Corynebacteriaceae
+c	y	4	Bacteria; Actinobacteria; Actinobacteridae
+d	n	8	Bacteria; Actinobacteria; Actinobacteridae; Gordoniaceae
+e	k	7	Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales
+f	n	7	Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadaceae
+g	n	8	Bacteria; Proteobacteria; Gammaproteobacteria; Moraxellaceae
+h	n	4	Bacteria; Firmicutes; Alicyclobacillaceae; Alicyclobacillus; Bacillales
+i	n	7	Bacteria; Actinobacteria; Actinobacteridae

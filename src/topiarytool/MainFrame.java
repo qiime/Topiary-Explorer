@@ -171,6 +171,8 @@ public class MainFrame extends JFrame {
         dataPane.addTab("Database", databasePanel);
         
         otuMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        otuMetadataTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        otuMetadataTable.setCellSelectionEnabled(true);
         //otuMetadataTable.setAutoCreateRowSorter(true);
         otuMetadataScrollPane = new JScrollPane(otuMetadataTable);
         dataPane.addTab("OTU Metadata", otuMetadataScrollPane);
@@ -242,6 +244,7 @@ public class MainFrame extends JFrame {
               w.resetLineWidthOtuMenu();
               w.resetCollapseByMenu();
               w.colorBy.resetColorByOtuMenu();
+              w.resetConsensusLineage();
           }
      }
      
@@ -290,7 +293,6 @@ public class MainFrame extends JFrame {
              {
                  case 'S':
                      otuSampleMap = new DataTable(database.toStrings());
-                  
                      model = new SparseTableModel(otuSampleMap.getData(),
 					 otuSampleMap.getColumnNames());
 					 sorter = new TableSorter(model, otuSampleMapTable.getTableHeader());
