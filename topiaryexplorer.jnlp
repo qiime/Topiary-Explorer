@@ -2,9 +2,9 @@
 <jnlp codebase="file:." >
     
     <information>
-    <title>TopiaryTool</title>
+    <title>TopiaryExplorer</title>
     <vendor>University of Colorado</vendor>
-    <description>TopiaryTool</description>
+    <description>TopiaryExplorer</description>
     <!--<icon href="icon.png"/>-->
     <!--<icon kind="splash" href="images/splash.gif"/>-->
     
@@ -21,12 +21,12 @@
     <j2se version="1.5+"  max-heap-size="128m" />
 	<extension name="jogl" href="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp" />
 	
-	<jar href="topiarytool.jar" />
+	<jar href="topiaryexplorer.jar" />
 	<jar href="lib/core.jar" />
 	<jar href="lib/itext.jar" />
 	<jar href="lib/pdf.jar" />
 	<jar href="lib/ojdbc14.jar" />
   </resources>
   
-  <application-desc main-class="topiarytool.TopiaryTool" />
+  <application-desc main-class="topiaryexplorer.TopiaryExplorer" />
 </jnlp>
