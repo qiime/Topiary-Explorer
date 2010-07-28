@@ -1,4 +1,4 @@
-package topiarytool;
+package topiaryexplorer;
 
 import javax.swing.*;
 import javax.swing.event.*;

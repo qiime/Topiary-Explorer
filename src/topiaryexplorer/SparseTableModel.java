@@ -1,4 +1,4 @@
-package topiarytool;
+package topiaryexplorer;
 
 import javax.swing.table.*;
 import java.awt.*;

@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
 
-package topiarytool;
+package topiaryexplorer;
 
 import java.awt.*;
 import java.awt.event.*;

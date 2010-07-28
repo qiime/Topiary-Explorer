@@ -1,4 +1,4 @@
-package topiarytool;
+package topiaryexplorer;
 
 import processing.core.*;
 import java.awt.*;

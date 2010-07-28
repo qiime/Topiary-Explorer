@@ -1,4 +1,4 @@
-package topiarytool;
+package topiaryexplorer;
 
 import java.awt.GridBagConstraints;
 import java.awt.event.ComponentEvent;

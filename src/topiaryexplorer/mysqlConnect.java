@@ -1,4 +1,4 @@
-package topiarytool;
+package topiaryexplorer;
 
 // location of test database: usr/local/mysql-5.1.30-osx10.5-x86/data/topiarytool
 import java.sql.*;

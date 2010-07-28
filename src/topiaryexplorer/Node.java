@@ -1,4 +1,4 @@
-package topiarytool;
+package topiaryexplorer;
 
 /**
  * Represents a node in the tree, which may be a leaf or internal node.

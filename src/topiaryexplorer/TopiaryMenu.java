@@ -1,4 +1,4 @@
-package topiarytool;
+package topiaryexplorer;
 
 /*
 Topiary Explorer - tree viewer/data explorer for phylogenetic trees and associated data

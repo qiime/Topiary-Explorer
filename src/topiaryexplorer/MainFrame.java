@@ -1,4 +1,4 @@
-package topiarytool;
+package topiaryexplorer;
 
 import com.sun.opengl.util.*;
 import java.awt.*;

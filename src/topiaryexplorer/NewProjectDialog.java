@@ -1,4 +1,4 @@
-package topiarytool;
+package topiaryexplorer;
 
 import java.awt.*;
 import java.awt.event.*;

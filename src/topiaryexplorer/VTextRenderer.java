@@ -1,5 +1,5 @@
 //From user V on the processing.org forums
-package topiarytool;
+package topiaryexplorer;
 
 import java.awt.*;
 import java.text.*; 
