@@ -28,7 +28,7 @@ import javax.swing.*;
  * It takes care of creating the main JFrame and displaying the GUI.
  */
 
-public class TopiaryTool {
+public class TopiaryExplorer {
     /**
      * Create the main GUI and display it on screen.
      */
