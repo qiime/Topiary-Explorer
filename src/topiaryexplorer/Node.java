@@ -107,10 +107,14 @@ public class Node {
   public double getLineWidth() { return lineWidth; }
   public void setLineWidth(double f) { lineWidth = f; }
   
-  public String getConsensusLineage() {        
+  
+  // recursive method to return consensus lineage
+  public String getConsensusLineage() {  
+      // If the node is a leaf return lineage      
       if(nodes.size() == 0)
         return lineage;
       
+      // Collect consensus lineage of children
       ArrayList<String> currLabels = new ArrayList<String>();
       for(Node n: nodes)
       {
@@ -122,9 +126,11 @@ public class Node {
       String consensusLineage = "";
       ArrayList<String> curr = new ArrayList<String>();
       ArrayList<String> newLabels = new ArrayList<String>();
+      // test if strings have at least one entry ie "bacteria;"
       String test = currLabels.get(0);
       boolean loop = true;
       
+      // while test string has one entry and continue looping
       while(test.indexOf(";") != -1 && loop)
       {
           curr = new ArrayList<String>();
@@ -132,11 +138,13 @@ public class Node {
           for(String l: currLabels)
           {
               try {
+              // add first entry to curr, keep rest of labels in newLabels
               curr.add(l.substring(0,l.indexOf(";")));
               newLabels.add(l.substring(l.indexOf(";")+1, l.length()));
             }
           catch(StringIndexOutOfBoundsException e)
             {
+                // if there is no ";" then break the loop
                 loop = false;
                 break;
             }
@@ -149,12 +157,15 @@ public class Node {
       
           if(testSet.size() == 1) // if the set only has one element, all names are the same
           {
+              // add that string to the consensusLineage
               consensusLineage += curr.get(0) + ";";
               currLabels = newLabels;
           }
-          else
+          else // if the set has more than one element, need to figure out
+          // the consensus string
           {
               HashMap counts = new HashMap();
+              // count number of times each string appears
               for(String s: curr)
               {
                   if(!counts.containsKey(s))
@@ -163,6 +174,7 @@ public class Node {
                   counts.put(s, ((Number)counts.get(s)).intValue() + 1);
               }
               
+              // figure out which string appears most often
               double max = 0;
               String maxStr = "";
               for(Object s : counts.keySet())
@@ -174,14 +186,18 @@ public class Node {
                   }
               }
               
+              // if the string that appears most often appears more than 50% of the time
+              // then it is the consensus string, add it to the consensusLineage
               if(max/curr.size() > .5)
               {
                   consensusLineage += maxStr + ";";
                   currLabels = newLabels;
               }
-              else
+              else // if the string that appears most often isn't 50% of the
+              // labels then don't add anything
                 break;
           }
+          // loop again using the next string in the list
           test = currLabels.get(0);
       }
       

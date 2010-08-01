@@ -101,5 +101,6 @@ public class TreeAppletHolder extends JComponent {
 		horizontalScroll.setBlockIncrement(tree.getWidth()*9/10);
 		horizontalScroll.setUnitIncrement(tree.getWidth()/10);
 		//System.out.println(horizontalScroll.getValue() + "; " + horizontalScroll.getMaximum());
+		frame.collapseTreeToolbar.resetLayout();
 	}
 }

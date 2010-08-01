@@ -33,8 +33,6 @@ public class CollapseTreeToolbar extends JToolBar {
             }
         });
 
-
-
         add(spacer1);
         add(collapseSlider);
         setFloatable(false);

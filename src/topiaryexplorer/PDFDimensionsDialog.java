@@ -22,7 +22,7 @@ class PDFDimensionsDialog extends JDialog implements ActionListener, DocumentLis
         super(frame, true);
         setTitle("Set PDF Dimensions");
         
-        TreeVis tree = ((MainFrame)frame).treeWindow.tree;
+        TreeVis tree = ((TreeWindow)frame).tree;
         String treeLayout = tree.getTreeLayout();
         
        if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {

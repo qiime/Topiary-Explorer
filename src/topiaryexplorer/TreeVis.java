@@ -979,7 +979,7 @@ public class TreeVis extends PApplet {
      * @param  canvas  the PGraphics object to draw to
      */
     private void drawWedge(Node node, PGraphics canvas) {
-      textFont(createFont("georgia", 12));
+      
       double x = node.getXOffset();
       double y = node.getYOffset();
       if (treeLayout.equals("Radial")) {
@@ -1000,6 +1000,19 @@ public class TreeVis extends PApplet {
       double longest = node.longestRootToTipDistance() - node.getBranchLength();
       double shortest = node.shortestRootToTipDistance() - node.getBranchLength();
     
+      //set wedge font size
+      /*      int size = node.getNumberOfLeaves();
+            int treeSize = root.getNumberOfLeaves();*/
+            double top = node.getMaximumYOffset()-y;
+            top = top/2;
+            double bottom = y-node.getMinimumYOffset();
+            bottom = bottom/2;
+            textFont(createFont("georgia", (int)Math.min(12, Math.max(bottom-top-4,1))));
+            
+            //re-scale so height is 1/2 the number of nodes
+            top = y + top;
+            bottom = y - bottom;
+    
       if (treeLayout.equals("Rectangular")) {      
           
           String s = "";
@@ -1011,12 +1024,8 @@ public class TreeVis extends PApplet {
             s = ""+node.getNumberOfLeaves();
 
           // find heights for wedge
-          double top = node.getMaximumYOffset()-y;
-          double bottom = y-node.getMinimumYOffset();
-    
-          //re-scale so height is 1/2 the number of nodes
-          top = y + (top/2);
-          bottom = y - (bottom/2);
+/*          double top = node.getMaximumYOffset()-y;*/
+/*          double bottom = y-node.getMinimumYOffset();*/
 
           //draw the wedge
           canvas.quad((float)toScreenX(x), (float)toScreenY(bottom), //center to bottom
@@ -1024,16 +1033,16 @@ public class TreeVis extends PApplet {
             (float)toScreenX(x+shortest),  (float)toScreenY(top),  //top to longest branch length
             (float)toScreenX(x+longest),  (float)toScreenY(bottom) );  //bottom to shortest branch length
     
-          //create white background for text
+/*          //create white background for text
           canvas.fill(255);
           canvas.stroke(255);
-          canvas.quad((float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+7),
-            (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY((top+bottom)/2)+7),
-            (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY((top+bottom)/2)-3),
-            (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)-3));
-          // write in the text (number of OTUs contained) in black
-          canvas.fill(0);
-          canvas.stroke(0);
+          canvas.quad((float)(toScreenX(x)+3), (float)(toScreenY((top+bottom)/2)+5),
+            (float)(toScreenX(x)+3+textWidth(s)), (float)(toScreenY((top+bottom)/2)+5),
+            (float)(toScreenX(x)+3+textWidth(s)), (float)(toScreenY((top+bottom)/2)-3),
+            (float)(toScreenX(x)+3), (float)(toScreenY((top+bottom)/2)-3));*/
+          // write in the text (number of OTUs contained) in white
+          canvas.fill(255);
+          canvas.stroke(255);
           
           canvas.text(s, (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+5));
       } else if (treeLayout.equals("Triangular")) {
@@ -1046,8 +1055,8 @@ public class TreeVis extends PApplet {
               s = ""+node.getNumberOfLeaves();
           
           // find heights for wedge
-          double top = node.getMaximumYOffset()-y;
-          double bottom = y-node.getMinimumYOffset();
+/*          double top = node.getMaximumYOffset()-y;*/
+/*          double bottom = y-node.getMinimumYOffset();*/
     
           //re-scale so height is 1/2 the number of nodes
           top = y + (top/2);
@@ -1287,7 +1296,8 @@ public class TreeVis extends PApplet {
 		  
 		  PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), JAVA2D);
 	
-		  setCollapsedPixel((float)(getCollapsedPixel()*(xscale/oldXScale)));
+/*        setCollapsedPixel((float)(getCollapsedPixel()*(xscale/oldXScale)));*/
+		  setCollapsedPixel((float)(getCollapsedPixel()*xscale));
 	
 		  //draw the three to the file
 		  canvas.beginDraw();

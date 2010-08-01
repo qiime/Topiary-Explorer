@@ -396,6 +396,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() + 1);
             tree.changeFontSize(Math.min(tree.getFontSize()+1,32));
             verticalTreeToolbar.syncTreeWithZoomSlider();
+/*            collapseTreeToolbar.syncTreeWithCollapseSlider();*/
+            
 	    }
 	    if(key.getKeyCode() == 45)
 	    {
@@ -404,6 +406,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() - 1);
             tree.changeFontSize(Math.max(tree.getFontSize()-1,1));
             verticalTreeToolbar.syncTreeWithZoomSlider();
+/*            collapseTreeToolbar.syncTreeWithCollapseSlider();*/
 	    }
     }
 	
@@ -505,7 +508,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     public void exportTreeImage() {
         tree.noLoop();
          //Determine PDF dimensions
-         PDFDimensionsDialog p = new PDFDimensionsDialog(frame);
+         PDFDimensionsDialog p = new PDFDimensionsDialog(this);
          p.pack();
          p.setVisible(true);
          double dims[] = p.dims;
