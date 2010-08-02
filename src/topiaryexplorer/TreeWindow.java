@@ -80,7 +80,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  				Node node = tree.findNode(evt.getX(), evt.getY());
  				if (node != null) {
  					if (node.isLeaf()) {
- 						treeOpsToolbar.setStatus(String.format("Leaf (OTU): %s", node.getName()));
+ 						treeOpsToolbar.setStatus(String.format("Lineage: %s", node.getLineage()));
  					} else {
  						treeOpsToolbar.setStatus(String.format("Sub-tree: %d leaves", node.getNumberOfLeaves()));
  					}
@@ -127,6 +127,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                 }
             });
             treePopupMenu.add(item);
+            item = new JMenuItem("View Subtree in new Window");
+              item.addActionListener(new ActionListener() {
+                  public void actionPerformed(ActionEvent arg0) {
+                      frame.newTreeWindow(TopiaryFunctions.createNewickStringFromTree(clickedNode));
+                  }
+              });
+              treePopupMenu.add(item);
 
          tree.addMouseListener(new java.awt.event.MouseAdapter() {
  			public void mousePressed(java.awt.event.MouseEvent evt) {

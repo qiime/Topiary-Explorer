@@ -156,7 +156,7 @@ public class Node {
           HashSet testSet = new HashSet(curr);
       
           if(testSet.size() == 1) // if the set only has one element, all names are the same
-          {
+          { 
               // add that string to the consensusLineage
               consensusLineage += curr.get(0) + ";";
               currLabels = newLabels;

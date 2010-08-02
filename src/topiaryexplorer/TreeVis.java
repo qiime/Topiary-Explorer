@@ -1007,7 +1007,7 @@ public class TreeVis extends PApplet {
             top = top/2;
             double bottom = y-node.getMinimumYOffset();
             bottom = bottom/2;
-            textFont(createFont("georgia", (int)Math.min(12, Math.max(bottom-top-4,1))));
+            textFont(createFont("georgia", (int)Math.min(12, Math.max(bottom-top,1))));
             
             //re-scale so height is 1/2 the number of nodes
             top = y + top;
@@ -1041,9 +1041,10 @@ public class TreeVis extends PApplet {
             (float)(toScreenX(x)+3+textWidth(s)), (float)(toScreenY((top+bottom)/2)-3),
             (float)(toScreenX(x)+3), (float)(toScreenY((top+bottom)/2)-3));*/
           // write in the text (number of OTUs contained) in white
+/*      canvas.stroke(Math.abs(Color.WHITE.getRGB()-node.getColor().getRGB()));
+      canvas.fill(Math.abs(Color.WHITE.getRGB()-node.getColor().getRGB()));*/
           canvas.fill(255);
           canvas.stroke(255);
-          
           canvas.text(s, (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+5));
       } else if (treeLayout.equals("Triangular")) {
           String s = "";
@@ -1074,10 +1075,11 @@ public class TreeVis extends PApplet {
             (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY((top+bottom)/2)+7),
             (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY((top+bottom)/2)-3),
             (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)-3));
-          // write in the text (number of OTUs contained) in black
-          canvas.fill(0);
-          canvas.stroke(0);
-          
+          // write in the text (number of OTUs contained) in opposite color of the wedge
+/*          canvas.stroke(Math.abs(Color.WHITE.getRGB()-node.getColor().getRGB()));
+          canvas.fill(Math.abs(Color.WHITE.getRGB()-node.getColor().getRGB()));*/
+              canvas.fill(255);
+              canvas.stroke(255);
           canvas.text(s, (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+5));
       
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
@@ -1102,17 +1104,23 @@ public class TreeVis extends PApplet {
             (float)toScreenX(x2),  (float)toScreenY(y2) );  //bottom to shortest branch length
     
           //create white background for text
-          canvas.fill(255);
+/*          canvas.fill(255);
           canvas.stroke(255);
           canvas.quad((float)(toScreenX(x)+5), (float)(toScreenY(y)+7),
             (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY(y)+7),
             (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY(y)-3),
-            (float)(toScreenX(x)+5), (float)(toScreenY(y)-3));
-          // write in the text (number of OTUs contained) in black
-          canvas.fill(0);
-          canvas.stroke(0);
+            (float)(toScreenX(x)+5), (float)(toScreenY(y)-3));*/
+          // write in the text (number of OTUs contained) in opposite color of the wedge
+/*      canvas.stroke(Math.abs(Color.WHITE.getRGB()-node.getColor().getRGB()));
+      canvas.fill(Math.abs(Color.WHITE.getRGB()-node.getColor().getRGB()));*/
+          canvas.fill(255);
+          canvas.stroke(255);
           canvas.text(s, (float)(toScreenX(x)+5), (float)(toScreenY(y)+5)); 
       }
+      // reset drawing color to black
+      canvas.fill(0);
+      canvas.stroke(0);
+      // reset font size
       textFont(currFont);
     }
 
