@@ -3731,7 +3731,6 @@ OTU ID	Consensus Lineage
 3726	Bacteria; Actinobacteria; Actinobacteridae; Propionibacterineae; Propionibacterium
 3727	Bacteria; Actinobacteria; Actinobacteridae; Propionibacterineae; Propionibacterium
 3728	Bacteria; Actinobacteria; Actinobacteridae; Propionibacterineae; Propionibacterium
-
 >>osm
 OTU ID	Blank3	DMIndexL	DMIndexR	DMMiddleL	DMMiddleR	DMPinkyL	DMPinkyR	DMRingL	DMRingR	DMThumbL	DMThumbR	DMkeyA	DMkeyB	DMkeyC	DMkeyD	DMkeyE	DMkeyEnter	DMkeyF	DMkeyG	DMkeyH	DMkeyJ	DMkeyK	DMkeyL	DMkeyLeftShift	DMkeyM	DMkeyN	DMkeyO	DMkeyP	DMkeyQ	DMkeyRightShift	DMkeyS	DMkeySpace	DMkeyU	DMkeyV	DMkeyW	DMkeyX	DMkeyY	DMkeyZ	Female1Space	Female2Space	Female3Space	Female4Space	Library1Space	Library2Space	Library3Space	Library4Space	Male1Space	Male2Space	NFIndexL	NFIndexR	NFMiddleL	NFMiddleR	NFPinkyL	NFPinkyR	NFRingL	NFRingR	NFThumbL	NFThumbR	NFkeyA	NFkeyB	NFkeyC	NFkeyD	NFkeyE	NFkeyEnter	NFkeyF	NFkeyG	NFkeyH	NFkeyI	NFkeyJ	NFkeyK	NFkeyL	NFkeyLeftShift	NFkeyM	NFkeyN	NFkeyO	NFkeyP	NFkeyQ	NFkeyR	NFkeyRightShift	NFkeyS	NFkeySpace	NFkeyT	NFkeyU	NFkeyV	NFkeyW	NFkeyX	NFkeyY	NFkeyZ	RKIndexL	RKIndexR	RKMiddleL	RKMiddleR	RKPinkyL	RKPinkyR	RKRingL	RKRingR	RKThumbL	RKThumbR	RKkeyA	RKkeyB	RKkeyC	RKkeyE	RKkeyEnter	RKkeyF	RKkeyG	RKkeyH	RKkeyI	RKkeyJ	RKkeyK	RKkeyL	RKkeyLeftShift	RKkeyM	RKkeyN	RKkeyP	RKkeyQ	RKkeyR	RKkeyRightShift	RKkeyS	RKkeySpace	RKkeyT	RKkeyU	RKkeyV	RKkeyW	RKkeyX	RKkeyY	RKkeyZ	Ramaley1Space	UMC1Space	UMC2Space	UMC3Space	Consensus Lineage	
 0	42	209	1613	1159	1791	1058	740	1481	902	721	1055	886	730	878	972	811	713	711	1097	1014	390	326	794	497	970	863	690	959	534	924	638	203	1459	1110	1006	737	626	741	143	222	324	497	101	98	144	91	456	230	35	53		50	53	174	14	47		19	38	107	8	6	3	228	134	73	89	138	126	247	256	45	289	66	291	42	58	27	288	93	74	133	179	135	14	30	294	28	770	614	1368	693	631	847	1011	505	629	869	451	855	745	849	470	177	875	502	193	315	154	760	355	730	524	505	609	567	698	272	739	959	260	816	965	766	767	343	508	96	445	142	Bacteria; Actinobacteria; Actinobacteridae; Propionibacterineae; Propionibacterium
@@ -7463,7 +7462,6 @@ OTU ID	Blank3	DMIndexL	DMIndexR	DMMiddleL	DMMiddleR	DMPinkyL	DMPinkyR	DMRingL	DM
 3726					1								1										1																																																																																																												Bacteria; Actinobacteria; Actinobacteridae; Propionibacterineae; Propionibacterium
 3727																																						1																																																							1												1																									1	Bacteria; Actinobacteria; Actinobacteridae; Propionibacterineae; Propionibacterium
 3728																																																																																																																																1			Bacteria; Actinobacteria; Actinobacteridae; Propionibacterineae; Propionibacterium
-
 >>sam
 SampleID	Digit	Hand	Keysize	Key	Source	Individual	Spacebar	SpacebarSex	Typingdigit	Handkey	TypingHand	TypingHandSource	TypingHandIndiv	TypingHandSourceIndiv	UseFreq	Description	
 NFkeyRightShift			Medium	RightShift	Key	NF			Pi	Right	PiRight	PiRightKey	PiRightNF	PiRightKeyNF		"Noahf.key, shift-right"

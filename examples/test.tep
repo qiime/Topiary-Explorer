@@ -11,7 +11,6 @@ f	n	7	Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadaceae
 g	n	8	Bacteria; Proteobacteria; Gammaproteobacteria; Moraxellaceae
 h	n	4	Bacteria; Firmicutes; Alicyclobacillaceae; Alicyclobacillus; Bacillales
 i	n	7	Bacteria; Actinobacteria; Actinobacteridae
-
 >>osm
 otuid	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	
 a	7	4	2	1
@@ -23,7 +22,6 @@ f		1	1
 g							2	1
 h												3	1
 i																	4	1
-
 >>sam
 sample ID	cat1	cat2	
 1	1	a
