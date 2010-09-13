@@ -127,31 +127,39 @@ public class Node {
       ArrayList<String> curr = new ArrayList<String>();
       ArrayList<String> newLabels = new ArrayList<String>();
       // test if strings have at least one entry ie "bacteria;"
-      String test = currLabels.get(0);
+      String test = currLabels.get(0); 
       boolean loop = true;
+      boolean testb = true;
       
       // while test string has one entry and continue looping
       while(test.indexOf(";") != -1 && loop)
+/*      while(currLabels.size() > 0)*/
       {
           curr = new ArrayList<String>();
           newLabels = new ArrayList<String>();
+          testb = true;
           for(String l: currLabels)
-          {
+          {                
               try {
               // add first entry to curr, keep rest of labels in newLabels
-              curr.add(l.substring(0,l.indexOf(";")));
-              newLabels.add(l.substring(l.indexOf(";")+1, l.length()));
+              String entry = l.substring(0,l.indexOf(";")+1);
+              entry = entry.replace(';',' ').trim();
+              curr.add(entry);        
             }
           catch(StringIndexOutOfBoundsException e)
             {
-                // if there is no ";" then break the loop
-                loop = false;
-                break;
+                // if there is no ";"
+                /*                System.out.println(l);*/
+                curr.add(l);
+/*                loop = false;*/
+                testb = false;
+/*                break;*/
             }
+            newLabels.add(l.substring(l.indexOf(";")+1, l.length()));      
           }
-          
-          if(!loop)
-            break;
+        
+/*            if(!loop)
+              break;*/
           
           HashSet testSet = new HashSet(curr);
       
@@ -195,10 +203,9 @@ public class Node {
               }
               else // if the string that appears most often isn't 50% of the
               // labels then don't add anything
-                break;
+                  break;
           }
-          // loop again using the next string in the list
-          test = currLabels.get(0);
+        test = currLabels.get(0);
       }
       
       return consensusLineage;

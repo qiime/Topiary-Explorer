@@ -599,12 +599,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		        }
 			if(frame.otuSampleMap != null) 
 			    {
-			        lines.add("\n>>osm\n"); 
+			        lines.add(">>osm\n"); 
 			        lines.addAll(frame.otuSampleMap.toStrings());
 		        }
 			if(frame.sampleMetadata != null)
 			{
-			    lines.add("\n>>sam\n");
+			    lines.add(">>sam\n");
 			    lines.addAll(frame.sampleMetadata.toStrings());
 		    }
 		    
@@ -663,6 +663,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             resetCollapseByMenu();*/
             //resetTipLabels();
             frame.treeWindow.tree.loop();
+            for(TreeWindow t : frame.treeWindows)
+            {
+                t.resetConsensusLineage();
+            }
             /*frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState())*/;
             frame.otuMetadataFile = inFile;
        }

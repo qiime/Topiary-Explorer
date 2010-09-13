@@ -79,11 +79,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  			public void mouseMoved(java.awt.event.MouseEvent evt) {
  				Node node = tree.findNode(evt.getX(), evt.getY());
  				if (node != null) {
- 					if (node.isLeaf()) {
- 						treeOpsToolbar.setStatus(String.format("Lineage: %s", node.getLineage()));
- 					} else {
+/*                  String lineage = node.getConsensusLineage();*/
+/*                  if (lineage.length() > 0 ) {
+                      treeOpsToolbar.setStatus(String.format("Lineage: %s", lineage));
+                    } else {*/
  						treeOpsToolbar.setStatus(String.format("Sub-tree: %d leaves", node.getNumberOfLeaves()));
- 					}
+/*                  }*/
  				} else {
  						treeOpsToolbar.setStatus(" ");
  				}
@@ -440,7 +441,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
              colorBy.setEnabled(true);
              this.setVisible(true);
-             resetConsensusLineage();
+/*             resetConsensusLineage();*/
              System.out.println("Done drawing tree.");
              frame.consoleWindow.update("Done drawing tree. ");
              frame.treeFile = inFile;
@@ -468,7 +469,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
               colorBy.setEnabled(true);
               this.setVisible(true);
-              resetConsensusLineage();
+      /*        resetConsensusLineage();*/
               System.out.println("Done drawing tree.");
               frame.consoleWindow.update("Done drawing tree. ");
               frame.treeFile = inFile;
@@ -490,7 +491,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
         colorBy.setEnabled(true);
         this.setVisible(true);
-        resetConsensusLineage();
+/*        resetConsensusLineage();*/
         System.out.println("Done drawing tree.");
         frame.consoleWindow.update("Done drawing tree. ");
     }

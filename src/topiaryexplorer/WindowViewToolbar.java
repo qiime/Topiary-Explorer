@@ -45,7 +45,7 @@ public class WindowViewToolbar extends JToolBar {
                 fc.getInputStream().read(buffer);
                 newTreeButton.setIcon(new ImageIcon(buffer));
         } catch(java.io.IOException ex) {}*/
-        newTreeButton.setText("New");
+        newTreeButton.setText("New Project");
         newTreeButton.setToolTipText("New Project");
         newTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -60,7 +60,7 @@ public class WindowViewToolbar extends JToolBar {
                 fc.getInputStream().read(buffer);
                 openTreeButton.setIcon(new ImageIcon(buffer));
         } catch(java.io.IOException ex) {}*/
-        openTreeButton.setText("Open");
+        openTreeButton.setText("Open Project");
         openTreeButton.setToolTipText("Open Project");
         openTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -75,7 +75,7 @@ public class WindowViewToolbar extends JToolBar {
         fc.getInputStream().read(buffer);
         saveTreeButton.setIcon(new ImageIcon(buffer));
         } catch(java.io.IOException ex) {}*/
-        saveTreeButton.setText("Save");
+        saveTreeButton.setText("Save Project");
         saveTreeButton.setToolTipText("Save Project");
         saveTreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
