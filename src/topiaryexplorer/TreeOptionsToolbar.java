@@ -174,9 +174,23 @@ public class TreeOptionsToolbar extends JToolBar {
         polarButton.setToolTipText("Polar");
         polarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                int size = frame.tree.getTree().getNumberOfLeaves();
+                if(size > 8000)
+                {
+                    if(JOptionPane.showConfirmDialog(null, 
+                    "Viewing the polar layout of trees with more\n"
+                    +"than 8000 nodes is not advised.",
+                    "Warning",JOptionPane.OK_CANCEL_OPTION, 
+                    JOptionPane.WARNING_MESSAGE) 
+                    == JOptionPane.CANCEL_OPTION)
+                        return;
+                }
+                treeStatus.setText("Calculating Offsets...");
+                frame.tree.setTOffsets(frame.tree.getTree(), 0);
                 frame.tree.setTreeLayout("Polar");
                 frame.polarradiobutton.setSelected(true);
                 frame.rotateMenu.setEnabled(true);
+                treeStatus.setText("Done drawing tree.");
             }
         });
         add(rectButton);

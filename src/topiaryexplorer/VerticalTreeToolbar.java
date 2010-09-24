@@ -14,6 +14,7 @@ public class VerticalTreeToolbar extends JToolBar {
     JButton zoomInButton = new JButton("+");
     JSlider zoomSlider = new JSlider(JSlider.VERTICAL, 0, 20, 0);
     JPanel spacer1 = new JPanel();
+    double lastValue = zoomSlider.getValue();
 
     TreeWindow frame = null;
 
@@ -26,8 +27,9 @@ public class VerticalTreeToolbar extends JToolBar {
 
             public void actionPerformed(ActionEvent arg0) {
                 zoomSlider.setValue(zoomSlider.getValue() - 1);
-                frame.tree.changeFontSize(frame.tree.getFontSize()-1);
+                frame.tree.changeFontSize(Math.max(frame.tree.getFontSize()-.3,1));
                 syncTreeWithZoomSlider();
+                lastValue = zoomSlider.getValue();
             }
 
         });
@@ -35,8 +37,9 @@ public class VerticalTreeToolbar extends JToolBar {
 
             public void actionPerformed(ActionEvent arg0) {
                 zoomSlider.setValue(zoomSlider.getValue() + 1);
-                frame.tree.changeFontSize(frame.tree.getFontSize()+1);
+                frame.tree.changeFontSize(Math.min(frame.tree.getFontSize()+.3,12));
                 syncTreeWithZoomSlider();
+                lastValue = zoomSlider.getValue();
             }
 
         });
@@ -47,7 +50,10 @@ public class VerticalTreeToolbar extends JToolBar {
         zoomSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 if (zoomSlider.getValueIsAdjusting()){
+                    double changeby = zoomSlider.getValue() - lastValue;
+                    frame.tree.changeFontSize(Math.min(12, Math.max(frame.tree.getFontSize()+(.5*changeby),1)));
                     syncTreeWithZoomSlider();
+                    lastValue = zoomSlider.getValue();
                 }
             }
         });

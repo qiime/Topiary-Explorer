@@ -225,15 +225,7 @@ public class MainFrame extends JFrame {
      
      public void newTreeWindow() {
          TreeWindow tempTreeWindow = new TreeWindow(this);
-         final long startTime = System.nanoTime();
-         final long endTime;
-         try {
-           tempTreeWindow.loadTree();
-         } finally {
-           endTime = System.nanoTime();
-         }
-         final long duration = endTime - startTime;
-         System.out.println("Time to open tree "+duration+"ns");
+         tempTreeWindow.loadTree();
          treeWindows.add(tempTreeWindow);
          resetOtuMenus();
          resetSampleMenus();
@@ -241,15 +233,7 @@ public class MainFrame extends JFrame {
      
      public void newTreeWindow(String treeString) {
           TreeWindow tempTreeWindow = new TreeWindow(this);
-          final long startTime = System.nanoTime();
-          final long endTime;
-          try {
-            tempTreeWindow.loadTree(treeString);
-          } finally {
-            endTime = System.nanoTime();
-          }
-          final long duration = endTime - startTime;
-          System.out.println("Time to open tree "+duration+"ns");
+          tempTreeWindow.loadTree(treeString);
           treeWindows.add(tempTreeWindow);
       }
      

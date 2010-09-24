@@ -497,6 +497,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     // load tree
                     //frame.treeWindow.loadTree();
                     frame.newTreeWindow(((ArrayList<String>)data.get("tre")).get(0));
+                    frame.treeWindow.tree.loop();
                     Object[] tables = null;
                     
                     // load otu metadata
@@ -545,7 +546,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                          frame.dataPane.setSelectedIndex(3);
                      }
                      
-                     frame.treeWindow.tree.loop();
+                     
                     frame.repaint();
                 }
             }

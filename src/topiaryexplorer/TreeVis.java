@@ -56,8 +56,8 @@ public class TreeVis extends PApplet {
     private Set hilightedNodes = new java.util.HashSet();
 
     private List listeners = new java.util.ArrayList();
-    private int fntpnt = 12;
-    private PFont currFont = createFont("georgia", fntpnt);
+    private double fntpnt = 12;
+    private PFont currFont = createFont("courier", (int)fntpnt);
 
 
     /**
@@ -447,13 +447,13 @@ public class TreeVis extends PApplet {
       }
     }
 
-    public void changeFontSize(int size) {
-        currFont = createFont("georgia", size);
+    public void changeFontSize(double size) {
+        currFont = createFont("courier", (int)size);
         textFont(currFont);
         fntpnt = size;
     }
     
-    public int getFontSize() {
+    public double getFontSize() {
         return fntpnt;
     }
 
@@ -465,11 +465,11 @@ public class TreeVis extends PApplet {
     public void setTree(Node newRoot) {
       fntpnt = 12;
       int treeSize = newRoot.getNumberOfLeaves();
-      if( treeSize > 50)
+      if(treeSize > 50)
       {
           fntpnt = Math.max(fntpnt / treeSize, 1);
       }
-      currFont = createFont("georgia", fntpnt);
+      currFont = createFont("courier", (int)fntpnt);
       textFont(currFont);
       //add to the margin the longest node labels
       float width = 0;
@@ -483,7 +483,7 @@ public class TreeVis extends PApplet {
       //recalculate the x- and y-offsets of the nodes in the tree
       setYOffsets(newRoot, 0);
       setXOffsets(newRoot, 0);
-      setTOffsets(newRoot, 0);
+      //setTOffsets(newRoot, 0);
       setROffsets(newRoot, 0);
       setRadialOffsets(newRoot);
       rootdepth = root.depth();
@@ -1003,16 +1003,16 @@ public class TreeVis extends PApplet {
       //set wedge font size
       /*      int size = node.getNumberOfLeaves();
             int treeSize = root.getNumberOfLeaves();*/
+            //re-scale so height is 1/2 the number of nodes
             double top = node.getMaximumYOffset()-y;
             top = top/2;
             double bottom = y-node.getMinimumYOffset();
             bottom = bottom/2;
-            textFont(createFont("georgia", (int)Math.min(12, Math.max(bottom-top,1))));
-            
-            //re-scale so height is 1/2 the number of nodes
+            textFont(createFont("courier", (int)Math.min(12, Math.max(toScreenY(bottom+top)/3,1))));            
+            //set wedge at y location
             top = y + top;
             bottom = y - bottom;
-    
+            
       if (treeLayout.equals("Rectangular")) {      
           
           String s = "";
