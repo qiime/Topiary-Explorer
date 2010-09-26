@@ -799,13 +799,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
      * Sets tip labels based on user selected metadata values
      */
      public void setTipLabels(boolean state) {
-         if(frame.otuMetadata == null)
-         {
-             JOptionPane.showMessageDialog(null, "No OTU metadata to use in tip labels.", "Error", JOptionPane.ERROR_MESSAGE);
-            frame.consoleWindow.update("No OTU metadata to use in tip labels.");
-         }
-         else
-         {
+         if(frame.otuMetadata != null)
+         {    
              externalLabelsMenuItem.setState(state);
              if(tlc == null) {resetTipLabelCustomizer(state);}
              tlc.setVisible(state);

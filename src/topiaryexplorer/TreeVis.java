@@ -746,6 +746,8 @@ public class TreeVis extends PApplet {
         double minX = drawX+offsetbias-1;
         double width = 0;
         String s = node.getLabel();
+        if(s.length() == 0)
+            s = node.getName();
         for (int i = 0; i < s.length(); i++) {
           width += currFont.width(s.charAt(i));
         }
