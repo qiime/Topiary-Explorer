@@ -484,8 +484,8 @@ public class TreeVis extends PApplet {
       setYOffsets(newRoot, 0);
       setXOffsets(newRoot, 0);
       //setTOffsets(newRoot, 0);
-      setROffsets(newRoot, 0);
-      setRadialOffsets(newRoot);
+      //setROffsets(newRoot, 0);
+      //setRadialOffsets(newRoot);
       rootdepth = root.depth();
 
       resetTreeX();

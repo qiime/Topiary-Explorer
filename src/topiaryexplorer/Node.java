@@ -10,6 +10,7 @@ import java.util.*;
 public class Node {
   private Node parent = null;
   public ArrayList<Node> nodes = new ArrayList(); //children
+  private ArrayList<Node> anscestors = new ArrayList();
 
   private String label = "";
   private String name = "";
@@ -106,7 +107,9 @@ public class Node {
   public void setMaximumRXOffset(double f) { maximumRXOffset = f; }  
   public double getLineWidth() { return lineWidth; }
   public void setLineWidth(double f) { lineWidth = f; }
-  
+  public void setAnscestors(ArrayList<Node> a) { anscestors = a; }
+  public ArrayList<Node> getAnscestors() { return anscestors; }
+  public int getLevel() { return anscestors.size(); };
   
   // recursive method to return consensus lineage
   public String getConsensusLineage() {  
@@ -295,6 +298,8 @@ public class Node {
   public void addChild(Node child) {
     nodes.add(child);
     child.parent = this;
+    child.setAnscestors(this.anscestors);
+    child.getAnscestors().add(this);
     updateColorFromChildren();
   }
 

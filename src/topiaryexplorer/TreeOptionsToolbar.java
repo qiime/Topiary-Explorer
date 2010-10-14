@@ -159,6 +159,7 @@ public class TreeOptionsToolbar extends JToolBar {
         radialButton.setToolTipText("Radial");
         radialButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                frame.tree.setRadialOffsets(frame.tree.getTree());
                 frame.tree.setTreeLayout("Radial");
                 frame.radialradiobutton.setSelected(true);
                 frame.rotateMenu.setEnabled(true);
@@ -187,6 +188,7 @@ public class TreeOptionsToolbar extends JToolBar {
                 }
                 treeStatus.setText("Calculating Offsets...");
                 frame.tree.setTOffsets(frame.tree.getTree(), 0);
+                frame.tree.setROffsets(frame.tree.getTree(), 0);
                 frame.tree.setTreeLayout("Polar");
                 frame.polarradiobutton.setSelected(true);
                 frame.rotateMenu.setEnabled(true);

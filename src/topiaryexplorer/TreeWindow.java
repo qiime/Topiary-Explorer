@@ -99,6 +99,31 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              }
          });
          treePopupMenu.add(item);
+         item = new JMenuItem("Invert Collapsed Nodes");
+          item.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent e) {
+                  clickedNode.setCollapsed(!clickedNode.isCollapsed());
+                  for(Node n: clickedNode.getParent().nodes) // siblings
+                    {
+                        if(n != clickedNode)
+                          n.setCollapsed(!clickedNode.isCollapsed());
+                    }
+                    
+                  for(Node n: tree.getTree().getNodes())
+                  {
+/*                      if(n.getLevel() > clickedNode.getLevel())
+                        continue;*/
+                      
+                      if(clickedNode.getAnscestors().contains(n))
+                        continue;
+                        
+                      n.setCollapsed(!clickedNode.isCollapsed());
+                  }
+                  
+                  //clickedNode.setCollapsed(!clickedNode.isCollapsed());
+              }
+          });
+          treePopupMenu.add(item);
          item = new JMenuItem("Rotate (Swap Children)");
          item.addActionListener(new ActionListener() {
              public void actionPerformed(ActionEvent arg0) {

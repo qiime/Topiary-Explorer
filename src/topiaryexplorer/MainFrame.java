@@ -92,7 +92,7 @@ public class MainFrame extends JFrame {
      * Default constructor.  Sets up the GUI.
      */
      public MainFrame() {
-        super("TopiaryTool");
+        super("TopiaryExplorer");
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

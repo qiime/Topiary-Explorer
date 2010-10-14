@@ -511,7 +511,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 						 frame.otuMetadataTable.setModel(sorter);
                          
                          frame.consoleWindow.update("Loaded OTU metadata.");
-/*                         resetColorByOtuMenu();*/
+/*                         frame.treeWindow.resetColorByOtuMenu();*/
                          frame.resetOtuMenus();
                          /*resetLineWidthOtuMenu();
                                                   resetCollapseByMenu();*/
@@ -636,7 +636,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    	   }
        if(inFile != null)
        {
-           frame.treeWindow.tree.noLoop();
+           for(TreeWindow t : frame.treeWindows)
+               t.tree.noLoop();
+               
            if(frame.otuMetadata != null)
                 clearOtuMetadata();
                 
@@ -659,13 +661,15 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             if (frame.currTable == frame.otuMetadata) {
                 frame.treeWindow.removeColor();
             }
+            frame.resetOtuMenus();
 /*            resetColorByOtuMenu();
             resetLineWidthOtuMenu();
             resetCollapseByMenu();*/
             //resetTipLabels();
-            frame.treeWindow.tree.loop();
+/*            frame.treeWindow.tree.loop();*/
             for(TreeWindow t : frame.treeWindows)
             {
+                t.tree.loop();
                 t.resetConsensusLineage();
             }
             /*frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState())*/;
