@@ -579,6 +579,20 @@ public class TreeVis extends PApplet {
           minX = minX - 5;
           minY = minY - 5;
       }
+      //if node is collapsed, whole wedge is viable
+      if(tree.isCollapsed())
+      {
+/*          double longest = tree.longestRootToTipDistance() - tree.getBranchLength();*/
+          double shortest = tree.shortestRootToTipDistance() - tree.getBranchLength();
+      	  double top = toScreenY(tree.getMaximumYOffset())-nodeY;
+          top = top/2;
+          double bottom = nodeY-toScreenY(tree.getMinimumYOffset());
+          bottom = bottom/2;
+      	  maxY = nodeY + top;
+          minY = nodeY - bottom;
+          maxX = nodeX + toScreenX(shortest);
+      }
+      
       //if the current node is within TOLERANCE pixels, return this node
       if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
         return tree;
