@@ -78,27 +78,38 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          tree.addMouseMotionListener(new MouseMotionAdapter() {
  			public void mouseMoved(java.awt.event.MouseEvent evt) {
  				Node node = tree.findNode(evt.getX(), evt.getY());
+ 				String status = "";
  				if (node != null) {
+                  
+                  if (node.isLocked())
+                    status += "(Locked) ";
+                    
                   String lineage = node.getConsensusLineage();
                   if (lineage.length() > 0 ) {
-                      treeOpsToolbar.setStatus(String.format("Lineage: %s", lineage));
+                      status += String.format("Lineage: %s", lineage);
                     } else {
- 						treeOpsToolbar.setStatus(String.format("Sub-tree: %d leaves", node.getNumberOfLeaves()));
+ 						status += String.format("Sub-tree: %d leaves", node.getNumberOfLeaves());
                   }
- 				} else {
- 						treeOpsToolbar.setStatus(" ");
- 				}
+ 				} 
+ 				treeOpsToolbar.setStatus(status);
  			}
  		});
 	     
-	     //set up the tree pop-up menu
-         item = new JMenuItem("Collapse/Expand");
-         item.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent e) {
-                 clickedNode.setCollapsed(!clickedNode.isCollapsed());
-             }
-         });
-         treePopupMenu.add(item);
+	     /*//set up the tree pop-up menu
+	              item = new JMenuItem("Collapse/Expand");
+	              item.addActionListener(new ActionListener() {
+	                  public void actionPerformed(ActionEvent e) {
+	                      clickedNode.setCollapsed(!clickedNode.isCollapsed());
+	                  }
+	              });
+	              treePopupMenu.add(item);*/
+          item = new JMenuItem("Lock/Unlock");
+              item.addActionListener(new ActionListener() {
+                  public void actionPerformed(ActionEvent e) {
+                      clickedNode.setLocked(!clickedNode.isLocked());
+                  }
+              });
+              treePopupMenu.add(item);
          item = new JMenuItem("Invert Collapsed Nodes");
           item.addActionListener(new ActionListener() {
               public void actionPerformed(ActionEvent e) {
@@ -352,6 +363,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                   setTipLabels(externalLabelsMenuItem.getState());
               } else if (e.getActionCommand().equals("Internal Node Labels")) {
                   tree.setDrawInternalNodeLabels(internalLabelsMenuItem.getState());
+              } else if (e.getActionCommand().equals("Lock/Unlock")) {
+                    if (frame.clickedNode != null) {
+                       frame.clickedNode.setLocked(!frame.clickedNode.isLocked());
+                    } 
               } else if (e.getActionCommand().equals("Collapse/Expand")) {
                   if (frame.clickedNode != null) {
                      frame.clickedNode.setCollapsed(!frame.clickedNode.isCollapsed());

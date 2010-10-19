@@ -25,6 +25,7 @@ public class Node {
   private double ryoffset = 0;
   private boolean drawPie = false; //should a pie chart be drawn for this node?
   private boolean drawLabel = false;
+  private boolean locked = false;
   private double maximumYOffset = 0;
   private double minimumYOffset = 0;
   private double maximumTOffset = 0;
@@ -57,6 +58,7 @@ public class Node {
   }
 
   //GETTERS AND SETTERS
+  public boolean isLocked() { return locked; }
   public boolean isLeaf() { return nodes.size() == 0; }
   public void setDrawPie(boolean b) { drawPie = b; }
   public boolean getDrawPie() { return drawPie; }
@@ -65,7 +67,7 @@ public class Node {
   public ArrayList<Color> getGroupColor() { return groupColor; }
   public ArrayList<Double> getGroupFraction() { return groupWeight; }
   public boolean isCollapsed() { return collapsed; }
-  public void setCollapsed(boolean cond) { collapsed = cond; }
+  public void setCollapsed(boolean cond) { if(!locked) collapsed = cond; }
   public void setLabel(String s) { label = s; }
   public String getLabel() { return label; }
   public double getBranchLength() { return branchlength; }
@@ -110,6 +112,12 @@ public class Node {
   public void setAnscestors(ArrayList<Node> a) { anscestors = a; }
   public ArrayList<Node> getAnscestors() { return anscestors; }
   public int getLevel() { return anscestors.size(); };
+  
+  public void setLocked(boolean l) { 
+      locked=l; 
+      for(Node n: nodes)
+        n.setLocked(l);
+      }
   
   // recursive method to return consensus lineage
   public String getConsensusLineage() {  

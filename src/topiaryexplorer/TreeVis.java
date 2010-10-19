@@ -647,9 +647,9 @@ public class TreeVis extends PApplet {
       boolean isInternal = !node.isLeaf();
       boolean collapsed = false;
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-          collapsed = node.isCollapsed() || toScreenX(node.getXOffset()) > collapsedPixel;
+          collapsed = node.isCollapsed() || toScreenX(node.getXOffset()) > collapsedPixel && !node.isLocked();
       } else {
-          collapsed = node.isCollapsed() || node.getROffset()/rootdepth > collapsedPixel/getWidth();
+          collapsed = node.isCollapsed() || node.getROffset()/rootdepth > collapsedPixel/getWidth() && !node.isLocked();
       }
 
       // Draw the branches first, so they get over-written by the nodes later
