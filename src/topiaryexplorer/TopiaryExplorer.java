@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import javax.swing.*;
 
 /**
- * TopiaryTool is the main class for the Topiary Tool application.
+ * TopiaryExplorer is the main class for the Topiary Explorer application.
  * It takes care of creating the main JFrame and displaying the GUI.
  */
 

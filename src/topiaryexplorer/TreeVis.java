@@ -8,6 +8,7 @@ import javax.jnlp.*;
 import java.io.*;
 import java.awt.image.*;
 import javax.imageio.*;
+import java.awt.Polygon;
 
 public class TreeVis extends PApplet {
 
@@ -523,8 +524,6 @@ public class TreeVis extends PApplet {
       redraw();
     }
 
-
-
     /**
      * Calls findNode(Node,double,double,double) on the root of the tree
      *
@@ -582,15 +581,23 @@ public class TreeVis extends PApplet {
       //if node is collapsed, whole wedge is viable
       if(tree.isCollapsed())
       {
-/*          double longest = tree.longestRootToTipDistance() - tree.getBranchLength();*/
-          double shortest = tree.shortestRootToTipDistance() - tree.getBranchLength();
+          double shortest = toScreenX(tree.shortestRootToTipDistance() - tree.getBranchLength());
+          double longest = toScreenX(tree.longestRootToTipDistance() - tree.getBranchLength());
       	  double top = toScreenY(tree.getMaximumYOffset())-nodeY;
           top = top/2;
           double bottom = nodeY-toScreenY(tree.getMinimumYOffset());
           bottom = bottom/2;
       	  maxY = nodeY + top;
           minY = nodeY - bottom;
-          maxX = nodeX + toScreenX(shortest);
+          
+          int[] xs = new int[]{(int)Math.floor(nodeX), (int)Math.floor(nodeX), (int)Math.ceil(nodeX+shortest), (int)Math.ceil(nodeX+longest)};
+          int[] ys = new int[]{(int)Math.floor(minY), (int)Math.ceil(maxY), (int)Math.ceil(maxY), (int)Math.floor(minY)};
+          
+          Polygon poly = new Polygon(xs,ys,4);
+          
+          if(poly.contains(x,y))
+            return tree;
+            
       }
       
       //if the current node is within TOLERANCE pixels, return this node
