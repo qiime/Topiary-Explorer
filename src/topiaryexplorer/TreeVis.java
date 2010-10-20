@@ -4,6 +4,7 @@ import processing.core.*;
 import javax.swing.event.*;
 import java.util.*;
 import java.awt.Color;
+import java.awt.Cursor;
 import javax.jnlp.*;
 import java.io.*;
 import java.awt.image.*;

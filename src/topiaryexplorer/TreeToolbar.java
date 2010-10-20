@@ -16,6 +16,7 @@ public class TreeToolbar extends JToolBar {
     JTextField search = new JTextField();
     JPanel spacer1 = new JPanel();    
     TreeWindow frame = null;
+    JLabel status = new JLabel("");
 
     public TreeToolbar(TreeWindow _frame) {
 
@@ -52,7 +53,9 @@ public class TreeToolbar extends JToolBar {
         
         add(zoomSlider);
         add(zoomInButton);
-
+        add(spacer1);
+        add(status);
+        add(spacer1);
         setFloatable(false);
         spacer1.setPreferredSize(new Dimension(100,10));
         add(spacer1);
@@ -92,6 +95,28 @@ public class TreeToolbar extends JToolBar {
 			}
 		});
         add(search);
+    }
+    
+/*    public void newTask(int max) {
+        progress.setStringPainted(true);
+        progress = new JProgressBar(0,max);
+    }
+    
+    public void endTask() {
+        progress = new JProgressBar();
+        progress.setStringPainted(false);
+    }
+    
+    public void updateProgress(int val) {
+        progress.setValue(val);
+    }
+    
+    public void incProgress() {
+        progress.setValue(progress.getValue()+1);
+    }*/
+    
+    public void setStatus(String s) {
+        status.setText(s);
     }
 
     public void syncTreeWithZoomSlider() {

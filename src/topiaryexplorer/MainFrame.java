@@ -224,17 +224,25 @@ public class MainFrame extends JFrame {
      }
      
      public void newTreeWindow() {
+         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
          TreeWindow tempTreeWindow = new TreeWindow(this);
          tempTreeWindow.loadTree();
          treeWindows.add(tempTreeWindow);
+         tempTreeWindow.setTitle("Tree "+treeWindows.size());
          resetOtuMenus();
          resetSampleMenus();
+         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
      public void newTreeWindow(String treeString) {
+          setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
           TreeWindow tempTreeWindow = new TreeWindow(this);
           tempTreeWindow.loadTree(treeString);
           treeWindows.add(tempTreeWindow);
+          tempTreeWindow.setTitle("Tree "+treeWindows.size());
+          resetOtuMenus();
+          resetSampleMenus();
+          setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       }
      
      public void resetOtuMenus() {
@@ -436,6 +444,7 @@ public class MainFrame extends JFrame {
      }
 
      public void recolor() {
+         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
          if (currTable != null && currTable == otuMetadata) {
              for(int i = 0; i < treeWindows.size(); i++)
                   treeWindows.get(i).recolorTreeByOtu();
@@ -447,9 +456,11 @@ public class MainFrame extends JFrame {
          } else {
              //it's null; don't do anything
          }
+         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
      public void interpolateColors() {
+         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		ArrayList<ArrayList<Object>> data = ((ColorTableModel)colorKeyTable.getModel()).getData();
 
 		int first = -1;
@@ -479,6 +490,7 @@ public class MainFrame extends JFrame {
                 colorKeyTable.repaint();
                 syncColorMap();
                 recolor();
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 return;
 			}
 			//interpolate
