@@ -573,6 +573,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     * supplied dimensions
     */
     public void exportTreeImage() {
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        treeOpsToolbar.setStatus("Exporting tree...");
         tree.noLoop();
          //Determine PDF dimensions
          PDFDimensionsDialog p = new PDFDimensionsDialog(this);
@@ -583,9 +585,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          	try {
          		byte[] b = new byte[0];
             	tree.exportTreeImage(frame.fss.saveFileDialog(null,null,new ByteArrayInputStream(b),null), dims);
-           	} catch(IOException ex) {};
+           	} catch(IOException ex) {
+           	    System.out.println(ex);
+           	};
 		}
         tree.loop();
+        treeOpsToolbar.setStatus("Done exporting tree.");
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
     /**

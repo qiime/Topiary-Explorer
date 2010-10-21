@@ -656,22 +656,17 @@ public class TreeVis extends PApplet {
       if (root==null) return;
 
       boolean isInternal = !node.isLeaf();
-      boolean collapsed = false;
-/*      if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-          collapsed = node.isCollapsed() || toScreenX(node.getXOffset()) > collapsedPixel && !node.isLocked();
-      } else {
-          collapsed = node.isCollapsed() || node.getROffset()/rootdepth > collapsedPixel/getWidth() && !node.isLocked();
-      }*/
-      
-/*      if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {*/
-            collapsed = (node.isCollapsed() || node.depth()/rootdepth <= collapsedLevel && !node.isLocked());
- /*       } else {
-                             collapsed = node.isCollapsed() || node.depth()/rootdepth > collapsedPixel/getWidth() && !node.isLocked();
-                         }
-         */
+
+      if(node.depth()/rootdepth <= collapsedLevel && !node.isLocked())
+        {
+            node.setCollapsed(true);
+        }
+        else
+            node.setCollapsed(false);
+
       // Draw the branches first, so they get over-written by the nodes later
       if (isInternal) {
-        if (collapsed){
+        if (node.isCollapsed()){
           //if it's an internal, collapsed node, then draw a wedge in its place
           drawWedge(node, canvas);
         }
@@ -683,7 +678,7 @@ public class TreeVis extends PApplet {
 
 
       //if it's internal and not collapsed, draw all the subtrees
-      if (isInternal && !collapsed) {
+      if (isInternal && !node.isCollapsed()) {
         for (int i=0; i < node.nodes.size(); i++) {
           Node child = node.nodes.get(i);
           drawTree(child, canvas);
@@ -1316,7 +1311,8 @@ public class TreeVis extends PApplet {
 		  double oldYScale = yscale;
 		  double oldXStart = xstart;
 		  double oldYStart = ystart;
-		  float oldCollapsedPixel = getCollapsedPixel();
+/*        float oldCollapsedPixel = getCollapsedPixel();*/
+/*          double oldCollapsedLevel = getCollapsedLevel();*/
 		  boolean oldDrawExternalNodeLabels = drawExternalNodeLabels;
 		  boolean oldDrawInternalNodeLabels = drawInternalNodeLabels;
 	
@@ -1345,9 +1341,9 @@ public class TreeVis extends PApplet {
 		  PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), JAVA2D);
 	
 /*        setCollapsedPixel((float)(getCollapsedPixel()*(xscale/oldXScale)));*/
-		  setCollapsedPixel((float)(getCollapsedPixel()*xscale));
+/*        setCollapsedLevel((float)(getCollapsedLevel()*xscale));*/
 	
-		  //draw the three to the file
+		  //draw the tree to the file
 		  canvas.beginDraw();
 		  canvas.textFont(currFont);
 		  canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
@@ -1363,8 +1359,7 @@ public class TreeVis extends PApplet {
           java.awt.image.BufferedImage img = (BufferedImage)canvas.getImage();
           file.setMaxLength(100000);
           OutputStream os = file.getOutputStream(true);
-          ImageIO.write(img, "PNG", os);
-                    
+          ImageIO.write(img, "png", os);
 
 		  canvas.dispose();
 	
@@ -1375,10 +1370,10 @@ public class TreeVis extends PApplet {
 		  ystart = oldYStart;
 		  drawExternalNodeLabels = oldDrawExternalNodeLabels;
 		  drawInternalNodeLabels = oldDrawInternalNodeLabels;
-		  setCollapsedPixel(oldCollapsedPixel);
-	
 		  redraw();
-	} catch (IOException ex) {};
+	} catch (Exception ex) {
+	    System.out.println(ex);
+	    }
 
     }
 }

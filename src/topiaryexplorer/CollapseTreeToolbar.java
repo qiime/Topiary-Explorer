@@ -9,7 +9,7 @@ import javax.swing.event.*;
 
 
 public class CollapseTreeToolbar extends JToolBar {
-    JSlider collapseSlider = new JSlider(0, 1000, 1000);
+    JSlider collapseSlider = new JSlider(0, 1000, 10);
     JPanel spacer1 = new JPanel();
 
     TreeWindow frame = null;
