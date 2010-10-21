@@ -79,19 +79,20 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  			public void mouseMoved(java.awt.event.MouseEvent evt) {
  				Node node = tree.findNode(evt.getX(), evt.getY());
  				String status = "";
+ 				String prefix = "";
  				if (node != null) {
                   
                   if (node.isLocked())
-                    status += "(Locked) ";
+                    prefix += "(Locked) ";
                     
                   String lineage = node.getConsensusLineage();
                   if (lineage.length() > 0 ) {
-                      status += String.format("Lineage: %s", lineage);
+                      status += lineage;
                     } else {
  						status += String.format("Sub-tree: %d leaves", node.getNumberOfLeaves());
                   }
  				} 
- 				treeOpsToolbar.setStatus(status);
+ 				treeToolbar.setStatus(prefix, status);
  			}
  		});
 	     
@@ -160,7 +161,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
           item = new JMenuItem("Consensus Lineage");
             item.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent arg0) {
-                    System.out.println(clickedNode.getConsensusLineage());
+                    JOptionPane.showMessageDialog(thisWindow,
+                        clickedNode.getConsensusLineage(),
+                        "Consensus Lineage",
+                        JOptionPane.PLAIN_MESSAGE);
+                    //System.out.println(clickedNode.getConsensusLineage());
                 }
             });
             treePopupMenu.add(item);
@@ -463,7 +468,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     */
 	public void loadTree(FileContents inFile) {
 	    this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	    treeToolbar.setStatus("Loading tree...");
+	    treeOpsToolbar.setStatus("Loading tree...");
 	     if (inFile == null) {
 	     	 try {
 	             inFile = frame.fos.openFileDialog(null,null);
@@ -490,13 +495,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              
              treeHolder.syncScrollbarsWithTree();
          }
-         treeToolbar.setStatus("Done loading tree.");
+         treeOpsToolbar.setStatus("Done loading tree.");
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
     public void loadTree() {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        treeToolbar.setStatus("Loading tree...");
+        treeOpsToolbar.setStatus("Loading tree...");
         FileContents inFile = null;
         try {
              inFile = frame.fos.openFileDialog(null,null);
@@ -522,13 +527,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
               
               treeHolder.syncScrollbarsWithTree();
           }
-          treeToolbar.setStatus("Done drawing tree.");
+          treeOpsToolbar.setStatus("Done drawing tree.");
           this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
     public void loadTree(String treeString) {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        treeToolbar.setStatus("Loading tree...");
+        treeOpsToolbar.setStatus("Loading tree...");
         tree.noLoop();
         tree.setTree(TopiaryFunctions.createTreeFromNewickString(treeString));
         removeColor();
@@ -544,7 +549,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         resetConsensusLineage();
         System.out.println("Done drawing tree.");
         frame.consoleWindow.update("Done drawing tree. ");
-        treeToolbar.setStatus("Done drawing tree.");
+        treeOpsToolbar.setStatus("Done drawing tree.");
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
@@ -552,7 +557,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     * Saves the current tree in newick format
     */
     public void saveTree() {
-        treeToolbar.setStatus("Saving tree...");
+        treeOpsToolbar.setStatus("Saving tree...");
 	    String s = TopiaryFunctions.createNewickStringFromTree(tree.getTree());
         try {
         	FileContents fc = frame.fss.saveFileDialog(null,null,new ByteArrayInputStream(s.getBytes()),null);
@@ -560,7 +565,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             JOptionPane.showMessageDialog(null, "Error writing to file.", "Error", JOptionPane.ERROR_MESSAGE);
             frame.consoleWindow.update("Error writing to file.");
         }
-        treeToolbar.setStatus("Done saving tree.");
+        treeOpsToolbar.setStatus("Done saving tree.");
     }
     
     /**
@@ -619,7 +624,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
      * Recolors the tree based on selected OTU metadata field
      */
 	public void recolorTreeByOtu() {
-	    treeToolbar.setStatus("Coloring tree...");
+	    treeOpsToolbar.setStatus("Coloring tree...");
 	    this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	    ArrayList<Node> ns = tree.getTree().getLeaves();
        //loop over each node
@@ -656,7 +661,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
        }
        tree.getTree().updateColorFromChildren();
        frame.repaint();
-       treeToolbar.setStatus("Done coloring tree.");
+       treeOpsToolbar.setStatus("Done coloring tree.");
        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
@@ -664,7 +669,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     * Recolors tree by selected sample metadata
     */
     public void recolorTreeBySample() {
-        treeToolbar.setStatus("Coloring tree...");
+        treeOpsToolbar.setStatus("Coloring tree...");
         ArrayList<Node> ns = tree.getTree().getLeaves();
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
          //loop over each node
@@ -720,7 +725,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          }
          tree.getTree().updateColorFromChildren();
          frame.repaint();
-         treeToolbar.setStatus("Done coloring tree.");
+         treeOpsToolbar.setStatus("Done coloring tree.");
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
@@ -934,10 +939,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  	 	//first, uncollapse the entire tree
  	 	//frame.treeWindow.uncollapseTree();
  	 	uncollapseTree();
-        treeToolbar.setStatus("Collasping tree...");
+        treeOpsToolbar.setStatus("Collasping tree...");
  	 	//using the metadata, collapse the tree
  	 	collapseByValueNonRecursive(tree.getTree(), name, level);
- 	 	treeToolbar.setStatus("Done collapsing tree.");
+ 	 	treeOpsToolbar.setStatus("Done collapsing tree.");
  	 	this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
  	 }
  	 
@@ -1055,7 +1060,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                 
         public void colorByValue(String value) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            treeToolbar.setStatus("Coloring tree...");
+            treeOpsToolbar.setStatus("Coloring tree...");
              //get the column that this category is
              int colIndex = frame.currTable.getColumnNames().indexOf(value);
              if (colIndex == -1) {
@@ -1086,7 +1091,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              frame.recolor();
              //color tree from leaves
              tree.getTree().updateColorFromChildren();
-             treeToolbar.setStatus("Done coloring tree.");
+             treeOpsToolbar.setStatus("Done coloring tree.");
              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
           }
       /**

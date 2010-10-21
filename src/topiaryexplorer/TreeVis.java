@@ -51,6 +51,7 @@ public class TreeVis extends PApplet {
     //is a label being dragged?
     private boolean draggingLabel = false;
     private float collapsedPixel = 10000000;
+    private double collapsedLevel = 0;
 
     private Node selectedNode;
     private Node mouseOverNode;
@@ -125,6 +126,8 @@ public class TreeVis extends PApplet {
     public void setDrawInternalNodeLabels(boolean b) { drawInternalNodeLabels = b; }
     public void setCollapsedPixel(float pixel) { collapsedPixel = pixel; }
     public float getCollapsedPixel() { return collapsedPixel; }
+    public void setCollapsedLevel(double level) { collapsedLevel = level; }
+    public double getCollapsedLevel(){ return collapsedLevel; }
     public double getLineWidthScale() { return lineWidthScale; }
     public void setLineWidthScale(double f) { lineWidthScale = f; }
 
@@ -565,20 +568,9 @@ public class TreeVis extends PApplet {
       double nodeY = toScreenY(row);
 
       double minX = nodeX;
-      double width = 0;
-      String s = tree.getLabel();
-      for (int i = 0; i < s.length(); i++) {
-        width += currFont.width(s.charAt(i));
-      }
-      double maxX =  nodeX + 5 + (width*currFont.size);
-      double minY = nodeY - (currFont.descent()*currFont.size);
-      double maxY = nodeY + (currFont.ascent()*currFont.size);
-      if ((tree.isLeaf() && !this.drawExternalNodeLabels) || (!tree.isLeaf() && !this.drawInternalNodeLabels)) {
-          maxX = minX + 5;
-          maxY = minY + 5;
-          minX = minX - 5;
-          minY = minY - 5;
-      }
+      double maxX = minX+5;
+      double minY = nodeY;
+      double maxY = minY+5;
       //if node is collapsed, whole wedge is viable
       if(tree.isCollapsed())
       {
@@ -597,8 +589,26 @@ public class TreeVis extends PApplet {
           Polygon poly = new Polygon(xs,ys,4);
           
           if(poly.contains(x,y))
-            return tree;
-            
+            {
+                return tree;
+            }
+            else
+                return null;
+      }
+      
+      double width = 0;
+      String s = tree.getLabel();
+      for (int i = 0; i < s.length(); i++) {
+        width += currFont.width(s.charAt(i));
+      }
+      maxX =  nodeX + 5 + (width*currFont.size);
+      minY = nodeY - (currFont.descent()*currFont.size);
+      maxY = nodeY + (currFont.ascent()*currFont.size);
+      if ((tree.isLeaf() && !this.drawExternalNodeLabels) || (!tree.isLeaf() && !this.drawInternalNodeLabels)) {
+          maxX = minX + 5;
+          maxY = minY + 5;
+          minX = minX - 5;
+          minY = minY - 5;
       }
       
       //if the current node is within TOLERANCE pixels, return this node
@@ -606,8 +616,8 @@ public class TreeVis extends PApplet {
         return tree;
       }
 
-      //if the tree is collapsed, don't search it
-      if (tree.isCollapsed()) return null;
+/*      //if the tree is collapsed, don't search it
+      if (tree.isCollapsed()) return null;*/
 
       //search the root's children
       for (int i = 0; i < tree.nodes.size(); i++) {
@@ -647,12 +657,18 @@ public class TreeVis extends PApplet {
 
       boolean isInternal = !node.isLeaf();
       boolean collapsed = false;
-      if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+/*      if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
           collapsed = node.isCollapsed() || toScreenX(node.getXOffset()) > collapsedPixel && !node.isLocked();
       } else {
           collapsed = node.isCollapsed() || node.getROffset()/rootdepth > collapsedPixel/getWidth() && !node.isLocked();
-      }
-
+      }*/
+      
+/*      if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {*/
+            collapsed = (node.isCollapsed() || node.depth()/rootdepth <= collapsedLevel && !node.isLocked());
+ /*       } else {
+                             collapsed = node.isCollapsed() || node.depth()/rootdepth > collapsedPixel/getWidth() && !node.isLocked();
+                         }
+         */
       // Draw the branches first, so they get over-written by the nodes later
       if (isInternal) {
         if (collapsed){

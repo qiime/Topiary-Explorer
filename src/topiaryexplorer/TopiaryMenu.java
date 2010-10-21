@@ -40,19 +40,14 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JMenu viewMenu = new JMenu("View");
     JMenu nodeMenu = new JMenu("Node");
     JMenu pcoaMenu = new JMenu("PCoA");
-/*    JMenu colorByMenu = new JMenu("Color");
-    JMenu colorByOtuMetadataMenu = new JMenu("OTU Metadata");
-    JMenu colorBySampleMetadataMenu = new JMenu("Sample Metadata");*/
     JMenu distanceMetricMenu = new JMenu("Distance Metric");
     JMenu sampleShapeMenu = new JMenu("Sample Shape");
     JMenu otuShapeMenu = new JMenu("OTU Shape");
     JRadioButtonMenuItem uniformLineWidthItem = new JRadioButtonMenuItem("Uniform");
     JMenu pcoaLayoutMenu = new JMenu("Layout");
-/*    JRadioButtonMenuItem noColoringMenuItem = new JRadioButtonMenuItem("No coloring");
-*/    JSlider pcoaLineWidthSlider = new JSlider(1, 1000, 10);
+    JSlider pcoaLineWidthSlider = new JSlider(1, 1000, 10);
 
     ButtonGroup distanceMetricGroup = new ButtonGroup();
-/*    ButtonGroup colorByGroup = new ButtonGroup();*/
     ButtonGroup pcoaLayoutGroup = new ButtonGroup();
     ButtonGroup sampleShapeGroup = new ButtonGroup();
     ButtonGroup otuShapeGroup = new ButtonGroup();
@@ -396,37 +391,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item.addActionListener(this);
         pcoaMenu.add(item);
 
-/*        //set up the "node" submenus
-        item = new JMenuItem("Collapse/Expand");
-        item.addActionListener(this);
-        nodeMenu.add(item);
-        item = new JMenuItem("Collapse/Expand All Children");
-        item.addActionListener(this);
-        nodeMenu.add(item);
-        item = new JMenuItem("Rotate (Swap Children)");
-        item.addActionListener(this);
-        nodeMenu.add(item);
-        item = new JCheckBoxMenuItem("Pie Chart");
-        item.addActionListener(this);
-        nodeMenu.add(item);
-        item = new JCheckBoxMenuItem("Node Label");
-        item.addActionListener(this);
-        nodeMenu.add(item);*/
-
-        /*//set up the "color by" submenus
-                colorByMenu.add(colorByOtuMetadataMenu);
-                colorByMenu.add(colorBySampleMetadataMenu);
-                colorByGroup.add(noColoringMenuItem);
-                noColoringMenuItem.setSelected(true);
-                noColoringMenuItem.addActionListener(this);
-                colorByMenu.add(noColoringMenuItem);*/
-        
         //add all the menus to the menu bar
         pcoaMenu.setEnabled(false);
-/*        colorByMenu.setEnabled(false);*/
         add(fileMenu);
         add(viewMenu);
-/*        add(colorByMenu);*/
      }
 
 
@@ -437,7 +405,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
          } else if (e.getActionCommand().equals("New Project...")) {
            newProject();
          } else if (e.getActionCommand().equals("Open Project...")) {
+                frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                   openProject();
+                  frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         } else if (e.getActionCommand().equals("Save Project...")) {
                     saveProject();
         } else if (e.getActionCommand().equals("Load OTU Metadata...")) {
@@ -466,6 +436,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     }
     
     public void openProject(){
+        
         try {
 		    FileContents inFile = frame.fos.openFileDialog(null, null);
 
@@ -491,11 +462,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     
                     
                     frame.treeWindow.tree.noLoop();
-/*                    clearOtuMetadata();
-                    clearSampleMetadata();
-                    clearSampleMetadata();*/
-                    // load tree
-                    //frame.treeWindow.loadTree();
                     frame.newTreeWindow(((ArrayList<String>)data.get("tre")).get(0));
                     frame.treeWindow.tree.loop();
                     Object[] tables = null;
@@ -511,11 +477,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 						 frame.otuMetadataTable.setModel(sorter);
                          
                          frame.consoleWindow.update("Loaded OTU metadata.");
-/*                         frame.treeWindow.resetColorByOtuMenu();*/
                          frame.resetOtuMenus();
-                         /*resetLineWidthOtuMenu();
-                                                  resetCollapseByMenu();*/
-                         /*frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState())*/;
                          frame.dataPane.setSelectedIndex(1);
                      }
                      // load otu sample map
@@ -541,12 +503,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 						 
                          frame.consoleWindow.update("Loaded sample metadata.");
                          frame.resetSampleMenus();
-/*                         resetColorBySampleMenu();*/
-                         /*resetLineWidthSampleMenu();*/
                          frame.dataPane.setSelectedIndex(3);
                      }
-                     
-                     
                     frame.repaint();
                 }
             }
@@ -555,32 +513,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 System.out.println("Error opening project.");
                 frame.consoleWindow.update("Error opening project.");
             }
+            
         }
-    
-/*    public void saveProject(){
-        try
-        {
-            String s = ">>tre\n";
-            if(frame.treeFile != null)
-                s = s + TopiaryFunctions.createNewickStringFromTree(frame.treeWindow.tree.getTree());
-            if(frame.otuMetadataFile != null)
-                s = s + "\n>>otm\n"+ frame.otuMetadata.toString();
-            if(frame.otuSampleMapFile != null) 
-                s = s + "\n>>osm\n" + frame.otuSampleMap.toString();
-            if(frame.sampleMetadataFile != null)
-                s = s + "\n>>sam\n" + frame.sampleMetadata.toString();
-                
-            FileContents fc = frame.fss.saveFileDialog(null, null, 
-                new ByteArrayInputStream(s.getBytes()),null);
-        }
-        catch(IOException e)
-            {
-                System.out.println("Error saving project.");
-                frame.consoleWindow.update("Error saving project.");
-            }
-    }*/
     
     public void saveProject(){
+        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		try
 		{
 		    String s = "";
@@ -622,6 +559,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 			    System.out.println("Error saving project.");
 			    frame.consoleWindow.update("Error saving project.");
 			}
+			frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
     /**
@@ -629,6 +567,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     * Populates otu metadata table with information from the file.
     */
    public void loadOtuMetadata(FileContents inFile){
+       frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       if (inFile==null) {
       	   try {
    	           inFile = frame.fos.openFileDialog(null,null);
@@ -676,6 +615,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.otuMetadataFile = inFile;
        }
        frame.repaint();
+       frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
    }
    
    public void clearOtuMetadata() {
@@ -693,7 +633,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    * Populates sample metadata table with information from the file.
    */
    public void loadSampleMetadata(FileContents inFile){
-   
+   frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
    	   if (inFile==null) {
    	       try {
    	           inFile = frame.fos.openFileDialog(null,null);
@@ -731,6 +671,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.sampleMetadataFile = inFile;
        }
        frame.repaint();
+       frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
    }
    
    public void clearSampleMetadata() {
@@ -748,6 +689,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    * Populates otu-sample map table with information from the file.
    */
    public void loadOtuSampleMap(FileContents inFile){
+       frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
    	   if (inFile==null) {
    	       try {
    	           inFile = frame.fos.openFileDialog(null,null);
@@ -778,6 +720,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.otuSampleMapFile = inFile;
        }
        frame.repaint();
+       frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
    }
    
    public void clearOtuSampleMap() {
@@ -808,60 +751,4 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         frame.treeWindow.tree.redraw();
     }
 
-    
-   /**
-   * Resets colorby OTU menu when a new otu table is loaded
-   */
-/*   public void resetColorByOtuMenu() {
-       noColoringMenuItem.setSelected(true);
-       colorByOtuMetadataMenu.removeAll();
-       ArrayList<String> data = frame.otuMetadata.getColumnNames();
-       //start at 1 to skip ID column
-       for (int i = 1; i < data.size(); i++) {
-            String value = data.get(i);
-            JRadioButtonMenuItem item = new JRadioButtonMenuItem(value);
-            colorByGroup.add(item);
-            item.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    //get the category to color by
-                    String value = e.getActionCommand();
-                    System.out.println("*");
-                    frame.currTable = frame.otuMetadata;
-                    frame.treeWindow.colorByValue(value);
-                    
-                    TableColumn column = frame.colorKeyTable.getColumnModel().getColumn(0);
-                    column.setHeaderValue(value);
-                }
-            });
-            colorByOtuMetadataMenu.add(item);
-       }
-   }*/
-
-
-   /**
-   * Resets colorby Sample menu when a new sample metadata table is loaded
-   */
-/*   public void resetColorBySampleMenu() {
-       noColoringMenuItem.setSelected(true);
-       colorBySampleMetadataMenu.removeAll();
-       ArrayList<String> data = frame.sampleMetadata.getColumnNames();
-       //start at 1 to skip ID column
-       for (int i = 1; i < data.size(); i++) {
-            String value = data.get(i);
-            JRadioButtonMenuItem item = new JRadioButtonMenuItem(value);
-            item.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    //get the category to color by
-                    String value = e.getActionCommand();
-                    frame.currTable = frame.sampleMetadata;
-                    frame.treeWindow.colorByValue(value);
-                    
-                    TableColumn column = frame.colorKeyTable.getColumnModel().getColumn(0);
-                    column.setHeaderValue(value);
-                }
-            });
-            colorByGroup.add(item);
-            colorBySampleMetadataMenu.add(item);
-       }
-   }*/
 }

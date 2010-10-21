@@ -53,10 +53,12 @@ public class TreeToolbar extends JToolBar {
         
         add(zoomSlider);
         add(zoomInButton);
-        add(spacer1);
-        add(status);
-        add(spacer1);
+
         setFloatable(false);
+        spacer1.setPreferredSize(new Dimension(10,10));
+        add(spacer1);
+        status.setFont(new Font("Courier",Font.PLAIN,12));
+        add(status);
         spacer1.setPreferredSize(new Dimension(100,10));
         add(spacer1);
         add(new JLabel("Search:"));
@@ -115,7 +117,9 @@ public class TreeToolbar extends JToolBar {
         progress.setValue(progress.getValue()+1);
     }*/
     
-    public void setStatus(String s) {
+    public void setStatus(String p, String s) {
+        if(s.length() > 56)
+            s = p +"..." + s.substring(s.length()-Math.min(56-p.length(),s.length()),s.length()-1);
         status.setText(s);
     }
 

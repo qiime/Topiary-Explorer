@@ -47,8 +47,8 @@ public class CollapseTreeToolbar extends JToolBar {
 
     public void syncTreeWithCollapseSlider() {
         if (frame.tree==null) return;
-        float pixelsIn = (float)(collapseSlider.getValue()/1000.0 * frame.treeHolder.getWidth());
-        frame.tree.setCollapsedPixel(pixelsIn);
+        //float pixelsIn = (float)(collapseSlider.getValue()/1000.0 * frame.treeHolder.getWidth());
+        frame.tree.setCollapsedLevel(1-collapseSlider.getValue()/1000.0);
     }
 
 }
