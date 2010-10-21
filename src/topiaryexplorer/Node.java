@@ -45,6 +45,7 @@ public class Node {
   private boolean collapsed = false; //if true, the children are not shown (draws a wedge)
 
   Object userObject = null;
+  String userString = "";
 
 
   Node() {}
@@ -121,13 +122,14 @@ public class Node {
   
   // recursive method to return consensus lineage
   public String getConsensusLineage() {  
-      // If the node is a leaf return lineage      
-      if(nodes.size() == 0)
+      // If the node is a leaf return lineage
+      ArrayList<Node> tips = getLeaves();   
+      if(isLeaf())
         return lineage;
       
       // Collect consensus lineage of children
       ArrayList<String> currLabels = new ArrayList<String>();
-      for(Node n: nodes)
+      for(Node n: tips)
       {
           String l = n.getConsensusLineage();
 /*          for(int i = 0; i < n.getNumberOfLeaves(); i++)*/
@@ -169,53 +171,15 @@ public class Node {
             newLabels.add(l.substring(l.indexOf(";")+1, l.length()));      
           }
         
-/*            if(!loop)
-              break;*/
-          
-          HashSet testSet = new HashSet(curr);
-      
-          if(testSet.size() == 1) // if the set only has one element, all names are the same
-          { 
-              // add that string to the consensusLineage
-              consensusLineage += curr.get(0) + ";";
-              currLabels = newLabels;
-          }
-          else // if the set has more than one element, need to figure out
-          // the consensus string
+          String c = TopiaryFunctions.getConsensus(curr,.5);
+          if(c != null)
           {
-              HashMap counts = new HashMap();
-              // count number of times each string appears
-              for(String s: curr)
-              {
-                  if(!counts.containsKey(s))
-                    counts.put(s,0);
-                  
-                  counts.put(s, ((Number)counts.get(s)).intValue() + 1);
-              }
-              
-              // figure out which string appears most often
-              double max = 0;
-              String maxStr = "";
-              for(Object s : counts.keySet())
-              {
-                  if(((Number)counts.get(s)).doubleValue() > max)
-                  {
-                      max = ((Number)counts.get(s)).doubleValue();
-                      maxStr = (String)s;
-                  }
-              }
-              
-              // if the string that appears most often appears more than 50% of the time
-              // then it is the consensus string, add it to the consensusLineage
-              if(max/curr.size() > .5)
-              {
-                  consensusLineage += maxStr + ";";
-                  currLabels = newLabels;
-              }
-              else // if the string that appears most often isn't 50% of the
-              // labels then don't add anything
-                  break;
+          consensusLineage += c + ";";
+          currLabels = newLabels;
           }
+          else
+              break;
+              
         test = currLabels.get(0);
       }
       

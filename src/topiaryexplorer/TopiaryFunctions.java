@@ -210,5 +210,48 @@ public class TopiaryFunctions {
                 }
 			}
 	}
+	
+	public static String getConsensus(ArrayList<String> consensus, double level) {
+	    HashSet testSet = new HashSet(consensus);
+
+          if(testSet.size() == 1) // if the set only has one element, all names are the same
+          { 
+              return consensus.get(0);
+          }
+          else // if the set has more than one element, need to figure out
+          // the consensus string
+          {
+              HashMap counts = new HashMap();
+              // count number of times each string appears
+              for(String s: consensus)
+              {
+                  if(!counts.containsKey(s))
+                    counts.put(s,0);
+
+                  counts.put(s, ((Number)counts.get(s)).intValue() + 1);
+              }
+
+              // figure out which string appears most often
+              double max = 0;
+              String maxStr = "";
+              for(Object s : counts.keySet())
+              {
+                  if(((Number)counts.get(s)).doubleValue() > max)
+                  {
+                      max = ((Number)counts.get(s)).doubleValue();
+                      maxStr = (String)s;
+                  }
+              }
+
+              // if the string that appears most often appears more than 50% of the time
+              // then it is the consensus string, add it to the consensusLineage
+              if(max/consensus.size() > level)
+              {
+                  return maxStr;
+              }
+              else
+                return null;
+          }
+	}
     
 }

@@ -42,7 +42,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     JMenu lineWidthOtuMetadataMenu = new JMenu("OTU Metadata");
     
     JMenuItem item;
-    
+    TreeWindow thisWindow = this;
     MainFrame frame = null;
     TreeAppletHolder treeHolder = null;
     TreeVis tree = new TreeVis();
@@ -929,19 +929,19 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 /*          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));*/
       }
 
-      public void collapseByValue(String name) {
+      public void collapseByValue(String name, double level) {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
  	 	//first, uncollapse the entire tree
  	 	//frame.treeWindow.uncollapseTree();
  	 	uncollapseTree();
         treeToolbar.setStatus("Collasping tree...");
  	 	//using the metadata, collapse the tree
- 	 	collapseByValueNonRecursive(tree.getTree(), name);
+ 	 	collapseByValueNonRecursive(tree.getTree(), name, level);
  	 	treeToolbar.setStatus("Done collapsing tree.");
  	 	this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
  	 }
  	 
- 	 public void collapseByValueNonRecursive(Node root, String name) {
+ 	 public void collapseByValueNonRecursive(Node root, String name, double level) {
  	     for (Node node : root.getNodes()) {
       	 	//if it's a leaf, set metadata
       	 	if (node.isLeaf()) {
@@ -961,25 +961,25 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
       	 		}
 
       	 		//set the node's field
-      	 		node.userObject = (Object) data.get(row,col).toString();
+      	 		node.userString = data.get(row,col).toString();
       	 	}
       	 	else {
-      	 		String consensus = (String) node.nodes.get(0).userObject;
-
-      	 		for (int i = 0; i < node.nodes.size(); i++) {
-      	 			if (!((String) node.nodes.get(i).userObject).equals(consensus)) {
-      	 				consensus = "none";
-      	 				break;
-      	 			}
+      	 		//String consensus = (String) node.nodes.get(0).userObject;
+                ArrayList<String> consensus = new ArrayList<String>();
+                ArrayList<Node> tips = node.getLeaves();
+      	 		for (int i = 0; i < tips.size(); i++) {
+      	 		    consensus.add(tips.get(i).userString);
+      	 			/*if (!((String) node.nodes.get(i).userObject).equals(consensus)) {
+      	 			                         consensus = "none";
+      	 			                         break;
+      	 			                     }*/
       	 		}
-      	 		node.userObject = (Object) consensus;
-
-      	 		if (!consensus.equals("none")) {
-      	 			node.setCollapsed(true);
-      	 		}
+      	 		
+      	 		node.userString = TopiaryFunctions.getConsensus(consensus, level);
+      	 		if(node.userString != null)
+                    node.setCollapsed(true);
       	 	}
       	 }
-         
  	 }
 
  	 public void collapseByValueRecursive(Node node, String name) {
@@ -1194,7 +1194,26 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                             public void actionPerformed(ActionEvent e) {
                                 //get the category to color by
                                 String value = e.getActionCommand();
-                                collapseByValue(value);
+                                double level = Double.parseDouble(((String)JOptionPane.showInputDialog(
+                                                    thisWindow,
+                                                    "Enter percent threshold to collapse by:\n"+
+                                                    "Use 100(%) for completely homogeneous\n"+
+                                                    "collapsing",
+                                                    "Collapse by "+value,
+                                                    JOptionPane.PLAIN_MESSAGE,
+                                                    null,
+                                                    null,
+                                                    "90")))/100;
+                                if(level > 0 && level <= 1)
+                                {
+                                    collapseByValue(value,level);
+                                }
+                                else
+                                    JOptionPane.showMessageDialog(frame,
+                                        "Invalid threshold percentage.",
+                                        "Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                                
                             }
                         });
                         collapseByMenu.add(item);
