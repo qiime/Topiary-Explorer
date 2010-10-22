@@ -1,6 +1,7 @@
 package topiaryexplorer;
 
 import processing.core.*;
+import processing.pdf.*;
 import javax.swing.event.*;
 import java.util.*;
 import java.awt.Color;
@@ -885,6 +886,7 @@ public class TreeVis extends PApplet {
             //canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
             canvas.fill(0);
             canvas.stroke(0);
+            canvas.textFont(currFont);
             canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
         }
       } else {
@@ -892,6 +894,7 @@ public class TreeVis extends PApplet {
             //canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
             canvas.fill(0);
             canvas.stroke(0);
+            canvas.textFont(currFont);
             canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
           }
       }
@@ -1039,14 +1042,14 @@ public class TreeVis extends PApplet {
       /*      int size = node.getNumberOfLeaves();
             int treeSize = root.getNumberOfLeaves();*/
             //re-scale so height is 1/2 the number of nodes
-            double top = node.getMaximumYOffset()-y;
-            top = top/2;
-            double bottom = y-node.getMinimumYOffset();
-            bottom = bottom/2;
-            textFont(createFont("courier", (int)Math.min(12, Math.max(toScreenY(bottom+top)/3,1))));            
-            //set wedge at y location
-            top = y + top;
-            bottom = y - bottom;
+        double top = node.getMaximumYOffset()-y;
+        top = top/2;
+        double bottom = y-node.getMinimumYOffset();
+        bottom = bottom/2;
+        canvas.textFont(createFont("courier", (int)Math.min(12, Math.max(toScreenY(bottom+top)/3,1))));            
+        //set wedge at y location
+        top = y + top;
+        bottom = y - bottom;
             
       if (treeLayout.equals("Rectangular")) {      
           
@@ -1338,14 +1341,13 @@ public class TreeVis extends PApplet {
 			  ystart = dims[1]*0.5;
 		  }
 		  
-		  PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), JAVA2D);
+		  OutputStream os = file.getOutputStream(true);
+		  PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), PDF, file.getName());
 	
-/*        setCollapsedPixel((float)(getCollapsedPixel()*(xscale/oldXScale)));*/
-/*        setCollapsedLevel((float)(getCollapsedLevel()*xscale));*/
 	
 		  //draw the tree to the file
 		  canvas.beginDraw();
-		  canvas.textFont(currFont);
+/*          canvas.textFont(currFont);*/
 		  canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
           canvas.pushMatrix();
           canvas.translate((float)xstart, (float)ystart);
@@ -1353,15 +1355,9 @@ public class TreeVis extends PApplet {
           canvas.translate((float)-xstart, (float)-ystart);
 		  drawTree(root, canvas);
           canvas.popMatrix();
+          canvas.dispose();
 		  canvas.endDraw();
 
-
-          java.awt.image.BufferedImage img = (BufferedImage)canvas.getImage();
-          file.setMaxLength(100000);
-          OutputStream os = file.getOutputStream(true);
-          ImageIO.write(img, "png", os);
-
-		  canvas.dispose();
 	
 		  //go back to how it was
 		  xscale = oldXScale;
