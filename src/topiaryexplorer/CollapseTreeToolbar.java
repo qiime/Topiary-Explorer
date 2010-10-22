@@ -37,6 +37,11 @@ public class CollapseTreeToolbar extends JToolBar {
         add(collapseSlider);
         setFloatable(false);
     }
+    
+    public void setValue(int v) {
+        collapseSlider.setValue(v);  
+        syncTreeWithCollapseSlider();      
+    }
 
     public void resetLayout() {
         spacer1.setMinimumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));

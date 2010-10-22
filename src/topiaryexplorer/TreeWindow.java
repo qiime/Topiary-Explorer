@@ -910,11 +910,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
       * Uncollapses all tree branches
       */
       public void uncollapseTree(){
+          collapseTreeToolbar.setValue(1000);
 /*          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));*/
-         for (Node n : tree.getTree().getNodes()) {
-             n.setCollapsed(false);
-         }
-         tree.getTree().setCollapsed(false);
+         /*for (Node n : tree.getTree().getNodes()) {
+                      n.setCollapsed(false);
+                  }
+                  tree.getTree().setCollapsed(false);*/
 /*         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));*/
       }
 
@@ -922,11 +923,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
       * Collapses all tree branches
       */
       public void collapseTree() {
+          collapseTreeToolbar.setValue(0);
 /*          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));*/
-         for (Node n : tree.getTree().getNodes()) {
-             n.setCollapsed(true);
-         }
-         tree.getTree().setCollapsed(false);
+         /*for (Node n : tree.getTree().getNodes()) {
+                      n.setCollapsed(true);
+                  }
+                  tree.getTree().setCollapsed(false);*/
 /*          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));*/
       }
 
