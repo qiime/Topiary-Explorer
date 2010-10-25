@@ -831,9 +831,7 @@ public class TreeVis extends PApplet {
 
       //set the color/weight to draw
       canvas.strokeWeight(1);
-      int c = node.getColor().getRGB();
-      if(majorityColoring)
-        c = node.getMajorityColor().getRGB();
+      int c = node.getColor(majorityColoring).getRGB();
         
       canvas.stroke(c);
       canvas.fill(c);
@@ -953,10 +951,7 @@ public class TreeVis extends PApplet {
 
       canvas.strokeWeight((float) (node.getLineWidth()*getLineWidthScale()));
       
-      int c = node.getColor().getRGB();
-        if(majorityColoring)
-          c = node.getMajorityColor().getRGB();
-
+      int c = node.getColor(majorityColoring).getRGB();
         canvas.stroke(c);
         
       if (treeLayout.equals("Rectangular")) {
@@ -968,7 +963,7 @@ public class TreeVis extends PApplet {
           //loop over all of the children
           for (int i=0; i < node.nodes.size(); i++) {
               //draw horizontal line from the vertical line to the child node
-              canvas.stroke(node.nodes.get(i).getColor().getRGB());
+              canvas.stroke(node.nodes.get(i).getColor(majorityColoring).getRGB());
               canvas.strokeWeight((float) (node.nodes.get(i).getLineWidth()*getLineWidthScale()));
               double yp = toScreenY(node.nodes.get(i).getYOffset());
               double xp = toScreenX(node.nodes.get(i).getXOffset());
@@ -981,7 +976,7 @@ public class TreeVis extends PApplet {
           //loop over all of the children
           for (int i=0; i < node.nodes.size(); i++) {
               //draw line from parent to the child node
-              canvas.stroke(node.nodes.get(i).getColor().getRGB());
+              canvas.stroke(node.nodes.get(i).getColor(majorityColoring).getRGB());
               canvas.strokeWeight((float) (node.nodes.get(i).getLineWidth()*getLineWidthScale()));
               double yp = toScreenY(node.nodes.get(i).getYOffset());
               double xp = toScreenX(node.nodes.get(i).getXOffset());
@@ -992,7 +987,7 @@ public class TreeVis extends PApplet {
           //loop over all of the children
           for (int i=0; i < node.nodes.size(); i++) {
               //draw line from parent to the child node
-              canvas.stroke(node.nodes.get(i).getColor().getRGB());
+              canvas.stroke(node.nodes.get(i).getColor(majorityColoring).getRGB());
               canvas.strokeWeight((float) (node.nodes.get(i).getLineWidth()*getLineWidthScale()));
               double xp = toScreenX(node.nodes.get(i).getRXOffset());
               double yp = toScreenY(node.nodes.get(i).getRYOffset());
@@ -1015,7 +1010,7 @@ public class TreeVis extends PApplet {
           //loop over all of the children
           for (int i=0; i < node.nodes.size(); i++) {
               //draw line from parent to the child node
-              canvas.stroke(node.nodes.get(i).getColor().getRGB());
+              canvas.stroke(node.nodes.get(i).getColor(majorityColoring).getRGB());
               canvas.strokeWeight((float) (node.nodes.get(i).getLineWidth()*getLineWidthScale()));
               double xp = node.nodes.get(i).getROffset() * Math.cos(node.nodes.get(i).getTOffset());
               double yp = node.nodes.get(i).getROffset() * Math.sin(node.nodes.get(i).getTOffset());
@@ -1054,9 +1049,7 @@ public class TreeVis extends PApplet {
         
       //set up the drawing properties
       canvas.strokeWeight((float) (node.getLineWidth()*getLineWidthScale()));
-      int c = node.getColor().getRGB();
-        if(majorityColoring)
-          c = node.getMajorityColor().getRGB();
+      int c = node.getColor(majorityColoring).getRGB();
 
         canvas.stroke(c);
         canvas.fill(c);

@@ -203,65 +203,61 @@ public class Node {
       }
       return total;
   }
-  
-  public Color getMajorityColor() throws ConcurrentModificationException{
-      //if there's no color, use black
-      if (!colored) {
-          return new Color(0,0,0);
-      }
-      
-      double r,g,b;
-      r = g = b = 0;
-      
-      ArrayList<Integer> cols = new ArrayList<Integer>();
-      
-      for(Node n : getLeaves())
-        cols.add(n.getColor().getRGB());
-      
-        HashMap counts = new HashMap();
-        // count number of times each string appears
-        for(Object o: cols)
-        {
-            if(!counts.containsKey(o))
-              counts.put(o,0);
-
-            counts.put(o, ((Number)counts.get(o)).intValue() + 1);
-        }
-
-        // figure out which color appears most often
-        int max = 0;
-        int majorityColor = 0;
-        for(Object o : counts.keySet())
-        {
-            if(((Number)counts.get(o)).intValue() > max)
-            {
-                majorityColor = ((Number)o).intValue();
-                max = ((Number)counts.get(o)).intValue();
-            }
-        }
-        return new Color(majorityColor);
-  }
 
   /**
    * Based on the groupWeight and groupColor field, return an overall blended color
    */
- public Color getColor() {
-    //if there's no color, use black
-    if (!colored) {
-        return new Color(0,0,0);
+ public Color getColor(boolean majority) throws ConcurrentModificationException{
+     
+     //if there's no color, use black
+     if (!colored) {
+         return new Color(0,0,0);
+     }
+     double r,g,b;
+     r = g = b = 0;
+     
+     if(majority)
+     {
+         /*ArrayList<Integer> cols = new ArrayList<Integer>();
+
+                    for(Node n : getLeaves())
+                      cols.add(n.getColor(false).getRGB());
+
+                      HashMap counts = new HashMap();
+                      // count number of times each string appears
+                      for(Object o: cols)
+                      {
+                          if(!counts.containsKey(o))
+                            counts.put(o,0);
+
+                          counts.put(o, ((Number)counts.get(o)).intValue() + 1);
+                      }*/
+
+             // figure out which color appears most often
+             double max = 0;
+             Color majorityColor = new Color(0);
+             for(int i = 0; i < groupColor.size(); i++)
+             {
+                 if(groupWeight.get(i) > max)
+                 {
+                     majorityColor = groupColor.get(i);
+                     max = groupWeight.get(i);
+                 }
+             }
+             return majorityColor;
+     }
+     else {
+        double total = 0;
+        for (Double weight : groupWeight) {
+          total = total + weight;
+        }
+        for (int i = 0; i < groupWeight.size(); i++) {
+          r += groupWeight.get(i)/total*groupColor.get(i).getRed();
+          g += groupWeight.get(i)/total*groupColor.get(i).getGreen();
+          b += groupWeight.get(i)/total*groupColor.get(i).getBlue();
+        }
+        return new Color(Math.abs((float)r/255),Math.abs((float)g/255),Math.abs((float)b/255));
     }
-    double r,g,b;
-    r = g = b = 0;
-    double total = 0;
-    for (Double weight : groupWeight) {
-      total = total + weight;
-    }
-    for (int i = 0; i < groupWeight.size(); i++) {
-      r += groupWeight.get(i)/total*groupColor.get(i).getRed();
-      g += groupWeight.get(i)/total*groupColor.get(i).getGreen();
-      b += groupWeight.get(i)/total*groupColor.get(i).getBlue();
-    }
-    return new Color((float)r/255,(float)g/255,(float)b/255);
   }
   
   public void noColor() {

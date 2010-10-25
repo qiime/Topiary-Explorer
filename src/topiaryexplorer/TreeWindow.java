@@ -1119,7 +1119,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              frame.recolor();
              //color tree from leaves
              tree.getTree().updateColorFromChildren();
-             treeOpsToolbar.setStatus("Done coloring tree.");
+             treeOpsToolbar.setStatus("Tree colored by "+value);
              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
           }
       /**
