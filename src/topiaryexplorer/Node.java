@@ -37,6 +37,7 @@ public class Node {
   
   //parallel arrays of colors and the weight to be drawn with each
   private boolean colored = true;
+  HashMap colormap = new HashMap();
   private ArrayList<Color> groupColor = new ArrayList<Color>();
   private ArrayList<Double> groupWeight = new ArrayList<Double>();
   
@@ -202,6 +203,44 @@ public class Node {
       }
       return total;
   }
+  
+  public Color getMajorityColor() throws ConcurrentModificationException{
+      //if there's no color, use black
+      if (!colored) {
+          return new Color(0,0,0);
+      }
+      
+      double r,g,b;
+      r = g = b = 0;
+      
+      ArrayList<Integer> cols = new ArrayList<Integer>();
+      
+      for(Node n : getLeaves())
+        cols.add(n.getColor().getRGB());
+      
+        HashMap counts = new HashMap();
+        // count number of times each string appears
+        for(Object o: cols)
+        {
+            if(!counts.containsKey(o))
+              counts.put(o,0);
+
+            counts.put(o, ((Number)counts.get(o)).intValue() + 1);
+        }
+
+        // figure out which color appears most often
+        int max = 0;
+        int majorityColor = 0;
+        for(Object o : counts.keySet())
+        {
+            if(((Number)counts.get(o)).intValue() > max)
+            {
+                majorityColor = ((Number)o).intValue();
+                max = ((Number)counts.get(o)).intValue();
+            }
+        }
+        return new Color(majorityColor);
+  }
 
   /**
    * Based on the groupWeight and groupColor field, return an overall blended color
@@ -224,7 +263,23 @@ public class Node {
     }
     return new Color((float)r/255,(float)g/255,(float)b/255);
   }
+  
+  public void noColor() {
+    colored = false;
+  }
 
+  public void clearColor() {
+    groupWeight = new ArrayList<Double>();
+    groupColor = new ArrayList<Color>();
+  }
+
+  public void addColor(Color c, double w) {
+      colormap.put(c,w);
+      groupWeight.add(new Double(w));
+      groupColor.add(c);
+      colored = true;
+  }
+  
   /**
    * Returns a list of all the leaves of the tree
    */
@@ -241,6 +296,7 @@ public class Node {
       }
       return result;
   }
+  
 
   /**
    * Returns all of the nodes of the tree.
@@ -252,21 +308,6 @@ public class Node {
       }
       result.add(this);
       return result;
-  }
-  
-  public void noColor() {
-    colored = false;
-  }
-
-  public void clearColor() {
-    groupWeight = new ArrayList<Double>();
-    groupColor = new ArrayList<Color>();
-  }
-
-  public void addColor(Color c, double w) {
-      groupWeight.add(new Double(w));
-      groupColor.add(c);
-      colored = true;
   }
 
   /**

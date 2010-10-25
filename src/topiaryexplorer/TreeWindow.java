@@ -578,7 +578,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         colorBy.setEnabled(true);
         this.setVisible(true);
         resetConsensusLineage();
-        System.out.println("Done drawing tree.");
+/*        System.out.println("Done drawing tree.");*/
         frame.consoleWindow.update("Done drawing tree. ");
         treeOpsToolbar.setStatus("Done drawing tree.");
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -739,7 +739,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      if (sampleRowIndex == -1) {
                         //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
                         //return;
-                        System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
+/*                        System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");*/
                         frame.consoleWindow.update("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
                         continue;
                      }
@@ -839,7 +839,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                  if (sampleRowIndex == -1) {
                     //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
                     //return;
-                    System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
+/*                    System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");*/
                     frame.consoleWindow.update("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
                     continue;
                  }
@@ -1156,7 +1156,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      public void actionPerformed(ActionEvent e) {
                          //get the category to color by
                          String value = e.getActionCommand();
-                         System.out.println("*");
+/*                         System.out.println("*");*/
                          frame.currTable = frame.otuMetadata;
                          setLineWidthByValue(value);
                      }

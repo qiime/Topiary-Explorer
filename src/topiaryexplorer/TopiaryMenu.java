@@ -515,7 +515,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
             catch(IOException e)
             {
-                System.out.println("Error opening project.");
+/*                System.out.println("Error opening project.");*/
                 frame.consoleWindow.update("Error opening project.");
             }
             
@@ -561,7 +561,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		}
 		catch(IOException e)
 			{
-			    System.out.println("Error saving project.");
+/*              System.out.println("Error saving project.");*/
 			    frame.consoleWindow.update("Error saving project.");
 			}
 			frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

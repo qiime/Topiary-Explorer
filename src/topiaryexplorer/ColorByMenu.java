@@ -40,6 +40,7 @@ public class ColorByMenu extends JMenu implements ActionListener{
     JMenu colorBySampleMetadataMenu = new JMenu("Sample Metadata");
     
     JRadioButtonMenuItem noColoringMenuItem = new JRadioButtonMenuItem("No coloring");
+    JRadioButtonMenuItem majorityColordingMenuItem = new JRadioButtonMenuItem("Majority wedge coloring");
     
     ButtonGroup colorByGroup = new ButtonGroup();
     
@@ -57,6 +58,8 @@ public class ColorByMenu extends JMenu implements ActionListener{
          noColoringMenuItem.setSelected(true);
          noColoringMenuItem.addActionListener(this);
          add(noColoringMenuItem);
+         majorityColordingMenuItem.addActionListener(this);
+         add(majorityColordingMenuItem);
      }
     
 
@@ -91,6 +94,11 @@ public class ColorByMenu extends JMenu implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("No coloring")) {
              ((TreeWindow)parent).removeColor();
+        }
+        else if(e.getActionCommand().equals("Majority wedge coloring")) {
+            ((TreeWindow)parent).tree.setMajorityColoring(!((TreeWindow)parent).tree.getMajorityColoring());
+            ((TreeWindow)parent).frame.recolor();
+            ((TreeWindow)parent).tree.getTree().updateColorFromChildren();
         }
     }
 

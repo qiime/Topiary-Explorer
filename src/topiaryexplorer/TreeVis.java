@@ -53,6 +53,8 @@ public class TreeVis extends PApplet {
     private boolean draggingLabel = false;
     private float collapsedPixel = 10000000;
     private double collapsedLevel = 0;
+    
+    private boolean majorityColoring = false;
 
     private Node selectedNode;
     private Node mouseOverNode;
@@ -62,6 +64,8 @@ public class TreeVis extends PApplet {
     private List listeners = new java.util.ArrayList();
     private double fntpnt = 12;
     private PFont currFont = createFont("courier", (int)fntpnt);
+
+    private TreeWindow frame = null;
 
 
     /**
@@ -100,8 +104,8 @@ public class TreeVis extends PApplet {
          drawTree(root);
          g.popMatrix();
       } catch (Exception e) {
-          System.out.println("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");
-          //frame.consoleWindow.update("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");
+/*          frame.treeOpsToolbar.setStatus("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");*/
+/*          frame.consoleWindow.update("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");*/
           e.printStackTrace();
       }
     }
@@ -131,6 +135,8 @@ public class TreeVis extends PApplet {
     public double getCollapsedLevel(){ return collapsedLevel; }
     public double getLineWidthScale() { return lineWidthScale; }
     public void setLineWidthScale(double f) { lineWidthScale = f; }
+    public void setMajorityColoring(boolean cond) { majorityColoring = cond; }
+    public boolean getMajorityColoring() { return majorityColoring; }
 
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
@@ -763,7 +769,7 @@ public class TreeVis extends PApplet {
       double xs = toScreenX(x);
       double ys = toScreenY(y);
 
-      //is this node slected or hilighted?
+      //is this node selected or hilighted?
       boolean selected = (node == selectedNode);
       boolean hilighted = hilightedNodes.contains(node);
 
@@ -825,8 +831,13 @@ public class TreeVis extends PApplet {
 
       //set the color/weight to draw
       canvas.strokeWeight(1);
-      canvas.stroke(node.getColor().getRGB());
-      canvas.fill(node.getColor().getRGB());
+      int c = node.getColor().getRGB();
+      if(majorityColoring)
+        c = node.getMajorityColor().getRGB();
+        
+      canvas.stroke(c);
+      canvas.fill(c);
+      
       //draw node label if we need to
        double minX = drawX+offsetbias-1;
        double width = 0;
@@ -941,7 +952,13 @@ public class TreeVis extends PApplet {
 
 
       canvas.strokeWeight((float) (node.getLineWidth()*getLineWidthScale()));
-      canvas.stroke(node.getColor().getRGB());
+      
+      int c = node.getColor().getRGB();
+        if(majorityColoring)
+          c = node.getMajorityColor().getRGB();
+
+        canvas.stroke(c);
+        
       if (treeLayout.equals("Rectangular")) {
           
           //draw vertical line through the node
@@ -1037,8 +1054,12 @@ public class TreeVis extends PApplet {
         
       //set up the drawing properties
       canvas.strokeWeight((float) (node.getLineWidth()*getLineWidthScale()));
-      canvas.stroke(node.getColor().getRGB());
-      canvas.fill(node.getColor().getRGB());
+      int c = node.getColor().getRGB();
+        if(majorityColoring)
+          c = node.getMajorityColor().getRGB();
+
+        canvas.stroke(c);
+        canvas.fill(c);
   
       //find the longest and shortest branch lengths
       double longest = node.longestRootToTipDistance() - node.getBranchLength();
