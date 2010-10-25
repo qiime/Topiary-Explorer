@@ -130,24 +130,19 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
           item.addActionListener(new ActionListener() {
               public void actionPerformed(ActionEvent e) {
                   clickedNode.setCollapsed(!clickedNode.isCollapsed());
+                  for(Node n: tree.getTree().getNodes())
+                    {
+
+                        if(clickedNode.getAnscestors().contains(n))
+                          continue;
+                        n.setCollapsed(!clickedNode.isCollapsed());
+                    }
+                    
                   for(Node n: clickedNode.getParent().nodes) // siblings
                     {
                         if(n != clickedNode)
                           n.setCollapsed(!clickedNode.isCollapsed());
                     }
-                    
-                  for(Node n: tree.getTree().getNodes())
-                  {
-/*                      if(n.getLevel() > clickedNode.getLevel())
-                        continue;*/
-                      
-                      if(clickedNode.getAnscestors().contains(n))
-                        continue;
-                        
-                      n.setCollapsed(!clickedNode.isCollapsed());
-                  }
-                  
-                  //clickedNode.setCollapsed(!clickedNode.isCollapsed());
               }
           });
           treePopupMenu.add(item);
@@ -180,7 +175,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                         clickedNode.getConsensusLineage(),
                         "Consensus Lineage",
                         JOptionPane.PLAIN_MESSAGE);
-                    //System.out.println(clickedNode.getConsensusLineage());
                 }
             });
             treePopupMenu.add(item);
@@ -188,6 +182,20 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
               item.addActionListener(new ActionListener() {
                   public void actionPerformed(ActionEvent arg0) {
                       frame.newTreeWindow(TopiaryFunctions.createNewickStringFromTree(clickedNode));
+                  }
+              });
+              treePopupMenu.add(item);
+              item = new JMenuItem("Delete");
+              item.addActionListener(new ActionListener() {
+                  public void actionPerformed(ActionEvent e) {
+                      int del = JOptionPane.showConfirmDialog(
+                          thisWindow,
+                          "Are you sure you want to delete this node?",
+                          "Delete Node",
+                          JOptionPane.YES_NO_OPTION);
+                          if(del == JOptionPane.YES_OPTION)
+                            clickedNode.getParent().nodes.remove(clickedNode);
+                        tree.resetTree();
                   }
               });
               treePopupMenu.add(item);

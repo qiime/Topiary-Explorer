@@ -462,6 +462,10 @@ public class TreeVis extends PApplet {
     public double getFontSize() {
         return fntpnt;
     }
+    
+    public void resetTree() {
+        setTree(root);
+    }
 
     /**
      * Replace the entire tree, recalculating cached values
@@ -1164,6 +1168,9 @@ public class TreeVis extends PApplet {
       textFont(currFont);
     }
 
+    public void resetOffsets(Node node, double _prev) {
+        
+    }
 
 
     /**
