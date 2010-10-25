@@ -44,6 +44,7 @@ public class Node {
 
   private boolean collapsed = false; //if true, the children are not shown (draws a wedge)
   private boolean sliderCollapsed = true;
+  private boolean hidden = false;
 
   Object userObject = null;
   String userString = "";
@@ -60,6 +61,8 @@ public class Node {
   }
 
   //GETTERS AND SETTERS
+  public boolean isHidden() { return hidden; }
+  public void setHidden(boolean cond) { hidden = cond; }
   public boolean isLocked() { return locked; }
   public boolean isLeaf() { return nodes.size() == 0; }
   public void setDrawPie(boolean b) { drawPie = b; }

@@ -655,7 +655,9 @@ public class TreeVis extends PApplet {
      */
     private void drawTree(Node node, PGraphics canvas) {
       if (root==null) return;
-
+      
+      if(node.isHidden()) return;
+      
       boolean isInternal = !node.isLeaf();
 
       if(node.depth()/rootdepth <= collapsedLevel)

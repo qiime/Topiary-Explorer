@@ -112,6 +112,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	                  }
 	              });
 	              treePopupMenu.add(item);*/
+          item = new JMenuItem("Hide");
+                item.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        clickedNode.setHidden(true);
+                    }
+                });
+                treePopupMenu.add(item);
           item = new JMenuItem("Lock/Unlock");
               item.addActionListener(new ActionListener() {
                   public void actionPerformed(ActionEvent e) {
@@ -240,9 +247,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     
 	     //set up the "tree" submenus
 	     JMenuItem item;
-         item = new JMenuItem("Beautify");
+/*         item = new JMenuItem("Beautify");
          item.addActionListener(this);
-         treeMenu.add(item);
+         treeMenu.add(item);*/
+         item = new JMenuItem("Show hidden nodes");
+          item.addActionListener(this);
+          treeMenu.add(item);
          item = new JMenuItem("Recenter");
          item.addActionListener(this);
          treeMenu.add(item);
@@ -386,6 +396,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      frame.clickedNode.setCollapsed(!frame.clickedNode.isCollapsed());
                   }
               }
+              else if (e.getActionCommand().equals("Show hidden nodes")) {
+                     for(Node n: tree.getTree().getNodes())
+                        n.setHidden(false);
+                 }
               else if (e.getActionCommand().equals("Beautify")) {
                    tree.getTree().sortByBranchLength();
                    tree.setYOffsets(tree.getTree(), 0);
