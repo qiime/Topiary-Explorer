@@ -658,12 +658,12 @@ public class TreeVis extends PApplet {
 
       boolean isInternal = !node.isLeaf();
 
-      if(node.depth()/rootdepth <= collapsedLevel && !node.isLocked())
+      if(node.depth()/rootdepth <= collapsedLevel)
         {
-            node.setCollapsed(true);
+            node.setSliderCollapsed(true);
         }
         else
-            node.setCollapsed(false);
+            node.setSliderCollapsed(false);
 
       // Draw the branches first, so they get over-written by the nodes later
       if (isInternal) {

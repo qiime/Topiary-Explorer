@@ -43,6 +43,7 @@ public class Node {
   private double lineWidth = 1;
 
   private boolean collapsed = false; //if true, the children are not shown (draws a wedge)
+  private boolean sliderCollapsed = true;
 
   Object userObject = null;
   String userString = "";
@@ -67,7 +68,8 @@ public class Node {
   public boolean getDrawLabel() { return drawLabel; }
   public ArrayList<Color> getGroupColor() { return groupColor; }
   public ArrayList<Double> getGroupFraction() { return groupWeight; }
-  public boolean isCollapsed() { return collapsed; }
+  public boolean isCollapsed() { return collapsed || sliderCollapsed; }
+  public void setSliderCollapsed(boolean cond) { sliderCollapsed = cond; }
   public void setCollapsed(boolean cond) { if(!locked) collapsed = cond; }
   public void setLabel(String s) { label = s; }
   public String getLabel() { return label; }
