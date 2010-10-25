@@ -56,6 +56,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     TipLabelCustomizer tlc = null;
     Set keys = new java.util.HashSet();
     boolean showTips = false;
+    String dir_path = ""; //(new File(".")).getCanonicalPath();
     
     /**
     * Class Constructor
@@ -64,6 +65,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          super(_frame);
 	     this.setSize(new Dimension(900,700));
          frame = _frame;
+         
+         try{
+         dir_path = (new File(".")).getCanonicalPath();
+         }
+         catch(IOException e)
+         {}
+         
          colorBy = new ColorByMenu(frame, this);
 	     tree.addKeyListener(this);
 	     treeHolder = new TreeAppletHolder(tree, this);
@@ -359,6 +367,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     
 	     setJMenuBar(topMenu);
 	     pane.add(treePanel, BorderLayout.CENTER);
+	     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -576,19 +585,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         treeOpsToolbar.setStatus("Exporting tree...");
         tree.noLoop();
-         //Determine PDF dimensions
-         PDFDimensionsDialog p = new PDFDimensionsDialog(this);
-         p.pack();
-         p.setVisible(true);
-         double dims[] = p.dims;
-         if (dims[0]!=0 || dims[1]!=0) {
-         	try {
-         		byte[] b = new byte[0];
-            	tree.exportTreeImage(frame.fss.saveFileDialog(null,null,new ByteArrayInputStream(b),null), dims);
-           	} catch(IOException ex) {
-           	    System.out.println(ex);
-           	};
-		}
+         ExportTreeDialog etd = new ExportTreeDialog(this);
+         etd.setVisible(true);
         tree.loop();
         treeOpsToolbar.setStatus("Done exporting tree.");
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

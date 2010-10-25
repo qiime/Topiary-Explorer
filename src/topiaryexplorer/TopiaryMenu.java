@@ -63,13 +63,18 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JCheckBoxMenuItem colorSamplesMenuItem = new JCheckBoxMenuItem("Color Samples");
     JCheckBoxMenuItem colorOtusMenuItem = new JCheckBoxMenuItem("Color OTUs");
 
+    String dir_path = "";// = (new File(".")).getCanonicalPath();
     /**
      * Constructor.  Sets up the menu.
      */
      public TopiaryMenu(MainFrame _frame) {
          frame  = _frame;
+        try{
+        dir_path = (new File(".")).getCanonicalPath();
+        }
+        catch(IOException e)
+        {}
         //initialize the menus
-        
         //set up the "file" submenus
         JMenuItem item;
         item = new JMenuItem("New Project...");
@@ -438,7 +443,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     public void openProject(){
         
         try {
-		    FileContents inFile = frame.fos.openFileDialog(null, null);
+		    FileContents inFile = frame.fos.openFileDialog(dir_path, new String[]{"tep"});
 
     	        if(inFile != null)
                 {
@@ -551,7 +556,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		    for(int i = 0; i < lines.size(); i++)
 		        b.write(lines.get(i).getBytes());
 			    
-			FileContents fc = frame.fss.saveFileDialog(null, null, 
+			FileContents fc = frame.fss.saveFileDialog(dir_path, new String[]{"tep"}, 
 				new ByteArrayInputStream(b.toByteArray()),null);
 		}
 		catch(IOException e)

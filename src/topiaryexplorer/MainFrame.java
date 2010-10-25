@@ -22,6 +22,7 @@ public class MainFrame extends JFrame {
     FileSaveService fss;
     ExtendedService es;
     BasicService bs;
+    String dir_path = "";//(new File(".")).getCanonicalPath();
     
     String DATABASE_URL = ""; // jdbc:mysql://127.0.0.1/topiarytool
     String DATABASE_UN = "";  // root
@@ -100,6 +101,12 @@ public class MainFrame extends JFrame {
         Container pane = getContentPane();
         
         pane.setLayout(new BorderLayout());
+        
+        try{
+        dir_path = (new File(".")).getCanonicalPath();
+        }
+        catch(IOException e)
+        {}
         
         //set up the menu bar
         setJMenuBar(mainMenu);
@@ -221,6 +228,8 @@ public class MainFrame extends JFrame {
     	try { 
         	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
     	} catch (UnavailableServiceException e) { bs=null; }   
+    	
+      setDefaultCloseOperation(DISPOSE_ON_CLOSE);
      }
      
      public void newTreeWindow() {

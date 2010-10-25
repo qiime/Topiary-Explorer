@@ -1305,7 +1305,7 @@ public class TreeVis extends PApplet {
      *
      * @param  filename  the file to write the image to
      */
-    public void exportTreeImage(FileContents file, double dims[]) {
+    public void exportTreeImage(String path, double dims[]) {
 	  try {
 		  //save the current variables
 		  int oldWidth = getWidth();
@@ -1341,8 +1341,7 @@ public class TreeVis extends PApplet {
 			  ystart = dims[1]*0.5;
 		  }
 		  
-		  OutputStream os = file.getOutputStream(true);
-		  PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), PDF, file.getName());
+		  PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), PDF, path);
 	
 	
 		  //draw the tree to the file
