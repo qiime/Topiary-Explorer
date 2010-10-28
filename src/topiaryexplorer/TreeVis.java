@@ -54,7 +54,7 @@ public class TreeVis extends PApplet {
     private float collapsedPixel = 10000000;
     private double collapsedLevel = 0;
     
-    private boolean majorityColoring = false;
+    private boolean majorityColoring = true;
 
     private Node selectedNode;
     private Node mouseOverNode;

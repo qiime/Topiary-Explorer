@@ -207,7 +207,7 @@ public class Node {
   /**
    * Based on the groupWeight and groupColor field, return an overall blended color
    */
- public Color getColor(boolean majority) throws ConcurrentModificationException{
+ public Color getColor(boolean majority) {
      
      //if there's no color, use black
      if (!colored) {
@@ -218,33 +218,17 @@ public class Node {
      
      if(majority)
      {
-         /*ArrayList<Integer> cols = new ArrayList<Integer>();
-
-                    for(Node n : getLeaves())
-                      cols.add(n.getColor(false).getRGB());
-
-                      HashMap counts = new HashMap();
-                      // count number of times each string appears
-                      for(Object o: cols)
-                      {
-                          if(!counts.containsKey(o))
-                            counts.put(o,0);
-
-                          counts.put(o, ((Number)counts.get(o)).intValue() + 1);
-                      }*/
-
-             // figure out which color appears most often
-             double max = 0;
-             Color majorityColor = new Color(0);
-             for(int i = 0; i < groupColor.size(); i++)
+         double max = 0;
+         Color majorityColor = new Color(0);
+         for(int i = 0; i < groupColor.size(); i++)
+         {
+             if(groupWeight.get(i) > max)
              {
-                 if(groupWeight.get(i) > max)
-                 {
-                     majorityColor = groupColor.get(i);
-                     max = groupWeight.get(i);
-                 }
+                 majorityColor = groupColor.get(i);
+                 max = groupWeight.get(i);
              }
-             return majorityColor;
+         }
+         return majorityColor;
      }
      else {
         double total = 0;

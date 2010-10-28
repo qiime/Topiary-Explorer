@@ -89,13 +89,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  				String status = "";
  				String prefix = "";
  				if (node != null) {
-                  
                   if (node.isLocked())
-                    prefix += "(Locked) ";
-                    
-                  String lineage = node.getConsensusLineage();
-                  if (lineage.length() > 0 ) {
-                      status += lineage;
+                    prefix += "(L)";
+                  String label = node.getName();
+                  if (label.length() > 0 ) {
+                      status += label;
                     } else {
  						status += String.format("Sub-tree: %d leaves", node.getNumberOfLeaves());
                   }
@@ -258,6 +256,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 /*         item = new JMenuItem("Beautify");
          item.addActionListener(this);
          treeMenu.add(item);*/
+/*         item = new JMenuItem("Prune tree...");
+           item.addActionListener(this);
+           treeMenu.add(item);*/
          item = new JMenuItem("Show hidden nodes");
           item.addActionListener(this);
           treeMenu.add(item);
@@ -408,6 +409,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      for(Node n: tree.getTree().getNodes())
                         n.setHidden(false);
                  }
+             else if (e.getActionCommand().equals("Prune tree...")) {
+                      //PruneTreeWindow ptw = new PruneTreeWindow(frame, this, true, true);
+                      //ptw.setVisible(true);
+                  }
               else if (e.getActionCommand().equals("Beautify")) {
                    tree.getTree().sortByBranchLength();
                    tree.setYOffsets(tree.getTree(), 0);
