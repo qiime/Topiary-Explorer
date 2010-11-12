@@ -43,14 +43,6 @@ public class TreeOptionsToolbar extends JToolBar {
                 collapseButton.setIcon(new ImageIcon(buffer));
         } catch(java.io.IOException ex) {}*/
         
-        consensusButton.setText("Consensus Collapsing");
-        consensusButton.setToolTipText("Consensus Collapsing");
-        consensusButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.tree.getTree().setConsensusLineage();
-            }
-        });
-        
         tipLabelsButton.setText("Tip Labels");
         tipLabelsButton.setToolTipText("Show Tip Labels");
         tipLabelsButton.addActionListener(new ActionListener() {
@@ -159,10 +151,14 @@ public class TreeOptionsToolbar extends JToolBar {
         radialButton.setToolTipText("Radial");
         radialButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                treeStatus.setText("Calculating Offsets...");
                 frame.tree.setRadialOffsets(frame.tree.getTree());
+                frame.tree.setTOffsets(frame.tree.getTree(), 0);
+                frame.tree.setROffsets(frame.tree.getTree(), 0);
                 frame.tree.setTreeLayout("Radial");
                 frame.radialradiobutton.setSelected(true);
                 frame.rotateMenu.setEnabled(true);
+                treeStatus.setText("Done drawing tree.");
             }
         });
 /*        try{
@@ -187,6 +183,7 @@ public class TreeOptionsToolbar extends JToolBar {
                         return;
                 }
                 treeStatus.setText("Calculating Offsets...");
+                frame.tree.setRadialOffsets(frame.tree.getTree());
                 frame.tree.setTOffsets(frame.tree.getTree(), 0);
                 frame.tree.setROffsets(frame.tree.getTree(), 0);
                 frame.tree.setTreeLayout("Polar");

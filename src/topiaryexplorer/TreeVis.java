@@ -62,11 +62,15 @@ public class TreeVis extends PApplet {
     private Set hilightedNodes = new java.util.HashSet();
 
     private List listeners = new java.util.ArrayList();
-    private double fntpnt = 12;
+    private float fntpnt = 12;
+    private int fntColor = 255;
     private PFont currFont = createFont("courier", (int)fntpnt);
 
     private TreeWindow frame = null;
 
+    private int labelXOffset = 0;
+    private int labelYOffset = 0;
+    private double wedgeHeightScale = 1;
 
     /**
      * setup() is called once to initialize the applet
@@ -137,6 +141,15 @@ public class TreeVis extends PApplet {
     public void setLineWidthScale(double f) { lineWidthScale = f; }
     public void setMajorityColoring(boolean cond) { majorityColoring = cond; }
     public boolean getMajorityColoring() { return majorityColoring; }
+    public void setLabelXOffset(int i) { labelXOffset = i; }
+    public int getLabelXOffset() { return labelXOffset; }
+    public void setLabelYOffset(int i) { labelYOffset = i; }
+    public int getLabelYOffset() { return labelYOffset; }
+    public void setWedgeHeight(double d) { wedgeHeightScale = d; }
+    public double getWedgeHeight() { return wedgeHeightScale; }
+    public void setFontSize(float d) { fntpnt = d; }
+    public float getFontSize() { return fntpnt; }
+    public void setFontColor(int c) { fntColor = c; }
 
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
@@ -330,7 +343,7 @@ public class TreeVis extends PApplet {
         if ((node.isLeaf() && this.drawExternalNodeLabels) ||(!node.isLeaf() && this.drawInternalNodeLabels)) {
             mouseOverNode = node;
         }
-        redraw();
+/*        redraw();*/
       }
       else {
         //cursor is normal
@@ -458,16 +471,6 @@ public class TreeVis extends PApplet {
           ystart = getHeight()*0.5;
       }
     }
-
-    public void changeFontSize(double size) {
-        currFont = createFont("courier", (int)size);
-        textFont(currFont);
-        fntpnt = size;
-    }
-    
-    public double getFontSize() {
-        return fntpnt;
-    }
     
     public void resetTree() {
         setTree(root);
@@ -478,15 +481,8 @@ public class TreeVis extends PApplet {
      *
      * @param  newRoot  the Node object that is the root of the new tree
      */
-    public void setTree(Node newRoot) {
-      fntpnt = 12;
-      int treeSize = newRoot.getNumberOfLeaves();
-      if(treeSize > 50)
-      {
-          fntpnt = Math.max(fntpnt / treeSize, 1);
-      }
-      currFont = createFont("courier", (int)fntpnt);
-      textFont(currFont);
+    public void setTree(Node newRoot) {      
+      
       //add to the margin the longest node labels
       float width = 0;
       String s = newRoot.getLongestLabel();
@@ -811,7 +807,7 @@ public class TreeVis extends PApplet {
       }
       if (mouseOverNode == node || mouseOverNodeToReplace == node) {
         //outline the node
-        canvas.strokeWeight(3);
+        canvas.strokeWeight(1);
         canvas.stroke(255,0,0);
         double minX = drawX-3;
         double width = 0;
@@ -830,7 +826,7 @@ public class TreeVis extends PApplet {
       }
 
       //set the color/weight to draw
-      canvas.strokeWeight(1);
+      canvas.strokeWeight((float).2);
       int c = node.getColor(majorityColoring).getRGB();
         
       canvas.stroke(c);
@@ -895,22 +891,44 @@ public class TreeVis extends PApplet {
      double minY = drawY - (currFont.descent()*currFont.size);
      double maxY = drawY + (currFont.ascent()*currFont.size);
      
-      
       if (node.isLeaf()) {
         if (drawExternalNodeLabels && node.getLabel().length() > 0 && node.getDrawLabel()) {
-            //canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
             canvas.fill(0);
             canvas.stroke(0);
-            canvas.textFont(currFont);
-            canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
+            
+            if(root.getNumberOfLeaves() > 50)
+            {
+                ArrayList<Node> siblings = node.getParent().nodes;
+                  float top = (float)toScreenY(siblings.get(0).getYOffset());
+                  float bottom = (float)toScreenY(siblings.get(siblings.size()-1).getYOffset());
+                if(Math.abs(top-bottom)/siblings.size() > fntpnt)
+                {
+                    currFont = createFont("courier", (int)fntpnt);
+                    textFont(currFont);
+                    canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
+                }
+            }   
+            else
+                canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
         }
       } else {
           if (drawInternalNodeLabels && node.getLabel().length() > 0 && node.getDrawLabel()) {
-            //canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
             canvas.fill(0);
             canvas.stroke(0);
-            canvas.textFont(currFont);
-            canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
+            if(root.getNumberOfLeaves() > 50)
+            {
+                ArrayList<Node> siblings = node.getParent().nodes;
+                  float top = (float)toScreenY(siblings.get(0).getYOffset());
+                  float bottom = (float)toScreenY(siblings.get(siblings.size()-1).getYOffset());
+                if(Math.abs(top-bottom)/siblings.size() > fntpnt)
+                {
+                    currFont = createFont("courier", (int)fntpnt);
+                    textFont(currFont);
+                    canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
+                }
+            }
+            else
+                canvas.text(node.getLabel(), (float)(drawX+offsetbias), (float)(drawY));
           }
       }
       //reset drawing color to default black
@@ -947,8 +965,7 @@ public class TreeVis extends PApplet {
       //get the actual screen coordinates
       double xs = toScreenX(x);
       double ys = toScreenY(y);
-
-
+        
       canvas.strokeWeight((float) (node.getLineWidth()*getLineWidthScale()));
       
       int c = node.getColor(majorityColoring).getRGB();
@@ -965,6 +982,7 @@ public class TreeVis extends PApplet {
               //draw horizontal line from the vertical line to the child node
               canvas.stroke(node.nodes.get(i).getColor(majorityColoring).getRGB());
               canvas.strokeWeight((float) (node.nodes.get(i).getLineWidth()*getLineWidthScale()));
+/*              canvas.strokeWeight((float).2);*/
               double yp = toScreenY(node.nodes.get(i).getYOffset());
               double xp = toScreenX(node.nodes.get(i).getXOffset());
               canvas.line((float)xs, (float)yp,
@@ -1045,7 +1063,6 @@ public class TreeVis extends PApplet {
           x = node.getROffset() * Math.cos(node.getTOffset());
           y = node.getROffset() * Math.sin(node.getTOffset());
       }
-      
         
       //set up the drawing properties
       canvas.strokeWeight((float) (node.getLineWidth()*getLineWidthScale()));
@@ -1058,96 +1075,30 @@ public class TreeVis extends PApplet {
       double longest = node.longestRootToTipDistance() - node.getBranchLength();
       double shortest = node.shortestRootToTipDistance() - node.getBranchLength();
     
-      //set wedge font size
-      /*      int size = node.getNumberOfLeaves();
-            int treeSize = root.getNumberOfLeaves();*/
             //re-scale so height is 1/2 the number of nodes
         double top = node.getMaximumYOffset()-y;
-        top = top/2;
+        top = (top/2)*wedgeHeightScale;
         double bottom = y-node.getMinimumYOffset();
-        bottom = bottom/2;
-        canvas.textFont(createFont("courier", (int)Math.min(12, Math.max(toScreenY(bottom+top)/3,1))));            
+        bottom = (bottom/2)*wedgeHeightScale;           
         //set wedge at y location
         top = y + top;
         bottom = y - bottom;
             
       if (treeLayout.equals("Rectangular")) {      
-          
-          String s = "";
-          if(node.getConsensusLineage().length() > 0)
-          {
-              s = node.getConsensusLineage();
-          }
-          else
-            s = ""+node.getNumberOfLeaves();
-
-          // find heights for wedge
-/*          double top = node.getMaximumYOffset()-y;*/
-/*          double bottom = y-node.getMinimumYOffset();*/
-
           //draw the wedge
           canvas.quad((float)toScreenX(x), (float)toScreenY(bottom), //center to bottom
             (float)toScreenX(x),  (float)toScreenY(top),  //center to top
             (float)toScreenX(x+shortest),  (float)toScreenY(top),  //top to longest branch length
             (float)toScreenX(x+longest),  (float)toScreenY(bottom) );  //bottom to shortest branch length
     
-/*          //create white background for text
-          canvas.fill(255);
-          canvas.stroke(255);
-          canvas.quad((float)(toScreenX(x)+3), (float)(toScreenY((top+bottom)/2)+5),
-            (float)(toScreenX(x)+3+textWidth(s)), (float)(toScreenY((top+bottom)/2)+5),
-            (float)(toScreenX(x)+3+textWidth(s)), (float)(toScreenY((top+bottom)/2)-3),
-            (float)(toScreenX(x)+3), (float)(toScreenY((top+bottom)/2)-3));*/
-          // write in the text (number of OTUs contained) in white
-/*      canvas.stroke(Math.abs(Color.WHITE.getRGB()-node.getColor().getRGB()));
-      canvas.fill(Math.abs(Color.WHITE.getRGB()-node.getColor().getRGB()));*/
-          canvas.fill(255);
-          canvas.stroke(255);
-          canvas.text(s, (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+5));
       } else if (treeLayout.equals("Triangular")) {
-          String s = "";
-            if(node.getConsensusLineage().length() > 0)
-            {
-                s = node.getConsensusLineage();
-            }
-            else
-              s = ""+node.getNumberOfLeaves();
-          
-          // find heights for wedge
-/*          double top = node.getMaximumYOffset()-y;*/
-/*          double bottom = y-node.getMinimumYOffset();*/
-    
-          //re-scale so height is 1/2 the number of nodes
-          top = y + (top/2);
-          bottom = y - (bottom/2);
 
           //draw the wedge
           canvas.triangle((float)toScreenX(x), (float)toScreenY(y), //center to bottom
             (float)toScreenX(x+shortest),  (float)toScreenY(top),  //top to longest branch length
             (float)toScreenX(x+longest),  (float)toScreenY(bottom) );  //bottom to shortest branch length
-    
-          //create white background for text
-          canvas.fill(255);
-          canvas.stroke(255);
-          canvas.quad((float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+7),
-            (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY((top+bottom)/2)+7),
-            (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY((top+bottom)/2)-3),
-            (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)-3));
-          // write in the text (number of OTUs contained) in opposite color of the wedge
-/*          canvas.stroke(Math.abs(Color.WHITE.getRGB()-node.getColor().getRGB()));
-          canvas.fill(Math.abs(Color.WHITE.getRGB()-node.getColor().getRGB()));*/
-              canvas.fill(255);
-              canvas.stroke(255);
-          canvas.text(s, (float)(toScreenX(x)+5), (float)(toScreenY((top+bottom)/2)+5));
       
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-          String s = "";
-              if(node.getConsensusLineage().length() > 0)
-              {
-                  s = node.getConsensusLineage();
-              }
-              else
-                s = ""+node.getNumberOfLeaves();
                 
           double maxt = node.getMaximumTOffset();
           double mint = node.getMinimumTOffset();
@@ -1160,26 +1111,26 @@ public class TreeVis extends PApplet {
           canvas.triangle((float)toScreenX(x), (float)toScreenY(y), //center to bottom
             (float)toScreenX(x1),  (float)toScreenY(y1),  //top to longest branch length
             (float)toScreenX(x2),  (float)toScreenY(y2) );  //bottom to shortest branch length
-    
-          //create white background for text
-/*          canvas.fill(255);
-          canvas.stroke(255);
-          canvas.quad((float)(toScreenX(x)+5), (float)(toScreenY(y)+7),
-            (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY(y)+7),
-            (float)(toScreenX(x)+5+textWidth(s)), (float)(toScreenY(y)-3),
-            (float)(toScreenX(x)+5), (float)(toScreenY(y)-3));*/
-          // write in the text (number of OTUs contained) in opposite color of the wedge
-/*      canvas.stroke(Math.abs(Color.WHITE.getRGB()-node.getColor().getRGB()));
-      canvas.fill(Math.abs(Color.WHITE.getRGB()-node.getColor().getRGB()));*/
-          canvas.fill(255);
-          canvas.stroke(255);
-          canvas.text(s, (float)(toScreenX(x)+5), (float)(toScreenY(y)+5)); 
+
+
+      }
+      canvas.fill(fntColor);
+      canvas.stroke(fntColor);
+      String s = "";
+      try{
+            if(node.getConsensusLineage().length() > 0)
+                s = node.getConsensusLineage();
+        }
+        catch(NullPointerException e)
+          {s = ""+node.getNumberOfLeaves();}
+      if(toScreenY(top-bottom)/2 > fntpnt)
+      {
+          canvas.textFont(createFont("courier", fntpnt));
+          canvas.text(s, (float)(toScreenX(x+(shortest)/2)+labelXOffset), (float)(toScreenY(bottom+(top-bottom)/2)+5)+labelYOffset);
       }
       // reset drawing color to black
       canvas.fill(0);
       canvas.stroke(0);
-      // reset font size
-      textFont(currFont);
     }
 
     public void resetOffsets(Node node, double _prev) {

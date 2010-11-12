@@ -41,6 +41,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     JMenu lineWidthSampleMetadataMenu = new JMenu("Sample Metadata");
     JMenu lineWidthOtuMetadataMenu = new JMenu("OTU Metadata");
     
+    JPanel toolbars = new JPanel();
+    JPanel middlePanel = new JPanel();
     JMenuItem item;
     TreeWindow thisWindow = this;
     MainFrame frame = null;
@@ -51,6 +53,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     VerticalTreeToolbar verticalTreeToolbar = null;
     CollapseTreeToolbar collapseTreeToolbar = null;
     TreeOptionsToolbar treeOpsToolbar = null;
+    WedgeCustomizerToolbar wedgeToolbar = null;
     Node clickedNode = null;
     JPopupMenu treePopupMenu = new JPopupMenu();
     TipLabelCustomizer tlc = null;
@@ -63,8 +66,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     */
 	 public TreeWindow(MainFrame _frame) {
          super(_frame);
-	     this.setSize(new Dimension(900,700));
-         frame = _frame;
+	     this.setSize(new Dimension(900,800));
+	     frame = _frame;
+	     this.addWindowListener(new WindowAdapter() {
+               public void windowClosing(WindowEvent e) {
+                 frame.treeWindows.remove(this);
+               }
+             });
+         
          
          try{
          dir_path = (new File(".")).getCanonicalPath();
@@ -79,6 +88,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     verticalTreeToolbar = new VerticalTreeToolbar(this);
 	     collapseTreeToolbar = new CollapseTreeToolbar(this);
 	     treeOpsToolbar = new TreeOptionsToolbar(this, frame);
+	     wedgeToolbar = new WedgeCustomizerToolbar(this);
 	     
 	     Container pane = getContentPane();
          pane.setLayout(new BorderLayout());
@@ -192,7 +202,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                           "Delete Node",
                           JOptionPane.YES_NO_OPTION);
                           if(del == JOptionPane.YES_OPTION)
+                          {
                             clickedNode.getParent().nodes.remove(clickedNode);
+                            for(Node n : clickedNode.getAnscestors())
+                                n.setConsensusLineage(n.getConsensusLineageF());
+                          }
                         tree.resetTree();
                   }
               });
@@ -216,11 +230,15 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          });
          
          treePanel.setLayout(new BorderLayout());
-         treePanel.add(treeToolbar, BorderLayout.PAGE_END);
-         treePanel.add(verticalTreeToolbar, BorderLayout.LINE_START);
+         treePanel.add(treeToolbar, BorderLayout.SOUTH);
+         treePanel.add(verticalTreeToolbar, BorderLayout.WEST);
          treePanel.add(treeHolder, BorderLayout.CENTER);
-         treePanel.add(collapseTreeToolbar, BorderLayout.PAGE_START);
-	     pane.add(treeOpsToolbar, BorderLayout.NORTH);
+         treePanel.add(collapseTreeToolbar, BorderLayout.NORTH);
+         toolbars.setLayout(new GridLayout(2,1));
+         toolbars.add(treeOpsToolbar);
+         toolbars.add(wedgeToolbar);
+         toolbars.setPreferredSize(new Dimension(this.getWidth(),80));
+	     pane.add(toolbars, BorderLayout.NORTH);
 	     
 	     //set up the "node" submenus
          item = new JMenuItem("Collapse/Expand");
@@ -483,20 +501,23 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	        treeToolbar.zoomSlider.setValue(treeToolbar.zoomSlider.getValue() + 1);
 	        treeToolbar.syncTreeWithZoomSlider();
             verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() + 1);
-            tree.changeFontSize(Math.min(tree.getFontSize()+1,32));
             verticalTreeToolbar.syncTreeWithZoomSlider();
-/*            collapseTreeToolbar.syncTreeWithCollapseSlider();*/
-            
 	    }
 	    if(key.getKeyCode() == 45)
 	    {
 	        treeToolbar.zoomSlider.setValue(treeToolbar.zoomSlider.getValue() - 1);
 	        treeToolbar.syncTreeWithZoomSlider();
             verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() - 1);
-            tree.changeFontSize(Math.max(tree.getFontSize()-1,1));
             verticalTreeToolbar.syncTreeWithZoomSlider();
-/*            collapseTreeToolbar.syncTreeWithCollapseSlider();*/
 	    }
+    }
+    
+    public void setTreeVals(Node root) {
+        for(Node n : root.getNodes())
+        {
+            n.setDepthO(n.depthF());
+            n.setNumberOfLeavesO(n.getNumberOfLeavesF());
+        }
     }
 	
 	/**
@@ -512,20 +533,17 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     }
          if (inFile != null) {
              tree.noLoop();
-             tree.setTree(TopiaryFunctions.createTreeFromNewickFile(inFile));
+             Node root = TopiaryFunctions.createTreeFromNewickFile(inFile);
+             setTreeVals(root);
+             tree.setTree(root);
              //make sure coloring is empty
              removeColor();
              treeToolbar.zoomSlider.setValue(0);
              tree.loop();
              collapseTree();
-             
-/*             treeMenu.setEnabled(true);
-             nodeMenu.setEnabled(true);*/
 
              colorBy.setEnabled(true);
              this.setVisible(true);
-             resetConsensusLineage();
-/*             System.out.println("Done drawing tree.");*/
              frame.consoleWindow.update("Done drawing tree. ");
              frame.treeFile = inFile;
              
@@ -544,7 +562,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          } catch (java.io.IOException e) {}
          if (inFile != null) {
               tree.noLoop();
-              tree.setTree(TopiaryFunctions.createTreeFromNewickFile(inFile));
+              Node root = TopiaryFunctions.createTreeFromNewickFile(inFile);
+               setTreeVals(root);
+               tree.setTree(root);
               //make sure coloring is empty
               removeColor();
               treeToolbar.zoomSlider.setValue(0);
@@ -556,7 +576,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
               colorBy.setEnabled(true);
               this.setVisible(true);
-              resetConsensusLineage();
+/*              resetConsensusLineage();*/
 /*              System.out.println("Done drawing tree.");*/
               frame.consoleWindow.update("Done drawing tree. ");
               frame.treeFile = inFile;
@@ -571,7 +591,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         treeOpsToolbar.setStatus("Loading tree...");
         tree.noLoop();
-        tree.setTree(TopiaryFunctions.createTreeFromNewickString(treeString));
+        Node root = TopiaryFunctions.createTreeFromNewickString(treeString);
+        setTreeVals(root);
+        tree.setTree(root);
         removeColor();
         treeToolbar.zoomSlider.setValue(0);
         tree.loop();
@@ -582,7 +604,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
         colorBy.setEnabled(true);
         this.setVisible(true);
-        resetConsensusLineage();
+/*        resetConsensusLineage();*/
 /*        System.out.println("Done drawing tree.");*/
         frame.consoleWindow.update("Done drawing tree. ");
         treeOpsToolbar.setStatus("Done drawing tree.");
@@ -663,18 +685,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                //get the node's name
                String nodeName = n.getName();
                //get the row of the OTU metadata table with this name
-               int rowIndex = -1;
-               for (int i = 0; i < frame.otuMetadata.getData().maxRow(); i++) {
-                   String val = (String)frame.otuMetadata.getData().get(i,0);
-                   if (val.equals(nodeName)) {
-                       rowIndex = i;
-                       break;
-                   }
-               }
+               int rowIndex = frame.otuMetadata.getRowNames().indexOf(nodeName);
                if (rowIndex == -1) {
-                   JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
-                   frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.");
-                   return;
+/*                   JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);*/
+/*                   frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.");*/
+                   continue;
                }
                Object category = frame.otuMetadata.getValueAt(rowIndex, frame.colorColumnIndex);
                if (category == null) continue;
@@ -682,8 +697,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                Color c = frame.colorMap.get(category);
                if (c == null) {
                    JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
-                   frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());
-                   return;
+/*                   frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());*/
+                   continue;
                }
                //set the node to this color
                n.clearColor();
@@ -702,60 +717,49 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     public void recolorTreeBySample() {
         treeOpsToolbar.setStatus("Coloring tree...");
         ArrayList<Node> ns = tree.getTree().getLeaves();
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-         //loop over each node
-         for (Node n : ns) {
-             //get the node's name
-             
-                 String nodeName = n.getName();
-                 //get the row of the OTU-Sample map with this name
-                 int rowIndex = -1;
-                 for (int i = 0; i < frame.otuSampleMap.getData().maxRow(); i++) {
-                    String val = (String)frame.otuSampleMap.getData().get(i,0);
-                    if (val.equals(nodeName)) {
-                        rowIndex = i;
-                        break;
-                    }
-                 }
-                 if (rowIndex == -1) {
-                    JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU-Sample Table.", "Error", JOptionPane.ERROR_MESSAGE);
-                    frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU-Sample Table.");
-                    return;
-                 }
-                 //get the row
-                 ArrayList<Object> row = frame.otuSampleMap.getRow(rowIndex);
-                 n.clearColor();
-                 //for each non-zero column value (starting after the ID column)
-                 for (int i = 1; i < row.size(); i++) {
-                     Object value = row.get(i);
-                     //if it's not an Integer, skip it
-                     if (!(value instanceof Integer)) continue;
-                     Integer weight = (Integer)value;
-                     if (weight == 0) continue;
-                     String sampleID = frame.otuSampleMap.getColumnName(i);
-                     //find the row that has this sampleID
-                     int sampleRowIndex = -1;
-                     for (int j = 0; j < frame.sampleMetadata.getData().maxRow(); j++) {
-                        if (frame.sampleMetadata.getData().get(j,0).equals(sampleID)) {
-                            sampleRowIndex = j;
-                            break;
-                        }
-                     }
-                     if (sampleRowIndex == -1) {
-                        //JOptionPane.showMessageDialog(null, "ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);
-                        //return;
-/*                        System.out.println("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");*/
-                        frame.consoleWindow.update("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));        
+            //loop over each node
+             for (Node n : ns) {
+                 //get the node's name
+
+                     String nodeName = n.getName();
+                     //get the row of the OTU-Sample map with this name
+                     int rowIndex = frame.otuSampleMap.getRowNames().indexOf(nodeName);
+                     
+                     if (rowIndex == -1) {
                         continue;
                      }
-                     Object val = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.colorColumnIndex);
-                     if (val == null) continue;
-                     n.addColor(frame.colorMap.get(val), weight);
-                 
+                     //get the row
+/*                     ArrayList<Object> row = frame.otuSampleMap.getRow(rowIndex);*/
+                     HashMap row = frame.otuSampleMap.getRow(rowIndex);
+                     n.clearColor();
+                    //for each non-zero column value (starting after the ID column)
+                     for (Object i : row.keySet()) {
+                         Object value = row.get(i);
+                         //if it's not an Integer, skip it
+                         if (!(value instanceof Integer)) continue;
+                         Integer weight = (Integer)value;
+                         if (weight == 0) continue;
+                         
+                         String sampleID = frame.otuSampleMap.getColumnName(((Number)i).intValue());
+                         
+                         //find the row that has this sampleID                         
+                         int sampleRowIndex = frame.sampleMetadata.getRowNames().indexOf(sampleID);
+                         
+                         if (sampleRowIndex == -1) {
+                            continue;
+                         }
+                         
+                         Object color = null;
+                         color = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.colorColumnIndex);                                                          
+                         if (color == null) continue;
+                         n.addColor(frame.colorMap.get(color), weight);
+                     }
              }
-         }
-         tree.getTree().updateColorFromChildren();
-         frame.repaint();
+
+          tree.getTree().updateColorFromChildren();
+          frame.repaint();
+         
          treeOpsToolbar.setStatus("Done coloring tree.");
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
@@ -822,7 +826,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                 return;
              }
              //get the row
-             ArrayList<Object> row = frame.otuSampleMap.getRow(rowIndex);
+             ArrayList<Object> row = frame.otuSampleMap.getRow2(rowIndex);
              n.clearColor();
              //for each non-zero column value (starting after the ID column)
              for (int i = 1; i < row.size(); i++) {
@@ -876,18 +880,19 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          if(col == -1)
          {
              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+             JOptionPane.showMessageDialog(null, "ERROR: No consensus lineage column defined.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
           }
             
          for (Node n : tree.getTree().getLeaves()) {
             String nodeName = n.getName();
-            for(int i = 0; i < frame.otuMetadata.getData().maxRow(); i++)
-            {
-                if(frame.otuMetadata.getValueAt(i,0).equals(nodeName))
-                    n.setLineage(""+frame.otuMetadata.getValueAt(i, col));
-            }
+            int id = frame.otuMetadata.getRowNames().indexOf(nodeName);
+            n.setLineage(""+frame.otuMetadata.getValueAt(id, col));
          }
-         //tree.getTree().setConsensusLineage();
+         for(Node n : tree.getTree().getNodes())
+         {
+             n.setConsensusLineage(n.getConsensusLineageF());
+         }
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
@@ -936,12 +941,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
       */
       public void uncollapseTree(){
           collapseTreeToolbar.setValue(1000);
-/*          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));*/
-         /*for (Node n : tree.getTree().getNodes()) {
-                      n.setCollapsed(false);
-                  }
-                  tree.getTree().setCollapsed(false);*/
-/*         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));*/
       }
 
       /**
@@ -949,22 +948,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
       */
       public void collapseTree() {
           collapseTreeToolbar.setValue(0);
-/*          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));*/
-         /*for (Node n : tree.getTree().getNodes()) {
-                      n.setCollapsed(true);
-                  }
-                  tree.getTree().setCollapsed(false);*/
-/*          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));*/
       }
 
       public void collapseTreeByInternalNodeLabels() {
-/*          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));*/
           for (Node n : tree.getTree().getNodes()){
               if (!n.isLeaf() && n.getName().length() > 0) {
                   n.setCollapsed(true);
               }
           }
-/*          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));*/
       }
 
       public void collapseByValue(String name, double level) {
@@ -987,16 +978,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
       	 		SparseTable data = frame.otuMetadata.getData();
 
       	 		//find which column we're looking at
-      	 		int col;
-      	 		for (col = 0; col < data.maxCol(); col++) {
-      	 			if (frame.otuMetadata.getColumnName(col).equals(name)) { break; }
-      	 		}
+     	 		int col = frame.otuMetadata.getColumnNames().indexOf(name);
 
-      	 		//find out which row we're looking at
-      	 		int row;
-      	 		for (row = 0; row < data.maxRow(); row++) {
-      	 			if ( ( data.get(row,0).toString()).equals(node.getName())) { break; }
-      	 		}
+     	 		//find out which row we're looking at
+     	 		int row = frame.otuMetadata.getRowNames().indexOf(node.getName());
 
       	 		//set the node's field
       	 		node.userString = data.get(row,col).toString();
@@ -1007,10 +992,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                 ArrayList<Node> tips = node.getLeaves();
       	 		for (int i = 0; i < tips.size(); i++) {
       	 		    consensus.add(tips.get(i).userString);
-      	 			/*if (!((String) node.nodes.get(i).userObject).equals(consensus)) {
-      	 			                         consensus = "none";
-      	 			                         break;
-      	 			                     }*/
       	 		}
       	 		
       	 		node.userString = TopiaryFunctions.getConsensus(consensus, level);
@@ -1030,16 +1011,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  	 		SparseTable data = frame.otuMetadata.getData();
 
  	 		//find which column we're looking at
- 	 		int col;
- 	 		for (col = 0; col < data.maxCol(); col++) {
- 	 			if (frame.otuMetadata.getColumnName(col).equals(name)) { break; }
- 	 		}
+ 	 		int col = frame.otuMetadata.getColumnNames().indexOf(name);
 
  	 		//find out which row we're looking at
- 	 		int row;
- 	 		for (row = 0; row < data.maxRow(); row++) {
- 	 			if ( ( data.get(row,0).toString()).equals(node.getName())) { break; }
- 	 		}
+ 	 		int row = frame.otuMetadata.getRowNames().indexOf(node.getName());
 
  	 		//set the node's field
  	 		node.userObject = (Object) data.get(row,col).toString();
@@ -1098,32 +1073,36 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              int colIndex = frame.currTable.getColumnNames().indexOf(value);
              if (colIndex == -1) {
                  //JOptionPane.showMessageDialog(null, "ERROR: Column "+value+" not found in table.", "Error", JOptionPane.ERROR_MESSAGE);
-
                  return;
              }
-
+             ArrayList<Object> column = new ArrayList<Object>();
              //get all unique values in this column
-             ArrayList<Object> column = frame.currTable.getColumn(colIndex);
+               column = frame.currTable.getColumn(colIndex);
+             
              while (column.contains(null)) column.remove(null);
-             TreeSet<Object> uniqueVals = new TreeSet<Object>(column);
-             //set up the colorMap
-             frame.colorMap = new TreeMap<Object, Color>();
-             float[] hsbvals = new float[3];
-             hsbvals[0] = 0;
-             hsbvals[1] = 1;
-             hsbvals[2] = 1;
-             Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
-             for (Object val : uniqueVals) {
-                 frame.colorMap.put(val, color);
-                 hsbvals[0] += (1.0/uniqueVals.size());
-                 color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
-             }
+              TreeSet<Object> uniqueVals = new TreeSet<Object>(column);
+              //set up the colorMap
+              frame.colorMap = new TreeMap<Object, Color>();
+              float[] hsbvals = new float[3];
+              hsbvals[0] = 0;
+              hsbvals[1] = 1;
+              hsbvals[2] = 1;
+              Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
+              for (Object val : uniqueVals) {
+                  frame.colorMap.put(val, new Color(200,200,200));//color);
+                  hsbvals[0] += (1.0/uniqueVals.size());
+                  color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
+              }
+             
              frame.syncColorKeyTable();
 
              frame.colorColumnIndex =  colIndex;
+             
              frame.recolor();
-             //color tree from leaves
+             
+            //color tree from leaves
              tree.getTree().updateColorFromChildren();
+             
              treeOpsToolbar.setStatus("Tree colored by "+value);
              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
           }

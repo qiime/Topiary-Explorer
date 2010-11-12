@@ -5,12 +5,13 @@ import java.io.*;
 
 public class DataTable {
     private ArrayList<String> columnNames = new ArrayList<String>();
+    private ArrayList<String> rowNames = new ArrayList<String>();
     private SparseTable data = new SparseTable();
-
 
     public DataTable() {
         data = new SparseTable();
 		columnNames = new java.util.ArrayList<String>();
+		rowNames = new ArrayList<String>();
     }
     
     public DataTable(ArrayList<String> lines){
@@ -52,6 +53,7 @@ public class DataTable {
         lines.remove(0);
 		for(int r = 0; r < lines.size(); r++) {
 		    vals = lines.get(r).split("\t");
+		    rowNames.add(vals[0]);
 		    c = 0;
 		    for (String obj : vals) {
 		        val = obj;
@@ -92,6 +94,7 @@ public class DataTable {
         Object val;
 		while ((line = br.readLine()) != null) {
 		    vals = line.split("\t");
+		    rowNames.add(vals[0]);
 		    c = 0;
 		    for (String obj : vals) {
 		        val = obj;
@@ -145,13 +148,27 @@ public class DataTable {
         }
         return result;
     }
-    public ArrayList<Object> getRow(int index) {
+    public ArrayList<Object> getRow2(int index) {
         ArrayList<Object> result = new ArrayList<Object>();
+        HashMap row = data.getRow(index);
         for (int i = 0; i < data.maxCol(); i++) {
-            result.add(data.get(index,i));
+            result.add(row.get((Integer)i));
         }
         return result;
     }
+    
+    public HashMap getRow(int index) {
+        return data.getRow(index);
+    }
+    
+    public ArrayList<Integer> getRowAsInts(int index) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        for (int i = 0; i < data.maxCol(); i++) {
+            result.add(((Number)data.get(index,i)).intValue());
+        }
+        return result;
+    }
+    
 
     public Object getValueAt(int row, int col) {
         return data.get(row,col);
@@ -163,6 +180,10 @@ public class DataTable {
 
 	public String getColumnName(int index) {
 		return columnNames.get(index);
+	}
+	
+	public ArrayList<String> getRowNames() {
+		return rowNames;
 	}
 
 	public ArrayList<String> getColumnNames() {

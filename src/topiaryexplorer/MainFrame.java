@@ -42,6 +42,7 @@ public class MainFrame extends JFrame {
     JPanel databaseTopPanel = new JPanel();
     JPanel searchPanel = new JPanel();
     JPanel dataPanel = new JPanel();
+    JToolBar colorBar = new JToolBar(SwingConstants.VERTICAL);
     JTabbedPane dataPane = new JTabbedPane();
     //JTabbedPane tabbedPane = new JTabbedPane();
     JTabbedPane databaseTabPane = new JTabbedPane();
@@ -88,7 +89,7 @@ public class MainFrame extends JFrame {
 
     //Holds the currently-clicked node
     Node clickedNode = null;
-    
+
     /**
      * Default constructor.  Sets up the GUI.
      */
@@ -129,6 +130,7 @@ public class MainFrame extends JFrame {
         interpolateButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         colorPanel.add(interpolateButton);
         colorPanel.setPreferredSize(new Dimension(200,600));
+        colorBar.add(colorPanel);
         
         databasePanel.setLayout(new BorderLayout());
         databaseTopPanel.setLayout(new GridLayout(1,5));
@@ -208,8 +210,9 @@ public class MainFrame extends JFrame {
         pane.add(toolbarPane, BorderLayout.NORTH);
         
         //add them to the split pane
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, colorPanel, dataPanel);
-        pane.add(splitPane, BorderLayout.CENTER);
+/*        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, colorBar, dataPanel);*/
+        pane.add(dataPanel, BorderLayout.CENTER);
+        pane.add(colorBar, BorderLayout.WEST);
         
         //the following is required to make sure th GLContext is created, or else resizing the 
         //window will result in program freezes
@@ -257,11 +260,9 @@ public class MainFrame extends JFrame {
      public void resetOtuMenus() {
          for(TreeWindow w : treeWindows)
          {
-/*             System.out.println("got here");*/
               w.resetLineWidthOtuMenu();
               w.resetCollapseByMenu();
               w.colorBy.resetColorByOtuMenu();
-              w.resetConsensusLineage();
           }
      }
      
@@ -406,7 +407,7 @@ public class MainFrame extends JFrame {
          colorKeyTable.setDefaultEditor(Color.class, new ColorEditor());
          colorKeyTable.setSelectionBackground(new Color(255,255,255));
          colorKeyTable.setSelectionForeground(new Color(0,0,0));
-
+         colorKeyTable.getColumnModel().getColumn(0).setPreferredWidth(150);
          colorKeyTable.getColumnModel().getColumn(1).setPreferredWidth(20);
          colorKeyTable.getColumnModel().getColumn(2).setPreferredWidth(20);
          colorKeyTable.setDragEnabled(true);

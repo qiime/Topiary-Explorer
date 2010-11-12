@@ -40,7 +40,7 @@ public class ColorByMenu extends JMenu implements ActionListener{
     JMenu colorBySampleMetadataMenu = new JMenu("Sample Metadata");
     
     JRadioButtonMenuItem noColoringMenuItem = new JRadioButtonMenuItem("No coloring");
-    JRadioButtonMenuItem majorityColordingMenuItem = new JRadioButtonMenuItem("Majority wedge coloring");
+    JRadioButtonMenuItem majorityColoringMenuItem = new JRadioButtonMenuItem("Majority wedge coloring",true);
     
     ButtonGroup colorByGroup = new ButtonGroup();
     
@@ -58,8 +58,8 @@ public class ColorByMenu extends JMenu implements ActionListener{
          noColoringMenuItem.setSelected(true);
          noColoringMenuItem.addActionListener(this);
          add(noColoringMenuItem);
-         majorityColordingMenuItem.addActionListener(this);
-         add(majorityColordingMenuItem);
+         majorityColoringMenuItem.addActionListener(this);
+         add(majorityColoringMenuItem);
      }
     
 
@@ -67,7 +67,7 @@ public class ColorByMenu extends JMenu implements ActionListener{
     * Resets colorby OTU menu when a new otu table is loaded
     */
     public void resetColorByOtuMenu() {
-        noColoringMenuItem.setSelected(true);
+/*        noColoringMenuItem.setSelected(true);*/
         colorByOtuMetadataMenu.removeAll();
         ArrayList<String> data = frame.otuMetadata.getColumnNames();
         //start at 1 to skip ID column
@@ -81,6 +81,7 @@ public class ColorByMenu extends JMenu implements ActionListener{
                      String value = e.getActionCommand();
  /*                    System.out.println("*");*/
                      frame.currTable = frame.otuMetadata;
+                     
                      ((TreeWindow)parent).colorByValue(value);
 
                      TableColumn column = frame.colorKeyTable.getColumnModel().getColumn(0);
@@ -119,6 +120,7 @@ public class ColorByMenu extends JMenu implements ActionListener{
                      //get the category to color by
                      String value = e.getActionCommand();
                      frame.currTable = frame.sampleMetadata;
+                     
                      ((TreeWindow)parent).colorByValue(value);
 
                      TableColumn column = frame.colorKeyTable.getColumnModel().getColumn(0);

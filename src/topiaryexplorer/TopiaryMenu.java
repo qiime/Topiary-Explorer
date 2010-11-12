@@ -606,15 +606,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 frame.treeWindow.removeColor();
             }
             frame.resetOtuMenus();
-/*            resetColorByOtuMenu();
-            resetLineWidthOtuMenu();
-            resetCollapseByMenu();*/
-            //resetTipLabels();
-/*            frame.treeWindow.tree.loop();*/
             for(TreeWindow t : frame.treeWindows)
             {
                 t.tree.loop();
-                t.resetConsensusLineage();
+/*                t.resetConsensusLineage();*/
             }
             /*frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState())*/;
             frame.otuMetadataFile = inFile;
@@ -625,9 +620,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    
    public void clearOtuMetadata() {
        frame.treeWindow.tree.noLoop();
-       ((SparseTableModel)frame.otuMetadataTable.getModel()).clearTable();
-/*       frame.resetColorByOtuMenus();*/
-/*       resetLineWidthOtuMenu();*/
+       frame.resetOtuMenus();
        frame.otuMetadataFile = null;
        frame.treeWindow.tree.loop();
        frame.repaint();
@@ -669,10 +662,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             if (frame.currTable == frame.sampleMetadata) {
                 frame.treeWindow.removeColor();
             }
-/*            frame.resetColorBySampleMenus();*/
-            /*resetLineWidthSampleMenu();*/
+            frame.resetSampleMenus();
             frame.treeWindow.tree.loop();
-/*            frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState());*/
             frame.sampleMetadataFile = inFile;
        }
        frame.repaint();
@@ -681,9 +672,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    
    public void clearSampleMetadata() {
        frame.treeWindow.tree.noLoop();
-       ((SparseTableModel)frame.sampleMetadataTable.getModel()).clearTable();
+/*       ((SparseTableModel)frame.sampleMetadataTable.getModel()).clearTable();*/
 /*       frame.resetColorBySampleMenus();*/
        /*resetLineWidthSampleMenu();*/
+       frame.resetSampleMenus();
        frame.sampleMetadataFile = null;
        frame.treeWindow.tree.loop();
        frame.repaint();
@@ -730,7 +722,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    
    public void clearOtuSampleMap() {
        frame.treeWindow.tree.noLoop();
-       ((SparseTableModel)frame.otuSampleMapTable.getModel()).clearTable();
+/*       ((SparseTableModel)frame.otuSampleMapTable.getModel()).clearTable();*/
        frame.otuSampleMapFile = null;
        frame.treeWindow.tree.loop();
        frame.repaint();

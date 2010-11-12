@@ -119,7 +119,11 @@ public class TreeToolbar extends JToolBar {
     
     public void setStatus(String p, String s) {
         if(s.length() > 56)
+        {
             s = p +"..." + s.substring(s.length()-Math.min(56-p.length(),s.length()),s.length()-1);
+        }
+        else
+            s = p+s;
         status.setText(s);
     }
 

@@ -15,8 +15,13 @@ public class Node {
   private String label = "";
   private String name = "";
   private String lineage = "";
-  private String consensusLineage = "";
+  private String consensusLineage = null;
+  private String tconsensusLineage = null;
   private double branchlength = 0;
+  
+  private double depth = 0;
+  private int numberOfLeaves = 0;
+  
   private double yoffset = 0;
   private double xoffset = 0;
   private double roffset = 0; //radius
@@ -38,6 +43,7 @@ public class Node {
   //parallel arrays of colors and the weight to be drawn with each
   private boolean colored = true;
   HashMap colormap = new HashMap();
+  private Color color = null;
   private ArrayList<Color> groupColor = new ArrayList<Color>();
   private ArrayList<Double> groupWeight = new ArrayList<Double>();
   
@@ -57,8 +63,6 @@ public class Node {
     label = _label;
     name = _label;
     branchlength = _branchlength;
-    
-    /*setConsensusLineage();*/
   }
 
   //GETTERS AND SETTERS
@@ -73,7 +77,7 @@ public class Node {
   public ArrayList<Color> getGroupColor() { return groupColor; }
   public ArrayList<Double> getGroupFraction() { return groupWeight; }
   public boolean isCollapsed() { return collapsed || sliderCollapsed; }
-  public void setSliderCollapsed(boolean cond) { sliderCollapsed = cond; }
+  public void setSliderCollapsed(boolean cond) { if(!locked) sliderCollapsed = cond; }
   public void setCollapsed(boolean cond) { if(!locked) collapsed = cond; }
   public void setLabel(String s) { label = s; }
   public String getLabel() { return label; }
@@ -82,8 +86,8 @@ public class Node {
   public String getName() { return name; }
   public void setLineage(String s) { lineage = s; }
   public String getLineage() { return lineage; }
-  public void setConsensusLineage() { consensusLineage = getConsensusLineage(); }
-/*  public String getConsensusLineage() { return consensusLineage; }*/
+  public void setConsensusLineage(String s) { consensusLineage = s; }
+  public String getConsensusLineage() { return consensusLineage;}
   public void setBranchLength(double f) { if (f >= 0) branchlength = f; }
   public double getYOffset() { return yoffset; }
   public double getXOffset() { return xoffset; }
@@ -118,7 +122,12 @@ public class Node {
   public void setLineWidth(double f) { lineWidth = f; }
   public void setAnscestors(ArrayList<Node> a) { anscestors = a; }
   public ArrayList<Node> getAnscestors() { return anscestors; }
-  public int getLevel() { return anscestors.size(); };
+  public int getLevel() { return anscestors.size(); }
+  public void setDepthO(double val) { depth = val;}
+  public double depth() { return depth; }
+  public void setNumberOfLeavesO(int val) { numberOfLeaves = val;}
+  public int getNumberOfLeaves() { return numberOfLeaves; }
+  
   
   public void setLocked(boolean l) { 
       locked=l; 
@@ -127,19 +136,19 @@ public class Node {
       }
   
   // recursive method to return consensus lineage
-  public String getConsensusLineage() {  
-      // If the node is a leaf return lineage
-      ArrayList<Node> tips = getLeaves();   
+  public String getConsensusLineageF() {   
       if(isLeaf())
         return lineage;
+         
+      // If the node is a leaf return lineage
+      ArrayList<Node> tips = getLeaves();   
       
-      // Collect consensus lineage of children
+      // Collect lineage of tips
       ArrayList<String> currLabels = new ArrayList<String>();
       for(Node n: tips)
       {
-          String l = n.getConsensusLineage();
-/*          for(int i = 0; i < n.getNumberOfLeaves(); i++)*/
-            currLabels.add(l);
+          String l = n.getLineage();
+          currLabels.add(l);
       }
       
       String consensusLineage = "";
@@ -152,7 +161,6 @@ public class Node {
       
       // while test string has one entry and continue looping
       while(test.indexOf(";") != -1 && loop)
-/*      while(currLabels.size() > 0)*/
       {
           curr = new ArrayList<String>();
           newLabels = new ArrayList<String>();
@@ -161,20 +169,16 @@ public class Node {
           {                
               try {
               // add first entry to curr, keep rest of labels in newLabels
-              String entry = l.substring(0,l.indexOf(";")+1);
-              entry = entry.replace(';',' ').trim();
+              String entry = l.substring(0,l.indexOf(";")).trim();
               curr.add(entry);        
             }
           catch(StringIndexOutOfBoundsException e)
             {
                 // if there is no ";"
-                /*                System.out.println(l);*/
-                curr.add(l);
-/*                loop = false;*/
+                curr.add(l.trim());
                 testb = false;
-/*                break;*/
             }
-            newLabels.add(l.substring(l.indexOf(";")+1, l.length()));      
+            newLabels.add(l.substring(l.indexOf(";")+1, l.length()).trim());      
           }
         
           String c = TopiaryFunctions.getConsensus(curr,.5);
@@ -188,11 +192,10 @@ public class Node {
               
         test = currLabels.get(0);
       }
-      
       return consensusLineage;
   }
   
-  public int getNumberOfLeaves() {
+  public int getNumberOfLeavesF() {
       int total = 0;
       if (isLeaf()) {
           total = 1;
@@ -201,14 +204,14 @@ public class Node {
               total = total + n.getNumberOfLeaves();
           }
       }
+      numberOfLeaves = total;
       return total;
   }
 
   /**
    * Based on the groupWeight and groupColor field, return an overall blended color
    */
- public Color getColor(boolean majority) {
-     
+ public Color getColor(boolean majority) {        
      //if there's no color, use black
      if (!colored) {
          return new Color(0,0,0);
@@ -218,8 +221,11 @@ public class Node {
      
      if(majority)
      {
-         double max = 0;
+         double max = -100;
          Color majorityColor = new Color(0);
+         if(groupColor.size() == 1)
+            return groupColor.get(0);
+
          for(int i = 0; i < groupColor.size(); i++)
          {
              if(groupWeight.get(i) > max)
@@ -228,7 +234,7 @@ public class Node {
                  max = groupWeight.get(i);
              }
          }
-         return majorityColor;
+         color = majorityColor;
      }
      else {
         double total = 0;
@@ -240,8 +246,9 @@ public class Node {
           g += groupWeight.get(i)/total*groupColor.get(i).getGreen();
           b += groupWeight.get(i)/total*groupColor.get(i).getBlue();
         }
-        return new Color(Math.abs((float)r/255),Math.abs((float)g/255),Math.abs((float)b/255));
+        color = new Color(Math.abs((float)r/255),Math.abs((float)g/255),Math.abs((float)b/255));
     }
+    return color;
   }
   
   public void noColor() {
@@ -249,6 +256,7 @@ public class Node {
   }
 
   public void clearColor() {
+    color = null;
     groupWeight = new ArrayList<Double>();
     groupColor = new ArrayList<Color>();
   }
@@ -315,7 +323,7 @@ public class Node {
   /**
    * Max depth of the tree (as a sum of branch lengths)
    */
-  public double depth() {
+  public double depthF() {
     double deepest = 0;
     for (int i = 0; i <nodes.size(); i++) {
       double depth = nodes.get(i).depth();
@@ -444,6 +452,7 @@ public class Node {
     if (isLeaf()) { aggregateData(); return; }
 
     //make the lists empty
+    color = null;
     groupColor = new ArrayList<Color>();
     groupWeight = new ArrayList<Double>();
     for (int i=0; i < nodes.size(); i++) {
@@ -459,6 +468,21 @@ public class Node {
     aggregateData();
   }
   
+  public double getLineWidthF() {
+      if (isLeaf()) {
+          return 1; 
+          }
+
+      //make the lists empty
+      double total = 0;
+      for (int i=0; i < nodes.size(); i++) {
+        //recursion
+        nodes.get(i).updateLineWidthsFromChildren();
+
+        total = total + nodes.get(i).getLineWidth();
+      }
+      return total/nodes.size();
+    }
   
   public void updateLineWidthsFromChildren() {
     if (isLeaf()) { return; }
@@ -475,7 +499,7 @@ public class Node {
   }
 
   /**
-   * Put all of the same colors together (so each color is just one wedge)
+   * Put all of the same colors together 
    */
   public void aggregateData() {
     ArrayList<Color> newGroupColor = new ArrayList<Color>();
