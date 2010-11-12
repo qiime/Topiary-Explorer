@@ -62,7 +62,7 @@ public class TreeVis extends PApplet {
     private Set hilightedNodes = new java.util.HashSet();
 
     private List listeners = new java.util.ArrayList();
-    private float fntpnt = 12;
+    private float fntpnt = 10;
     private int fntColor = 255;
     private PFont currFont = createFont("courier", (int)fntpnt);
 
@@ -147,7 +147,7 @@ public class TreeVis extends PApplet {
     public int getLabelYOffset() { return labelYOffset; }
     public void setWedgeHeight(double d) { wedgeHeightScale = d; }
     public double getWedgeHeight() { return wedgeHeightScale; }
-    public void setFontSize(float d) { fntpnt = d; }
+    public void setFontSize(float d) { if(d>0) {fntpnt = d;} }
     public float getFontSize() { return fntpnt; }
     public void setFontColor(int c) { fntColor = c; }
 

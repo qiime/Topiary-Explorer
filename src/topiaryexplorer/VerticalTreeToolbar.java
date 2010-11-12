@@ -51,7 +51,7 @@ public class VerticalTreeToolbar extends JToolBar {
             public void stateChanged(ChangeEvent e) {
                 if (zoomSlider.getValueIsAdjusting()){
                     double changeby = zoomSlider.getValue() - lastValue;
-                    frame.tree.changeFontSize(Math.min(12, Math.max(frame.tree.getFontSize()+(.5*changeby),1)));
+/*                    frame.tree.changeFontSize(Math.min(12, Math.max(frame.tree.getFontSize()+(.5*changeby),1)));*/
                     syncTreeWithZoomSlider();
                     lastValue = zoomSlider.getValue();
                 }
