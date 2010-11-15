@@ -659,6 +659,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              n.setXOffset(tree.getTree().depth() - n.getXOffset());
              n.setTOffset(Math.PI - n.getTOffset());
              }
+        tree.setMirrored(!tree.getMirrored());
         tree.setRadialOffsets(tree.getTree());
      }
      

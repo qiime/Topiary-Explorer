@@ -55,6 +55,7 @@ public class TreeVis extends PApplet {
     private double collapsedLevel = 0;
     
     private boolean majorityColoring = true;
+    private boolean mirrored = false;
 
     private Node selectedNode;
     private Node mouseOverNode;
@@ -150,6 +151,8 @@ public class TreeVis extends PApplet {
     public void setFontSize(float d) { if(d>0) {fntpnt = d;} }
     public float getFontSize() { return fntpnt; }
     public void setFontColor(int c) { fntColor = c; }
+    public boolean getMirrored() { return mirrored; }
+    public void setMirrored(boolean b) { mirrored = b; }
 
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
@@ -1083,25 +1086,52 @@ public class TreeVis extends PApplet {
         //set wedge at y location
         top = y + top;
         bottom = y - bottom;
-            
-      if (treeLayout.equals("Rectangular")) {      
+      
+      if (treeLayout.equals("Rectangular")) {   
+          if(mirrored)
+          {
+              canvas.quad((float)toScreenX(x), (float)toScreenY(bottom), //center to bottom
+                  (float)toScreenX(x),  (float)toScreenY(top),  //center to top
+                  (float)toScreenX(x-shortest),  (float)toScreenY(top),  //top to longest branch length
+                  (float)toScreenX(x-longest),  (float)toScreenY(bottom) );  //bottom to shortest branch length
+          }
+          else
+          {
           //draw the wedge
           canvas.quad((float)toScreenX(x), (float)toScreenY(bottom), //center to bottom
             (float)toScreenX(x),  (float)toScreenY(top),  //center to top
             (float)toScreenX(x+shortest),  (float)toScreenY(top),  //top to longest branch length
             (float)toScreenX(x+longest),  (float)toScreenY(bottom) );  //bottom to shortest branch length
+        }
     
       } else if (treeLayout.equals("Triangular")) {
-
+          if(mirrored)
+            {
+                //draw the wedge
+                  canvas.triangle((float)toScreenX(x), (float)toScreenY(y), //center to bottom
+                    (float)toScreenX(x-shortest),  (float)toScreenY(top),  //top to longest branch length
+                    (float)toScreenX(x-longest),  (float)toScreenY(bottom) );  //bottom to shortest branch length
+            }
+            else
+            {
           //draw the wedge
           canvas.triangle((float)toScreenX(x), (float)toScreenY(y), //center to bottom
             (float)toScreenX(x+shortest),  (float)toScreenY(top),  //top to longest branch length
             (float)toScreenX(x+longest),  (float)toScreenY(bottom) );  //bottom to shortest branch length
-      
+            }
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
                 
           double maxt = node.getMaximumTOffset();
           double mint = node.getMinimumTOffset();
+          
+          if(wedgeHeightScale < 1)
+          {
+              double theta = Math.abs(maxt-mint);
+              double f = (theta*(1-wedgeHeightScale))/2;
+              mint = mint + f;
+              maxt = maxt - f;
+          }
+          
           double x1 = node.getParent().getRXOffset() + shortest * Math.cos(mint);
           double y1 = node.getParent().getRYOffset() + shortest * Math.sin(mint);
           double x2 = node.getParent().getRXOffset() + longest * Math.cos(maxt);
@@ -1111,8 +1141,6 @@ public class TreeVis extends PApplet {
           canvas.triangle((float)toScreenX(x), (float)toScreenY(y), //center to bottom
             (float)toScreenX(x1),  (float)toScreenY(y1),  //top to longest branch length
             (float)toScreenX(x2),  (float)toScreenY(y2) );  //bottom to shortest branch length
-
-
       }
       canvas.fill(fntColor);
       canvas.stroke(fntColor);
@@ -1126,17 +1154,17 @@ public class TreeVis extends PApplet {
       if(toScreenY(top-bottom)/2 > fntpnt)
       {
           canvas.textFont(createFont("courier", fntpnt));
-          canvas.text(s, (float)(toScreenX(x+(shortest)/2)+labelXOffset), (float)(toScreenY(bottom+(top-bottom)/2)+5)+labelYOffset);
+          if(mirrored)
+          {
+              canvas.text(s, (float)(toScreenX(x-(shortest)/2)+labelXOffset), (float)(toScreenY(bottom+(top-bottom)/2)+5)+labelYOffset);
+          }
+          else
+              canvas.text(s, (float)(toScreenX(x+(shortest)/2)+labelXOffset), (float)(toScreenY(bottom+(top-bottom)/2)+5)+labelYOffset);
       }
       // reset drawing color to black
       canvas.fill(0);
       canvas.stroke(0);
     }
-
-    public void resetOffsets(Node node, double _prev) {
-        
-    }
-
 
     /**
      * Sets the y-offset for each node in the tree to the average of its children
@@ -1320,7 +1348,6 @@ public class TreeVis extends PApplet {
 	
 		  //draw the tree to the file
 		  canvas.beginDraw();
-/*          canvas.textFont(currFont);*/
 		  canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
           canvas.pushMatrix();
           canvas.translate((float)xstart, (float)ystart);
