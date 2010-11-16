@@ -438,6 +438,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 
     public void newProject() {
         frame.newProjectChooser = new NewProjectDialog(frame);
+        
     }
     
     public void openProject(){
@@ -447,23 +448,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 
     	        if(inFile != null)
                 {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(inFile.getInputStream()));
-                    String dataType = "";
-                    HashMap data = new HashMap();
-                    String line = br.readLine();
-                    while(line != null)
-                    {
-                        line = line.trim();
-                        if(line.startsWith(">>"))
-                        {
-                            dataType = line.substring(2,5);
-                            data.put(dataType, new ArrayList<String>());
-                        }
-                        else
-                            ((ArrayList<String>)data.get(dataType)).add(line);
-                        line = br.readLine();
-                    }
-                    br.close();
+                    HashMap data = TopiaryFunctions.parseTep(inFile);
                     
                     
                     frame.treeWindow.tree.noLoop();

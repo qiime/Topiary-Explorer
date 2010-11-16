@@ -157,20 +157,20 @@ public class TopiaryFunctions {
      * Load a Newick-formatted tree from the given file and returns the head node of the tree.
      */
     public static Node createTreeFromNewickFile(FileContents file) {
-      String newickString = "";
-      try {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
-        String line = reader.readLine();
-        while(line != null)
-        {
-            newickString += line;
-            line = reader.readLine();
-        }
-      }
-      catch (IOException e) {
-        JOptionPane.showMessageDialog(null, "Unable to load " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-      }
-      return createTreeFromNewickString(newickString);
+          String newickString = "";
+          try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
+            String line = reader.readLine();
+            while(line != null)
+            {
+                newickString += line;
+                line = reader.readLine();
+            }
+          }
+          catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Unable to load " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+          }
+          return createTreeFromNewickString(newickString);
     }
 
     public static String createNewickStringFromTree(Node root) {
@@ -209,6 +209,33 @@ public class TopiaryFunctions {
                     }
                 }
 			}
+	}
+	
+	public static HashMap parseTep(FileContents inFile) {
+	    try {
+    	    BufferedReader br = new BufferedReader(new InputStreamReader(inFile.getInputStream()));
+            String dataType = "";
+            HashMap data = new HashMap();
+            String line = br.readLine();
+            while(line != null)
+            {
+                line = line.trim();
+                if(line.startsWith(">>"))
+                {
+                    dataType = line.substring(2,5);
+                    data.put(dataType, new ArrayList<String>());
+                }
+                else
+                    ((ArrayList<String>)data.get(dataType)).add(line);
+                line = br.readLine();
+            }
+            br.close();
+            return data;
+        }
+        catch(IOException e)
+        {
+            return null;
+        }
 	}
 	
 	public static String getConsensus(ArrayList<String> consensus, double level) {

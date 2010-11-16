@@ -103,7 +103,11 @@ public class NewProjectDialog extends JFrame{
         okButton.addActionListener(new ActionListener() {
                public void actionPerformed(ActionEvent e) {
                    if(okButtonPressed())
-                        dispose();
+                   {
+                       frame.resetSampleMenus();
+               	       frame.resetOtuMenus();
+                       dispose();
+                    }
                }
         });
         
@@ -119,12 +123,12 @@ public class NewProjectDialog extends JFrame{
         
 	    if(treeFile!=null)
 	    {
-            frame.treeWindow.loadTree(treeFile);
+            frame.newTreeWindow(treeFile);
 	    }
     
 	    if(otuMetadataFile != null)
 	    {
-            frame.mainMenu.loadOtuMetadata(otuMetadataFile); 	    
+            frame.mainMenu.loadOtuMetadata(otuMetadataFile);    
         }
       else
         {frame.mainMenu.clearOtuMetadata();}
@@ -143,7 +147,6 @@ public class NewProjectDialog extends JFrame{
 	    }
       else
             {frame.mainMenu.clearSampleMetadata();}
-	        
 	    return true;
 	}
 }

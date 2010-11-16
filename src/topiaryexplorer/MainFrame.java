@@ -256,6 +256,17 @@ public class MainFrame extends JFrame {
           resetSampleMenus();
           setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       }
+      
+      public void newTreeWindow(FileContents treeFile) {
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            TreeWindow tempTreeWindow = new TreeWindow(this);
+            tempTreeWindow.loadTree(treeFile);
+            treeWindows.add(tempTreeWindow);
+            tempTreeWindow.setTitle("Tree "+treeWindows.size());
+            resetOtuMenus();
+            resetSampleMenus();
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
      
      public void resetOtuMenus() {
          for(TreeWindow w : treeWindows)
