@@ -812,12 +812,12 @@ public class TreeVis extends PApplet {
         double maxX =  drawX + 5 + (width*nodeFont.size);
         double minY = drawY - (nodeFont.descent()*nodeFont.size);
         double maxY = drawY + (nodeFont.ascent()*nodeFont.size);
-        /*if ((node.isLeaf() && !drawExternalNodeLabels) || (!node.isLeaf() && !drawInternalNodeLabels)) {
+        if ((node.isLeaf() && !drawExternalNodeLabels) || (!node.isLeaf() && !drawInternalNodeLabels)) {
                     maxX = minX + 5;
                     maxY = minY + 5;
                     minX = minX - 5;
                     minY = minY - 5;
-                }*/
+                }
         canvas.rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
 
       }
@@ -912,10 +912,10 @@ public class TreeVis extends PApplet {
       if (node.isLeaf() && drawNodeLabels) {
           canvas.fill(0);
           canvas.stroke(0);
-          if(treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")){
+/*          if(treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")){*/
             if (yscale > nodeFontSize) 
                 canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
-            }
+/*            }*/
            /*else {
                         
                     }*/

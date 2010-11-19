@@ -165,11 +165,7 @@ public class TreeEditToolbar extends JToolBar {
                 frame.mirrorHorz();
             }
         });
-        add(mirrorvertButton);
-        add(mirrorhorzButton);
-        addSeparator();
-        
-        add(treeStatus);
+
         setFloatable(false);
     }
     
