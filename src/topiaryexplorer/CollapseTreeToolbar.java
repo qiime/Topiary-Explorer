@@ -9,16 +9,16 @@ import javax.swing.event.*;
 
 
 public class CollapseTreeToolbar extends JToolBar {
-    JSlider collapseSlider = new JSlider(0, 1000, 10);
+    JSlider collapseSlider = new JSlider(0, 1001, 10);
     JPanel spacer1 = new JPanel();
+    JLabel collapseLabel = new JLabel("Collapse tree: ");
 
     TreeWindow frame = null;
 
     public CollapseTreeToolbar(TreeWindow _frame) {
 
         frame = _frame;
-
-//        this.setLayout(new BorderLayout());
+        add(collapseLabel);
 
         spacer1.setMinimumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
         spacer1.setMaximumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));

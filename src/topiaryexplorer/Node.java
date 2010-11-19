@@ -29,7 +29,7 @@ public class Node {
   private double rxoffset = 0;
   private double ryoffset = 0;
   private boolean drawPie = false; //should a pie chart be drawn for this node?
-  private boolean drawLabel = false;
+  private boolean drawLabel = true;
   private boolean locked = false;
   private double maximumYOffset = 0;
   private double minimumYOffset = 0;
@@ -43,7 +43,8 @@ public class Node {
   //parallel arrays of colors and the weight to be drawn with each
   private boolean colored = true;
   HashMap colormap = new HashMap();
-  private Color color = null;
+  private Color branchColor = null;
+  private Color labelColor = null;
   private ArrayList<Color> groupColor = new ArrayList<Color>();
   private ArrayList<Double> groupWeight = new ArrayList<Double>();
   
@@ -78,7 +79,7 @@ public class Node {
   public ArrayList<Double> getGroupFraction() { return groupWeight; }
   public boolean isCollapsed() { return collapsed || sliderCollapsed; }
   public void setSliderCollapsed(boolean cond) { if(!locked) sliderCollapsed = cond; }
-  public void setCollapsed(boolean cond) { if(!locked) collapsed = cond; }
+  public void setCollapsed(boolean cond) { if(!locked && parent != null) collapsed = cond; }
   public void setLabel(String s) { label = s; }
   public String getLabel() { return label; }
   public double getBranchLength() { return branchlength; }
@@ -211,7 +212,7 @@ public class Node {
   /**
    * Based on the groupWeight and groupColor field, return an overall blended color
    */
- public Color getColor(boolean majority) {        
+ public Color getBranchColor(boolean majority) {        
      //if there's no color, use black
      if (!colored) {
          return new Color(0,0,0);
@@ -234,7 +235,7 @@ public class Node {
                  max = groupWeight.get(i);
              }
          }
-         color = majorityColor;
+         branchColor = majorityColor;
      }
      else {
         double total = 0;
@@ -246,26 +247,26 @@ public class Node {
           g += groupWeight.get(i)/total*groupColor.get(i).getGreen();
           b += groupWeight.get(i)/total*groupColor.get(i).getBlue();
         }
-        color = new Color(Math.abs((float)r/255),Math.abs((float)g/255),Math.abs((float)b/255));
+        branchColor = new Color(Math.abs((float)r/255),Math.abs((float)g/255),Math.abs((float)b/255));
     }
-    return color;
+    return branchColor;
   }
   
-  public void noColor() {
+  public void noBranchColor() {
     colored = false;
   }
 
-  public void clearColor() {
-    color = null;
+  public void clearBranchColor() {
+    branchColor = null;
     groupWeight = new ArrayList<Double>();
     groupColor = new ArrayList<Color>();
   }
 
-  public void addColor(Color c, double w) {
+  public void addBranchColor(Color c, double w) {
+      colored = true;
       colormap.put(c,w);
       groupWeight.add(new Double(w));
       groupColor.add(c);
-      colored = true;
   }
   
   /**
@@ -306,7 +307,7 @@ public class Node {
     child.parent = this;
     child.setAnscestors(this.anscestors);
     child.getAnscestors().add(this);
-    updateColorFromChildren();
+    updateBranchColorFromChildren();
   }
 
   public void rotate() {
@@ -448,16 +449,16 @@ public class Node {
    * Set the color by blending the children's colors, weighted by the number of leaves in each child
    * this recursively works over the entire tree.
    */
-  public void updateColorFromChildren() {
+  public void updateBranchColorFromChildren() {
     if (isLeaf()) { aggregateData(); return; }
 
     //make the lists empty
-    color = null;
+    branchColor = null;
     groupColor = new ArrayList<Color>();
     groupWeight = new ArrayList<Double>();
     for (int i=0; i < nodes.size(); i++) {
       //recursion
-      nodes.get(i).updateColorFromChildren();
+      nodes.get(i).updateBranchColorFromChildren();
 
       //get the overall color for this node
       for (int j = 0; j < nodes.get(i).groupColor.size(); j++) {

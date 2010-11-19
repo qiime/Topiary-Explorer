@@ -83,7 +83,7 @@ public class WindowViewToolbar extends JToolBar {
             }
         });
         add(saveTreeButton);
-        addSeparator();
+/*        addSeparator();*/
         
 /*        try{
         FileContents fc = es.openFile(new File("images/treewindow.gif"));
@@ -126,9 +126,9 @@ public class WindowViewToolbar extends JToolBar {
             }
         });
         
-        add(treeButton);
+/*        add(treeButton);*/
 /*        add(pcoaButton);*/
-        add(consoleButton);
+/*        add(consoleButton);*/
         
         setFloatable(false);
     }

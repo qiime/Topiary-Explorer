@@ -450,57 +450,29 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 {
                     HashMap data = TopiaryFunctions.parseTep(inFile);
                     
-                    
-                    frame.treeWindow.tree.noLoop();
-                    frame.newTreeWindow(((ArrayList<String>)data.get("tre")).get(0));
-                    frame.treeWindow.tree.loop();
-                    Object[] tables = null;
-                    
+                    // load tree
+                    if(data.containsKey("tre")){
+                        frame.treeWindow.tree.noLoop();
+                        frame.newTreeWindow(((ArrayList<String>)data.get("tre")).get(0));
+                        frame.treeWindow.tree.loop();
+                    }
                     // load otu metadata
                      if(data.containsKey("otm")){
-                         //tables = loadDataTable(((ArrayList<String>)data.get("otm")));
-                         frame.otuMetadata = new DataTable(((ArrayList<String>)data.get("otm")));
-   
- 					     SparseTableModel model = new SparseTableModel(frame.otuMetadata.getData(),
-						 frame.otuMetadata.getColumnNames());
-						 TableSorter sorter = new TableSorter(model, frame.otuMetadataTable.getTableHeader());
-						 frame.otuMetadataTable.setModel(sorter);
-                         
-                         frame.consoleWindow.update("Loaded OTU metadata.");
-                         frame.resetOtuMenus();
-                         frame.dataPane.setSelectedIndex(1);
+                         frame.setOtuMetadata(((ArrayList<String>)data.get("otm")));
                      }
                      // load otu sample map
                      if(data.containsKey("osm")){
-                         frame.otuSampleMap = new DataTable(((ArrayList<String>)data.get("osm")));
-                         
-                         SparseTableModel model = new SparseTableModel(frame.otuSampleMap.getData(),
-						 frame.otuSampleMap.getColumnNames());
-						 TableSorter sorter = new TableSorter(model, frame.otuSampleMapTable.getTableHeader());
-						 frame.otuSampleMapTable.setModel(sorter);
-						 
-                         frame.consoleWindow.update("Loaded OTU to sample map");
-                         frame.dataPane.setSelectedIndex(2);
+                         frame.setOtuSampleMap(((ArrayList<String>)data.get("osm")));
                      }
                      // load sample metadata
                      if(data.containsKey("sam")){
-                         frame.sampleMetadata = new DataTable(((ArrayList<String>)data.get("sam")));
-                         
-                         SparseTableModel model = new SparseTableModel(frame.sampleMetadata.getData(),
-						 frame.sampleMetadata.getColumnNames());
-						 TableSorter sorter = new TableSorter(model, frame.sampleMetadataTable.getTableHeader());
-						 frame.sampleMetadataTable.setModel(sorter);
-						 
-                         frame.consoleWindow.update("Loaded sample metadata.");
-                         frame.resetSampleMenus();
-                         frame.dataPane.setSelectedIndex(3);
+                         frame.setSampleMetadata(((ArrayList<String>)data.get("sam")));
                      }
                     frame.repaint();
                 }
             }
             catch(IOException e)
             {
-/*                System.out.println("Error opening project.");*/
                 frame.consoleWindow.update("Error opening project.");
             }
             

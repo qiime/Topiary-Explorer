@@ -267,13 +267,52 @@ public class MainFrame extends JFrame {
             resetSampleMenus();
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
+        
+    public void setOtuMetadata(ArrayList<String> data) {
+        otuMetadata = new DataTable(data);
+
+	     SparseTableModel model = new SparseTableModel(otuMetadata.getData(),
+		 otuMetadata.getColumnNames());
+		 TableSorter sorter = new TableSorter(model, otuMetadataTable.getTableHeader());
+		 otuMetadataTable.setModel(sorter);
+         
+/*         frame.consoleWindow.update("Loaded OTU metadata.");*/
+         resetOtuMenus();
+         dataPane.setSelectedIndex(1);
+    }
+    
+    public void setOtuSampleMap(ArrayList<String> data) {
+         otuSampleMap = new DataTable(data);
+         
+         SparseTableModel model = new SparseTableModel(otuSampleMap.getData(),
+		 otuSampleMap.getColumnNames());
+		 TableSorter sorter = new TableSorter(model, otuSampleMapTable.getTableHeader());
+		 otuSampleMapTable.setModel(sorter);
+		 
+/*         consoleWindow.update("Loaded OTU to sample map");*/
+         dataPane.setSelectedIndex(2);
+    }
+    
+    public void setSampleMetadata(ArrayList<String> data) {
+        sampleMetadata = new DataTable(data);
+         
+         SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
+		 sampleMetadata.getColumnNames());
+		 TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
+		 sampleMetadataTable.setModel(sorter);
+		 
+/*         frame.consoleWindow.update("Loaded sample metadata.");*/
+         resetSampleMenus();
+         dataPane.setSelectedIndex(3);
+    }
      
      public void resetOtuMenus() {
          for(TreeWindow w : treeWindows)
          {
               w.resetLineWidthOtuMenu();
               w.resetCollapseByMenu();
-              w.colorBy.resetColorByOtuMenu();
+              w.branchMenu.colorBy.resetColorByOtuMenu();
+/*              w.nodeMenu.resetColorByOtuMenu();*/
           }
      }
      
@@ -282,7 +321,8 @@ public class MainFrame extends JFrame {
           {
                w.resetLineWidthSampleMenu();
                w.resetCollapseByMenu();
-               w.colorBy.resetColorBySampleMenu();
+               w.branchMenu.colorBy.resetColorBySampleMenu();
+/*               w.nodeMenu.resetColorBySampleMenu();*/
                w.resetLineWidthSampleMenu();
            }
       }
