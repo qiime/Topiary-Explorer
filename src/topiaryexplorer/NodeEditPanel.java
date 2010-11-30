@@ -24,6 +24,8 @@ public final class NodeEditPanel extends JPanel{
     TreeVis vis = null;
     JLabel wedgeLabel = new JLabel("Customize Nodes:");
     
+    JCheckBox pieChartCheckBox = new JCheckBox("Pie Chart");
+    JCheckBox nodeLabelCheckBox = new JCheckBox("Labels");
     JPanel labelPanel = new JPanel();
     CollapsablePanel labelPanelCP = new CollapsablePanel("Labels",labelPanel, false, true);
     
@@ -42,7 +44,6 @@ public final class NodeEditPanel extends JPanel{
     JColorChooser colorChooser = new JColorChooser();
     
     JPanel holder = new JPanel();
-    JCheckBox nodeLabelCheckBox = new JCheckBox("Labels");
     
     JLabel colorByLabel = new JLabel("Color By:");
     JButton colorByButton = new JButton("Color By...");
@@ -111,7 +112,7 @@ public final class NodeEditPanel extends JPanel{
                 Color newColor = JColorChooser.showDialog(
                                      NodeEditPanel.this,
                                      "Choose Node Label Color",
-                                     colorButton.getBackground());
+                                     colorLabel.getBackground());
                  if(newColor != null)
                  {
                      colorLabel.setBackground(newColor);

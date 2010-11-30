@@ -20,21 +20,21 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     JMenuBar topMenu = new JMenuBar();
     JMenu treeMenu = new JMenu("Options");
     JMenu nodeMenu = new JMenu("Node");
-    JMenu rotateMenu = new JMenu("Rotate");
+   /* JMenu rotateMenu = new JMenu("Rotate");*/
     
     JMenu collapseByMenu = new JMenu("Collapse by");
     ColorByMenu colorBy;// = new ColorByMenu();
     BranchMenu branchMenu;
-    TreeElementMenu nodesMenu;
+/*    TreeElementMenu nodesMenu;*/
     JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels");
     JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");
     
-    JRadioButtonMenuItem rectangularradiobutton = new JRadioButtonMenuItem("Rectangular");
+/*    JRadioButtonMenuItem rectangularradiobutton = new JRadioButtonMenuItem("Rectangular");
     JRadioButtonMenuItem triangularradiobutton = new JRadioButtonMenuItem("Triangular");
     JRadioButtonMenuItem radialradiobutton = new JRadioButtonMenuItem("Radial");
-    JRadioButtonMenuItem polarradiobutton = new JRadioButtonMenuItem("Polar");
+    JRadioButtonMenuItem polarradiobutton = new JRadioButtonMenuItem("Polar");*/
     
-    JSlider rotateSlider = new JSlider(0,359,0);
+/*    JSlider rotateSlider = new JSlider(0,359,0);*/
     
     ButtonGroup treeLayoutGroup = new ButtonGroup();
     
@@ -283,82 +283,82 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          item = new JMenuItem("Recenter");
          item.addActionListener(this);
          treeMenu.add(item);
-         item = new JMenuItem("Mirror left/right");
-         item.addActionListener(this);
-         treeMenu.add(item);
-         item = new JMenuItem("Mirror up/down");
-         item.addActionListener(this);
-         treeMenu.add(item);
+         /*item = new JMenuItem("Mirror left/right");
+                  item.addActionListener(this);
+                  treeMenu.add(item);
+                  item = new JMenuItem("Mirror up/down");
+                  item.addActionListener(this);
+                  treeMenu.add(item);*/
          resetCollapseByMenu();
          treeMenu.add(collapseByMenu);
 
-         JMenu layout = new JMenu("Layout");
-         rectangularradiobutton.setSelected(true);
-         rectangularradiobutton.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent e) {
-                 tree.setTreeLayout("Rectangular");
-                 rotateMenu.setEnabled(false);
-             }
-         });
-         treeLayoutGroup.add(rectangularradiobutton);
-         layout.add(rectangularradiobutton);
+         /*JMenu layout = new JMenu("Layout");
+                  rectangularradiobutton.setSelected(true);
+                  rectangularradiobutton.addActionListener(new ActionListener() {
+                      public void actionPerformed(ActionEvent e) {
+                          tree.setTreeLayout("Rectangular");
+                          rotateMenu.setEnabled(false);
+                      }
+                  });
+                  treeLayoutGroup.add(rectangularradiobutton);
+                  layout.add(rectangularradiobutton);
 
-         triangularradiobutton.setSelected(true);
-         triangularradiobutton.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent e) {
-                 tree.setTreeLayout("Triangular");
-                 rotateMenu.setEnabled(false);
-             }
-         });
-         treeLayoutGroup.add(triangularradiobutton);
-         layout.add(triangularradiobutton);
-
-
-         radialradiobutton = new JRadioButtonMenuItem("Radial");
-         radialradiobutton.setSelected(true);
-         radialradiobutton.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent e) {
-                 tree.setTreeLayout("Radial");
-                 rotateMenu.setEnabled(true);
-             }
-         });
-         treeLayoutGroup.add(radialradiobutton);
-         layout.add(radialradiobutton);
-
-         polarradiobutton.setSelected(true);
-         polarradiobutton.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent e) {
-                 tree.setTreeLayout("Polar");
-                 rotateMenu.setEnabled(true);
-             }
-         });
-         treeLayoutGroup.add(polarradiobutton);
-         layout.add(polarradiobutton);
+                  triangularradiobutton.setSelected(true);
+                  triangularradiobutton.addActionListener(new ActionListener() {
+                      public void actionPerformed(ActionEvent e) {
+                          tree.setTreeLayout("Triangular");
+                          rotateMenu.setEnabled(false);
+                      }
+                  });
+                  treeLayoutGroup.add(triangularradiobutton);
+                  layout.add(triangularradiobutton);
 
 
-         treeMenu.add(layout);
+                  radialradiobutton = new JRadioButtonMenuItem("Radial");
+                  radialradiobutton.setSelected(true);
+                  radialradiobutton.addActionListener(new ActionListener() {
+                      public void actionPerformed(ActionEvent e) {
+                          tree.setTreeLayout("Radial");
+                          rotateMenu.setEnabled(true);
+                      }
+                  });
+                  treeLayoutGroup.add(radialradiobutton);
+                  layout.add(radialradiobutton);
 
-         rotateSlider.addChangeListener(new ChangeListener() {
-         	public void stateChanged(ChangeEvent e) {
-         		if (rotateSlider.getValueIsAdjusting()) {
-         			syncTreeWithRotateSlider();
-         		}
-         	}
+                  polarradiobutton.setSelected(true);
+                  polarradiobutton.addActionListener(new ActionListener() {
+                      public void actionPerformed(ActionEvent e) {
+                          tree.setTreeLayout("Polar");
+                          rotateMenu.setEnabled(true);
+                      }
+                  });
+                  treeLayoutGroup.add(polarradiobutton);
+                  layout.add(polarradiobutton);
+
+
+                  treeMenu.add(layout);*/
+
+/*         rotateSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                if (rotateSlider.getValueIsAdjusting()) {
+                    syncTreeWithRotateSlider();
+                }
+            }
          });
          rotateMenu.add(rotateSlider);
-         rotateMenu.setEnabled(false);
-         treeMenu.add(rotateMenu);
+         rotateMenu.setEnabled(false);*/
+/*         treeMenu.add(rotateMenu);*/
 
 
-         item = new JMenuItem("Background Color...");        
-         item.addActionListener(new ActionListener() {        
-             public void actionPerformed(ActionEvent e) {
-                 JColorChooser colorChooser = new JColorChooser();
-                 Color c = colorChooser.showDialog(frame, "Pick a Color", tree.getBackgroundColor());
-                 tree.setBackgroundColor(c);
-             }
-         });
-         treeMenu.add(item);
+         /*item = new JMenuItem("Background Color...");        
+                  item.addActionListener(new ActionListener() {        
+                      public void actionPerformed(ActionEvent e) {
+                          JColorChooser colorChooser = new JColorChooser();
+                          Color c = colorChooser.showDialog(frame, "Pick a Color", tree.getBackgroundColor());
+                          tree.setBackgroundColor(c);
+                      }
+                  });
+                  treeMenu.add(item);*/
 
          externalLabelsMenuItem.setSelected(false);
          externalLabelsMenuItem.addActionListener(this);
@@ -367,7 +367,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          treeMenu.add(externalLabelsMenuItem);
          treeMenu.add(internalLabelsMenuItem);
 	     topMenu.add(treeMenu);
-	     topMenu.add(nodeMenu);
+/*       topMenu.add(nodeMenu);*/
 	     topMenu.add(branchMenu);
 	     
 	     setJMenuBar(topMenu);
@@ -1057,12 +1057,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          /**
          *
          */
-         public void syncTreeWithRotateSlider() {
-         	if (tree.getTree() == null) return;
-         	double value = rotateSlider.getValue();
-         	tree.setRotate(value);
-         	tree.redraw();
-         }
+         
          
          public void resetLineWidthOtuMenu() {
             branchMenu.resetLineWidthOtuMenu();

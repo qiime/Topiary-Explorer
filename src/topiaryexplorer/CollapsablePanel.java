@@ -19,6 +19,10 @@ class CollapsablePanel extends JPanel {
 	private boolean nested;
 	JPanel contentPanel_;
 	HeaderPanel headerPanel_;
+	private Color selectedColor = new Color(200,255,200);
+	private Color hoverColor = new Color(100,255,100);
+	private Color unselectedColor = new Color(200,220,200);
+	private Color currentColor = new Color(200,220,200);
 
 	private class HeaderPanel extends JPanel implements MouseListener {
 		String text_;
@@ -40,8 +44,12 @@ class CollapsablePanel extends JPanel {
                 
 			int w = getWidth();
 			int h = getHeight();
-            
-            setBackground(new Color(200,255,200));
+            if(selected)
+                currentColor = selectedColor;
+            else
+                currentColor = unselectedColor;
+                
+            setBackground(currentColor);
             
             try {
                 open = ImageIO.read(new File("./src/images/down_mini.gif"));
@@ -77,11 +85,11 @@ class CollapsablePanel extends JPanel {
 		}
 
 		public void mouseEntered(MouseEvent e) {
-		    headerPanel_.setBackground(new Color(100,255,100));
+		    headerPanel_.setBackground(hoverColor);
 		}
 
 		public void mouseExited(MouseEvent e) {
-		    headerPanel_.setBackground(new Color(200,255,200));
+		    headerPanel_.setBackground(currentColor);
 		}
 
 		public void mousePressed(MouseEvent e) {
@@ -142,7 +150,12 @@ class CollapsablePanel extends JPanel {
 
 	public void toggleSelection() {
 		selected = !selected;
-
+        
+        if(selected)
+            currentColor = selectedColor;
+        else
+            currentColor = unselectedColor;
+        
 		if (contentPanel_.isShowing())
 			contentPanel_.setVisible(false);
 		else
