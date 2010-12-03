@@ -35,7 +35,8 @@ public class MainFrame extends JFrame {
 
     //INITIALIZE GUI OBJECTS
     JSplitPane splitPane = null;
-    JPanel colorPanel = new JPanel();
+/*    JPanel colorPanel = new JPanel();*/
+    JTabbedPane colorPane = new JTabbedPane(JTabbedPane.TOP);
     JPanel splitPaneMainPanel = new JPanel();
     JPanel databasePanel = new JPanel();
     JPanel databaseBottomPanel = new JPanel();
@@ -50,12 +51,12 @@ public class MainFrame extends JFrame {
     JScrollPane otuMetadataScrollPane = new JScrollPane();
     JScrollPane otuSampleMapScrollPane = new JScrollPane();
     JScrollPane sampleMetadataScrollPane = new JScrollPane();
-    JScrollPane colorKeyScrollPane = new JScrollPane();  
+    /*JScrollPane colorKeyScrollPane = new JScrollPane();  */
     JTable databaseTable = new JTable(new SparseTableModel());  
     JTable otuMetadataTable = new JTable(new SparseTableModel());
     JTable otuSampleMapTable = new JTable(new SparseTableModel());
     JTable sampleMetadataTable = new JTable(new SparseTableModel());
-    JTable colorKeyTable = new JTable();
+/*    JTable branchColorKeyTable = new JTable();*/
     JButton back = new JButton("<<");
     JButton showData = new JButton("Show Table");
     JButton setAs = new JButton("Set As...");
@@ -68,7 +69,7 @@ public class MainFrame extends JFrame {
     WindowViewToolbar windowToolbar = new WindowViewToolbar(this);
     
     ArrayList<TreeWindow> treeWindows = new ArrayList<TreeWindow>();
-    TreeWindow treeWindow = new TreeWindow(this);
+/*    TreeWindow treeWindow = null;*/
     PcoaWindow pcoaWindow = new PcoaWindow(this);
     ConsoleWindow consoleWindow = new ConsoleWindow(this);
     
@@ -81,10 +82,13 @@ public class MainFrame extends JFrame {
     DataTable otuSampleMap = new DataTable();
     DataTable database = new DataTable();
 
-    //Holds the current coloring information
-    TreeMap<Object, Color> colorMap = new TreeMap<Object, Color>();
+
+    ColorPanel branchColorPanel;// = null;//new ColorPanel(this);
+    ColorPanel labelColorPanel;// = null;
+    /*//Holds the current coloring information
+        TreeMap<Object, Color> branchColorMap = new TreeMap<Object, Color>();
+        TreeMap<Object, Color> nodebranchColorMap = new TreeMap<Object, Color>();*/
     DataTable currTable = null;
-    int colorColumnIndex = -1;
     int lineWidthColumnIndex = -1;
 
     //Holds the currently-clicked node
@@ -112,25 +116,22 @@ public class MainFrame extends JFrame {
         //set up the menu bar
         setJMenuBar(mainMenu);
 
-
         //set up the color panel
-        colorPanel.setLayout(new BoxLayout(colorPanel, BoxLayout.PAGE_AXIS));
-        JLabel label = new JLabel("Color Key");
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        colorPanel.add(label, BorderLayout.NORTH);
-        colorKeyTable.setModel(new ColorTableModel());
-        colorKeyScrollPane = new JScrollPane(colorKeyTable);
-        colorKeyScrollPane.setPreferredSize(new Dimension(200,600));
-        colorPanel.add(colorKeyScrollPane);
         interpolateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                interpolateColors();
+                ((ColorPanel)colorPane.getSelectedComponent()).interpolateColors();
             }
         });
         interpolateButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        colorPanel.add(interpolateButton);
-        colorPanel.setPreferredSize(new Dimension(200,600));
-        colorBar.add(colorPanel);
+        
+        colorPane.setPreferredSize(new Dimension(220,600));
+        branchColorPanel = new ColorPanel(this, 0);
+        labelColorPanel = new ColorPanel(this, 1);
+        colorPane.add("Branches", branchColorPanel);
+        colorPane.add("Labels", labelColorPanel);
+        colorBar.add(new JLabel("Color Key"));
+        colorBar.add(colorPane);
+        colorBar.add(interpolateButton);
         
         databasePanel.setLayout(new BorderLayout());
         databaseTopPanel.setLayout(new GridLayout(1,5));
@@ -312,7 +313,7 @@ public class MainFrame extends JFrame {
               w.resetLineWidthOtuMenu();
               w.resetCollapseByMenu();
               w.branchMenu.colorBy.resetColorByOtuMenu();
-/*              w.nodeMenu.resetColorByOtuMenu();*/
+              w.treeEditToolbar.nodeEditPanel.colorByMenu.resetColorByOtuMenu();
           }
      }
      
@@ -322,7 +323,7 @@ public class MainFrame extends JFrame {
                w.resetLineWidthSampleMenu();
                w.resetCollapseByMenu();
                w.branchMenu.colorBy.resetColorBySampleMenu();
-/*               w.nodeMenu.resetColorBySampleMenu();*/
+               w.treeEditToolbar.nodeEditPanel.colorByMenu.resetColorBySampleMenu();
                w.resetLineWidthSampleMenu();
            }
       }
@@ -433,65 +434,6 @@ public class MainFrame extends JFrame {
          }
      }
      
-
-     /**
-      * Syncs the colorKeyTable with colorMap
-      */
-     public void syncColorKeyTable() {
-         //data is: name, color, selected
-         ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
-         for (Object key : colorMap.keySet()) {
-             ArrayList<Object> newRow = new ArrayList<Object>();
-             newRow.add(key);
-             newRow.add(colorMap.get(key));
-             newRow.add(new Boolean(false));
-             data.add(newRow);
-         }
-
-         ArrayList<String> colNames = new ArrayList<String>();
-         colNames.add("Category");
-         colNames.add("Color");
-         colNames.add("");
-
-         colorKeyTable.setModel(new ColorTableModel(data, colNames));
-         colorKeyTable.setDefaultRenderer(Color.class, new ColorRenderer(true));
-         colorKeyTable.setDefaultEditor(Color.class, new ColorEditor());
-         colorKeyTable.setSelectionBackground(new Color(255,255,255));
-         colorKeyTable.setSelectionForeground(new Color(0,0,0));
-         colorKeyTable.getColumnModel().getColumn(0).setPreferredWidth(150);
-         colorKeyTable.getColumnModel().getColumn(1).setPreferredWidth(20);
-         colorKeyTable.getColumnModel().getColumn(2).setPreferredWidth(20);
-         colorKeyTable.setDragEnabled(true);
-
-         colorKeyTable.getModel().addTableModelListener(new TableModelListener() {
-             public void tableChanged(TableModelEvent e) {
-                 int row = e.getFirstRow();
-                 int column = e.getColumn();
-                 ColorTableModel model = (ColorTableModel)e.getSource();
-                 Object value = model.getValueAt(row, 0);
-                 Object data = model.getValueAt(row, column);
-                 if (column == 2) {
-                     model.setValueAt(data, row, column);
-                 } else if (column == 1) {
-                     //update the color map
-                     colorMap.remove(value);
-                     colorMap.put(value, (Color)data);
-                     recolor();
-                 }
-             }
-         });
-     }
-
-     /**
-      * Syncs the colorMap with the colorKeyTable
-      */
-     public void syncColorMap() {
-        colorMap.clear();
-        for (ArrayList<Object> row : ((ColorTableModel)colorKeyTable.getModel()).getData()) {
-            colorMap.put(row.get(0), (Color)row.get(1));
-        }
-     }
-     
      public void resetLineWidths() {
          if (currTable != null && currTable == otuMetadata) {
              for(int i = 0; i < treeWindows.size(); i++)
@@ -504,67 +446,33 @@ public class MainFrame extends JFrame {
          }     
      }
 
-     public void recolor() {
+     public void recolorBranches() {
          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
          if (currTable != null && currTable == otuMetadata) {
              for(int i = 0; i < treeWindows.size(); i++)
-                  treeWindows.get(i).recolorTreeByOtu();
-             pcoaWindow.recolorPcoaByOtu();
+                  treeWindows.get(i).recolorBranchesByOtu();
          } else if (currTable != null && currTable == sampleMetadata) {
              for(int i = 0; i < treeWindows.size(); i++)
-                  treeWindows.get(i).recolorTreeBySample();
-             pcoaWindow.recolorPcoaBySample();
+                  treeWindows.get(i).recolorBranchesBySample();
          } else {
              //it's null; don't do anything
          }
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
-     public void interpolateColors() {
-         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		ArrayList<ArrayList<Object>> data = ((ColorTableModel)colorKeyTable.getModel()).getData();
-
-		int first = -1;
-		int second = -1;
-		//find the first color
-		for (int i = 0; i < data.size(); i++) {
-			if ((Boolean) data.get(i).get(2) == true) {
-				second = i;
-				break;
-			}
-		}
-		//now, keep moving down the list and interpolating until we reach the end
-		while (true) {
-			//switch the second color to the first
-			first = second;
-			second = -1;
-			//find the next color
-			for (int i = first+1; i < data.size(); i++) {
-				if ((Boolean) data.get(i).get(2) == true) {
-				second = i;
-				break;
-				}
-			}
-			//have we reached the end?
-			if (second == -1) {
-				((ColorTableModel) colorKeyTable.getModel()).setData(data);
-                colorKeyTable.repaint();
-                syncColorMap();
-                recolor();
-                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                return;
-			}
-			//interpolate
-			Color firstColor = (Color) data.get(first).get(1);
-			Color secondColor = (Color) data.get(second).get(1);
-			for (int i = first+1; i < second; i++) {
-				//here's the interpolation
-				float frac = (i-first)*(1.0f/(second-first));
-				Color c = new Color((1-frac)*firstColor.getRed()/255.0f + frac*secondColor.getRed()/255.0f,
-					(1-frac)*firstColor.getGreen()/255.0f + frac*secondColor.getGreen()/255.0f,
-					(1-frac)*firstColor.getBlue()/255.0f + frac*secondColor.getBlue()/255.0f);
-                data.get(i).set(1, c);
-			}
-		}
-     }
+     public void recolorLabels() {
+          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+          if (currTable != null && currTable == otuMetadata) {
+              for(int i = 0; i < treeWindows.size(); i++)
+                   treeWindows.get(i).recolorLabelsByOtu();
+              pcoaWindow.recolorPcoaByOtu();
+          } else if (currTable != null && currTable == sampleMetadata) {
+              for(int i = 0; i < treeWindows.size(); i++)
+                   treeWindows.get(i).recolorLabelsBySample();
+              pcoaWindow.recolorPcoaBySample();
+          } else {
+              //it's null; don't do anything
+          }
+          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+      }
 }

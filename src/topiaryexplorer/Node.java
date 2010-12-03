@@ -41,12 +41,17 @@ public class Node {
   private double minimumRXOffset = 0;
   
   //parallel arrays of colors and the weight to be drawn with each
-  private boolean colored = true;
-  HashMap colormap = new HashMap();
+  private boolean branchColored = true;
+  HashMap branchColorMap = new HashMap();
   private Color branchColor = null;
+  private ArrayList<Color> groupBranchColor = new ArrayList<Color>();
+  private ArrayList<Double> groupBranchWeight = new ArrayList<Double>();
+  
+  private boolean labelColored = true;
+  HashMap labelColorMap = new HashMap();
   private Color labelColor = null;
-  private ArrayList<Color> groupColor = new ArrayList<Color>();
-  private ArrayList<Double> groupWeight = new ArrayList<Double>();
+  private ArrayList<Color> groupLabelColor = new ArrayList<Color>();
+  private ArrayList<Double> groupLabelWeight = new ArrayList<Double>();
   
   private double lineWidth = 1;
 
@@ -75,8 +80,10 @@ public class Node {
   public boolean getDrawPie() { return drawPie; }
   public void setDrawLabel(boolean b) { drawLabel = b; }
   public boolean getDrawLabel() { return drawLabel; }
-  public ArrayList<Color> getGroupColor() { return groupColor; }
-  public ArrayList<Double> getGroupFraction() { return groupWeight; }
+  public ArrayList<Color> getGroupBranchColor() { return groupBranchColor; }
+  public ArrayList<Double> getGroupBranchFraction() { return groupBranchWeight; }
+  public ArrayList<Color> getGroupLabelColor() { return groupLabelColor; }
+  public ArrayList<Double> getGroupLabelFraction() { return groupLabelWeight; }
   public boolean isCollapsed() { return collapsed || sliderCollapsed; }
   public void setSliderCollapsed(boolean cond) { if(!locked) sliderCollapsed = cond; }
   public void setCollapsed(boolean cond) { if(!locked && parent != null) collapsed = cond; }
@@ -210,11 +217,11 @@ public class Node {
   }
 
   /**
-   * Based on the groupWeight and groupColor field, return an overall blended color
+   * Based on the groupBranchWeight and groupBranchColor field, return an overall blended color
    */
  public Color getBranchColor(boolean majority) {        
      //if there's no color, use black
-     if (!colored) {
+     if (!branchColored) {
          return new Color(0,0,0);
      }
      double r,g,b;
@@ -224,28 +231,28 @@ public class Node {
      {
          double max = -100;
          Color majorityColor = new Color(0);
-         if(groupColor.size() == 1)
-            return groupColor.get(0);
+         if(groupBranchColor.size() == 1)
+            return groupBranchColor.get(0);
 
-         for(int i = 0; i < groupColor.size(); i++)
+         for(int i = 0; i < groupBranchColor.size(); i++)
          {
-             if(groupWeight.get(i) > max)
+             if(groupBranchWeight.get(i) > max)
              {
-                 majorityColor = groupColor.get(i);
-                 max = groupWeight.get(i);
+                 majorityColor = groupBranchColor.get(i);
+                 max = groupBranchWeight.get(i);
              }
          }
          branchColor = majorityColor;
      }
      else {
         double total = 0;
-        for (Double weight : groupWeight) {
+        for (Double weight : groupBranchWeight) {
           total = total + weight;
         }
-        for (int i = 0; i < groupWeight.size(); i++) {
-          r += groupWeight.get(i)/total*groupColor.get(i).getRed();
-          g += groupWeight.get(i)/total*groupColor.get(i).getGreen();
-          b += groupWeight.get(i)/total*groupColor.get(i).getBlue();
+        for (int i = 0; i < groupBranchWeight.size(); i++) {
+          r += groupBranchWeight.get(i)/total*groupBranchColor.get(i).getRed();
+          g += groupBranchWeight.get(i)/total*groupBranchColor.get(i).getGreen();
+          b += groupBranchWeight.get(i)/total*groupBranchColor.get(i).getBlue();
         }
         branchColor = new Color(Math.abs((float)r/255),Math.abs((float)g/255),Math.abs((float)b/255));
     }
@@ -253,21 +260,78 @@ public class Node {
   }
   
   public void noBranchColor() {
-    colored = false;
+    branchColored = false;
   }
 
   public void clearBranchColor() {
     branchColor = null;
-    groupWeight = new ArrayList<Double>();
-    groupColor = new ArrayList<Color>();
+    groupBranchWeight = new ArrayList<Double>();
+    groupBranchColor = new ArrayList<Color>();
   }
 
   public void addBranchColor(Color c, double w) {
-      colored = true;
-      colormap.put(c,w);
-      groupWeight.add(new Double(w));
-      groupColor.add(c);
+      branchColored = true;
+      branchColorMap.put(c,w);
+      groupBranchWeight.add(new Double(w));
+      groupBranchColor.add(c);
   }
+  
+  public Color getLabelColor(boolean majority) {        
+       //if there's no color, use black
+       if (!labelColored) {
+           return new Color(0,0,0);
+       }
+       double r,g,b;
+       r = g = b = 0;
+
+       if(majority)
+       {
+           double max = -100;
+           Color majorityColor = new Color(0);
+           if(groupLabelColor.size() == 1)
+              return groupLabelColor.get(0);
+
+           for(int i = 0; i < groupLabelColor.size(); i++)
+           {
+               if(groupLabelWeight.get(i) > max)
+               {
+                   majorityColor = groupLabelColor.get(i);
+                   max = groupLabelWeight.get(i);
+               }
+           }
+           labelColor = majorityColor;
+       }
+       else {
+          double total = 0;
+          for (Double weight : groupLabelWeight) {
+            total = total + weight;
+          }
+          for (int i = 0; i < groupBranchWeight.size(); i++) {
+            r += groupLabelWeight.get(i)/total*groupLabelColor.get(i).getRed();
+            g += groupLabelWeight.get(i)/total*groupLabelColor.get(i).getGreen();
+            b += groupLabelWeight.get(i)/total*groupLabelColor.get(i).getBlue();
+          }
+          labelColor = new Color(Math.abs((float)r/255),Math.abs((float)g/255),Math.abs((float)b/255));
+      }
+      return labelColor;
+    }
+
+    public void noLabelColor() {
+      labelColored = false;
+    }
+
+    public void clearLabelColor() {
+      labelColor = null;
+      groupLabelWeight = new ArrayList<Double>();
+      groupLabelColor = new ArrayList<Color>();
+    }
+
+    public void addLabelColor(Color c, double w) {
+        labelColored = true;
+        labelColorMap.put(c,w);
+        groupLabelWeight.add(new Double(w));
+        groupLabelColor.add(c);
+    }
   
   /**
    * Returns a list of all the leaves of the tree
@@ -450,23 +514,43 @@ public class Node {
    * this recursively works over the entire tree.
    */
   public void updateBranchColorFromChildren() {
-    if (isLeaf()) { aggregateData(); return; }
+    if (isLeaf()) { aggregateBranchData(); return; }
 
     //make the lists empty
     branchColor = null;
-    groupColor = new ArrayList<Color>();
-    groupWeight = new ArrayList<Double>();
+    groupBranchColor = new ArrayList<Color>();
+    groupBranchWeight = new ArrayList<Double>();
     for (int i=0; i < nodes.size(); i++) {
       //recursion
       nodes.get(i).updateBranchColorFromChildren();
 
       //get the overall color for this node
-      for (int j = 0; j < nodes.get(i).groupColor.size(); j++) {
-        groupColor.add(nodes.get(i).groupColor.get(j));
-        groupWeight.add(nodes.get(i).groupWeight.get(j));
+      for (int j = 0; j < nodes.get(i).groupBranchColor.size(); j++) {
+        groupBranchColor.add(nodes.get(i).groupBranchColor.get(j));
+        groupBranchWeight.add(nodes.get(i).groupBranchWeight.get(j));
       }
     }
-    aggregateData();
+    aggregateBranchData();
+  }
+  
+  public void updateLabelColorFromChildren() {
+    if (isLeaf()) { aggregateLabelData(); return; }
+
+    //make the lists empty
+    labelColor = null;
+    groupLabelColor = new ArrayList<Color>();
+    groupLabelWeight = new ArrayList<Double>();
+    for (int i=0; i < nodes.size(); i++) {
+      //recursion
+      nodes.get(i).updateLabelColorFromChildren();
+
+      //get the overall color for this node
+      for (int j = 0; j < nodes.get(i).groupLabelColor.size(); j++) {
+        groupLabelColor.add(nodes.get(i).groupLabelColor.get(j));
+        groupLabelWeight.add(nodes.get(i).groupLabelWeight.get(j));
+      }
+    }
+    aggregateLabelData();
   }
   
   public double getLineWidthF() {
@@ -502,21 +586,39 @@ public class Node {
   /**
    * Put all of the same colors together 
    */
-  public void aggregateData() {
-    ArrayList<Color> newGroupColor = new ArrayList<Color>();
-    ArrayList<Double> newGroupWeight = new ArrayList<Double>();
+  public void aggregateBranchData() {
+    ArrayList<Color> newgroupBranchColor = new ArrayList<Color>();
+    ArrayList<Double> newgroupBranchWeight = new ArrayList<Double>();
 
-    for (int i = 0; i < groupColor.size(); i++) {
-      if (newGroupColor.contains(groupColor.get(i))) {
-          int index = newGroupColor.indexOf(groupColor.get(i));
-          newGroupWeight.set(index, newGroupWeight.get(index) + groupWeight.get(i));
+    for (int i = 0; i < groupBranchColor.size(); i++) {
+      if (newgroupBranchColor.contains(groupBranchColor.get(i))) {
+          int index = newgroupBranchColor.indexOf(groupBranchColor.get(i));
+          newgroupBranchWeight.set(index, newgroupBranchWeight.get(index) + groupBranchWeight.get(i));
       } else {
-        newGroupColor.add(groupColor.get(i));
-        newGroupWeight.add(groupWeight.get(i));
+        newgroupBranchColor.add(groupBranchColor.get(i));
+        newgroupBranchWeight.add(groupBranchWeight.get(i));
       }
     }
 
-    groupWeight = newGroupWeight;
-    groupColor = newGroupColor;
+    groupBranchWeight = newgroupBranchWeight;
+    groupBranchColor = newgroupBranchColor;
   }
+  
+  public void aggregateLabelData() {
+        ArrayList<Color> newgroupLabelColor = new ArrayList<Color>();
+        ArrayList<Double> newgroupLabelWeight = new ArrayList<Double>();
+
+        for (int i = 0; i < groupLabelColor.size(); i++) {
+          if (newgroupLabelColor.contains(groupLabelColor.get(i))) {
+              int index = newgroupLabelColor.indexOf(groupLabelColor.get(i));
+              newgroupLabelWeight.set(index, newgroupLabelWeight.get(index) + groupLabelWeight.get(i));
+          } else {
+            newgroupLabelColor.add(groupLabelColor.get(i));
+            newgroupLabelWeight.add(groupLabelWeight.get(i));
+          }
+        }
+
+        groupLabelWeight = newgroupLabelWeight;
+        groupLabelColor = newgroupLabelColor;
+     }
 }

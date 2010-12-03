@@ -13,12 +13,13 @@ import java.io.*;
 import javax.jnlp.*;
 
 public class TopiaryWindow extends JFrame {
-    ColorByMenu colorBy;// = new ColorByMenu();
+    ColorByMenu colorBranchesBy;// = new ColorByMenu();
+    ColorByMenu colorLabelsBy;
     MainFrame frame = null;
     TreeWindow tWindow = null;
 
     public TopiaryWindow(MainFrame _frame) {
-        colorBy = new ColorByMenu(frame,this);
+        super();
     }
 
 }

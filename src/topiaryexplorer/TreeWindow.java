@@ -23,7 +23,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
    /* JMenu rotateMenu = new JMenu("Rotate");*/
     
     JMenu collapseByMenu = new JMenu("Collapse by");
-    ColorByMenu colorBy;// = new ColorByMenu();
+/*    ColorByMenu colorBy;// = new ColorByMenu();*/
     BranchMenu branchMenu;
 /*    TreeElementMenu nodesMenu;*/
     JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels");
@@ -79,6 +79,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          }
          catch(IOException e)
          {}
+         
+         colorBranchesBy = new ColorByMenu(frame,this,frame.branchColorPanel,0);
+         colorLabelsBy = new ColorByMenu(frame,this,frame.labelColorPanel,1);
          
          branchMenu = new BranchMenu(frame, this, "Branches");
 	     tree.addKeyListener(this);
@@ -619,7 +622,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	 /**
      * Recolors the tree based on selected OTU metadata field
      */
-	public void recolorTreeByOtu() {
+	public void recolorBranchesByOtu() {
 	    treeEditToolbar.setStatus("Coloring tree...");
 	    this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	    ArrayList<Node> ns = tree.getTree().getLeaves();
@@ -634,10 +637,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 /*                   frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.");*/
                    continue;
                }
-               Object category = frame.otuMetadata.getValueAt(rowIndex, frame.colorColumnIndex);
+               Object category = frame.otuMetadata.getValueAt(rowIndex, frame.branchColorPanel.getColorColumnIndex());
                if (category == null) continue;
                //get the color for this category
-               Color c = frame.colorMap.get(category);
+               Color c = frame.branchColorPanel.getColorMap().get(category);
                if (c == null) {
                    JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
 /*                   frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());*/
@@ -657,7 +660,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     /**
     * Recolors tree by selected sample metadata
     */
-    public void recolorTreeBySample() {
+    public void recolorBranchesBySample() {
         treeEditToolbar.setStatus("Coloring tree...");
         ArrayList<Node> ns = tree.getTree().getLeaves();
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));        
@@ -694,9 +697,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          }
                          
                          Object color = null;
-                         color = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.colorColumnIndex);                                                          
+                         color = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.branchColorPanel.getColorColumnIndex());                                                          
                          if (color == null) continue;
-                         n.addBranchColor(frame.colorMap.get(color), weight);
+                         n.addBranchColor(frame.branchColorPanel.getColorMap().get(color), weight);
                      }
              }
 
@@ -706,6 +709,94 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          treeEditToolbar.setStatus("Done coloring tree.");
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
+     
+     	public void recolorLabelsByOtu() {
+     	    treeEditToolbar.setStatus("Coloring tree...");
+     	    this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+     	    ArrayList<Node> ns = tree.getTree().getLeaves();
+            //loop over each node
+            for (Node n : ns){
+                    //get the node's name
+                    String nodeName = n.getName();
+                    //get the row of the OTU metadata table with this name
+                    int rowIndex = frame.otuMetadata.getRowNames().indexOf(nodeName);
+                    if (rowIndex == -1) {
+     /*                   JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);*/
+     /*                   frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.");*/
+                        continue;
+                    }
+                    Object category = frame.otuMetadata.getValueAt(rowIndex, frame.labelColorPanel.getColorColumnIndex());
+                    if (category == null) continue;
+                    //get the color for this category
+                    Color c = frame.labelColorPanel.getColorMap().get(category);
+                    if (c == null) {
+                        JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+     /*                   frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());*/
+                        continue;
+                    }
+                    //set the node to this color
+                    n.clearLabelColor();
+                    n.addLabelColor(c, 1.0);
+
+            }
+            tree.getTree().updateLabelColorFromChildren();
+            frame.repaint();
+            treeEditToolbar.setStatus("Done coloring tree.");
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+         }
+
+         /**
+         * Recolors tree by selected sample metadata
+         */
+         public void recolorLabelsBySample() {
+             treeEditToolbar.setStatus("Coloring tree...");
+             ArrayList<Node> ns = tree.getTree().getLeaves();
+             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));        
+                 //loop over each node
+                  for (Node n : ns) {
+                      //get the node's name
+
+                          String nodeName = n.getName();
+                          //get the row of the OTU-Sample map with this name
+                          int rowIndex = frame.otuSampleMap.getRowNames().indexOf(nodeName);
+
+                          if (rowIndex == -1) {
+                             continue;
+                          }
+                          //get the row
+     /*                     ArrayList<Object> row = frame.otuSampleMap.getRow(rowIndex);*/
+                          HashMap row = frame.otuSampleMap.getRow(rowIndex);
+                          n.clearLabelColor();
+                         //for each non-zero column value (starting after the ID column)
+                          for (Object i : row.keySet()) {
+                              Object value = row.get(i);
+                              //if it's not an Integer, skip it
+                              if (!(value instanceof Integer)) continue;
+                              Integer weight = (Integer)value;
+                              if (weight == 0) continue;
+
+                              String sampleID = frame.otuSampleMap.getColumnName(((Number)i).intValue());
+
+                              //find the row that has this sampleID                         
+                              int sampleRowIndex = frame.sampleMetadata.getRowNames().indexOf(sampleID);
+
+                              if (sampleRowIndex == -1) {
+                                 continue;
+                              }
+
+                              Object color = null;
+                              color = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.labelColorPanel.getColorColumnIndex());                                                          
+                              if (color == null) continue;
+                              n.addLabelColor(frame.labelColorPanel.getColorMap().get(color), weight);
+                          }
+                  }
+
+               tree.getTree().updateLabelColorFromChildren();
+               frame.repaint();
+
+              treeEditToolbar.setStatus("Done coloring tree.");
+              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+          }
      
      
      public void resetLineWidthsByOtu() {
@@ -977,11 +1068,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  	 }
 
       public void removeColor() {
-            //reset the colorMap
-            frame.colorMap = new TreeMap<Object, Color>();
+            //reset the branchColorPanel.getColorMap()
+            frame.branchColorPanel.setColorMap(new TreeMap<Object, Color>());
             //reset the colorKeyTable
-            ((ColorTableModel)frame.colorKeyTable.getModel()).clearTable();
-            frame.colorKeyTable.repaint();
+            ((ColorTableModel)frame.branchColorPanel.getColorKeyTable().getModel()).clearTable();
+            frame.branchColorPanel.getColorKeyTable().repaint();
             //reset the node colors
             for (Node n : tree.getTree().getLeaves()) {
                 n.noBranchColor();
@@ -1003,9 +1094,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
         }
                 
-        public void colorByValue(String value) {
+        public void colorBranchesByValue(String value) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            treeEditToolbar.setStatus("Coloring tree...");
+            treeEditToolbar.setStatus("Coloring branches...");
              //get the column that this category is
              int colIndex = frame.currTable.getColumnNames().indexOf(value);
              if (colIndex == -1) {
@@ -1018,31 +1109,71 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              
              while (column.contains(null)) column.remove(null);
               TreeSet<Object> uniqueVals = new TreeSet<Object>(column);
-              //set up the colorMap
-              frame.colorMap = new TreeMap<Object, Color>();
+              //set up the branchColorPanel.getColorMap()
+              frame.branchColorPanel.setColorMap(new TreeMap<Object, Color>());
               float[] hsbvals = new float[3];
               hsbvals[0] = 0;
               hsbvals[1] = 1;
               hsbvals[2] = 1;
               Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
               for (Object val : uniqueVals) {
-                  frame.colorMap.put(val, new Color(200,200,200));//color);
+                  frame.branchColorPanel.getColorMap().put(val, new Color(200,200,200));//color);
                   hsbvals[0] += (1.0/uniqueVals.size());
                   color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
               }
              
-             frame.syncColorKeyTable();
-
-             frame.colorColumnIndex =  colIndex;
+             frame.branchColorPanel.syncColorKeyTable();
+             frame.branchColorPanel.setColorColumnIndex(colIndex);
              
-             frame.recolor();
+             frame.recolorBranches();
              
             //color tree from leaves
              tree.getTree().updateBranchColorFromChildren();
              
-             treeEditToolbar.setStatus("Tree colored by "+value);
+             treeEditToolbar.setStatus("Branches colored by "+value);
              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
           }
+          
+          
+          public void colorLabelsByValue(String value) {
+              this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+              treeEditToolbar.setStatus("Coloring labels...");
+               //get the column that this category is
+               int colIndex = frame.currTable.getColumnNames().indexOf(value);
+               if (colIndex == -1) {
+                   //JOptionPane.showMessageDialog(null, "ERROR: Column "+value+" not found in table.", "Error", JOptionPane.ERROR_MESSAGE);
+                   return;
+               }
+               ArrayList<Object> column = new ArrayList<Object>();
+               //get all unique values in this column
+                 column = frame.currTable.getColumn(colIndex);
+
+               while (column.contains(null)) column.remove(null);
+                TreeSet<Object> uniqueVals = new TreeSet<Object>(column);
+                //set up the branchColorPanel.getColorMap()
+                frame.labelColorPanel.setColorMap(new TreeMap<Object, Color>());
+                float[] hsbvals = new float[3];
+                hsbvals[0] = 0;
+                hsbvals[1] = 1;
+                hsbvals[2] = 1;
+                Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
+                for (Object val : uniqueVals) {
+                    frame.labelColorPanel.getColorMap().put(val, new Color(200,200,200));//color);
+                    hsbvals[0] += (1.0/uniqueVals.size());
+                    color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
+                }
+
+               frame.labelColorPanel.syncColorKeyTable();
+               frame.labelColorPanel.setColorColumnIndex(colIndex);
+
+               frame.recolorLabels();
+
+              //color tree from leaves
+               tree.getTree().updateLabelColorFromChildren();
+
+               treeEditToolbar.setStatus("Labels colored by "+value);
+               this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
       /**
         * 
         */

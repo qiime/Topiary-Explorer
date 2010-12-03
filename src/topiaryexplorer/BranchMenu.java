@@ -33,7 +33,7 @@ public class BranchMenu extends TreeElementMenu {
      * 
      */
     public BranchMenu(MainFrame _frame, TopiaryWindow _parent, String name) {
-        super(_frame, _parent, name);
+        super(_frame, _parent, name, _frame.branchColorPanel,0);
         item = new JMenuItem("Number of OTUs");
          item.addActionListener(this);
          sortBy.add(item);

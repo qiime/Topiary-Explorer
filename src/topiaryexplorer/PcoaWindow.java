@@ -397,11 +397,11 @@ public class PcoaWindow extends JFrame {
                     frame.consoleWindow.update("ERROR: OTU ID "+otuID+" not found in OTU Metadata Table.");
                    return;
                 }
-                Object val = frame.otuMetadata.getValueAt(otuRowIndex, frame.colorColumnIndex);
+                Object val = frame.otuMetadata.getValueAt(otuRowIndex, frame.labelColorPanel.getColorColumnIndex());
                 if (val == null) {
                     v.groupColor.add(new Color(0,0,0));
                 } else {
-                    v.groupColor.add(frame.colorMap.get(val));
+                    v.groupColor.add(frame.labelColorPanel.getColorMap().get(val));
                 }
                 v.groupFraction.add(new Double(weight.intValue()));
             }
@@ -428,10 +428,10 @@ public class PcoaWindow extends JFrame {
                 //return;
                 continue;
              }
-             Object category = frame.otuMetadata.getValueAt(rowIndex, frame.colorColumnIndex);
+             Object category = frame.otuMetadata.getValueAt(rowIndex, frame.labelColorPanel.getColorColumnIndex());
              if (category == null) continue;
              //get the color for this category
-             Color c = frame.colorMap.get(category);
+             Color c = frame.labelColorPanel.getColorMap().get(category);
              if (c == null) {
                 JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
                 frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());
@@ -471,10 +471,10 @@ public class PcoaWindow extends JFrame {
                 //return;
                 continue;
              }
-             Object category = frame.sampleMetadata.getValueAt(rowIndex, frame.colorColumnIndex);
+             Object category = frame.sampleMetadata.getValueAt(rowIndex, frame.labelColorPanel.getColorColumnIndex());
              if (category == null) continue;
              //get the color for this category
-             Color c = frame.colorMap.get(category);
+             Color c = frame.labelColorPanel.getColorMap().get(category);
              if (c == null) {
                 JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
                 frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());
@@ -494,7 +494,7 @@ public class PcoaWindow extends JFrame {
             //find the row of the otu-sample map with this ID
             int rowIndex = frame.otuSampleMap.getColumn(0).indexOf(otuID);
             //get this row of the table
-            ArrayList<Object> rowData = frame.otuSampleMap.getRow(rowIndex);
+            HashMap rowData = frame.otuSampleMap.getRow(rowIndex);
             //for each non-zero row value
             for (int i = 1; i < rowData.size(); i++) {
                 Object value = rowData.get(i);
@@ -516,11 +516,11 @@ public class PcoaWindow extends JFrame {
                    frame.consoleWindow.update("ERROR: Sample ID "+sampleID+" not found in Sample Metadata Table.");
                    return;
                 }
-                Object val = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.colorColumnIndex);
+                Object val = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.labelColorPanel.getColorColumnIndex());
                 if (val == null) {
                     v.groupColor.add(new Color(0,0,0));
                 } else {
-                    v.groupColor.add(frame.colorMap.get(val));
+                    v.groupColor.add(frame.labelColorPanel.getColorMap().get(val));
                 }
                 v.groupFraction.add(new Double(weight.intValue()));
             }

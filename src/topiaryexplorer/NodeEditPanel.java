@@ -57,7 +57,7 @@ public final class NodeEditPanel extends JPanel{
         super();
         frame = _frame;
         vis = frame.tree;
-        colorByMenu = new ColorByPopupMenu(frame.frame, frame);
+        colorByMenu = new ColorByPopupMenu(frame.frame, frame, frame.frame.labelColorPanel,1);
         this.setToolTipText("Customize Nodes");
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
@@ -132,7 +132,7 @@ public final class NodeEditPanel extends JPanel{
         
         colorByButton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
-				colorByMenu.show(colorByButton, colorByButton.getX(), colorByButton.getY());
+				colorByMenu.show(colorByButton, colorByLabel.getX(), colorByLabel.getY());
            } 
         });
         

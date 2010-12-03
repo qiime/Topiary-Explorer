@@ -718,8 +718,8 @@ public class TreeVis extends PApplet {
         PieChart pie = new PieChart((int)Math.round(toScreenX(node.getXOffset())), //draw at the same x-value as the node
           (int)Math.round(toScreenY(node.getYOffset())), //draw at the y-value of the node
           75, //diameter of the pie chart
-          node.getGroupFraction(), //the weighting of the node's colors
-          node.getGroupColor()); //the colors for the node
+          node.getGroupBranchFraction(), //the weighting of the node's colors
+          node.getGroupBranchColor()); //the colors for the node
         drawPieChart(pie);
       }
     }
@@ -910,8 +910,9 @@ public class TreeVis extends PApplet {
      double maxY = drawY + (nodeFont.ascent()*nodeFont.size);
      
       if (node.isLeaf() && drawNodeLabels) {
-          canvas.fill(0);
-          canvas.stroke(0);
+          int lc = node.getLabelColor(majorityColoring).getRGB();
+          canvas.fill(lc);
+          canvas.stroke(lc);
 /*          if(treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")){*/
             if (yscale > nodeFontSize) 
                 canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));

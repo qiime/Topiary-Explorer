@@ -36,6 +36,8 @@ import javax.jnlp.*;
 public class ColorByMenu extends JMenu{
     TopiaryWindow parent;
     MainFrame frame;
+    ColorPanel colorPanel;
+    int elementType = 0;
     JMenu colorByOtuMetadataMenu = new JMenu("OTU Metadata");
     JMenu colorBySampleMetadataMenu = new JMenu("Sample Metadata");
     
@@ -44,10 +46,12 @@ public class ColorByMenu extends JMenu{
     /**
      * Constructor.  Sets up the menu.
      */
-     public ColorByMenu(MainFrame _frame, TopiaryWindow _parent) {
+     public ColorByMenu(MainFrame _frame, TopiaryWindow _parent, ColorPanel _colorPanel, int _elementType) {
          super("Color By");
          frame  = _frame;
          parent = _parent;
+         colorPanel = _colorPanel;
+         elementType = _elementType;
          //set up the "color by" submenus
          add(colorByOtuMetadataMenu);
          add(colorBySampleMetadataMenu);
@@ -70,12 +74,16 @@ public class ColorByMenu extends JMenu{
                  public void actionPerformed(ActionEvent e) {
                      //get the category to color by
                      String value = e.getActionCommand();
- /*                    System.out.println("*");*/
                      frame.currTable = frame.otuMetadata;
                      
-                     ((TreeWindow)parent).colorByValue(value);
+                     frame.colorPane.setSelectedIndex(elementType);
+                     
+                     if(elementType == 0)
+                         ((TreeWindow)parent).colorBranchesByValue(value);
+                     else if(elementType == 1)
+                         ((TreeWindow)parent).colorLabelsByValue(value);
 
-                     TableColumn column = frame.colorKeyTable.getColumnModel().getColumn(0);
+                     TableColumn column = colorPanel.getColorKeyTable().getColumnModel().getColumn(0);
                      column.setHeaderValue(value);
                  }
              });
@@ -99,10 +107,13 @@ public class ColorByMenu extends JMenu{
                      //get the category to color by
                      String value = e.getActionCommand();
                      frame.currTable = frame.sampleMetadata;
-                     
-                     ((TreeWindow)parent).colorByValue(value);
-
-                     TableColumn column = frame.colorKeyTable.getColumnModel().getColumn(0);
+                     frame.colorPane.setSelectedIndex(elementType);
+                     if(elementType == 0)
+                          ((TreeWindow)parent).colorBranchesByValue(value);
+                      else if(elementType == 1)
+                          ((TreeWindow)parent).colorLabelsByValue(value);
+                          
+                     TableColumn column = colorPanel.getColorKeyTable().getColumnModel().getColumn(0);
                      column.setHeaderValue(value);
                  }
              });

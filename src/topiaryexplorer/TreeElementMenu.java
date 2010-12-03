@@ -28,7 +28,7 @@ public class TreeElementMenu extends JMenu implements ActionListener{
     /**
      * 
      */
-    public TreeElementMenu(MainFrame _frame, TopiaryWindow _parent, String name) {
+    public TreeElementMenu(MainFrame _frame, TopiaryWindow _parent, String name, ColorPanel _colorPanel, int elementType) {
         super(name);
          parent = _parent;
          frame = _frame;
@@ -37,7 +37,7 @@ public class TreeElementMenu extends JMenu implements ActionListener{
           add(noColoringMenuItem);
           majorityColoringMenuItem.addActionListener(this);
           add(majorityColoringMenuItem);
-          colorBy = new ColorByMenu(frame,parent);
+          colorBy = new ColorByMenu(frame,parent,_colorPanel,elementType);
           add(colorBy);
     }
 	// }}}
