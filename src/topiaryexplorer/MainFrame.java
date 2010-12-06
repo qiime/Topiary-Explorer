@@ -122,6 +122,8 @@ public class MainFrame extends JFrame {
         interpolateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 ((ColorPanel)colorPane.getSelectedComponent()).interpolateColors();
+                recolorBranches();
+                recolorLabels();
             }
         });
         interpolateButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -336,6 +338,14 @@ public class MainFrame extends JFrame {
                w.resetLineWidthSampleMenu();
            }
       }
+      
+      public void colorTrees() {
+           if(labelValue != "")
+              recolorLabels();
+
+            if(branchValue != "")
+              recolorBranches();
+      }
      
      public void resetDatabaseTable() {
          database = new DataTable(db_conn.c);
@@ -458,11 +468,11 @@ public class MainFrame extends JFrame {
      public void recolorBranches() {
          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
          if (currTable != null && currTable == otuMetadata) {
-             for(int i = 0; i < treeWindows.size(); i++)
-                  treeWindows.get(i).recolorBranchesByOtu();
+             for(TreeWindow t : treeWindows)
+                  t.recolorBranchesByOtu();
          } else if (currTable != null && currTable == sampleMetadata) {
-             for(int i = 0; i < treeWindows.size(); i++)
-                  treeWindows.get(i).recolorBranchesBySample();
+             for(TreeWindow t : treeWindows)
+                  t.recolorBranchesBySample();
          } else {
              //it's null; don't do anything
          }
@@ -472,12 +482,12 @@ public class MainFrame extends JFrame {
      public void recolorLabels() {
           this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
           if (currTable != null && currTable == otuMetadata) {
-              for(int i = 0; i < treeWindows.size(); i++)
-                   treeWindows.get(i).recolorLabelsByOtu();
+              for(TreeWindow t : treeWindows)
+                  t.recolorLabelsByOtu();
               pcoaWindow.recolorPcoaByOtu();
           } else if (currTable != null && currTable == sampleMetadata) {
-              for(int i = 0; i < treeWindows.size(); i++)
-                   treeWindows.get(i).recolorLabelsBySample();
+              for(TreeWindow t : treeWindows)
+                t.recolorLabelsBySample();
               pcoaWindow.recolorPcoaBySample();
           } else {
               //it's null; don't do anything
