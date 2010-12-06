@@ -7,7 +7,7 @@ package topiaryexplorer;
 import java.awt.*;
 import java.util.*;
 
-public class Node {
+public class Node implements Cloneable{
   private Node parent = null;
   public ArrayList<Node> nodes = new ArrayList(); //children
   private ArrayList<Node> anscestors = new ArrayList();
@@ -288,8 +288,10 @@ public class Node {
        {
            double max = -100;
            Color majorityColor = new Color(0);
+           if(groupLabelColor.size() == 0)
+             return new Color(0,0,0);
            if(groupLabelColor.size() == 1)
-              return groupLabelColor.get(0);
+             return groupLabelColor.get(0);
 
            for(int i = 0; i < groupLabelColor.size(); i++)
            {

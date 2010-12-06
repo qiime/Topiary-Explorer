@@ -29,6 +29,8 @@ public final class NodeEditPanel extends JPanel{
     JPanel labelPanel = new JPanel();
     CollapsablePanel labelPanelCP = new CollapsablePanel("Labels",labelPanel, false, true);
     
+    JButton tipLabelButton = new JButton("Customize Tip Labels...");
+    
     JLabel fontSizeLabel = new JLabel("Size: ");
     JTextField fntSize = new JTextField("",3);
     JLabel ptLabel = new JLabel("pt");
@@ -75,6 +77,12 @@ public final class NodeEditPanel extends JPanel{
         
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
         
+        tipLabelButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.resetTipLabelCustomizer(true);
+            }
+        });
+        labelPanel.add(tipLabelButton);
 /*        labelPanel.add(fontSizeLabel);*/
         fontSizePanel.add(fontSizeLabel);
         fntSize.setToolTipText("Change the font size of node labels.");

@@ -12,11 +12,12 @@ public class TreeToolbar extends JToolBar {
 
     JButton zoomOutButton  = new JButton("-");
     JButton zoomInButton = new JButton("+");
-    JSlider zoomSlider = new JSlider(0, 20, 0);
+    JSlider zoomSlider = new JSlider(1, 100, 1);
     JTextField search = new JTextField();
     JPanel spacer1 = new JPanel();    
     TreeWindow frame = null;
     JLabel status = new JLabel("");
+    double minXScale = 0;
 
     public TreeToolbar(TreeWindow _frame) {
 
@@ -99,24 +100,6 @@ public class TreeToolbar extends JToolBar {
         add(search);
     }
     
-/*    public void newTask(int max) {
-        progress.setStringPainted(true);
-        progress = new JProgressBar(0,max);
-    }
-    
-    public void endTask() {
-        progress = new JProgressBar();
-        progress.setStringPainted(false);
-    }
-    
-    public void updateProgress(int val) {
-        progress.setValue(val);
-    }
-    
-    public void incProgress() {
-        progress.setValue(progress.getValue()+1);
-    }*/
-    
     public void setStatus(String p, String s) {
         if(s.length() > 56)
         {
@@ -127,28 +110,23 @@ public class TreeToolbar extends JToolBar {
         status.setText(s);
     }
 
-    public void syncTreeWithZoomSlider() {
-        if (frame.tree.getTree() == null) return;
-        double minXScale = 0;
+    public void setScale() {
         if (frame.tree.getTreeLayout().equals("Rectangular") || frame.tree.getTreeLayout().equals("Triangular")) {
 		    minXScale = (frame.tree.getWidth()-frame.tree.getMargin()-frame.tree.getTreeMargin())/frame.tree.getTree().depth();
 		} else {
 		    minXScale = (Math.min(frame.tree.getWidth(), frame.tree.getHeight())*0.5-frame.tree.getMargin())/frame.tree.getTree().depth();
 		}
-        double newScale = minXScale * Math.pow(Math.pow(2.0, 0.5), zoomSlider.getValue());
+    }
+    
+    public void syncTreeWithZoomSlider() {
+        if (frame.tree.getTree() == null) return;
+        double newScale = minXScale *zoomSlider.getValue();
         frame.tree.setScaleFactor(newScale, frame.tree.getYScale(), frame.tree.getXStart(), frame.tree.getYStart());
     }
 
     public void syncZoomSliderWithTree() {
-        if (frame.tree.getTree() == null) return;
-        double minXScale = 0;
-        if (frame.tree.getTreeLayout().equals("Rectangular") || frame.tree.getTreeLayout().equals("Triangular")) {
-    	    minXScale = (frame.tree.getWidth()-frame.tree.getMargin()-frame.tree.getTreeMargin())/frame.tree.getTree().depth();
-    	} else {
-		    minXScale = (Math.min(frame.tree.getWidth(), frame.tree.getHeight())*0.5-frame.tree.getMargin())/frame.tree.getTree().depth();
-    	}
-        int currStep = (int) Math.floor(Math.log(frame.tree.getXScale()/minXScale) / Math.log(Math.pow(2.0,0.5))+0.00001);
-        zoomSlider.setValue(currStep);
+        if (frame.tree.getTree() == null) return;        
+        zoomSlider.setValue((int)(frame.tree.getXScale()/minXScale));
     }
 
 }

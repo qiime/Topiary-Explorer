@@ -49,7 +49,7 @@ public class TreeElementMenu extends JMenu implements ActionListener{
            else if(e.getActionCommand().equals("Majority coloring")) {
                ((TreeWindow)parent).tree.setMajorityColoring(majorityColoringMenuItem.isSelected());
                ((TreeWindow)parent).tree.getTree().updateBranchColorFromChildren();
-               frame.recolor();
+               frame.recolorBranches();
            } else if (e.getActionCommand().equals("Number of OTUs")) {
                  tree.getTree().sortByNumberOfOtus();
                  tree.setYOffsets(tree.getTree(), 0);

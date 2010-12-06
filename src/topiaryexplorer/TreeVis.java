@@ -122,6 +122,7 @@ public class TreeVis extends PApplet {
 
 
     //GETTERS AND SETTERS
+    public void setParent(TreeWindow f) { frame = f; }
     public double getMargin() { return MARGIN; }
     public double getTreeMargin() { return TREEMARGIN; }
     public double getYScale() { return yscale; }
@@ -352,6 +353,8 @@ public class TreeVis extends PApplet {
      * mouseMoved() is called whenever the mouse is moved.
      */
     public void mouseMoved() {
+        if(!frame.isActive())
+            return;
       //is the mouse over a node?
       Node node = findNode(mouseX, mouseY);
       if (node != null) {
@@ -571,6 +574,7 @@ public class TreeVis extends PApplet {
      */
     private Node findNode(Node tree, double x, double y) {
       if (tree==null) return null;
+      if (tree.isHidden()) return null;
 
       double row = 0;
       double col = 0;
@@ -1282,10 +1286,10 @@ public class TreeVis extends PApplet {
      *
      * @param  filename  the file to write the image to
      */
-    public void exportScreenCapture(FileContents fc) {
-      try {
-		  String filename = fc.getName();
-		  PGraphics canvas = createGraphics(width, height, JAVA2D);
+    public void exportScreenCapture(String path) {
+/*      try {*/
+/*        String filename = fc.getName();*/
+		  PGraphics canvas = createGraphics(width, height, P2D);
 		  canvas.beginDraw();
 		  canvas.textFont(nodeFont);
 		  canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
@@ -1296,13 +1300,14 @@ public class TreeVis extends PApplet {
 		  drawTree(root, canvas);
           canvas.popMatrix();
 		  canvas.endDraw();
-		  java.awt.image.BufferedImage img = (BufferedImage)canvas.getImage();
-		  String[] formatNames = ImageIO.getWriterFormatNames();
-		  fc.setMaxLength(10000000);
-		  OutputStream os = fc.getOutputStream(true);
-		  ImageIO.write(img, "PNG", os);
-          canvas.dispose();
-      } catch (java.io.IOException e) {e.printStackTrace(); }
+		  canvas.save(path);
+/*        java.awt.image.BufferedImage img = (BufferedImage)canvas.getImage();
+          String[] formatNames = ImageIO.getWriterFormatNames();
+          fc.setMaxLength(10000000);
+          OutputStream os = fc.getOutputStream(true);
+          ImageIO.write(img, "PNG", os);
+          canvas.dispose();*/
+/*      } catch (java.io.IOException e) {e.printStackTrace(); }*/
     }
 
     /**
@@ -1319,10 +1324,9 @@ public class TreeVis extends PApplet {
 		  double oldYScale = yscale;
 		  double oldXStart = xstart;
 		  double oldYStart = ystart;
-/*        float oldCollapsedPixel = getCollapsedPixel();*/
-/*          double oldCollapsedLevel = getCollapsedLevel();*/
 		  boolean oldDrawExternalNodeLabels = drawExternalNodeLabels;
 		  boolean oldDrawInternalNodeLabels = drawInternalNodeLabels;
+		  boolean oldDrawNodeLabels = drawNodeLabels;
 	
 		  //reset the sizing and zooming so that the tree can be drawn visibly
 		  double longest = textWidth(root.getLongestLabel());
@@ -1330,6 +1334,7 @@ public class TreeVis extends PApplet {
 		  double s = root.shortestRootToTipDistance();
 		  drawExternalNodeLabels = true;
 		  drawInternalNodeLabels = true;
+		  drawNodeLabels = true;
 		  if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
 			  xscale = (dims[0]-MARGIN-TREEMARGIN)/root.depth();
 			  xstart = MARGIN;
@@ -1356,6 +1361,7 @@ public class TreeVis extends PApplet {
           canvas.translate((float)xstart, (float)ystart);
           canvas.rotate((float)(treerotation*Math.PI/180.0));
           canvas.translate((float)-xstart, (float)-ystart);
+          canvas.textFont(nodeFont);
 		  drawTree(root, canvas);
           canvas.popMatrix();
           canvas.dispose();
@@ -1369,6 +1375,7 @@ public class TreeVis extends PApplet {
 		  ystart = oldYStart;
 		  drawExternalNodeLabels = oldDrawExternalNodeLabels;
 		  drawInternalNodeLabels = oldDrawInternalNodeLabels;
+		  drawNodeLabels = oldDrawNodeLabels;
 		  redraw();
 	} catch (Exception ex) {
 	    System.out.println(ex);

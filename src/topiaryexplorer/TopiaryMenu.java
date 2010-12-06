@@ -568,7 +568,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             for(TreeWindow t : frame.treeWindows)
             {
                 t.tree.loop();
-/*                t.resetConsensusLineage();*/
             }
             /*frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState())*/;
             frame.otuMetadataFile = inFile;

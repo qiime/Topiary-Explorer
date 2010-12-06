@@ -93,6 +93,8 @@ public class MainFrame extends JFrame {
 
     //Holds the currently-clicked node
     Node clickedNode = null;
+    String labelValue = "";
+    String branchValue = "";
 
     /**
      * Default constructor.  Sets up the GUI.
@@ -255,6 +257,13 @@ public class MainFrame extends JFrame {
           tempTreeWindow.setTitle("Tree "+treeWindows.size());
           resetOtuMenus();
           resetSampleMenus();
+          
+          if(labelValue != "")
+            recolorLabels();
+            
+          if(branchValue != "")
+            recolorBranches();
+          
           setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       }
       

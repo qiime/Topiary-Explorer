@@ -11,30 +11,23 @@ import java.sql.*;
 import javax.swing.table.*;
 import java.io.*;
 import javax.jnlp.*;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * TreeWindow is the window that contains the tree visualization.
  */
 
-public class TreeWindow extends TopiaryWindow implements KeyListener, ActionListener{
+public class TreeWindow extends TopiaryWindow implements KeyListener, ActionListener, WindowListener{
     JMenuBar topMenu = new JMenuBar();
     JMenu treeMenu = new JMenu("Options");
     JMenu nodeMenu = new JMenu("Node");
-   /* JMenu rotateMenu = new JMenu("Rotate");*/
     
     JMenu collapseByMenu = new JMenu("Collapse by");
-/*    ColorByMenu colorBy;// = new ColorByMenu();*/
     BranchMenu branchMenu;
-/*    TreeElementMenu nodesMenu;*/
     JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels");
     JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");
-    
-/*    JRadioButtonMenuItem rectangularradiobutton = new JRadioButtonMenuItem("Rectangular");
-    JRadioButtonMenuItem triangularradiobutton = new JRadioButtonMenuItem("Triangular");
-    JRadioButtonMenuItem radialradiobutton = new JRadioButtonMenuItem("Radial");
-    JRadioButtonMenuItem polarradiobutton = new JRadioButtonMenuItem("Polar");*/
-    
-/*    JSlider rotateSlider = new JSlider(0,359,0);*/
     
     ButtonGroup treeLayoutGroup = new ButtonGroup();
     
@@ -52,7 +45,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     VerticalTreeToolbar verticalTreeToolbar = null;
     CollapseTreeToolbar collapseTreeToolbar = null;
     TreeEditToolbar treeEditToolbar = null;
-/*    WedgeCustomizerToolbar wedgeToolbar = null;*/
     Node clickedNode = null;
     JPopupMenu treePopupMenu = new JPopupMenu();
     TipLabelCustomizer tlc = null;
@@ -67,13 +59,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          super(_frame);
 	     this.setSize(new Dimension(1000,800));
 	     frame = _frame;
-	     this.addWindowListener(new WindowAdapter() {
+/*       this.addWindowListener(new WindowAdapter() {
                public void windowClosing(WindowEvent e) {
                  frame.treeWindows.remove(this);
                }
-             });
+             });*/
          
-         
+         tree.setParent(this);         
          try{
          dir_path = (new File(".")).getCanonicalPath();
          }
@@ -97,6 +89,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          
          tree.addMouseMotionListener(new MouseMotionAdapter() {
  			public void mouseMoved(java.awt.event.MouseEvent evt) {
+ 			    if(!isActive()) return;
  				Node node = tree.findNode(evt.getX(), evt.getY());
  				String status = "";
  				String prefix = "";
@@ -205,11 +198,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                           JOptionPane.YES_NO_OPTION);
                           if(del == JOptionPane.YES_OPTION)
                           {
+                              tree.noLoop();
                             clickedNode.getParent().nodes.remove(clickedNode);
                             for(Node n : clickedNode.getAnscestors())
                                 n.setConsensusLineage(n.getConsensusLineageF());
                           }
-                        tree.resetTree();
+/*                        tree.resetTree();*/
+                        tree.setTree(tree.getTree());
+                        tree.loop();
                   }
               });
               treePopupMenu.add(item);
@@ -224,7 +220,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  		});
 
          tree.addChangeListener(new ChangeListener() {
-
              public void stateChanged(ChangeEvent e) {
                  treeToolbar.syncZoomSliderWithTree();
                  verticalTreeToolbar.syncZoomSliderWithTree();
@@ -263,6 +258,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          item.addActionListener(this);
          nodeMenu.add(item);
 	     
+	     
+	     //options menu
 	     item = new JMenuItem("Save Tree...");
          item.addActionListener(this);
          treeMenu.add(item);
@@ -281,8 +278,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
            item.addActionListener(this);
            treeMenu.add(item);*/
          item = new JMenuItem("Show hidden nodes");
-          item.addActionListener(this);
-          treeMenu.add(item);
+         item.addActionListener(this);
+         treeMenu.add(item);
+         item = new JMenuItem("Set consensus lineage");
+         item.addActionListener(this);
+         treeMenu.add(item);
          item = new JMenuItem("Recenter");
          item.addActionListener(this);
          treeMenu.add(item);
@@ -295,73 +295,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          resetCollapseByMenu();
          treeMenu.add(collapseByMenu);
 
-         /*JMenu layout = new JMenu("Layout");
-                  rectangularradiobutton.setSelected(true);
-                  rectangularradiobutton.addActionListener(new ActionListener() {
-                      public void actionPerformed(ActionEvent e) {
-                          tree.setTreeLayout("Rectangular");
-                          rotateMenu.setEnabled(false);
-                      }
-                  });
-                  treeLayoutGroup.add(rectangularradiobutton);
-                  layout.add(rectangularradiobutton);
-
-                  triangularradiobutton.setSelected(true);
-                  triangularradiobutton.addActionListener(new ActionListener() {
-                      public void actionPerformed(ActionEvent e) {
-                          tree.setTreeLayout("Triangular");
-                          rotateMenu.setEnabled(false);
-                      }
-                  });
-                  treeLayoutGroup.add(triangularradiobutton);
-                  layout.add(triangularradiobutton);
-
-
-                  radialradiobutton = new JRadioButtonMenuItem("Radial");
-                  radialradiobutton.setSelected(true);
-                  radialradiobutton.addActionListener(new ActionListener() {
-                      public void actionPerformed(ActionEvent e) {
-                          tree.setTreeLayout("Radial");
-                          rotateMenu.setEnabled(true);
-                      }
-                  });
-                  treeLayoutGroup.add(radialradiobutton);
-                  layout.add(radialradiobutton);
-
-                  polarradiobutton.setSelected(true);
-                  polarradiobutton.addActionListener(new ActionListener() {
-                      public void actionPerformed(ActionEvent e) {
-                          tree.setTreeLayout("Polar");
-                          rotateMenu.setEnabled(true);
-                      }
-                  });
-                  treeLayoutGroup.add(polarradiobutton);
-                  layout.add(polarradiobutton);
-
-
-                  treeMenu.add(layout);*/
-
-/*         rotateSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                if (rotateSlider.getValueIsAdjusting()) {
-                    syncTreeWithRotateSlider();
-                }
-            }
-         });
-         rotateMenu.add(rotateSlider);
-         rotateMenu.setEnabled(false);*/
-/*         treeMenu.add(rotateMenu);*/
-
-
-         /*item = new JMenuItem("Background Color...");        
-                  item.addActionListener(new ActionListener() {        
-                      public void actionPerformed(ActionEvent e) {
-                          JColorChooser colorChooser = new JColorChooser();
-                          Color c = colorChooser.showDialog(frame, "Pick a Color", tree.getBackgroundColor());
-                          tree.setBackgroundColor(c);
-                      }
-                  });
-                  treeMenu.add(item);*/
 
          externalLabelsMenuItem.setSelected(false);
          externalLabelsMenuItem.addActionListener(this);
@@ -399,6 +332,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      for(Node n: tree.getTree().getNodes())
                         n.setHidden(false);
                  }
+             else if (e.getActionCommand().equals("Set consensus lineage")) {
+                      resetConsensusLineage();
+                  }
              else if (e.getActionCommand().equals("Prune tree...")) {
                       //PruneTreeWindow ptw = new PruneTreeWindow(frame, this, true, true);
                       //ptw.setVisible(true);
@@ -433,13 +369,35 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                  exportTreeImage();
               } else if (e.getActionCommand().equals("Export Tree Screen Capture...") && tree.getTree()!= null)  {
                   tree.noLoop();
-                  try {
-                  	 byte[] b = new byte[0];
-                      FileContents fc = frame.fss.saveFileDialog(null,null,new ByteArrayInputStream(b),null);
-     			 	 tree.exportScreenCapture(fc);
-     			 } catch(IOException ex){}
-                  tree.loop();
+     			  exportScreenCapture();
+                  if(this.isActive()) tree.loop();
               }
+    }
+    
+    public void windowActivated(WindowEvent e)  {
+        tree.loop();
+    }
+    
+    public void windowDeactivated(WindowEvent e)  {
+        tree.noLoop();
+    }
+    
+    public void windowClosed(WindowEvent e) {
+        frame.treeWindows.remove(this);
+        dispose();
+    }
+    
+    public void windowClosing(WindowEvent e) {}
+    public void windowDeiconified(WindowEvent e){
+        tree.loop();
+    }
+    
+    public void windowIconified(WindowEvent e)  {
+        tree.noLoop();
+    }
+    
+    public void windowOpened(WindowEvent e) {
+        tree.loop();
     }
 	
 	public void keyTyped(KeyEvent key) {
@@ -490,9 +448,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              setTreeVals(root);
              tree.setTree(root);
              //make sure coloring is empty
-             removeColor();
-             treeToolbar.zoomSlider.setValue(0);
+/*             removeColor();*/
+             treeToolbar.setScale();
+             verticalTreeToolbar.setScale();             
              tree.loop();
+             
              collapseTree();
 
              this.setVisible(true);
@@ -518,8 +478,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                setTreeVals(root);
                tree.setTree(root);
               //make sure coloring is empty
-              removeColor();
-              treeToolbar.zoomSlider.setValue(0);
+/*              removeColor();*/
+              treeToolbar.setScale();
+              verticalTreeToolbar.setScale();
               tree.loop();
               collapseTree();
 
@@ -540,8 +501,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         Node root = TopiaryFunctions.createTreeFromNewickString(treeString);
         setTreeVals(root);
         tree.setTree(root);
-        removeColor();
-        treeToolbar.zoomSlider.setValue(0);
+/*        removeColor();*/
+        treeToolbar.setScale();
+        verticalTreeToolbar.setScale();
         tree.loop();
         collapseTree();
 
@@ -576,9 +538,18 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         tree.noLoop();
          ExportTreeDialog etd = new ExportTreeDialog(this);
          etd.setVisible(true);
-        tree.loop();
+        if(this.isActive()) tree.loop();
         treeEditToolbar.setStatus("Done exporting tree.");
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
+    
+    /**
+    * Exports the current tree view as screencap
+    */
+    public void exportScreenCapture() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        Date date = new Date();
+        tree.exportScreenCapture(frame.dir_path+"/tree_screencaps/"+dateFormat.format(date)+".png");
     }
     
     /**
@@ -1091,10 +1062,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                     v.clearColor();
                 }
             }
-
+            frame.branchValue = "";
         }
                 
         public void colorBranchesByValue(String value) {
+            frame.branchValue = value;
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             treeEditToolbar.setStatus("Coloring branches...");
              //get the column that this category is
@@ -1136,44 +1108,45 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
           
           
           public void colorLabelsByValue(String value) {
-              this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-              treeEditToolbar.setStatus("Coloring labels...");
-               //get the column that this category is
-               int colIndex = frame.currTable.getColumnNames().indexOf(value);
-               if (colIndex == -1) {
-                   //JOptionPane.showMessageDialog(null, "ERROR: Column "+value+" not found in table.", "Error", JOptionPane.ERROR_MESSAGE);
-                   return;
-               }
-               ArrayList<Object> column = new ArrayList<Object>();
-               //get all unique values in this column
-                 column = frame.currTable.getColumn(colIndex);
+          frame.labelValue = value;
+          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+          treeEditToolbar.setStatus("Coloring labels...");
+           //get the column that this category is
+           int colIndex = frame.currTable.getColumnNames().indexOf(value);
+           if (colIndex == -1) {
+               //JOptionPane.showMessageDialog(null, "ERROR: Column "+value+" not found in table.", "Error", JOptionPane.ERROR_MESSAGE);
+               return;
+           }
+           ArrayList<Object> column = new ArrayList<Object>();
+           //get all unique values in this column
+             column = frame.currTable.getColumn(colIndex);
 
-               while (column.contains(null)) column.remove(null);
-                TreeSet<Object> uniqueVals = new TreeSet<Object>(column);
-                //set up the branchColorPanel.getColorMap()
-                frame.labelColorPanel.setColorMap(new TreeMap<Object, Color>());
-                float[] hsbvals = new float[3];
-                hsbvals[0] = 0;
-                hsbvals[1] = 1;
-                hsbvals[2] = 1;
-                Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
-                for (Object val : uniqueVals) {
-                    frame.labelColorPanel.getColorMap().put(val, new Color(200,200,200));//color);
-                    hsbvals[0] += (1.0/uniqueVals.size());
-                    color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
-                }
-
-               frame.labelColorPanel.syncColorKeyTable();
-               frame.labelColorPanel.setColorColumnIndex(colIndex);
-
-               frame.recolorLabels();
-
-              //color tree from leaves
-               tree.getTree().updateLabelColorFromChildren();
-
-               treeEditToolbar.setStatus("Labels colored by "+value);
-               this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+           while (column.contains(null)) column.remove(null);
+            TreeSet<Object> uniqueVals = new TreeSet<Object>(column);
+            //set up the branchColorPanel.getColorMap()
+            frame.labelColorPanel.setColorMap(new TreeMap<Object, Color>());
+            float[] hsbvals = new float[3];
+            hsbvals[0] = 0;
+            hsbvals[1] = 1;
+            hsbvals[2] = 1;
+            Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
+            for (Object val : uniqueVals) {
+                frame.labelColorPanel.getColorMap().put(val, new Color(200,200,200));//color);
+                hsbvals[0] += (1.0/uniqueVals.size());
+                color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
             }
+
+           frame.labelColorPanel.syncColorKeyTable();
+           frame.labelColorPanel.setColorColumnIndex(colIndex);
+
+           frame.recolorLabels();
+
+          //color tree from leaves
+           tree.getTree().updateLabelColorFromChildren();
+
+           treeEditToolbar.setStatus("Labels colored by "+value);
+           this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
       /**
         * 
         */
