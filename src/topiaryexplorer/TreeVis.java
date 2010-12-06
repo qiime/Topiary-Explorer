@@ -718,9 +718,18 @@ public class TreeVis extends PApplet {
       drawNode(node, canvas);
 
       //draw the pie chart?
-      if (node.getDrawPie() == true) {
-        PieChart pie = new PieChart((int)Math.round(toScreenX(node.getXOffset())), //draw at the same x-value as the node
-          (int)Math.round(toScreenY(node.getYOffset())), //draw at the y-value of the node
+      if (node.getDrawPie()) {
+          double x = node.getXOffset();
+          double y = node.getYOffset();
+          if (treeLayout.equals("Radial")) {
+                x = node.getRXOffset();
+                y = node.getRYOffset();
+            } else if (treeLayout.equals("Polar")) {
+                x = node.getROffset() * Math.cos(node.getTOffset());
+                y = node.getROffset() * Math.sin(node.getTOffset());
+            }
+        PieChart pie = new PieChart((int)Math.round(toScreenX(x)), //draw at the same x-value as the node
+          (int)Math.round(toScreenY(y)), //draw at the y-value of the node
           75, //diameter of the pie chart
           node.getGroupBranchFraction(), //the weighting of the node's colors
           node.getGroupBranchColor()); //the colors for the node
