@@ -19,10 +19,10 @@ class CollapsablePanel extends JPanel {
 	private boolean nested;
 	JPanel contentPanel_;
 	HeaderPanel headerPanel_;
-	private Color selectedColor = new Color(200,255,200);
-	private Color hoverColor = new Color(100,255,100);
-	private Color unselectedColor = new Color(200,220,200);
-	private Color currentColor = new Color(200,220,200);
+	private Color selectedColor = new Color(20,200,250);
+	private Color hoverColor = new Color(20,200,250);
+	private Color unselectedColor = new Color(170,210,220);
+	private Color currentColor = new Color(170,210,220);
 
 	private class HeaderPanel extends JPanel implements MouseListener {
 		String text_;
