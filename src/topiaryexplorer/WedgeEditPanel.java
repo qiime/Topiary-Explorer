@@ -145,6 +145,16 @@ public class WedgeEditPanel extends JPanel{
         fntSize.setToolTipText("Change the font size of wedge labels.");
         fntSize.setText(""+vis.getWedgeFontSize());
         fntSize.setMaximumSize(new Dimension(20,20));
+        fntSize.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+            }
+            public void keyPressed(KeyEvent e) {
+            }
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER)
+                    vis.setWedgeFontSize(Float.parseFloat(fntSize.getText()));
+            }
+        });
         fontSizePanel.add(fntSize);
         fontSizePanel.add(ptLabel);
         fntPanel.setLayout(new GridLayout(2,1));

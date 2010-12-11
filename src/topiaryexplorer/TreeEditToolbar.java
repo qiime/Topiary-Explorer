@@ -16,11 +16,15 @@ public class TreeEditToolbar extends JToolBar {
     TreeViewPanel treeViewPanel;
     CollapsablePanel treeViewPanelCP;
     
+    NodeEditPanel nodeEditPanel;
+    CollapsablePanel nodeEditPanelCP;
+    
+    BranchEditPanel branchEditPanel;
+    CollapsablePanel branchEditPanelCP;
+    
     WedgeEditPanel wedgeEditPanel;// = new WedgeEditPanel(frame);
     CollapsablePanel wedgeEditPanelCP; // = new CollapsablePanel("Wedge",wedgeEditPanel);
     
-    NodeEditPanel nodeEditPanel;
-    CollapsablePanel nodeEditPanelCP;
     
     JLabel treeStatus = new JLabel("");
 
@@ -32,11 +36,16 @@ public class TreeEditToolbar extends JToolBar {
         treeViewPanel = new TreeViewPanel(frame, this);
         treeViewPanelCP = new CollapsablePanel("View", treeViewPanel, true, false);
         
+        nodeEditPanel = new NodeEditPanel(frame);
+        nodeEditPanelCP = new CollapsablePanel("Node", nodeEditPanel);
+        
+        branchEditPanel = new BranchEditPanel(frame);
+        branchEditPanelCP = new CollapsablePanel("Branch", branchEditPanel);
+        
         wedgeEditPanel = new WedgeEditPanel(frame);
         wedgeEditPanelCP = new CollapsablePanel("Wedge",wedgeEditPanel);
         
-        nodeEditPanel = new NodeEditPanel(frame);
-        nodeEditPanelCP = new CollapsablePanel("Node", nodeEditPanel);
+        
         
         GroupLayout gLayout = new GroupLayout(this);
         setLayout(gLayout);
@@ -47,16 +56,18 @@ public class TreeEditToolbar extends JToolBar {
         gLayout.setHorizontalGroup(gLayout.createSequentialGroup()
             .addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                 .addComponent(treeViewPanelCP)
-                .addComponent(wedgeEditPanelCP)
                 .addComponent(nodeEditPanelCP)
+                .addComponent(branchEditPanelCP)
+                .addComponent(wedgeEditPanelCP)
                 .addComponent(treeStatus))
         );
         
         gLayout.setVerticalGroup(gLayout.createSequentialGroup()
 /*            .addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.BASELINE, false))*/
                 .addComponent(treeViewPanelCP, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(wedgeEditPanelCP, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(nodeEditPanelCP, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(branchEditPanelCP, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(wedgeEditPanelCP, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(treeStatus, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 

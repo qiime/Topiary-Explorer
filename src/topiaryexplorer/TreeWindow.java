@@ -45,6 +45,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     VerticalTreeToolbar verticalTreeToolbar = null;
     CollapseTreeToolbar collapseTreeToolbar = null;
     TreeEditToolbar treeEditToolbar = null;
+    JScrollPane treeEditPane = new JScrollPane();
     Node clickedNode = null;
     JPopupMenu treePopupMenu = new JPopupMenu();
     TipLabelCustomizer tlc = null;
@@ -82,6 +83,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     verticalTreeToolbar = new VerticalTreeToolbar(this);
 	     collapseTreeToolbar = new CollapseTreeToolbar(this);
 	     treeEditToolbar = new TreeEditToolbar(this, frame);
+	     treeEditPane.add(treeEditToolbar);
 /*       wedgeToolbar = new WedgeCustomizerToolbar(this);*/
 	     
 	     Container pane = getContentPane();

@@ -1296,8 +1296,6 @@ public class TreeVis extends PApplet {
      * @param  filename  the file to write the image to
      */
     public void exportScreenCapture(String path) {
-/*      try {*/
-/*        String filename = fc.getName();*/
 		  PGraphics canvas = createGraphics(width, height, P2D);
 		  canvas.beginDraw();
 		  canvas.textFont(nodeFont);
@@ -1310,13 +1308,6 @@ public class TreeVis extends PApplet {
           canvas.popMatrix();
 		  canvas.endDraw();
 		  canvas.save(path);
-/*        java.awt.image.BufferedImage img = (BufferedImage)canvas.getImage();
-          String[] formatNames = ImageIO.getWriterFormatNames();
-          fc.setMaxLength(10000000);
-          OutputStream os = fc.getOutputStream(true);
-          ImageIO.write(img, "PNG", os);
-          canvas.dispose();*/
-/*      } catch (java.io.IOException e) {e.printStackTrace(); }*/
     }
 
     /**

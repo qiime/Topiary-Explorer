@@ -25,14 +25,16 @@ public final class NodeEditPanel extends JPanel{
     JLabel wedgeLabel = new JLabel("Customize Nodes:");
     
     JCheckBox pieChartCheckBox = new JCheckBox("Pie Chart");
-    JCheckBox nodeLabelCheckBox = new JCheckBox("Labels");
+    JCheckBox nodeLabelCheckBox = new JCheckBox("Tip Labels");
     JPanel labelPanel = new JPanel();
     CollapsablePanel labelPanelCP = new CollapsablePanel("Labels",labelPanel, false, true);
     
-    JButton tipLabelButton = new JButton("Customize Tip Labels...");
+    JButton tipLabelButton = new JButton("Customize...");
     
     JLabel fontSizeLabel = new JLabel("Size: ");
     JTextField fntSize = new JTextField("",3);
+/*    Integer[] fntSizes = {1,2,3,4,5,7,9,10,15,20,25,30,35,40,45,50};*/
+/*    JComboBox fntSize = new JComboBox(fntSizes);*/
     JLabel ptLabel = new JLabel("pt");
     JButton fntIncButton = new JButton("^");
     JButton fntDecButton = new JButton("v");
@@ -62,20 +64,22 @@ public final class NodeEditPanel extends JPanel{
         colorByMenu = new ColorByPopupMenu(frame.frame, frame, frame.frame.labelColorPanel,1);
         this.setToolTipText("Customize Nodes");
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+/*        setLayout(new GridLayout(1,1));*/
         
         
         nodeLabelCheckBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                vis.setDrawNodeLabels(nodeLabelCheckBox.isSelected());
-                vis.redraw();
-                labelPanelCP.setVisible(nodeLabelCheckBox.isSelected());
+                    vis.setDrawNodeLabels(nodeLabelCheckBox.isSelected());
+                    vis.redraw();
+                    labelPanelCP.setVisible(nodeLabelCheckBox.isSelected());
             }
         });
         holder.add(nodeLabelCheckBox);
         holder.add(new JLabel());
         add(holder);
         
-        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
+/*        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));*/
+        labelPanel.setLayout(new GridLayout(4,1));
         
         tipLabelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -86,32 +90,49 @@ public final class NodeEditPanel extends JPanel{
 /*        labelPanel.add(fontSizeLabel);*/
         fontSizePanel.add(fontSizeLabel);
         fntSize.setToolTipText("Change the font size of node labels.");
+        fntSize.setMaximumSize(new Dimension(30,20));
         fntSize.setText(""+vis.getNodeFontSize());
-        fntSize.setMaximumSize(new Dimension(20,20));
-        fontSizePanel.add(fntSize);
-        fontSizePanel.add(ptLabel);
+        fntSize.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+            }
+            public void keyPressed(KeyEvent e) {
+            }
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER)
+                    vis.setNodeFontSize(Float.parseFloat(fntSize.getText()));
+            }
+        });
+/*        fntSize.setText(""+vis.getNodeFontSize());*/
+/*        fntSize.setMaximumSize(new Dimension(20,10));*/
+/*        fontSizePanel.add(fntSize);*/
+/*        fontSizePanel.add(ptLabel);*/
         fntPanel.setLayout(new GridLayout(2,1));
-        fntPanel.setMaximumSize(new Dimension(10,20));
+/*        fntPanel.setMaximumSize(new Dimension(10,10));*/
+        fntDecButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                vis.setNodeFontSize(vis.getNodeFontSize()-1);
+                fntSize.setText(""+vis.getNodeFontSize());
+                    
+            }
+        });
+        
+/*        fntPanel.add(fntDecButton);*/
+/*        fontSizePanel.add(fntPanel);*/
+        fontSizePanel.add(fntDecButton);
+        fontSizePanel.add(fntSize);
         fntIncButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 vis.setNodeFontSize(vis.getNodeFontSize()+1);
                 fntSize.setText(""+vis.getNodeFontSize());
             }
         });
-        fntPanel.add(fntIncButton);
-        fntDecButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                vis.setNodeFontSize(vis.getNodeFontSize()-1);
-                fntSize.setText(""+vis.getNodeFontSize());
-            }
-        });
-        fntPanel.add(fntDecButton);
-        fontSizePanel.add(fntPanel);
+/*        fntPanel.add(fntIncButton);*/
+        fontSizePanel.add(fntIncButton);        
         labelPanel.add(fontSizePanel);
         
 /*        add(fontColorLabel);*/
 
-        colorLabel.setPreferredSize(new Dimension(30,20));
+        colorLabel.setPreferredSize(new Dimension(30,15));
         colorLabel.setOpaque(true);
         colorLabel.setBorder(LineBorder.createGrayLineBorder());
         colorLabel.setBackground(Color.WHITE);
