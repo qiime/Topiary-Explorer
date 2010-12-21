@@ -323,7 +323,7 @@ public class MainFrame extends JFrame {
          {
               w.resetLineWidthOtuMenu();
               w.resetCollapseByMenu();
-              w.branchMenu.colorBy.resetColorByOtuMenu();
+              w.treeEditToolbar.branchEditPanel.colorByMenu.resetColorByOtuMenu();
               w.treeEditToolbar.nodeEditPanel.colorByMenu.resetColorByOtuMenu();
           }
      }
@@ -333,7 +333,7 @@ public class MainFrame extends JFrame {
           {
                w.resetLineWidthSampleMenu();
                w.resetCollapseByMenu();
-               w.branchMenu.colorBy.resetColorBySampleMenu();
+               w.treeEditToolbar.branchEditPanel.colorByMenu.resetColorBySampleMenu();
                w.treeEditToolbar.nodeEditPanel.colorByMenu.resetColorBySampleMenu();
                w.resetLineWidthSampleMenu();
            }

@@ -25,7 +25,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     JMenu nodeMenu = new JMenu("Node");
     
     JMenu collapseByMenu = new JMenu("Collapse by");
-    BranchMenu branchMenu;
+/*    BranchMenu branchMenu;*/
     JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels");
     JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");
     
@@ -73,10 +73,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          catch(IOException e)
          {}
          
-         colorBranchesBy = new ColorByMenu(frame,this,frame.branchColorPanel,0);
-         colorLabelsBy = new ColorByMenu(frame,this,frame.labelColorPanel,1);
+/*         colorBranchesBy = new ColorByMenu(frame,this,frame.branchColorPanel,0);*/
+/*         colorLabelsBy = new ColorByMenu(frame,this,frame.labelColorPanel,1);*/
          
-         branchMenu = new BranchMenu(frame, this, "Branches");
+/*         branchMenu = new BranchMenu(frame, this, "Branches");*/
 	     tree.addKeyListener(this);
 	     treeHolder = new TreeAppletHolder(tree, this);
 	     treeToolbar = new TreeToolbar(this);
@@ -306,7 +306,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          treeMenu.add(internalLabelsMenuItem);
 	     topMenu.add(treeMenu);
 /*       topMenu.add(nodeMenu);*/
-	     topMenu.add(branchMenu);
+/*       topMenu.add(branchMenu);*/
 	     
 	     setJMenuBar(topMenu);
          pane.add(leftPanel, BorderLayout.WEST);
@@ -1154,7 +1154,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         */
          public void syncTreeWithLineWidthSlider() {
              if (tree.getTree() == null) return;
-             double value = branchMenu.lineWidthSlider.getValue();
+             double value = treeEditToolbar.branchEditPanel.lineWidthSlider.getValue();
              value = value/20.0;
              tree.setLineWidthScale(value);
              tree.redraw();
@@ -1166,11 +1166,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          
          
          public void resetLineWidthOtuMenu() {
-            branchMenu.resetLineWidthOtuMenu();
+/*            branchMenu.resetLineWidthOtuMenu();*/
         }
         
         public void resetLineWidthSampleMenu() {
-               branchMenu.resetLineWidthSampleMenu();
+/*               branchMenu.resetLineWidthSampleMenu();*/
            }        
         
          /**
