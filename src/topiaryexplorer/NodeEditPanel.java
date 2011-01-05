@@ -26,6 +26,7 @@ public final class NodeEditPanel extends JPanel{
     
     JCheckBox pieChartCheckBox = new JCheckBox("Pie Chart");
     JCheckBox nodeLabelCheckBox = new JCheckBox("Tip Labels");
+    JCheckBox internalLabelCheckBox = new JCheckBox("Internal Node Labels");
     JPanel labelPanel = new JPanel();
     CollapsablePanel labelPanelCP = new CollapsablePanel("Labels",labelPanel, false, true);
     

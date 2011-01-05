@@ -242,6 +242,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          rightPanel.add(toolbars, BorderLayout.NORTH);
          rightPanel.add(treePanel, BorderLayout.CENTER);
          leftPanel.add(treeEditToolbar, BorderLayout.CENTER);
+         treeEditPane.setViewportView(leftPanel);
 	     
 	     //set up the "node" submenus
          item = new JMenuItem("Collapse/Expand");
@@ -302,14 +303,15 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          externalLabelsMenuItem.addActionListener(this);
          internalLabelsMenuItem.setSelected(false);
          internalLabelsMenuItem.addActionListener(this);
-         treeMenu.add(externalLabelsMenuItem);
+/*         treeMenu.add(externalLabelsMenuItem);*/
          treeMenu.add(internalLabelsMenuItem);
 	     topMenu.add(treeMenu);
 /*       topMenu.add(nodeMenu);*/
 /*       topMenu.add(branchMenu);*/
 	     
 	     setJMenuBar(topMenu);
-         pane.add(leftPanel, BorderLayout.WEST);
+/*         pane.add(leftPanel, BorderLayout.WEST);*/ 
+         pane.add(treeEditPane, BorderLayout.WEST);
 	     pane.add(rightPanel, BorderLayout.CENTER);
 	     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
