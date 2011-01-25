@@ -34,17 +34,17 @@ import javax.jnlp.*;
  * TopiaryMenu is the main menu bar for TopiaryTool
  */
 public class ColorByMenu extends JMenu{
-    TopiaryWindow parent;
-    MainFrame frame;
-    ColorPanel colorPanel;
-    int elementType = 0;
-    JMenu colorByOtuMetadataMenu = new JMenu("OTU Metadata");
-    JMenu colorBySampleMetadataMenu = new JMenu("Sample Metadata");
+    private TopiaryWindow parent;
+    private MainFrame frame;
+    private ColorPanel colorPanel;
+    private int elementType = 0;
+    private JMenu colorByOtuMetadataMenu = new JMenu("OTU Metadata");
+    private JMenu colorBySampleMetadataMenu = new JMenu("Sample Metadata");
     
-    ButtonGroup colorByGroup = new ButtonGroup();
+    private ButtonGroup colorByGroup = new ButtonGroup();
     
     /**
-     * Constructor.  Sets up the menu.
+     * Creates a menu for the specified element type.
      */
      public ColorByMenu(MainFrame _frame, TopiaryWindow _parent, ColorPanel _colorPanel, int _elementType) {
          super("Color By");
@@ -56,10 +56,9 @@ public class ColorByMenu extends JMenu{
          add(colorByOtuMetadataMenu);
          add(colorBySampleMetadataMenu);
      }
-    
 
- /**
-    * Resets colorby OTU menu when a new otu table is loaded
+    /**
+    * Resets colorby OTU menu when a new otu table is loaded.
     */
     public void resetColorByOtuMenu() {
 /*        noColoringMenuItem.setSelected(true);*/
@@ -92,7 +91,7 @@ public class ColorByMenu extends JMenu{
     }
 
     /**
-    * Resets colorby Sample menu when a new sample metadata table is loaded
+    * Resets colorby Sample menu when a new sample metadata table is loaded.
     */
     public void resetColorBySampleMenu() {
 /*        noColoringMenuItem.setSelected(true);*/

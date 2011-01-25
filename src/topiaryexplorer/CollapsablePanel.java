@@ -9,32 +9,41 @@ import java.io.*;
 import java.lang.*;
 import javax.imageio.ImageIO;
 
-/** Code adapted from http://www.coderanch.com/t/341737/GUI/java/Expand-Collapse-Panels 
+/** 
+* Panel that has a collapse/uncollapse ability for hiding and revealing content.
+* Code adapted from http://www.coderanch.com/t/341737/GUI/java/Expand-Collapse-Panels 
+* @see #javax.swing.JPanel
 **/
  
- 
 class CollapsablePanel extends JPanel {
-
 	private boolean selected;
 	private boolean nested;
-	JPanel contentPanel_;
-	HeaderPanel headerPanel_;
+	private JPanel contentPanel_;
+	private HeaderPanel headerPanel_;
 	private Color selectedColor = new Color(20,200,250);
 	private Color hoverColor = new Color(20,200,250);
 	private Color unselectedColor = new Color(170,210,220);
 	private Color currentColor = new Color(170,210,220);
-
+    /**
+    * A private class used within a <code>CollapsablePanel</code>.
+    **/
 	private class HeaderPanel extends JPanel implements MouseListener {
 		String text_;
 		Font font;
+		// Images for open and closed state of panel
 		BufferedImage open, closed;
+		// Offsets for the text in the header and padding for the image
 		final int OFFSET = 30, PAD = 5;
 
+        /**
+        * Creates a header panel with a title.
+        **/
 		public HeaderPanel(String text) {
+		    // Mouse listener so that the header will change colors when hovered
 			addMouseListener(this);
 			text_ = text;
 			font = new Font("sans-serif", Font.PLAIN, 12);
-			// setRequestFocusEnabled(true);
+			// If this panel is nested, the width needs to be smaller
 			if(nested)
 			{
                 setPreferredSize(new Dimension(190, 20));
@@ -44,6 +53,7 @@ class CollapsablePanel extends JPanel {
                 
 			int w = getWidth();
 			int h = getHeight();
+			// Draw the header with the color corresponding to collapsed or uncollapsed status
             if(selected)
                 currentColor = selectedColor;
             else
@@ -59,7 +69,10 @@ class CollapsablePanel extends JPanel {
             }
 
 		}
-
+        /**
+        * Draws the header using the proper colors and open or closed image
+        * @see JComponent#paintComponent(Graphics)
+        **/
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
@@ -70,7 +83,7 @@ class CollapsablePanel extends JPanel {
 	               g2.drawImage(open, PAD, 0, h, h, this);
 	           else
 	               g2.drawImage(closed, PAD, 0, h, h, this);
-	                         // Uncomment once you have your own images
+
 			g2.setFont(font);
 			FontRenderContext frc = g2.getFontRenderContext();
 			LineMetrics lm = font.getLineMetrics(text_, frc);
@@ -99,8 +112,11 @@ class CollapsablePanel extends JPanel {
 		}
 
 	}
-
-	public CollapsablePanel(String text, JPanel panel) {
+    
+    /**
+    * Creates a collapsable panel with header and internal panel
+    **/
+	CollapsablePanel(String text, JPanel panel) {
 		super(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(1, 3, 0, 3);
@@ -124,7 +140,10 @@ class CollapsablePanel extends JPanel {
 
 	}
 	
-	public CollapsablePanel(String text, JPanel panel, boolean _selected, boolean _nested) {
+	/**
+    * Creates a collapsable panel with header, internal panel, selected state and nested state.
+    **/
+	CollapsablePanel(String text, JPanel panel, boolean _selected, boolean _nested) {
 		super(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(1, 3, 0, 3);
@@ -147,8 +166,11 @@ class CollapsablePanel extends JPanel {
 		gbc.weighty = 1.0;
 		add(padding, gbc);
 	}
-
-	public void toggleSelection() {
+    
+    /**
+    * Inverts selected state of the panel.
+    **/
+	void toggleSelection() {
 		selected = !selected;
         
         if(selected)
@@ -156,7 +178,7 @@ class CollapsablePanel extends JPanel {
         else
             currentColor = unselectedColor;
         
-		if (contentPanel_.isShowing())
+		if(contentPanel_.isShowing())
 			contentPanel_.setVisible(false);
 		else
 			contentPanel_.setVisible(true);
@@ -166,7 +188,10 @@ class CollapsablePanel extends JPanel {
 		headerPanel_.repaint();
 	}
 	
-	public void addToHeader(Component c) {
+	/**
+	* Adds a component to the header bar.
+	**/
+	void addToHeader(Component c) {
 	    headerPanel_.add(c);
 	}
 

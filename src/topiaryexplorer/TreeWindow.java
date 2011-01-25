@@ -25,7 +25,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     JMenu nodeMenu = new JMenu("Node");
     
     JMenu collapseByMenu = new JMenu("Collapse by");
-/*    BranchMenu branchMenu;*/
     JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels");
     JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");
     
@@ -99,7 +98,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                   if (node.isLocked())
                     prefix += "(L)";
                   String label = node.getName();
-                  if (label.length() > 0 ) {
+                  if (label.length() > 0) {
                       status += label;
                     } else {
  						status += String.format("Sub-tree: %d leaves", node.getNumberOfLeaves());
@@ -137,8 +136,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                   clickedNode.setCollapsed(!clickedNode.isCollapsed());
                   for(Node n: tree.getTree().getNodes())
                     {
-
-                        if(clickedNode.getAnscestors().contains(n))
+                        if(clickedNode.getAnscestors().contains(n) || n == clickedNode)
                           continue;
                         n.setCollapsed(!clickedNode.isCollapsed());
                     }
@@ -510,8 +508,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         verticalTreeToolbar.setScale();
         tree.loop();
         collapseTree();
-
+        
         this.setVisible(true);
+        treeHolder.syncScrollbarsWithTree();
         frame.consoleWindow.update("Done drawing tree. ");
         treeEditToolbar.setStatus("Done drawing tree.");
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

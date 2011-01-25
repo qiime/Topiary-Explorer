@@ -13,21 +13,29 @@ import javax.swing.table.*;
 import javax.jnlp.*;
 
 /**
- * <<Class summary>>
+ * A button used specifically for browsing for files.
  *
  * @author Meg Pirrung &lt;&gt;
  * @version $Rev$
+ * @see #javax.swing.JButton
  */
-public class BrowseButton extends JButton{
-    NewProjectDialog frame = null;
-    JTextField partner = null;
-    FileContents fl = null;
+class BrowseButton extends JButton{
+    /**
+    * Reference to the <code>NewProjectDialog</code> that this browse button resides on.
+    **/
+    private NewProjectDialog frame = null;
+    /**
+    * Reference to the textfield on <code>NewProjectDialog</code> that this button is partnered with.
+    **/
+    private JTextField partner = null;
+    private FileContents fl = null;
     
 	// {{{ browsButton constructor
     /**
-     * 
+     * Creates a button to be used on a <code>NewProjectDialog</code> linked to a text field
+     * with a certain file type.
      */
-    public BrowseButton(NewProjectDialog _frame, JTextField _partner, String fileType) {
+    BrowseButton(NewProjectDialog _frame, JTextField _partner, String fileType) {
         frame = _frame;
         partner = _partner;
         this.setText("Browse...");
@@ -83,6 +91,9 @@ public class BrowseButton extends JButton{
     }
     // }}}
     
+    /**
+    * @return <code>FileContents</code> containing file information.
+    **/
     public FileContents buttonPressed() {
     	FileOpenService fos;
     	try { 

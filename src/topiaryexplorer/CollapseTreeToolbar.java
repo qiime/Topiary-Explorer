@@ -1,27 +1,36 @@
 package topiaryexplorer;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
 
+/**
+* A toolbar containing a slider which determines the collapse level of the tree.
+**/
 
-public class CollapseTreeToolbar extends JToolBar {
-    JSlider collapseSlider = new JSlider(0, 1001, 10);
-    JPanel spacer1 = new JPanel();
-    JLabel collapseLabel = new JLabel("Collapse tree: ");
+class CollapseTreeToolbar extends JToolBar {
+    // The slider represents the percent of the tree length
+    // that is collapsed, so the value of the slider divided
+    // by 1000 gives you the percentage of the tree that
+    // should be collapsed.
+    private JSlider collapseSlider = new JSlider(0, 1001, 10);
+    private JPanel spacer = new JPanel();
+    private JLabel collapseLabel = new JLabel("Collapse tree: ");
 
-    TreeWindow frame = null;
-
-    public CollapseTreeToolbar(TreeWindow _frame) {
+    private TreeWindow frame = null;
+    
+    /**
+    * Creates a slider within a toolbar for collapsing a tree.
+    **/
+    CollapseTreeToolbar(TreeWindow _frame) {
 
         frame = _frame;
         add(collapseLabel);
 
-        spacer1.setMinimumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
-        spacer1.setMaximumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
+        spacer.setMinimumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
+        spacer.setMaximumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
         collapseSlider.setSnapToTicks(true);
         collapseSlider.setToolTipText("Drag slider to collapse tree.");
         collapseSlider.setPreferredSize(new Dimension(this.getWidth(),28));
@@ -33,24 +42,35 @@ public class CollapseTreeToolbar extends JToolBar {
             }
         });
 
-        add(spacer1);
+        add(spacer);
         add(collapseSlider);
         setFloatable(false);
     }
     
-    public void setValue(int v) {
-        collapseSlider.setValue(v);  
+    /**
+    * Set the value of the collapse slider.
+    **/
+    void setValue(int v) {
+        // Slider only goes from 0 to 1000
+        if(v >= 0 && v <= 1000)
+            collapseSlider.setValue(v);  
         syncTreeWithCollapseSlider();      
     }
 
-    public void resetLayout() {
-        spacer1.setMinimumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
-        spacer1.setMaximumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
+    /**
+    * Reset the slider width if the window containing it is modified.
+    **/
+    void resetLayout() {
+        spacer.setMinimumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
+        spacer.setMaximumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
         collapseSlider.setPreferredSize(new Dimension(frame.treeHolder.getWidth(),28));
         syncTreeWithCollapseSlider();
     }
 
-    public void syncTreeWithCollapseSlider() {
+    /**
+    * Redraw the tree at the appropriate collapse level.
+    **/
+    void syncTreeWithCollapseSlider() {
         if (frame.tree==null) return;
         frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         frame.tree.setCollapsedLevel(1-collapseSlider.getValue()/1000.0);

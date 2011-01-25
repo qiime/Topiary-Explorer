@@ -94,7 +94,7 @@ public class TreeVis extends PApplet {
 
     /**
      * draw() is called whenever the tree needs to be re-drawn.
-     * @see redraw
+     * @see #redraw()
      */
     public void draw() {
       //color over the existing graphics with a white background
@@ -532,7 +532,8 @@ public class TreeVis extends PApplet {
      * Rescales the tree, keeping the point (x, y) in screen coords at the same position relative
      * to the tree.  Note that rescaling the tree only has an effect on the vertical scale.
      *
-     * @param  value  the new scale value
+     * @param  xvalue  the new xscale value
+     * @param  yvalue  the new yscale value
      * @param  x  the x position to keep the same while the tree is scaled
      * @param  y  the y position to keep the same while the tree is scaled
      */
@@ -554,11 +555,11 @@ public class TreeVis extends PApplet {
     }
 
     /**
-     * Calls findNode(Node,double,double,double) on the root of the tree
+     * Calls findNode(Node,double,double) on the root of the tree
      *
      * @param  x  the x-value to search for the node at
      * @param  y  the y-value to search for the node at
-     * @see findNode(Node,double,double,double)
+     * @see #findNode(Node,double,double)
      */
     public Node findNode(double x, double y) {
       return findNode(root, mouseX, mouseY);
@@ -923,10 +924,10 @@ public class TreeVis extends PApplet {
      double maxY = drawY + (nodeFont.ascent()*nodeFont.size);
      
       if (node.isLeaf() && drawNodeLabels) {
+/*     if(drawNodeLabels) {*/
           int lc = node.getLabelColor(majorityColoring).getRGB();
           canvas.fill(lc);
           canvas.stroke(lc);
-/*          if(treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")){*/
             if (yscale > nodeFontSize) 
                 canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
 /*            }*/
@@ -965,6 +966,13 @@ public class TreeVis extends PApplet {
           y = node.getROffset() * Math.sin(node.getTOffset());
       }
       
+      String s = node.getName();
+         if(node.getLabel().length() > 0)
+             s = node.getLabel();
+         for (int i = 0; i < s.length(); i++) {
+           width += nodeFont.width(s.charAt(i));
+         }
+      
       //get the actual screen coordinates
       double xs = toScreenX(x);
       double ys = toScreenY(y);
@@ -977,7 +985,7 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Rectangular")) {
           
           //draw vertical line through the node
-          canvas.line((float)xs, (float)toScreenY( node.nodes.get(0).getYOffset()),
+          canvas.line((float)xs, (float)toScreenY(node.nodes.get(0).getYOffset()),
             (float)xs, (float)toScreenY(node.nodes.get(node.nodes.size()-1).getYOffset()));
             
           //loop over all of the children
@@ -985,11 +993,18 @@ public class TreeVis extends PApplet {
               //draw horizontal line from the vertical line to the child node
               canvas.stroke(node.nodes.get(i).getBranchColor(majorityColoring).getRGB());
               canvas.strokeWeight((float) (node.nodes.get(i).getLineWidth()*getLineWidthScale()));
-/*              canvas.strokeWeight((float).2);*/
               double yp = toScreenY(node.nodes.get(i).getYOffset());
               double xp = toScreenX(node.nodes.get(i).getXOffset());
               canvas.line((float)xs, (float)yp,
                   (float)xp, (float)yp);
+                  
+              if(this.drawInternalNodeLabels) {
+                    int lc = node.getLabelColor(majorityColoring).getRGB();
+                    canvas.fill(lc);
+                    canvas.stroke(lc);
+                      if (yscale > nodeFontSize) 
+                          canvas.text(s, (float)(xs), (float)(yp-2));
+                }
           }
       
             
@@ -1293,7 +1308,7 @@ public class TreeVis extends PApplet {
     /**
      * Exports a screen caputre of the tree to a PDF file
      *
-     * @param  filename  the file to write the image to
+     * @param  path The path to write the image to
      */
     public void exportScreenCapture(String path) {
 		  PGraphics canvas = createGraphics(width, height, P2D);
@@ -1313,7 +1328,8 @@ public class TreeVis extends PApplet {
     /**
      * Export the entire tree to a PDF file
      *
-     * @param  filename  the file to write the image to
+     * @param  path The path to write the image to
+     * @param  dims The dimentions of the output image file
      */
     public void exportTreeImage(String path, double dims[]) {
 	  try {

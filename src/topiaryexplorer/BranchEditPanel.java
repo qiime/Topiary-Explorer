@@ -14,40 +14,57 @@ import java.io.*;
 import javax.jnlp.*;
 
 /**
- * <<Class summary>>
+ * Component of the TreeViewToolbar for editing branch properties
  *
  * @author Meg Pirrung &lt;&gt;
- * @version $Rev$
+ * @see #javax.swing.JPanel
  */
-public final class BranchEditPanel extends JPanel{
-    TreeWindow frame = null;
-    TreeVis vis = null;
+class BranchEditPanel extends JPanel{
+    //A reference to the <code>TreeWindow</code> that contains this panel.
+    private TreeWindow frame = null;
+    /**
+    * A reference to the <code>TreeVis</code> that this panel modifies.
+    **/
+    private TreeVis vis = null;
     
+    /**
+    * A checkbox indicating the colored status of branches.
+    **/
     JCheckBox coloringMenuItem = new JCheckBox("No coloring",true);
+    /**
+    * A checkbox indicating the type of coloring used for the branches.
+    **/
     JCheckBox majorityColoringMenuItem = new JCheckBox("Majority coloring",true);
     
+    /**
+    * A button that triggers menus containing fields that the branches can be colored by.
+    **/
     JButton colorBy = new JButton("Color by...");
+    /**
+    * Menu triggered by colorBy button which contains fields that branches can be colored by.
+    **/
     ColorByPopupMenu colorByMenu;
     
-    JButton sortByButton = new JButton("Sort by...");
-    JMenu sortBy = new JMenu("Sort by");
+/*    JButton sortByButton = new JButton("Sort by...");
+    JMenu sortBy = new JMenu("Sort by");*/
     
     JMenu lineWidthMenu = new JMenu("Line Width");
     JSlider lineWidthSlider = new JSlider(1, 20, 20);
     ButtonGroup lineWidthGroup = new ButtonGroup();
     
-    JRadioButtonMenuItem uniformLineWidthItem = new JRadioButtonMenuItem("Uniform");
+/*    JRadioButtonMenuItem uniformLineWidthItem = new JRadioButtonMenuItem("Uniform");
     JMenu lineWidthSampleMetadataMenu = new JMenu("Sample Metadata");
-    JMenu lineWidthOtuMetadataMenu = new JMenu("OTU Metadata");
+    JMenu lineWidthOtuMetadataMenu = new JMenu("OTU Metadata");*/
     
 	// {{{ BranchEditPanel constructor
     /**
-     * 
+     * Creates a panel with reference to the <code>TreeWindow</code> it is contained in.
      */
-    public BranchEditPanel(TreeWindow _frame) {
+    BranchEditPanel(TreeWindow _frame) {
         super();
         frame = _frame;
         vis = frame.tree;
+        // TreeWindow frame, MainFrame frame.frame
         colorByMenu = new ColorByPopupMenu(frame.frame, frame, frame.frame.branchColorPanel,0);
         this.setToolTipText("Customize Branches");
 /*        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));*/

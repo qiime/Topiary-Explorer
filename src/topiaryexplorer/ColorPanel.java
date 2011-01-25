@@ -13,23 +13,24 @@ import java.io.*;
 import javax.jnlp.*;
 
 /**
- * <<Class summary>>
+ * Panel that coordinates the color key table.
  *
  * @author Meg Pirrung &lt;&gt;
  * @version $Rev$
- */
+ **/
 public class ColorPanel extends JPanel{
-    MainFrame frame = null;
-    JScrollPane colorKeyScrollPane = new JScrollPane();  
-    JTable colorKeyTable = new JTable();
-    int elementType = 0;
+    private MainFrame frame = null;
+    private JScrollPane colorKeyScrollPane = new JScrollPane();  
+    private JTable colorKeyTable = new JTable();
+    private int elementType = 0;
     
     //Holds the current coloring information
     private TreeMap<Object, Color> colorMap = new TreeMap<Object, Color>();
     private int colorColumnIndex = -1;
+    
 	// {{{ ColorPanel constructor
     /**
-     * 
+     * Creates a color panel of a certain element type with a reference to the main frame.
      */
     public ColorPanel(MainFrame _frame, int _elementType) {
         super();
@@ -42,18 +43,37 @@ public class ColorPanel extends JPanel{
         add(colorKeyScrollPane);
     }
 	// }}}
+	/**
+	* Returns the current mapping for the color blocks
+	* and their associated metadata values.
+	**/
+	TreeMap<Object, Color> getColorMap(){ return colorMap; }
+	/**
+	* Sets the colormap.
+	**/
+	void setColorMap(TreeMap<Object, Color> c) { colorMap = c; }
+	/**
+	* Gets the colorKeyTable corresponding to this color panel.
+	* @return the current color key table.
+	**/
+	JTable getColorKeyTable() { return colorKeyTable; }
+	/**
+	* Gets the index of the currently selected value in the color map.
+	* @return the index of the currently selected value.
+	**/
+	int getColorColumnIndex() { return colorColumnIndex; }
+	/**
+	* Sets the index of the currently selected value
+	**/
+	void setColorColumnIndex(int i) { colorColumnIndex = i; }
 	
-	public TreeMap<Object, Color> getColorMap(){ return colorMap; }
-	public void setColorMap(TreeMap<Object, Color> c) { colorMap = c; }
-	public JTable getColorKeyTable() { return colorKeyTable; }
-	public int getColorColumnIndex() { return colorColumnIndex; }
-	public void setColorColumnIndex(int i) { colorColumnIndex = i; }
     /**
-      * Syncs the colorKeyTable with ColorMap
-      */
-     public void syncColorKeyTable() {
-         //data is: name, color, selected
+    * Syncs the colorKeyTable with ColorMap
+    **/
+     void syncColorKeyTable() {
+         // data is: name, color, selected
          ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
+         // set up the rows of the color map
          for (Object key : colorMap.keySet()) {
              ArrayList<Object> newRow = new ArrayList<Object>();
              newRow.add(key);
@@ -94,23 +114,26 @@ public class ColorPanel extends JPanel{
                          frame.recolorBranches();
                      else if(elementType == 1)
                          frame.recolorLabels();
-                 }
-             }
-         });
+                }
+            }
+        });
      }
 
      /**
       * Syncs the ColorMap with the colorKeyTable
       */
-     public void syncColorMap() {
+     void syncColorMap() {
         colorMap.clear();
         for (ArrayList<Object> row : ((ColorTableModel)colorKeyTable.getModel()).getData()) {
             colorMap.put(row.get(0), (Color)row.get(1));
         }
      }
      
-     public void interpolateColors() {
-          setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+     /**
+     * Create a gradient using the colors selected in the colormap
+     **/
+     void interpolateColors() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
  		ArrayList<ArrayList<Object>> data = ((ColorTableModel)colorKeyTable.getModel()).getData();
 
  		int first = -1;
