@@ -269,7 +269,7 @@ public class TopiaryFunctions {
                       maxStr = (String)s;
                   }
               }
-
+              
               // if the string that appears most often appears more than 50% of the time
               // then it is the consensus string, add it to the consensusLineage
               if(max/consensus.size() > level)

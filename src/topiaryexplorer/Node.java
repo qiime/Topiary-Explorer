@@ -93,7 +93,11 @@ public class Node implements Cloneable{
   public void setName(String s) { name = s; }
   public String getName() { return name; }
   public void setLineage(String s) { lineage = s; }
-  public String getLineage() { return lineage; }
+  public String getLineage() { 
+      if(!lineage.equals("Unclassified-Screened"))
+          return lineage;
+        return ""; 
+        }
   public void setConsensusLineage(String s) { consensusLineage = s; }
   public String getConsensusLineage() { return consensusLineage;}
   public void setBranchLength(double f) { if (f >= 0) branchlength = f; }
@@ -145,11 +149,15 @@ public class Node implements Cloneable{
   
   // recursive method to return consensus lineage
   public String getConsensusLineageF() {   
-      if(isLeaf())
-        return lineage;
-         
       // If the node is a leaf return lineage
-      ArrayList<Node> tips = getLeaves();   
+      if(isLeaf())
+      {
+          if(!lineage.equals("Unclassified-Screened"))
+            return lineage;
+          return "";
+      }
+      
+      ArrayList<Node> tips = getLeaves();
       
       // Collect lineage of tips
       ArrayList<String> currLabels = new ArrayList<String>();
@@ -186,7 +194,8 @@ public class Node implements Cloneable{
                 curr.add(l.trim());
                 testb = false;
             }
-            newLabels.add(l.substring(l.indexOf(";")+1, l.length()).trim());      
+            if(l.length() > 0)
+                newLabels.add(l.substring(l.indexOf(";")+1, l.length()).trim());      
           }
         
           String c = TopiaryFunctions.getConsensus(curr,.5);
