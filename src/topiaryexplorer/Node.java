@@ -96,7 +96,7 @@ public class Node implements Cloneable{
   public String getLineage() { 
       if(!lineage.equals("Unclassified-Screened"))
           return lineage;
-        return ""; 
+        return null; 
         }
   public void setConsensusLineage(String s) { consensusLineage = s; }
   public String getConsensusLineage() { return consensusLineage;}
@@ -154,7 +154,7 @@ public class Node implements Cloneable{
       {
           if(!lineage.equals("Unclassified-Screened"))
             return lineage;
-          return "";
+          return null;
       }
       
       ArrayList<Node> tips = getLeaves();
@@ -164,8 +164,12 @@ public class Node implements Cloneable{
       for(Node n: tips)
       {
           String l = n.getLineage();
-          currLabels.add(l);
+          if(l != null)
+              currLabels.add(l);
       }
+      
+      if(currLabels.size() == 0)
+        return null;
       
       String consensusLineage = "";
       ArrayList<String> curr = new ArrayList<String>();
