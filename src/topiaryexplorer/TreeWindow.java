@@ -203,7 +203,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                             for(Node n : clickedNode.getAnscestors())
                                 n.setConsensusLineage(n.getConsensusLineageF());
                           }
-/*                        tree.resetTree();*/
                         tree.setTree(tree.getTree());
                         tree.loop();
                   }
@@ -275,9 +274,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     
 	     //set up the "tree" submenus
 	     JMenuItem item;
-/*         item = new JMenuItem("Prune tree...");
-           item.addActionListener(this);
-           treeMenu.add(item);*/
+         item = new JMenuItem("Prune tree...");
+         item.addActionListener(this);
+         treeMenu.add(item);
          item = new JMenuItem("Show hidden nodes");
          item.addActionListener(this);
          treeMenu.add(item);
@@ -337,10 +336,22 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              else if (e.getActionCommand().equals("Set consensus lineage")) {
                       resetConsensusLineage();
                   }
-             else if (e.getActionCommand().equals("Prune tree...")) {
-                      //PruneTreeWindow ptw = new PruneTreeWindow(frame, this, true, true);
-                      //ptw.setVisible(true);
-                  }
+             else if (e.getActionCommand().equals("Prune tree")) {
+                 tree.noLoop();
+                 double total = tree.getTree().depth();
+                 double perc = .01;
+                 while(tree.getTree().getNumberOfLeaves() > 30000)
+                 {
+                      for(Node n: tree.getTree().getLeaves())
+                        {
+                            n.prune(total, perc);
+                        }
+                        perc += .01;
+                        setTreeVals(tree.getTree());
+                        tree.setTree(tree.getTree());
+                }
+                tree.loop();
+            }
                else if (e.getActionCommand().equals("Collapse/Expand All Children")) {
                    if (frame.clickedNode != null) {
                       ArrayList<Node> children = frame.clickedNode.getNodes();
@@ -428,8 +439,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     public void setTreeVals(Node root) {
         for(Node n : root.getNodes())
         {
-            n.setDepthO(n.depthF());
-            n.setNumberOfLeavesO(n.getNumberOfLeavesF());
+            n.setDepth(n.depthF());
+            n.setNumberOfLeaves(n.getNumberOfLeavesF());
         }
     }
 	

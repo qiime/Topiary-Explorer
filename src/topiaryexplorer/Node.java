@@ -135,11 +135,20 @@ public class Node implements Cloneable{
   public void setAnscestors(ArrayList<Node> a) { anscestors = a; }
   public ArrayList<Node> getAnscestors() { return anscestors; }
   public int getLevel() { return anscestors.size(); }
-  public void setDepthO(double val) { depth = val;}
+  public void setDepth(double val) { depth = val;}
   public double depth() { return depth; }
-  public void setNumberOfLeavesO(int val) { numberOfLeaves = val;}
+  public void setNumberOfLeaves(int val) { numberOfLeaves = val;}
   public int getNumberOfLeaves() { return numberOfLeaves; }
   
+  public void prune(double total, double perc) {
+      if(getBranchLength()/total > perc)
+        return;
+      
+      if(parent == null)
+        return;
+      parent.setName(parent.getName() +","+ this.name);
+      parent.nodes.remove(this);
+  }
   
   public void setLocked(boolean l) { 
       locked=l; 
