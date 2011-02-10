@@ -25,7 +25,7 @@ public class ColorPanel extends JPanel{
     private int elementType = 0;
     
     //Holds the current coloring information
-    private TreeMap<Object, Color> colorMap = new TreeMap<Object, Color>();
+    private HashMap colorMap = new HashMap();
     private int colorColumnIndex = -1;
     
 	// {{{ ColorPanel constructor
@@ -47,11 +47,11 @@ public class ColorPanel extends JPanel{
 	* Returns the current mapping for the color blocks
 	* and their associated metadata values.
 	**/
-	TreeMap<Object, Color> getColorMap(){ return colorMap; }
+	HashMap getColorMap(){ return colorMap; }
 	/**
 	* Sets the colormap.
 	**/
-	void setColorMap(TreeMap<Object, Color> c) { colorMap = c; }
+	void setColorMap(HashMap c) { colorMap = c; }
 	/**
 	* Gets the colorKeyTable corresponding to this color panel.
 	* @return the current color key table.

@@ -625,7 +625,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                Object category = frame.otuMetadata.getValueAt(rowIndex, frame.branchColorPanel.getColorColumnIndex());
                if (category == null) continue;
                //get the color for this category
-               Color c = frame.branchColorPanel.getColorMap().get(category);
+               Color c = (Color)frame.branchColorPanel.getColorMap().get(category);
                if (c == null) {
                    JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
 /*                   frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());*/
@@ -684,7 +684,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          Object color = null;
                          color = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.branchColorPanel.getColorColumnIndex());                                                          
                          if (color == null) continue;
-                         n.addBranchColor(frame.branchColorPanel.getColorMap().get(color), weight);
+                         n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(color), weight);
                      }
              }
 
@@ -713,7 +713,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                     Object category = frame.otuMetadata.getValueAt(rowIndex, frame.labelColorPanel.getColorColumnIndex());
                     if (category == null) continue;
                     //get the color for this category
-                    Color c = frame.labelColorPanel.getColorMap().get(category);
+                    Color c = (Color)frame.labelColorPanel.getColorMap().get(category);
                     if (c == null) {
                         JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
      /*                   frame.consoleWindow.update("ERROR: No color specified for category "+category.toString());*/
@@ -772,7 +772,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                               Object color = null;
                               color = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.labelColorPanel.getColorColumnIndex());                                                          
                               if (color == null) continue;
-                              n.addLabelColor(frame.labelColorPanel.getColorMap().get(color), weight);
+                              n.addLabelColor((Color)frame.labelColorPanel.getColorMap().get(color), weight);
                           }
                   }
 
@@ -1054,7 +1054,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
       public void removeColor() {
             //reset the branchColorPanel.getColorMap()
-            frame.branchColorPanel.setColorMap(new TreeMap<Object, Color>());
+            frame.branchColorPanel.setColorMap(new HashMap());
             //reset the colorKeyTable
             ((ColorTableModel)frame.branchColorPanel.getColorKeyTable().getModel()).clearTable();
             frame.branchColorPanel.getColorKeyTable().repaint();
@@ -1094,9 +1094,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                column = frame.currTable.getColumn(colIndex);
              
              while (column.contains(null)) column.remove(null);
-              TreeSet<Object> uniqueVals = new TreeSet<Object>(column);
+              ArrayList<Object> uniqueVals = new ArrayList<Object>(column);
               //set up the branchColorPanel.getColorMap()
-              frame.branchColorPanel.setColorMap(new TreeMap<Object, Color>());
+              frame.branchColorPanel.setColorMap(new HashMap());
               float[] hsbvals = new float[3];
               hsbvals[0] = 0;
               hsbvals[1] = 1;
@@ -1136,9 +1136,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              column = frame.currTable.getColumn(colIndex);
 
            while (column.contains(null)) column.remove(null);
-            TreeSet<Object> uniqueVals = new TreeSet<Object>(column);
+            ArrayList<Object> uniqueVals = new ArrayList<Object>(column);
             //set up the branchColorPanel.getColorMap()
-            frame.labelColorPanel.setColorMap(new TreeMap<Object, Color>());
+            frame.labelColorPanel.setColorMap(new HashMap());
             float[] hsbvals = new float[3];
             hsbvals[0] = 0;
             hsbvals[1] = 1;
