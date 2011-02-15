@@ -461,7 +461,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              setTreeVals(root);
              tree.setTree(root);
              //make sure coloring is empty
-             removeColor();
+/*             removeColor();*/
              treeToolbar.setScale();
              verticalTreeToolbar.setScale();             
              tree.loop();
@@ -491,7 +491,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                setTreeVals(root);
                tree.setTree(root);
               //make sure coloring is empty
-              removeColor();
+/*              removeColor();*/
               treeToolbar.setScale();
               verticalTreeToolbar.setScale();
               tree.loop();
@@ -514,7 +514,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         Node root = TopiaryFunctions.createTreeFromNewickString(treeString);
         setTreeVals(root);
         tree.setTree(root);
-        removeColor();
+/*        removeColor();*/
         treeToolbar.setScale();
         verticalTreeToolbar.setScale();
         tree.loop();
@@ -1056,7 +1056,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             //reset the branchColorPanel.getColorMap()
             frame.branchColorPanel.setColorMap(new HashMap());
             //reset the colorKeyTable
-            ((ColorTableModel)frame.branchColorPanel.getColorKeyTable().getModel()).clearTable();
+            ((ColorTableModel)((TableSorter)frame.branchColorPanel.getColorKeyTable().getModel()).getTableModel()).clearTable();
             frame.branchColorPanel.getColorKeyTable().repaint();
             //reset the node colors
             for (Node n : tree.getTree().getLeaves()) {

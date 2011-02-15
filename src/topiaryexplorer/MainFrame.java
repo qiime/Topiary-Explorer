@@ -269,6 +269,25 @@ public class MainFrame extends JFrame {
           setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       }
       
+      public void newTreeWindow(String treeString, Boolean t) {
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            TreeWindow tempTreeWindow = new TreeWindow(this);
+            tempTreeWindow.loadTree(treeString);
+            treeWindows.add(tempTreeWindow);
+            tempTreeWindow.removeColor();
+            tempTreeWindow.setTitle("Tree "+treeWindows.size());
+            resetOtuMenus();
+            resetSampleMenus();
+
+            if(labelValue != "")
+              recolorLabels();
+
+            if(branchValue != "")
+              recolorBranches();
+
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
+      
       public void newTreeWindow(FileContents treeFile) {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             TreeWindow tempTreeWindow = new TreeWindow(this);
@@ -279,6 +298,18 @@ public class MainFrame extends JFrame {
             resetSampleMenus();
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
+        
+        public void newTreeWindow(FileContents treeFile, Boolean t) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                TreeWindow tempTreeWindow = new TreeWindow(this);
+                tempTreeWindow.loadTree(treeFile);
+                tempTreeWindow.removeColor();
+                treeWindows.add(tempTreeWindow);
+                tempTreeWindow.setTitle("Tree "+treeWindows.size());
+                resetOtuMenus();
+                resetSampleMenus();
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
         
     public void setOtuMetadata(ArrayList<String> data) {
         otuMetadata = new DataTable(data);

@@ -70,6 +70,8 @@ public final class NodeEditPanel extends JPanel{
         
         nodeLabelCheckBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                    if(nodeLabelCheckBox.isSelected())
+                        JOptionPane.showMessageDialog(null, "Node labels will not show unless you are zoomed in enough that the labels would not overlap.", "Warning", JOptionPane.WARNING_MESSAGE);
                     vis.setDrawNodeLabels(nodeLabelCheckBox.isSelected());
                     vis.redraw();
                     labelPanelCP.setVisible(nodeLabelCheckBox.isSelected());

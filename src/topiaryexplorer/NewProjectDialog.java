@@ -123,7 +123,7 @@ public class NewProjectDialog extends JFrame{
         
 	    if(treeFile!=null)
 	    {
-            frame.newTreeWindow(treeFile);
+            frame.newTreeWindow(treeFile, true);
 	    }
     
 	    if(otuMetadataFile != null)
