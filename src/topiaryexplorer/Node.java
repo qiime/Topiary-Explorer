@@ -244,7 +244,7 @@ public class Node implements Cloneable{
  public Color getBranchColor(boolean majority) {        
      //if there's no color, use black
      if (!branchColored) {
-         return new Color(0,0,0);
+         return new Color(0);
      }
      double r,g,b;
      r = g = b = 0;
@@ -286,7 +286,7 @@ public class Node implements Cloneable{
   }
 
   public void clearBranchColor() {
-    branchColor = null;
+    branchColor = new Color(0);
     groupBranchWeight = new ArrayList<Double>();
     groupBranchColor = new ArrayList<Color>();
   }
@@ -345,7 +345,7 @@ public class Node implements Cloneable{
     }
 
     public void clearLabelColor() {
-      labelColor = null;
+      labelColor = new Color(0,0,0);
       groupLabelWeight = new ArrayList<Double>();
       groupLabelColor = new ArrayList<Color>();
     }

@@ -461,7 +461,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              setTreeVals(root);
              tree.setTree(root);
              //make sure coloring is empty
-/*             removeColor();*/
+             removeColor();
              treeToolbar.setScale();
              verticalTreeToolbar.setScale();             
              tree.loop();
@@ -491,7 +491,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                setTreeVals(root);
                tree.setTree(root);
               //make sure coloring is empty
-/*              removeColor();*/
+              removeColor();
               treeToolbar.setScale();
               verticalTreeToolbar.setScale();
               tree.loop();
@@ -514,7 +514,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         Node root = TopiaryFunctions.createTreeFromNewickString(treeString);
         setTreeVals(root);
         tree.setTree(root);
-/*        removeColor();*/
+        removeColor();
         treeToolbar.setScale();
         verticalTreeToolbar.setScale();
         tree.loop();
@@ -1063,6 +1063,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                 n.noBranchColor();
             }
             tree.getTree().updateBranchColorFromChildren();
+            frame.recolorBranches();
             this.repaint();
 
             //reset the pcoa vertex colors

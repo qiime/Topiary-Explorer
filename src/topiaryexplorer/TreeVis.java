@@ -860,10 +860,17 @@ public class TreeVis extends PApplet {
 
       //set the color/weight to draw
       canvas.strokeWeight((float).2);
-      int c = node.getBranchColor(majorityColoring).getRGB();
-        
-      canvas.stroke(c);
-      canvas.fill(c);
+        Color c = node.getBranchColor(majorityColoring);
+          if(c == null)
+          {
+            canvas.stroke(0);
+            canvas.fill(0);
+          }
+          else
+          {
+              canvas.stroke(c.getRGB());
+              canvas.fill(c.getRGB());
+          }
       
       //draw node label if we need to
        double minX = drawX+offsetbias-1;
@@ -873,10 +880,18 @@ public class TreeVis extends PApplet {
            width += nodeFont.width(s.charAt(i));
          }
        
-       if (node.isLeaf() && drawNodeLabels) {
-           int lc = node.getLabelColor(majorityColoring).getRGB();
-           canvas.fill(lc);
-           canvas.stroke(lc);
+       if (node.isLeaf() && drawNodeLabels) {           
+           Color lc = node.getLabelColor(majorityColoring);
+             if(lc == null)
+             {
+               canvas.stroke(0);
+               canvas.fill(0);
+             }
+             else
+             {
+                 canvas.fill(lc.getRGB());
+                 canvas.stroke(lc.getRGB());
+             }
              if (yscale > nodeFontSize) 
                  canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
        }
@@ -977,8 +992,13 @@ public class TreeVis extends PApplet {
         
       canvas.strokeWeight((float) (node.getLineWidth()*getLineWidthScale()));
       
-      int c = node.getBranchColor(majorityColoring).getRGB();
-        canvas.stroke(c);
+      Color c = node.getBranchColor(majorityColoring);
+      if(c == null)
+      {
+        canvas.stroke(0);
+      }
+      else
+          canvas.stroke(c.getRGB());
         
       if (treeLayout.equals("Rectangular")) {
           
@@ -989,7 +1009,15 @@ public class TreeVis extends PApplet {
           //loop over all of the children
           for (int i=0; i < node.nodes.size(); i++) {
               //draw horizontal line from the vertical line to the child node
-              canvas.stroke(node.nodes.get(i).getBranchColor(majorityColoring).getRGB());
+              
+                c = node.nodes.get(i).getBranchColor(majorityColoring);
+                if(c == null)
+                {
+                  canvas.stroke(0);
+                }
+                else
+                    canvas.stroke(c.getRGB());
+              
               canvas.strokeWeight((float) (node.nodes.get(i).getLineWidth()*getLineWidthScale()));
               double yp = toScreenY(node.nodes.get(i).getYOffset());
               double xp = toScreenX(node.nodes.get(i).getXOffset());
@@ -1102,10 +1130,18 @@ public class TreeVis extends PApplet {
         
       //set up the drawing properties
       canvas.strokeWeight((float) (node.getLineWidth()*getLineWidthScale()));
-      int c = node.getBranchColor(majorityColoring).getRGB();
 
-        canvas.stroke(c);
-        canvas.fill(c);
+      Color c = node.getBranchColor(majorityColoring);
+        if(c == null)
+        {
+          canvas.stroke(0);
+          canvas.fill(0);
+        }
+        else
+        {
+            canvas.stroke(c.getRGB());
+            canvas.fill(c.getRGB());
+        }
   
       //find the longest and shortest branch lengths
       double longest = node.longestRootToTipDistance() - node.getBranchLength();

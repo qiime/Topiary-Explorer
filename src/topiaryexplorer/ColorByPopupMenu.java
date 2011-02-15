@@ -60,7 +60,10 @@ class ColorByPopupMenu extends JPopupMenu{
                       frame.currTable = frame.otuMetadata;
                       frame.colorPane.setSelectedIndex(elementType);
                       if(elementType == 0)
+                      {
                           ((TreeWindow)parent).colorBranchesByValue(value);
+                          ((TreeWindow)parent).treeEditToolbar.branchEditPanel.coloringMenuItem.setSelected(false);
+                      }
                       else if(elementType == 1)
                           ((TreeWindow)parent).colorLabelsByValue(value);
 
@@ -90,7 +93,10 @@ class ColorByPopupMenu extends JPopupMenu{
                       frame.currTable = frame.sampleMetadata;
                       frame.colorPane.setSelectedIndex(elementType);
                       if(elementType == 0)
-                           ((TreeWindow)parent).colorBranchesByValue(value);
+                       {
+                             ((TreeWindow)parent).colorBranchesByValue(value);
+                             ((TreeWindow)parent).treeEditToolbar.branchEditPanel.coloringMenuItem.setSelected(false);
+                         }
                        else if(elementType == 1)
                            ((TreeWindow)parent).colorLabelsByValue(value);
 
