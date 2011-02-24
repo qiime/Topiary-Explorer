@@ -251,6 +251,17 @@ public class MainFrame extends JFrame {
          setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
+/*     public void newTreeWindow(Node root) {
+         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+          TreeWindow tempTreeWindow = new TreeWindow(this);
+          tempTreeWindow.loadTree(root);
+          treeWindows.add(tempTreeWindow);
+          tempTreeWindow.setTitle("Tree "+treeWindows.size());
+          resetOtuMenus();
+          resetSampleMenus();
+          setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+     }*/
+     
      public void newTreeWindow(String treeString) {
           setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
           TreeWindow tempTreeWindow = new TreeWindow(this);

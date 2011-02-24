@@ -23,14 +23,12 @@ class SparseTable {
             data.add(row, new HashMap());
             data.get(row).put(col, value);
         }
-/*        data.put(new Point(row, col), value);*/
         maxrow = Math.max(row, maxrow);
         maxcol = Math.max(col, maxcol);
     }
     
     public void set(Object value, int row, int col) {
         data.get(row).put(col, value);
-/*        data.put(new Point(row, col), value);*/
     }
     
     public HashMap getRow(int row) {
@@ -51,7 +49,6 @@ class SparseTable {
         {
             return null;
         }
-/*        return data.get(new Point(row, col));*/
     }
     
     public String getstr(int row, int col) {
@@ -62,7 +59,6 @@ class SparseTable {
         {
             return null;
         }
-/*        return (String)data.get(new Point(row, col));*/
     }
     
     public void removeElements() {

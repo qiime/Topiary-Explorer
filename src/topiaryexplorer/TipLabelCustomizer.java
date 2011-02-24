@@ -135,8 +135,10 @@ public class TipLabelCustomizer extends JFrame {
                 }
                 int rowIndex = -1;
                 for (int i = 0; i < frame.otuMetadata.getData().maxRow(); i++) {
-                    String val = (String)frame.otuMetadata.getData().get(i,0);
-                    if (val.equals(n.getName())) {
+                    Object val = frame.otuMetadata.getData().get(i,0);
+                    if(val == null)
+                        continue;
+                    if (val.equals(TopiaryFunctions.objectify(n.getName()))) {
                         rowIndex = i;
                         break;
                     }

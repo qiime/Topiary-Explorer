@@ -70,8 +70,28 @@ public class Node implements Cloneable{
     name = _label;
     branchlength = _branchlength;
   }
-
+  
+  Node(String _name, String _label, double _branchlength, ArrayList<Node> _nodes,
+   Node _parent, String _consensusLineage, Color _branchColor, Color _labelColor) {
+      name = _name;
+      label = _label;
+      branchlength = _branchlength;
+      nodes = _nodes;
+      parent = _parent;
+      setConsensusLineage(_consensusLineage);
+      branchColor = branchColor;
+      labelColor = _labelColor;
+  }
+  
+  Node(Node aNode) {
+      this(aNode.getName(), aNode.getLabel(), aNode.getBranchLength(),
+      aNode.getNodes(), aNode.getParent(), aNode.getConsensusLineage(),
+      aNode.getBranchColor(), aNode.getLabelColor());
+  }
+  
   //GETTERS AND SETTERS
+  public Color getBranchColor() { return branchColor; }
+  public Color getLabelColor() { return labelColor; }
   public boolean isHidden() { return hidden; }
   public void setHidden(boolean cond) { hidden = cond; }
   public boolean isLocked() { return locked; }
@@ -157,7 +177,7 @@ public class Node implements Cloneable{
       }
   
   // recursive method to return consensus lineage
-  public String getConsensusLineageF() {   
+  public String getConsensusLineageF(double perc) {   
       // If the node is a leaf return lineage
       if(isLeaf())
       {
@@ -211,7 +231,7 @@ public class Node implements Cloneable{
                 newLabels.add(l.substring(l.indexOf(";")+1, l.length()).trim());      
           }
         
-          String c = TopiaryFunctions.getConsensus(curr,.5);
+          String c = TopiaryFunctions.getConsensus(curr,perc);
           if(c != null)
           {
           consensusLineage += c + ";";

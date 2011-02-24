@@ -49,5 +49,15 @@ class SparseTableModel extends AbstractTableModel {
   public boolean isCellEditable(int rowIndex, int colIndex) {
   	  return false;
   }
+  
+  public Class getColumnClass(int c) {
+      try {
+          return lookup.get(1, c).getClass();
+        }
+        catch(NullPointerException e)
+        {
+            return Object.class;
+        }
+  }
 
 }

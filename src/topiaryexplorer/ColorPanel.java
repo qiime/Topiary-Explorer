@@ -36,8 +36,11 @@ public class ColorPanel extends JPanel{
         super();
         frame = _frame;
         elementType = _elementType;
+
+	    ColorTableModel model = new ColorTableModel();
+		TableSorter sorter = new TableSorter(model, colorKeyTable.getTableHeader());
         
-        colorKeyTable.setModel(new ColorTableModel());
+        colorKeyTable.setModel(sorter);
         colorKeyScrollPane = new JScrollPane(colorKeyTable);
         colorKeyScrollPane.setPreferredSize(new Dimension(190,600));
         add(colorKeyScrollPane);
@@ -87,7 +90,10 @@ public class ColorPanel extends JPanel{
          colNames.add("Color");
          colNames.add("");
 
-         colorKeyTable.setModel(new ColorTableModel(data, colNames));
+         ColorTableModel model = new ColorTableModel(data, colNames);
+ 		 TableSorter sorter = new TableSorter(model, colorKeyTable.getTableHeader());
+
+         colorKeyTable.setModel(sorter);
          colorKeyTable.setDefaultRenderer(Color.class, new ColorRenderer(true));
          colorKeyTable.setDefaultEditor(Color.class, new ColorEditor());
          colorKeyTable.setSelectionBackground(new Color(255,255,255));
@@ -97,7 +103,7 @@ public class ColorPanel extends JPanel{
          colorKeyTable.getColumnModel().getColumn(2).setPreferredWidth(20);
          colorKeyTable.setDragEnabled(true);
 
-         colorKeyTable.getModel().addTableModelListener(new TableModelListener() {
+         ((TableSorter)colorKeyTable.getModel()).getTableModel().addTableModelListener(new TableModelListener() {
              public void tableChanged(TableModelEvent e) {
                  int row = e.getFirstRow();
                  int column = e.getColumn();
@@ -124,7 +130,7 @@ public class ColorPanel extends JPanel{
       */
      void syncColorMap() {
         colorMap.clear();
-        for (ArrayList<Object> row : ((ColorTableModel)colorKeyTable.getModel()).getData()) {
+        for (ArrayList<Object> row : ((ColorTableModel)((TableSorter)colorKeyTable.getModel()).getTableModel()).getData()) {
             colorMap.put(row.get(0), (Color)row.get(1));
         }
      }
@@ -134,13 +140,13 @@ public class ColorPanel extends JPanel{
      **/
      void interpolateColors() {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
- 		ArrayList<ArrayList<Object>> data = ((ColorTableModel)colorKeyTable.getModel()).getData();
-
+/*      ArrayList<ArrayList<Object>> data = ((ColorTableModel)((TableSorter)colorKeyTable.getModel()).getTableModel()).getData();*/
+        TableSorter sorterModel = (TableSorter)colorKeyTable.getModel();
  		int first = -1;
  		int second = -1;
  		//find the first color
- 		for (int i = 0; i < data.size(); i++) {
- 			if ((Boolean) data.get(i).get(2) == true) {
+ 		for (int i = 0; i < sorterModel.getRowCount(); i++) {
+ 			if ((Boolean) sorterModel.getValueAt(i,2) == true) {
  				second = i;
  				break;
  			}
@@ -151,15 +157,15 @@ public class ColorPanel extends JPanel{
  			first = second;
  			second = -1;
  			//find the next color
- 			for (int i = first+1; i < data.size(); i++) {
- 				if ((Boolean) data.get(i).get(2) == true) {
+ 			for (int i = first+1; i < sorterModel.getRowCount(); i++) {
+ 				if ((Boolean) sorterModel.getValueAt(i,2) == true) {
  				second = i;
  				break;
  				}
  			}
  			//have we reached the end?
  			if (second == -1) {
- 				((ColorTableModel) colorKeyTable.getModel()).setData(data);
+/*              ((ColorTableModel)((TableSorter)colorKeyTable.getModel()).getTableModel()).setData(data);*/
                  colorKeyTable.repaint();
                  syncColorMap();
                  if(elementType == 0)
@@ -170,15 +176,18 @@ public class ColorPanel extends JPanel{
                  return;
  			}
  			//interpolate
- 			Color firstColor = (Color) data.get(first).get(1);
- 			Color secondColor = (Color) data.get(second).get(1);
+ 			Color firstColor = (Color) sorterModel.getValueAt(first,1);
+ 			Color secondColor = (Color) sorterModel.getValueAt(second,1);
+/*          Color firstColor = (Color) data.get(first).get(1);*/
+/*          Color secondColor = (Color) data.get(second).get(1);*/
  			for (int i = first+1; i < second; i++) {
  				//here's the interpolation
  				float frac = (i-first)*(1.0f/(second-first));
  				Color c = new Color((1-frac)*firstColor.getRed()/255.0f + frac*secondColor.getRed()/255.0f,
  					(1-frac)*firstColor.getGreen()/255.0f + frac*secondColor.getGreen()/255.0f,
  					(1-frac)*firstColor.getBlue()/255.0f + frac*secondColor.getBlue()/255.0f);
-                 data.get(i).set(1, c);
+/*                 data.get(i).set(1, c);*/
+                 sorterModel.setValueAt(c, i, 1);
  			}
  		}
       }

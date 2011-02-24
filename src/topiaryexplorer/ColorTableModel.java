@@ -52,7 +52,7 @@ class ColorTableModel extends AbstractTableModel {
     }
 
     public Class getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
+        return getValueAt(1, c).getClass();
     }
 
     public boolean isCellEditable(int row, int col) {

@@ -34,7 +34,7 @@ public class DataTable {
         int c = 0;
         for(int r = 0; r < conn.resultLines.size(); r++) {
 		    String vals[] = conn.resultLines.get(r).split("\t");
-		    c = 0;
+            c = 0;
 		    for (String obj : vals) {
 		        Object val = TopiaryFunctions.objectify(obj);
 		        if (val != null) {
@@ -59,10 +59,7 @@ public class DataTable {
 		    rowNames.add(vals[0]);
 		    c = 0;
 		    for (String obj : vals) {
-		        val = obj;
-		        if (c!=0) {
-		            val = TopiaryFunctions.objectify(obj);
-		        }
+		        val = TopiaryFunctions.objectify(obj);
 		        if (val != null) {
 		            data.add(r, c, val);
 		        }
@@ -100,10 +97,8 @@ public class DataTable {
 		    rowNames.add(vals[0]);
 		    c = 0;
 		    for (String obj : vals) {
-		        val = obj;
-		        if (c!=0) {
-		            val = TopiaryFunctions.objectify(obj);
-		        }
+/*              val = obj;*/
+		        val = TopiaryFunctions.objectify(obj);
 		        if (val != null) {
 		            data.add(r, c, val);
 		        }

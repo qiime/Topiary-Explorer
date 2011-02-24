@@ -201,7 +201,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                               tree.noLoop();
                             clickedNode.getParent().nodes.remove(clickedNode);
                             for(Node n : clickedNode.getAnscestors())
-                                n.setConsensusLineage(n.getConsensusLineageF());
+                                n.setConsensusLineage(n.getConsensusLineageF(.8));
                           }
                         tree.setTree(tree.getTree());
                         tree.loop();
@@ -899,7 +899,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          if(col == -1)
          {
              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-             JOptionPane.showMessageDialog(null, "ERROR: No consensus lineage column defined.", "Error", JOptionPane.ERROR_MESSAGE);
+             JOptionPane.showMessageDialog(null, "ERROR: No consensus lineage"+
+             " column defined. Column must have title \"Consensus Lineage\","+
+             " case sensistive.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
           }
             
@@ -910,7 +912,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          }
          for(Node n : tree.getTree().getNodes())
          {
-             n.setConsensusLineage(n.getConsensusLineageF());
+             n.setConsensusLineage(n.getConsensusLineageF(.8));
          }
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
@@ -924,7 +926,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
      */
      public void resetTipLabelCustomizer(boolean state) {
          if(tlc != null) {tlc.dispose();}
-         tlc = new TipLabelCustomizer(frame, this, (frame.otuMetadata != null), (frame.sampleMetadata != null));
+         tlc = new TipLabelCustomizer(frame, this, (frame.otuMetadata != null),
+          (frame.sampleMetadata != null));
          tlc.setVisible(state);
      }
      
