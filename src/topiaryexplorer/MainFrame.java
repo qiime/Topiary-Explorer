@@ -60,7 +60,7 @@ public class MainFrame extends JFrame {
     JButton back = new JButton("<<");
     JButton showData = new JButton("Show Table");
     JButton setAs = new JButton("Set As...");
-    JButton interpolateButton = new JButton("Interpolate");
+    JButton interpolateButton = new JButton("Interpolate Colors");
     NewProjectDialog newProjectChooser = null;
     JLabel databaseStatus = new JLabel("Database not connected.");
     TopiaryMenu mainMenu = new TopiaryMenu(this);
@@ -128,7 +128,7 @@ public class MainFrame extends JFrame {
         });
         interpolateButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        colorPane.setPreferredSize(new Dimension(220,600));
+/*        colorPane.setPreferredSize(new Dimension(220,600));*/
         branchColorPanel = new ColorPanel(this, 0);
         labelColorPanel = new ColorPanel(this, 1);
         colorPane.add("Branches", branchColorPanel);
@@ -215,8 +215,9 @@ public class MainFrame extends JFrame {
         pane.add(toolbarPane, BorderLayout.NORTH);
         
         //add them to the split pane
-/*        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, colorBar, dataPanel);*/
-        pane.add(dataPanel, BorderLayout.CENTER);
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, colorBar, dataPanel);
+        pane.add(splitPane, BorderLayout.CENTER);
+/*        pane.add(dataPanel, BorderLayout.CENTER);*/
         pane.add(colorBar, BorderLayout.WEST);
         
         //the following is required to make sure th GLContext is created, or else resizing the 

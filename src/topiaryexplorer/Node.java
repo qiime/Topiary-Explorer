@@ -7,7 +7,7 @@ package topiaryexplorer;
 import java.awt.*;
 import java.util.*;
 
-public class Node implements Cloneable{
+public class Node implements Comparable{
   private Node parent = null;
   public ArrayList<Node> nodes = new ArrayList(); //children
   private ArrayList<Node> anscestors = new ArrayList();
@@ -159,6 +159,28 @@ public class Node implements Cloneable{
   public double depth() { return depth; }
   public void setNumberOfLeaves(int val) { numberOfLeaves = val;}
   public int getNumberOfLeaves() { return numberOfLeaves; }
+  
+  public int compareTo(Object otherNode) throws ClassCastException {
+      if (!(otherNode instanceof Node))
+        throw new ClassCastException("A Node object expected.");
+      double otherBranchLength = ((Node)otherNode).getBranchLength();
+      if(this.branchlength > otherBranchLength)
+      {
+          return 1;
+      }
+      else if(this.branchlength < otherBranchLength)
+      {
+          return -1;
+      }
+      else
+        return 0;
+  }
+  
+  public void ladderize(){
+      if(isLeaf())
+        return;
+      Collections.sort(nodes);
+  }
   
   public void prune(double total, double perc) {
       if(getBranchLength()/total > perc)

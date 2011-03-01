@@ -42,7 +42,8 @@ public class ColorPanel extends JPanel{
         
         colorKeyTable.setModel(sorter);
         colorKeyScrollPane = new JScrollPane(colorKeyTable);
-        colorKeyScrollPane.setPreferredSize(new Dimension(190,600));
+/*        colorKeyScrollPane.setMinimumSize(new Dimension(200,600));*/
+        colorKeyScrollPane.setPreferredSize(new Dimension(200,600));
         add(colorKeyScrollPane);
     }
 	// }}}
