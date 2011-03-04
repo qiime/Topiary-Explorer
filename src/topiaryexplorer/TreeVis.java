@@ -880,25 +880,6 @@ public class TreeVis extends PApplet {
            width += nodeFont.width(s.charAt(i));
          }
        
-       if (node.isLeaf() && drawNodeLabels) {           
-           Color lc = node.getLabelColor(majorityColoring);
-             if(lc == null)
-             {
-               canvas.stroke(0);
-               canvas.fill(0);
-             }
-             else
-             {
-                 canvas.fill(lc.getRGB());
-                 canvas.stroke(lc.getRGB());
-             }
-             if (yscale > nodeFontSize) 
-                 canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
-       }
-       
-       canvas.fill(255);
-       canvas.noStroke();
-       
       if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
         canvas.pushMatrix();
         double rotation = 0;
@@ -947,6 +928,25 @@ public class TreeVis extends PApplet {
      double maxX =  drawX + 5 + (width*nodeFont.size);
      double minY = drawY - (nodeFont.descent()*nodeFont.size);
      double maxY = drawY + (nodeFont.ascent()*nodeFont.size);
+     
+     if (node.isLeaf() && drawNodeLabels) {           
+         Color lc = node.getLabelColor(majorityColoring);
+           if(lc == null)
+           {
+             canvas.stroke(0);
+             canvas.fill(0);
+           }
+           else
+           {
+               canvas.fill(lc.getRGB());
+               canvas.stroke(lc.getRGB());
+           }
+           if (yscale > nodeFontSize) 
+               canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
+     }
+     
+/*     canvas.fill(255);
+     canvas.noStroke();*/
      
       //reset drawing color to default black
       canvas.fill(0);
@@ -1024,7 +1024,7 @@ public class TreeVis extends PApplet {
               canvas.line((float)xs, (float)yp,
                   (float)xp, (float)yp);
                   
-              if(this.drawInternalNodeLabels && !node.nodes.get(i).isLeaf()) {
+              if(this.drawInternalNodeLabels && !node.nodes.get(i).isLeaf() && !node.nodes.get(i).isCollapsed() ) {
                     int lc = node.getLabelColor(majorityColoring).getRGB();
                     canvas.fill(lc);
                     canvas.stroke(lc);
@@ -1216,14 +1216,18 @@ public class TreeVis extends PApplet {
       if(drawWedgeLabels){
           canvas.textFont(wedgeFont);
           String s = "";
-            if(node.getConsensusLineage() != null)
+            if(drawInternalNodeLabels)
+            {
+                s = node.getLabel();
+            }
+            else if(node.getConsensusLineage() != null)
             {
                 s = node.getConsensusLineage();
                 if(s.lastIndexOf(";",s.length()-2) != -1)
                     s = s.substring(s.lastIndexOf(";",s.length()-2)+1,s.length());
             }
             else
-          {s = ""+node.getNumberOfLeaves();}
+            {s = ""+node.getNumberOfLeaves();}
           
           if(Math.abs((toScreenY(top)-toScreenY(bottom))) > wedgeFontSize)
           {

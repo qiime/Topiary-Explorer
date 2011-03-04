@@ -243,7 +243,8 @@ public class TopiaryFunctions {
 
           if(testSet.size() == 1) // if the set only has one element, all names are the same
           { 
-              return consensus.get(0);
+/*              String[] ans = {consensus.get(0),"100%"};*/
+              return consensus.get(0)+"[100%]";
           }
           else // if the set has more than one element, need to figure out
           // the consensus string
@@ -275,7 +276,9 @@ public class TopiaryFunctions {
               // the consensusLineage
               if(max/consensus.size() > level)
               {
-                  return maxStr;
+/*                  String[] ans = {maxStr,((Double)max/consensus.size())+"%"};*/
+                  String ans = String.format("%s[%3.0f%%]",maxStr,((Double)max/consensus.size())*100);
+                  return ans;
               }
               else
                 return null;
