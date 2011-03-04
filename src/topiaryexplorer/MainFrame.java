@@ -128,11 +128,11 @@ public class MainFrame extends JFrame {
         });
         interpolateButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-/*        colorPane.setPreferredSize(new Dimension(220,600));*/
         branchColorPanel = new ColorPanel(this, 0);
         labelColorPanel = new ColorPanel(this, 1);
         colorPane.add("Branches", branchColorPanel);
         colorPane.add("Labels", labelColorPanel);
+        colorBar.setMinimumSize(new Dimension(200,600));
         colorBar.add(new JLabel("Color Key"));
         colorBar.add(colorPane);
         colorBar.add(interpolateButton);
@@ -206,6 +206,7 @@ public class MainFrame extends JFrame {
         dataPane.setSelectedIndex(0);
         
         dataPanel.setLayout(new BorderLayout());
+/*        dataPanel.setPreferredSize(400,700);*/
         dataPanel.add(dataPane, BorderLayout.CENTER);
 
         //set up toolbar area
@@ -216,6 +217,9 @@ public class MainFrame extends JFrame {
         
         //add them to the split pane
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, colorBar, dataPanel);
+/*        splitPane.setOneTouchExpandable(true);*/
+/*        splitPane.setResizeWeight(1.0);*/
+        splitPane.setDividerLocation(0.25);
         pane.add(splitPane, BorderLayout.CENTER);
 /*        pane.add(dataPanel, BorderLayout.CENTER);*/
         pane.add(colorBar, BorderLayout.WEST);

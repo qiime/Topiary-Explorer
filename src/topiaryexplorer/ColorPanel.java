@@ -40,10 +40,14 @@ public class ColorPanel extends JPanel{
 	    ColorTableModel model = new ColorTableModel();
 		TableSorter sorter = new TableSorter(model, colorKeyTable.getTableHeader());
         
+        
         colorKeyTable.setModel(sorter);
+        colorKeyTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        colorKeyTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        colorKeyTable.setCellSelectionEnabled(true);
         colorKeyScrollPane = new JScrollPane(colorKeyTable);
-/*        colorKeyScrollPane.setMinimumSize(new Dimension(200,600));*/
-        colorKeyScrollPane.setPreferredSize(new Dimension(200,600));
+        this.setPreferredSize(new Dimension(270,600));
+        colorKeyScrollPane.setPreferredSize(new Dimension(250,580));
         add(colorKeyScrollPane);
     }
 	// }}}
@@ -99,7 +103,7 @@ public class ColorPanel extends JPanel{
          colorKeyTable.setDefaultEditor(Color.class, new ColorEditor());
          colorKeyTable.setSelectionBackground(new Color(255,255,255));
          colorKeyTable.setSelectionForeground(new Color(0,0,0));
-         colorKeyTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+         colorKeyTable.getColumnModel().getColumn(0).setPreferredWidth(190);
          colorKeyTable.getColumnModel().getColumn(1).setPreferredWidth(20);
          colorKeyTable.getColumnModel().getColumn(2).setPreferredWidth(20);
          colorKeyTable.setDragEnabled(true);

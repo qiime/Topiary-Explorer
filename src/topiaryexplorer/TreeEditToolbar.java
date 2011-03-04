@@ -75,7 +75,7 @@ public class TreeEditToolbar extends JToolBar {
     }
     
     public void setStatus(String s) {
-        treeStatus.setText(s);
+/*        treeStatus.setText(s);*/
     }
 
 }

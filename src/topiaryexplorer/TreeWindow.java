@@ -30,10 +30,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     
     ButtonGroup treeLayoutGroup = new ButtonGroup();
     
-    JPanel toolbars = new JPanel();
+/*    JPanel toolbars = new JPanel();*/
     JPanel leftPanel = new JPanel();
     JPanel rightPanel = new JPanel();
-    JPanel middlePanel = new JPanel();
+/*    JPanel middlePanel = new JPanel();*/
     JMenuItem item;
     TreeWindow thisWindow = this;
     MainFrame frame = null;
@@ -130,7 +130,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                   }
               });
               treePopupMenu.add(item);
-         item = new JMenuItem("Invert Collapsed Nodes");
+/*         item = new JMenuItem("Invert Collapsed Nodes");
           item.addActionListener(new ActionListener() {
               public void actionPerformed(ActionEvent e) {
                   clickedNode.setCollapsed(!clickedNode.isCollapsed());
@@ -148,7 +148,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                     }
               }
           });
-          treePopupMenu.add(item);
+          treePopupMenu.add(item);*/
          item = new JMenuItem("Rotate (Swap Children)");
          item.addActionListener(new ActionListener() {
              public void actionPerformed(ActionEvent arg0) {
@@ -230,15 +230,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          treePanel.add(verticalTreeToolbar, BorderLayout.WEST);
          treePanel.add(treeHolder, BorderLayout.CENTER);
          treePanel.add(collapseTreeToolbar, BorderLayout.NORTH);
-/*         toolbars.setLayout(new GridLayout(2,1));*/
-/*         toolbars.add(treeEditToolbar);*/
-/*         toolbars.add(wedgeToolbar);*/
-/*         toolbars.setPreferredSize(new Dimension(this.getWidth(),80));*/
-/*         wedgeToolbar.setVisible(false);*/
          rightPanel.setLayout(new BorderLayout());
-         rightPanel.add(toolbars, BorderLayout.NORTH);
          rightPanel.add(treePanel, BorderLayout.CENTER);
-         leftPanel.add(treeEditToolbar, BorderLayout.CENTER);
+         leftPanel.add(treeEditToolbar);
          treeEditPane.setViewportView(leftPanel);
 	     
 	     //set up the "node" submenus
@@ -294,21 +288,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                   treeMenu.add(item);*/
          resetCollapseByMenu();
          treeMenu.add(collapseByMenu);
-
-
-/*         externalLabelsMenuItem.setSelected(false);
-         externalLabelsMenuItem.addActionListener(this);
-         internalLabelsMenuItem.setSelected(false);
-         internalLabelsMenuItem.addActionListener(this);*/
-/*         treeMenu.add(externalLabelsMenuItem);*/
-/*         treeMenu.add(internalLabelsMenuItem);*/
 	     topMenu.add(treeMenu);
-/*       topMenu.add(nodeMenu);*/
-/*       topMenu.add(branchMenu);*/
 	     
 	     setJMenuBar(topMenu);
-/*         pane.add(leftPanel, BorderLayout.WEST);*/ 
          pane.add(treeEditPane, BorderLayout.WEST);
+/*         pane.add(leftPanel, BorderLayout.WEST);*/
 	     pane.add(rightPanel, BorderLayout.CENTER);
 	     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
@@ -441,9 +425,17 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         {
             n.setDepth(n.depthF());
             n.setNumberOfLeaves(n.getNumberOfLeavesF());
-            n.ladderize();
         }
     }
+	
+	public void ladderize() {
+	    tree.noLoop();
+        tree.getTree().ladderize();
+        tree.setTree(tree.getTree());
+	    
+/*      frame.repaint();*/
+	    tree.loop();
+	}
 	
 	/**
     * Loads a new tree from the selected file
@@ -1057,6 +1049,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  	 }
 
       public void removeColor() {
+          tree.noLoop();
             //reset the branchColorPanel.getColorMap()
             frame.branchColorPanel.setColorMap(new HashMap());
             //reset the colorKeyTable
@@ -1082,6 +1075,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                 }
             }
             frame.branchValue = "";
+            tree.loop();
         }
                 
         public void colorBranchesByValue(String value) {

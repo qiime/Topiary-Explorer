@@ -410,7 +410,12 @@ public class TableSorter extends AbstractTableModel {
             JTableHeader h = (JTableHeader) e.getSource();
             TableColumnModel columnModel = h.getColumnModel();
             int viewColumn = h.columnAtPoint(e.getPoint());
-            int column = columnModel.getColumn(viewColumn).getModelIndex();
+            int column = 0;
+            try{
+            column = columnModel.getColumn(viewColumn).getModelIndex();
+            }
+            catch(ArrayIndexOutOfBoundsException a)
+            {return;}
             if (column != -1) {
                 int status = getSortingStatus(column);
                 if (!e.isControlDown()) {

@@ -23,6 +23,7 @@ public final class TreeViewPanel extends JPanel{
     TreeVis vis = null;
     
     JButton recenterButton = new JButton("Recenter");
+    JButton ladderizeButton = new JButton("Ladderize");
     JButton pruneButton = new JButton("Prune Tree");
     JButton showHiddenButton = new JButton("Show Hidden Nodes");
     JButton setLineageButton = new JButton("Set Consensus Lineage");
@@ -63,7 +64,7 @@ public final class TreeViewPanel extends JPanel{
         
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
-        buttonPanel.setLayout(new GridLayout(4,1));
+        buttonPanel.setLayout(new GridLayout(5,1));
         
         recenterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -71,6 +72,13 @@ public final class TreeViewPanel extends JPanel{
             }
         });
         buttonPanel.add(recenterButton);
+        
+        ladderizeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                 frame.ladderize();
+            }
+        });
+        buttonPanel.add(ladderizeButton);
         
         pruneButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

@@ -34,8 +34,8 @@ public final class NodeEditPanel extends JPanel{
     
     JLabel fontSizeLabel = new JLabel("Size: ");
     JTextField fntSize = new JTextField("",3);
-/*    Integer[] fntSizes = {1,2,3,4,5,7,9,10,15,20,25,30,35,40,45,50};*/
-/*    JComboBox fntSize = new JComboBox(fntSizes);*/
+    String[] fntFaces = {"courier","helvetica","timesroman"};
+    JComboBox fntFace = new JComboBox(fntFaces);
     JLabel ptLabel = new JLabel("pt");
     JButton fntIncButton = new JButton("^");
     JButton fntDecButton = new JButton("v");
@@ -119,6 +119,7 @@ public final class NodeEditPanel extends JPanel{
 /*        fntSize.setMaximumSize(new Dimension(20,10));*/
 /*        fontSizePanel.add(fntSize);*/
 /*        fontSizePanel.add(ptLabel);*/
+/*        labelPanel.add(fntFace); */
         fntPanel.setLayout(new GridLayout(2,1));
 /*        fntPanel.setMaximumSize(new Dimension(10,10));*/
         fntDecButton.addActionListener(new ActionListener() {
@@ -140,7 +141,7 @@ public final class NodeEditPanel extends JPanel{
             }
         });
 /*        fntPanel.add(fntIncButton);*/
-        fontSizePanel.add(fntIncButton);        
+        fontSizePanel.add(fntIncButton);       
         labelPanel.add(fontSizePanel);
         
 /*        add(fontColorLabel);*/

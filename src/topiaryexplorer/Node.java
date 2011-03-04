@@ -180,6 +180,8 @@ public class Node implements Comparable{
       if(isLeaf())
         return;
       Collections.sort(nodes);
+      for(Node n: nodes)
+        n.ladderize();
   }
   
   public void prune(double total, double perc) {
