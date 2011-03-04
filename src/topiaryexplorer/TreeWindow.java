@@ -92,19 +92,19 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  			public void mouseMoved(java.awt.event.MouseEvent evt) {
  			    if(!isActive()) return;
  				Node node = tree.findNode(evt.getX(), evt.getY());
- 				String status = "";
- 				String prefix = "";
  				if (node != null) {
+			      String status = "";
+ 				  String prefix = "";
                   if (node.isLocked())
                     prefix += "(L)";
-                  String label = node.getName();
-                  if (label.length() > 0) {
-                      status += label;
-                    } else {
- 						status += String.format("Sub-tree: %d leaves", node.getNumberOfLeaves());
-                  }
- 				} 
- 				treeToolbar.setStatus(prefix, status);
+                  String label = node.getConsensusLineage();
+                  if (label == null)
+                      label = "";
+ 				  status += String.format("Sub-tree: %d leaves", node.getNumberOfLeaves());
+ 				  treeToolbar.setStatus(prefix, status, label);
+ 				}
+ 				else
+                    treeToolbar.setStatus("","",""); 
  			}
  		});
 	     

@@ -16,7 +16,9 @@ public class TreeToolbar extends JToolBar {
     JTextField search = new JTextField();
     JPanel spacer1 = new JPanel();    
     TreeWindow frame = null;
+    JPanel statusPanel = new JPanel();
     JLabel status = new JLabel("");
+    JLabel statusLine2 = new JLabel("");
     double minXScale = 0;
 
     public TreeToolbar(TreeWindow _frame) {
@@ -58,8 +60,12 @@ public class TreeToolbar extends JToolBar {
         setFloatable(false);
         spacer1.setPreferredSize(new Dimension(10,10));
         add(spacer1);
+        statusPanel.setLayout(new GridLayout(2,1));
         status.setFont(new Font("Courier",Font.PLAIN,12));
-        add(status);
+        statusLine2.setFont(new Font("Courier",Font.PLAIN,12));
+        statusPanel.add(status);
+        statusPanel.add(statusLine2);
+        add(statusPanel);
         spacer1.setPreferredSize(new Dimension(100,10));
         add(spacer1);
         add(new JLabel("Search:"));
@@ -100,14 +106,15 @@ public class TreeToolbar extends JToolBar {
         add(search);
     }
     
-    public void setStatus(String p, String s) {
-        if(s.length() > 56)
+    public void setStatus(String p, String s, String s2) {
+/*        if(s.length() > 56)
         {
             s = p +"..." + s.substring(s.length()-Math.min(56-p.length(),s.length()),s.length()-1);
         }
         else
-            s = p+s;
-        status.setText(s);
+            s = p+s;*/
+        status.setText(p+s);
+        statusLine2.setText(s2);
     }
 
     public void setScale() {

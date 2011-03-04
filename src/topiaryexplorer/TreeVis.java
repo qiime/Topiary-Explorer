@@ -1216,13 +1216,16 @@ public class TreeVis extends PApplet {
       if(drawWedgeLabels){
           canvas.textFont(wedgeFont);
           String s = "";
-          try{
-                if(node.getConsensusLineage().length() > 0)
-                    s = node.getConsensusLineage();
+            if(node.getConsensusLineage() != null)
+            {
+                s = node.getConsensusLineage();
+                if(s.lastIndexOf(";",s.length()-2) != -1)
+                    s = s.substring(s.lastIndexOf(";",s.length()-2)+1,s.length());
             }
-            catch(NullPointerException e)
-              {s = ""+node.getNumberOfLeaves();}
-          if(Math.abs((toScreenY(top)-toScreenY(bottom)))/2 > wedgeFontSize)
+            else
+          {s = ""+node.getNumberOfLeaves();}
+          
+          if(Math.abs((toScreenY(top)-toScreenY(bottom))) > wedgeFontSize)
           {
               canvas.textFont(createFont("courier", wedgeFontSize));
               if(mirrored)

@@ -26,6 +26,7 @@ public final class TreeViewPanel extends JPanel{
     JButton pruneButton = new JButton("Prune Tree");
     JButton showHiddenButton = new JButton("Show Hidden Nodes");
     JButton setLineageButton = new JButton("Set Consensus Lineage");
+    JPanel buttonPanel = new JPanel();
     
     JPanel rotatePanel = new JPanel();
     JLabel rotateLabel = new JLabel("Rotate: ");
@@ -62,12 +63,14 @@ public final class TreeViewPanel extends JPanel{
         
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
+        buttonPanel.setLayout(new GridLayout(4,1));
+        
         recenterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                  frame.recenter();
             }
         });
-        add(recenterButton);
+        buttonPanel.add(recenterButton);
         
         pruneButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -87,7 +90,7 @@ public final class TreeViewPanel extends JPanel{
                 vis.loop();
             }
         });
-        add(pruneButton);
+        buttonPanel.add(pruneButton);
         
         showHiddenButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -95,14 +98,16 @@ public final class TreeViewPanel extends JPanel{
                     n.setHidden(false);
             }
         });
-        add(showHiddenButton);
+        buttonPanel.add(showHiddenButton);
         
         setLineageButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.resetConsensusLineage();
             }
         });
-        add(setLineageButton);
+        buttonPanel.add(setLineageButton);
+        
+        add(buttonPanel);
         
         rotateSlider.addChangeListener(new ChangeListener() {
          	public void stateChanged(ChangeEvent e) {
