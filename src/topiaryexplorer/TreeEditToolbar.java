@@ -34,7 +34,7 @@ public class TreeEditToolbar extends JToolBar {
         mainframe = _mainframe;
         
         treeViewPanel = new TreeViewPanel(frame, this);
-        treeViewPanelCP = new CollapsablePanel("View", treeViewPanel, true, false);
+        treeViewPanelCP = new CollapsablePanel("Tree", treeViewPanel, true, false);
         
         nodeEditPanel = new NodeEditPanel(frame);
         nodeEditPanelCP = new CollapsablePanel("Node", nodeEditPanel);

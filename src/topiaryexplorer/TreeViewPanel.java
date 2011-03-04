@@ -22,6 +22,11 @@ public final class TreeViewPanel extends JPanel{
     TreeEditToolbar parent = null;
     TreeVis vis = null;
     
+    JButton recenterButton = new JButton("Recenter");
+    JButton pruneButton = new JButton("Prune Tree");
+    JButton showHiddenButton = new JButton("Show Hidden Nodes");
+    JButton setLineageButton = new JButton("Set Consensus Lineage");
+    
     JPanel rotatePanel = new JPanel();
     JLabel rotateLabel = new JLabel("Rotate: ");
     JSlider rotateSlider = new JSlider(0,359,0);
@@ -57,6 +62,48 @@ public final class TreeViewPanel extends JPanel{
         
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
+        recenterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                 frame.recenter();
+            }
+        });
+        add(recenterButton);
+        
+        pruneButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                vis.noLoop();
+                 double total = vis.getTree().depth();
+                 double perc = .01;
+                 while(vis.getTree().getNumberOfLeaves() > 30000)
+                 {
+                      for(Node n: vis.getTree().getLeaves())
+                        {
+                            n.prune(total, perc);
+                        }
+                        perc += .01;
+                        frame.setTreeVals(vis.getTree());
+                        vis.setTree(vis.getTree());
+                }
+                vis.loop();
+            }
+        });
+        add(pruneButton);
+        
+        showHiddenButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                for(Node n: vis.getTree().getNodes())
+                    n.setHidden(false);
+            }
+        });
+        add(showHiddenButton);
+        
+        setLineageButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.resetConsensusLineage();
+            }
+        });
+        add(setLineageButton);
+        
         rotateSlider.addChangeListener(new ChangeListener() {
          	public void stateChanged(ChangeEvent e) {
          		if (rotateSlider.getValueIsAdjusting()) {
@@ -67,6 +114,7 @@ public final class TreeViewPanel extends JPanel{
          rotateSlider.setPreferredSize(new Dimension(120,20));
          rotatePanel.add(rotateLabel);
          rotatePanel.add(rotateSlider);
+         rotatePanel.setVisible(false);
          rotateSlider.setEnabled(false);
         
         rectButton.setToolTipText("Rectangular");
@@ -75,6 +123,7 @@ public final class TreeViewPanel extends JPanel{
                 vis.setTreeLayout("Rectangular");
                 rotateSlider.setValue(0);
                 syncTreeWithRotateSlider();
+                rotatePanel.setVisible(false);
                 rotateSlider.setEnabled(false);
                 layoutChanged();
             }
@@ -86,6 +135,7 @@ public final class TreeViewPanel extends JPanel{
                 vis.setTreeLayout("Triangular");
                 rotateSlider.setValue(0);
                 syncTreeWithRotateSlider();
+                rotatePanel.setVisible(false);
                 rotateSlider.setEnabled(false);
                 layoutChanged();
             }
@@ -101,6 +151,7 @@ public final class TreeViewPanel extends JPanel{
                 vis.setROffsets(vis.getTree(), 0);
                 vis.loop();
                 vis.setTreeLayout("Radial");
+                rotatePanel.setVisible(true);
                 rotateSlider.setEnabled(true);
                 layoutChanged();
                 parent.treeStatus.setText("Done drawing tree.");
@@ -128,6 +179,7 @@ public final class TreeViewPanel extends JPanel{
                 vis.setROffsets(vis.getTree(), 0);
                 vis.loop();
                 vis.setTreeLayout("Polar");
+                rotatePanel.setVisible(true);
                 rotateSlider.setEnabled(true);
                 layoutChanged();
                 parent.treeStatus.setText("Done drawing tree.");
@@ -138,11 +190,20 @@ public final class TreeViewPanel extends JPanel{
         layoutGroup.add(radialButton);
         layoutGroup.add(polarButton);
         
-        layoutPanel.setLayout(new GridLayout(1,4));
-        layoutPanel.add(rectButton);
-        layoutPanel.add(triButton);
-        layoutPanel.add(radialButton);
-        layoutPanel.add(polarButton);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1,4));
+        buttonPanel.add(rectButton);
+        buttonPanel.add(triButton);
+        buttonPanel.add(radialButton);
+        buttonPanel.add(polarButton);
+        
+        layoutPanel.setLayout(new GridLayout(2,1));
+        layoutPanel.add(buttonPanel);
+        layoutPanel.add(rotatePanel);
+/*        layoutPanel
+        layoutPanel.
+        layoutPanel.
+        layoutPanel.*/
         
         mirrorvertButton.setToolTipText("Flip Vertical");
         mirrorvertButton.addActionListener(new ActionListener() {
@@ -189,7 +250,7 @@ public final class TreeViewPanel extends JPanel{
         bgColorPanel.add(bgColorLabel);
         bgColorPanel.add(colorLabel);
         add(bgColorPanel);
-        add(rotatePanel);
+/*        add(rotatePanel);*/
         add(layoutCP);
         add(mirrorCP);
     }

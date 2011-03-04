@@ -399,7 +399,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         //add all the menus to the menu bar
         pcoaMenu.setEnabled(false);
         add(fileMenu);
-        add(viewMenu);
+/*        add(viewMenu);*/
      }
 
 

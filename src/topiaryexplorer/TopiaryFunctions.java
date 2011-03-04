@@ -195,7 +195,7 @@ public class TopiaryFunctions {
         try {
                 int i = Integer.parseInt(str);
                 if (i == 0)
-                    return null;
+                    return 0;
 				return i;
 			} catch (NumberFormatException nfx) {
                 try {

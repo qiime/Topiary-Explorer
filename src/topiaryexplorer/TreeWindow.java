@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 
 public class TreeWindow extends TopiaryWindow implements KeyListener, ActionListener, WindowListener{
     JMenuBar topMenu = new JMenuBar();
-    JMenu treeMenu = new JMenu("Options");
+    JMenu treeMenu = new JMenu("File");
     JMenu nodeMenu = new JMenu("Node");
     
     JMenu collapseByMenu = new JMenu("Collapse by");
@@ -276,16 +276,16 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     JMenuItem item;
          item = new JMenuItem("Prune tree...");
          item.addActionListener(this);
-         treeMenu.add(item);
+/*         treeMenu.add(item);*/
          item = new JMenuItem("Show hidden nodes");
          item.addActionListener(this);
-         treeMenu.add(item);
+/*         treeMenu.add(item);*/
          item = new JMenuItem("Set consensus lineage");
          item.addActionListener(this);
-         treeMenu.add(item);
+/*         treeMenu.add(item);*/
          item = new JMenuItem("Recenter");
          item.addActionListener(this);
-         treeMenu.add(item);
+/*         treeMenu.add(item);*/
          /*item = new JMenuItem("Mirror left/right");
                   item.addActionListener(this);
                   treeMenu.add(item);
@@ -296,12 +296,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          treeMenu.add(collapseByMenu);
 
 
-         externalLabelsMenuItem.setSelected(false);
+/*         externalLabelsMenuItem.setSelected(false);
          externalLabelsMenuItem.addActionListener(this);
          internalLabelsMenuItem.setSelected(false);
-         internalLabelsMenuItem.addActionListener(this);
+         internalLabelsMenuItem.addActionListener(this);*/
 /*         treeMenu.add(externalLabelsMenuItem);*/
-         treeMenu.add(internalLabelsMenuItem);
+/*         treeMenu.add(internalLabelsMenuItem);*/
 	     topMenu.add(treeMenu);
 /*       topMenu.add(nodeMenu);*/
 /*       topMenu.add(branchMenu);*/
@@ -329,14 +329,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      frame.clickedNode.setCollapsed(!frame.clickedNode.isCollapsed());
                   }
               }
-              else if (e.getActionCommand().equals("Show hidden nodes")) {
+/*              else if (e.getActionCommand().equals("Show hidden nodes")) {
                      for(Node n: tree.getTree().getNodes())
                         n.setHidden(false);
-                 }
-             else if (e.getActionCommand().equals("Set consensus lineage")) {
+                 }*/
+/*             else if (e.getActionCommand().equals("Set consensus lineage")) {
                       resetConsensusLineage();
-                  }
-             else if (e.getActionCommand().equals("Prune tree")) {
+                  }*/
+/*             else if (e.getActionCommand().equals("Prune tree")) {
                  tree.noLoop();
                  double total = tree.getTree().depth();
                  double perc = .01;
@@ -351,7 +351,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                         tree.setTree(tree.getTree());
                 }
                 tree.loop();
-            }
+            }*/
                else if (e.getActionCommand().equals("Collapse/Expand All Children")) {
                    if (frame.clickedNode != null) {
                       ArrayList<Node> children = frame.clickedNode.getNodes();
@@ -372,9 +372,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                        if (frame.clickedNode != null) {
                           frame.clickedNode.setDrawLabel(!frame.clickedNode.getDrawLabel());
                        }
-              } else if (e.getActionCommand().equals("Recenter")) {
-                  recenter();
-              } else if (e.getActionCommand().equals("Mirror left/right")) {
+              } /*else if (e.getActionCommand().equals("Recenter")) {
+                                recenter();
+                            }*/ else if (e.getActionCommand().equals("Mirror left/right")) {
                  mirrorHorz();
               } else if (e.getActionCommand().equals("Mirror up/down")) {
                   mirrorVert();

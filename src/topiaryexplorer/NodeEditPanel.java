@@ -49,6 +49,7 @@ public final class NodeEditPanel extends JPanel{
     JColorChooser colorChooser = new JColorChooser();
     
     JPanel holder = new JPanel();
+    JPanel holder1 = new JPanel();
     
     JLabel colorByLabel = new JLabel("Color By:");
     JButton colorByButton = new JButton("Color By...");
@@ -67,6 +68,15 @@ public final class NodeEditPanel extends JPanel{
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 /*        setLayout(new GridLayout(1,1));*/
         
+        internalLabelCheckBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                vis.setDrawInternalNodeLabels(internalLabelCheckBox.isSelected());
+                vis.redraw();
+            }
+        });
+        holder1.add(internalLabelCheckBox);
+        holder1.add(new JLabel());
+        add(holder1);
         
         nodeLabelCheckBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
