@@ -63,6 +63,7 @@ class ColorByPopupMenu extends JPopupMenu{
                       {
                           ((TreeWindow)parent).colorBranchesByValue(value);
                           ((TreeWindow)parent).treeEditToolbar.branchEditPanel.coloringMenuItem.setSelected(false);
+                          ((TreeWindow)parent).treeEditToolbar.branchEditPanel.majorityColoringMenuItem.setEnabled(true);
                       }
                       else if(elementType == 1)
                           ((TreeWindow)parent).colorLabelsByValue(value);
@@ -96,6 +97,7 @@ class ColorByPopupMenu extends JPopupMenu{
                        {
                              ((TreeWindow)parent).colorBranchesByValue(value);
                              ((TreeWindow)parent).treeEditToolbar.branchEditPanel.coloringMenuItem.setSelected(false);
+                             ((TreeWindow)parent).treeEditToolbar.branchEditPanel.majorityColoringMenuItem.setEnabled(true);
                          }
                        else if(elementType == 1)
                            ((TreeWindow)parent).colorLabelsByValue(value);
