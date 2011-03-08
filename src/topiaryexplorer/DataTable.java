@@ -72,7 +72,7 @@ public class DataTable {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
 		//mark the beginning of the file so that we can come back if the next line is not commented out
-		br.mark(10000);
+/*      br.mark(10000);*/
 		String line = br.readLine();
 
 		//Commented lines start with a #
@@ -80,11 +80,11 @@ public class DataTable {
 
 		while (line.charAt(0) == '#') {
 			commentedLines.add(line);
-			br.mark(10000);
+/*          br.mark(10000);*/
 			line = br.readLine();
 		}
 		//now we've gone one line too far, so return to our last mark
-		br.reset();
+/*      br.reset();*/
 
 
         data = new SparseTable();
@@ -92,7 +92,7 @@ public class DataTable {
         int c = 0;
         String vals[];
         Object val;
-		while ((line = br.readLine()) != null) {
+		while ((line) != null) {
 		    vals = line.split("\t");
 		    rowNames.add(vals[0]);
 		    c = 0;
@@ -105,6 +105,7 @@ public class DataTable {
 		        c = c + 1;
 		    }
 		    r = r + 1;
+		    line = br.readLine();
         }
 
         int numCols = c;

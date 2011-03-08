@@ -1402,9 +1402,9 @@ public class TreeVis extends PApplet {
 		  double longest = textWidth(root.getLongestLabel());
 		  double l = root.longestRootToTipDistance();
 		  double s = root.shortestRootToTipDistance();
-		  drawExternalNodeLabels = true;
-		  drawInternalNodeLabels = true;
-		  drawNodeLabels = true;
+/*        drawExternalNodeLabels = true;*/
+/*        drawInternalNodeLabels = true;*/
+/*        drawNodeLabels = true;*/
 		  if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
 			  xscale = (dims[0]-MARGIN-TREEMARGIN)/root.depth();
 			  xstart = MARGIN;
