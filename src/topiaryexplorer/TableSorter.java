@@ -104,7 +104,12 @@ public class TableSorter extends AbstractTableModel {
 
     public static final Comparator COMPARABLE_COMAPRATOR = new Comparator() {
         public int compare(Object o1, Object o2) {
-            return ((Comparable) o1).compareTo(o2);
+            if(o1.getClass() == o2.getClass())
+            {
+                return ((Comparable) o1).compareTo(o2);
+            }
+            else
+                return o1.toString().compareTo(o2.toString());
         }
     };
     public static final Comparator LEXICAL_COMPARATOR = new Comparator() {

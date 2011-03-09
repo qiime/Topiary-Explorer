@@ -183,17 +183,25 @@ public class ColorPanel extends JPanel{
  			//interpolate
  			Color firstColor = (Color) sorterModel.getValueAt(first,1);
  			Color secondColor = (Color) sorterModel.getValueAt(second,1);
-/*          Color firstColor = (Color) data.get(first).get(1);*/
-/*          Color secondColor = (Color) data.get(second).get(1);*/
- 			for (int i = first+1; i < second; i++) {
- 				//here's the interpolation
- 				float frac = (i-first)*(1.0f/(second-first));
- 				Color c = new Color((1-frac)*firstColor.getRed()/255.0f + frac*secondColor.getRed()/255.0f,
- 					(1-frac)*firstColor.getGreen()/255.0f + frac*secondColor.getGreen()/255.0f,
- 					(1-frac)*firstColor.getBlue()/255.0f + frac*secondColor.getBlue()/255.0f);
-/*                 data.get(i).set(1, c);*/
-                 sorterModel.setValueAt(c, i, 1);
- 			}
+ 			
+ 			if(firstColor == secondColor)
+ 			{
+ 			    for (int i = first+1; i < second; i++) 
+ 			        sorterModel.setValueAt(firstColor, i, 1);
+		        
+ 			}else
+ 			{
+    /*          Color firstColor = (Color) data.get(first).get(1);*/
+    /*          Color secondColor = (Color) data.get(second).get(1);*/
+     			for (int i = first+1; i < second; i++) {
+     				//here's the interpolation
+     				float frac = (i-first)*(1.0f/(second-first));
+     				Color c = new Color((1-frac)*firstColor.getRed()/255.0f + frac*secondColor.getRed()/255.0f,
+     					(1-frac)*firstColor.getGreen()/255.0f + frac*secondColor.getGreen()/255.0f,
+     					(1-frac)*firstColor.getBlue()/255.0f + frac*secondColor.getBlue()/255.0f);
+                     sorterModel.setValueAt(c, i, 1);
+     			}
+		    }
  		}
       }
 

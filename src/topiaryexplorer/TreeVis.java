@@ -54,6 +54,7 @@ public class TreeVis extends PApplet {
     private float collapsedPixel = 10000000;
     private double collapsedLevel = 0;
     
+    private boolean zoomDrawNodeLabels = false;
     private boolean majorityColoring = true;
     private boolean mirrored = false;
 
@@ -670,6 +671,12 @@ public class TreeVis extends PApplet {
      */
     private void drawTree(Node node) {
       g.textFont(nodeFont);
+      if (yscale > nodeFontSize)
+      {
+        zoomDrawNodeLabels = true;
+      }
+      else
+        zoomDrawNodeLabels = false;
       drawTree(node, g);
     }
     
@@ -929,7 +936,7 @@ public class TreeVis extends PApplet {
      double minY = drawY - (nodeFont.descent()*nodeFont.size);
      double maxY = drawY + (nodeFont.ascent()*nodeFont.size);
      
-     if (node.isLeaf() && drawNodeLabels) {           
+     if (node.isLeaf() && drawNodeLabels && zoomDrawNodeLabels) {           
          Color lc = node.getLabelColor(majorityColoring);
            if(lc == null)
            {
@@ -941,7 +948,7 @@ public class TreeVis extends PApplet {
                canvas.fill(lc.getRGB());
                canvas.stroke(lc.getRGB());
            }
-           if (yscale > nodeFontSize) 
+/*           if (yscale > nodeFontSize) */
                canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
      }
      

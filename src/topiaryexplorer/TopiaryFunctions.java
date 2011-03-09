@@ -239,14 +239,15 @@ public class TopiaryFunctions {
 	}
 	
 	public static String getConsensus(ArrayList<String> consensus, double level) {
-	    HashSet testSet = new HashSet(consensus);
-
+        while(consensus.contains(null))
+            consensus.remove(consensus.indexOf(null));
+        HashSet testSet = new HashSet(consensus);
           if(testSet.size() == 1) // if the set only has one element, all names are the same
           { 
 /*              String[] ans = {consensus.get(0),"100%"};*/
               return consensus.get(0)+"[100%]";
           }
-          else // if the set has more than one element, need to figure out
+          else if(consensus.size() > 0) // if the set has more than one element, need to figure out
           // the consensus string
           {
               HashMap counts = new HashMap();
@@ -274,15 +275,19 @@ public class TopiaryFunctions {
               // if the string that appears most often appears more than 
               // supplied level then it is the consensus string, add it to
               // the consensusLineage
-              if(max/consensus.size() > level)
+              if(max/consensus.size() > level && maxStr != null & maxStr != "null" && maxStr !="")
               {
 /*                  String[] ans = {maxStr,((Double)max/consensus.size())+"%"};*/
                   String ans = String.format("%s[%3.0f%%]",maxStr,((Double)max/consensus.size())*100);
+                  if(ans.substring(0,4) == "null")
+                    return "";
                   return ans;
               }
               else
-                return null;
+                return "";
           }
+          else
+            return "";
 	}
     
 }

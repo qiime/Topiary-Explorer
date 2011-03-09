@@ -116,7 +116,7 @@ public class Node implements Comparable{
   public String getLineage() { 
       if(!lineage.equals("Unclassified-Screened"))
           return lineage;
-        return null; 
+        return ""; 
         }
   public void setConsensusLineage(String s) { consensusLineage = s; }
   public String getConsensusLineage() { return consensusLineage;}
@@ -207,7 +207,7 @@ public class Node implements Comparable{
       {
           if(!lineage.equals("Unclassified-Screened"))
             return lineage;
-          return null;
+          return "";
       }
       
       ArrayList<Node> tips = getLeaves();
@@ -222,7 +222,7 @@ public class Node implements Comparable{
       }
       
       if(currLabels.size() == 0)
-        return null;
+        return "";
       
       String consensusLineage = "";
       ArrayList<String> curr = new ArrayList<String>();

@@ -88,6 +88,18 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     Container pane = getContentPane();
          pane.setLayout(new BorderLayout());
          
+         addComponentListener(new java.awt.event.ComponentAdapter() {
+ 			public void componentResized(ComponentEvent e) {
+ 				tree.checkBounds();
+ 				tree.redraw();
+
+                collapseTreeToolbar.resetLayout();
+ 				treeHolder.syncScrollbarsWithTree();
+ 				//frame.updateZoomBounds();
+ 				//frame.syncZoomSliderWithTree();
+ 			}
+ 		});
+         
          tree.addMouseMotionListener(new MouseMotionAdapter() {
  			public void mouseMoved(java.awt.event.MouseEvent evt) {
  			    if(!isActive()) return;
@@ -201,7 +213,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                               tree.noLoop();
                             clickedNode.getParent().nodes.remove(clickedNode);
                             for(Node n : clickedNode.getAnscestors())
-                                n.setConsensusLineage(n.getConsensusLineageF(.8));
+                                n.setConsensusLineage(n.getConsensusLineageF(0.0));
                           }
                         tree.setTree(tree.getTree());
                         tree.loop();
@@ -905,7 +917,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          }
          for(Node n : tree.getTree().getNodes())
          {
-             n.setConsensusLineage(n.getConsensusLineageF(.8));
+             n.setConsensusLineage(n.getConsensusLineageF(0.0));
          }
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
@@ -1079,6 +1091,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         }
                 
         public void colorBranchesByValue(String value) {
+            tree.noLoop();
             frame.branchValue = value;
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             treeEditToolbar.setStatus("Coloring branches...");
@@ -1096,15 +1109,15 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
               ArrayList<Object> uniqueVals = new ArrayList<Object>(column);
               //set up the branchColorPanel.getColorMap()
               frame.branchColorPanel.setColorMap(new HashMap());
-              float[] hsbvals = new float[3];
+/*              float[] hsbvals = new float[3];
               hsbvals[0] = 0;
               hsbvals[1] = 1;
               hsbvals[2] = 1;
-              Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
+              Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));*/
               for (Object val : uniqueVals) {
                   frame.branchColorPanel.getColorMap().put(val, new Color(200,200,200));//color);
-                  hsbvals[0] += (1.0/uniqueVals.size());
-                  color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
+/*                  hsbvals[0] += (1.0/uniqueVals.size());
+                  color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));*/
               }
              
              frame.branchColorPanel.syncColorKeyTable();
@@ -1116,11 +1129,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              tree.getTree().updateBranchColorFromChildren();
              
              treeEditToolbar.setStatus("Branches colored by "+value);
+             tree.loop();
              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
           }
           
           
           public void colorLabelsByValue(String value) {
+          tree.noLoop();
           frame.labelValue = value;
           this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
           treeEditToolbar.setStatus("Coloring labels...");
@@ -1138,15 +1153,15 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             ArrayList<Object> uniqueVals = new ArrayList<Object>(column);
             //set up the branchColorPanel.getColorMap()
             frame.labelColorPanel.setColorMap(new HashMap());
-            float[] hsbvals = new float[3];
+/*            float[] hsbvals = new float[3];
             hsbvals[0] = 0;
             hsbvals[1] = 1;
             hsbvals[2] = 1;
-            Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
+            Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));*/
             for (Object val : uniqueVals) {
                 frame.labelColorPanel.getColorMap().put(val, new Color(200,200,200));//color);
-                hsbvals[0] += (1.0/uniqueVals.size());
-                color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
+/*                hsbvals[0] += (1.0/uniqueVals.size());
+                color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));*/
             }
 
            frame.labelColorPanel.syncColorKeyTable();
@@ -1159,6 +1174,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
            treeEditToolbar.setStatus("Labels colored by "+value);
            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+           tree.loop();
         }
       /**
         * 
