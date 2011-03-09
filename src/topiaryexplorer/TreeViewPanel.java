@@ -82,7 +82,6 @@ public final class TreeViewPanel extends JPanel{
         
         pruneButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                vis.noLoop();
                  double total = vis.getTree().depth();
                  double perc = .01;
                  while(vis.getTree().getNumberOfLeaves() > 30000)
@@ -95,7 +94,7 @@ public final class TreeViewPanel extends JPanel{
                         frame.setTreeVals(vis.getTree());
                         vis.setTree(vis.getTree());
                 }
-                vis.loop();
+                vis.redraw();
             }
         });
         buttonPanel.add(pruneButton);
@@ -186,11 +185,10 @@ public final class TreeViewPanel extends JPanel{
                         return;
                 }
                 parent.treeStatus.setText("Calculating Offsets...");
-                vis.noLoop();
                 vis.setRadialOffsets(vis.getTree());
                 vis.setTOffsets(vis.getTree(), 0);
                 vis.setROffsets(vis.getTree(), 0);
-                vis.loop();
+                vis.redraw();
                 vis.setTreeLayout("Polar");
                 rotatePanel.setVisible(true);
                 rotateSlider.setEnabled(true);
@@ -252,6 +250,7 @@ public final class TreeViewPanel extends JPanel{
                      colorLabel.setBackground(newColor);
                      vis.setBackgroundColor(newColor);
                  }
+                 vis.redraw();
             }
             
             public void mouseExited(MouseEvent e) {}
@@ -272,6 +271,7 @@ public final class TreeViewPanel extends JPanel{
 	public void layoutChanged() {
 	    frame.treeToolbar.setScale();
 	    frame.verticalTreeToolbar.setScale();
+	    vis.redraw();
 	}
 	
 	public void syncTreeWithRotateSlider() {
