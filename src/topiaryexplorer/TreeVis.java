@@ -85,7 +85,7 @@ public class TreeVis extends PApplet {
     public void setup() {
         size(800, 600);
         smooth();
-        noLoop();
+/*        noLoop();*/
 /*        frameRate(10);*/
         //set up default font
         textFont(nodeFont);

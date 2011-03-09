@@ -157,11 +157,10 @@ public final class TreeViewPanel extends JPanel{
         radialButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 parent.treeStatus.setText("Calculating Offsets...");
-                vis.noLoop();
                 vis.setRadialOffsets(vis.getTree());
                 vis.setTOffsets(vis.getTree(), 0);
                 vis.setROffsets(vis.getTree(), 0);
-                vis.loop();
+                vis.redraw();
                 vis.setTreeLayout("Radial");
                 rotatePanel.setVisible(true);
                 rotateSlider.setEnabled(true);
