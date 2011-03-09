@@ -85,8 +85,8 @@ public class TreeVis extends PApplet {
     public void setup() {
         size(800, 600);
         smooth();
-        //noLoop();
-        frameRate(30);
+        noLoop();
+/*        frameRate(10);*/
         //set up default font
         textFont(nodeFont);
         oldwidth = width;
@@ -338,6 +338,9 @@ public class TreeVis extends PApplet {
     }
 
     public void mouseReleased() {
+      
+      Node node = findNode(mouseX, mouseY);
+      mouseOverNode = node;
       cursor(ARROW);
       if (draggingLabel && mouseOverNodeToReplace != null) {
           //replace node label
@@ -358,26 +361,25 @@ public class TreeVis extends PApplet {
      * mouseMoved() is called whenever the mouse is moved.
      */
     public void mouseMoved() {
-        if(!frame.isActive())
-            return;
-      //is the mouse over a node?
-      Node node = findNode(mouseX, mouseY);
-      if (node != null) {
-        //if so, chance the cursor's hand
-        cursor(HAND);
-        //outline the node
-        if ((node.isLeaf() && this.drawExternalNodeLabels) ||(!node.isLeaf() && this.drawInternalNodeLabels)) {
-            mouseOverNode = node;
-        }
-/*        redraw();*/
-      }
-      else {
-        //cursor is normal
-        cursor(ARROW);
-        //set outlined node to nothing
-        mouseOverNode = null;
-      }
-      mouseOverNodeToReplace = null;
+       /* if(!frame.isActive())
+                   return;
+             //is the mouse over a node?
+             Node node = findNode(mouseX, mouseY);
+             if (node != null) {
+               //if so, chance the cursor's hand
+               cursor(HAND);
+               //outline the node
+               if ((node.isLeaf() && this.drawExternalNodeLabels) ||(!node.isLeaf() && this.drawInternalNodeLabels)) {
+                   mouseOverNode = node;
+               }
+             }
+             else {
+               //cursor is normal
+               cursor(ARROW);
+               //set outlined node to nothing
+               mouseOverNode = null;
+             }
+             mouseOverNodeToReplace = null;*/
     }
 
     /**

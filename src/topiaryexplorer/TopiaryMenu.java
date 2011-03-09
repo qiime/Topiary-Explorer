@@ -450,11 +450,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     
                     // load tree
                     if(data.containsKey("tre")){
-                        for(TreeWindow w : frame.treeWindows)
-                               w.tree.noLoop();
+                       /* for(TreeWindow w : frame.treeWindows)
+                                                      w.tree.noLoop();*/
                         frame.newTreeWindow(((ArrayList<String>)data.get("tre")).get(0), true);
-                        for(TreeWindow w : frame.treeWindows)
-                               w.tree.loop();
+    /*                    for(TreeWindow w : frame.treeWindows)
+                                   w.tree.loop();*/
                     }
                     // load otu metadata
                      if(data.containsKey("otm")){
@@ -537,8 +537,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    	   }
        if(inFile != null)
        {
-           for(TreeWindow t : frame.treeWindows)
-               t.tree.noLoop();
+/*           for(TreeWindow t : frame.treeWindows)
+               t.tree.noLoop();*/
                
            if(frame.otuMetadata != null)
                 clearOtuMetadata();
@@ -567,7 +567,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.resetOtuMenus();
             for(TreeWindow t : frame.treeWindows)
             {
-                t.tree.loop();
+                t.tree.redraw();
             }
             /*frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState())*/;
             frame.otuMetadataFile = inFile;
@@ -596,8 +596,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    	       } catch (java.io.IOException e) {}
    	   }
        if (inFile != null) {
-           for(TreeWindow t : frame.treeWindows)
-               t.tree.noLoop();
+/*           for(TreeWindow t : frame.treeWindows)
+               t.tree.noLoop();*/
            if(frame.sampleMetadata != null)
                 clearSampleMetadata();
                 
@@ -624,7 +624,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
             frame.resetSampleMenus();
             for(TreeWindow t : frame.treeWindows)
-                t.tree.loop();
+                t.tree.redraw();
             frame.sampleMetadataFile = inFile;
        }
        frame.repaint();
@@ -632,15 +632,15 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    }
    
    public void clearSampleMetadata() {
-       for(TreeWindow t : frame.treeWindows)
-              t.tree.noLoop();
+/*       for(TreeWindow t : frame.treeWindows)
+              t.tree.noLoop();*/
 /*       ((SparseTableModel)frame.sampleMetadataTable.getModel()).clearTable();*/
 /*       frame.resetColorBySampleMenus();*/
        /*resetLineWidthSampleMenu();*/
        frame.resetSampleMenus();
        frame.sampleMetadataFile = null;
        for(TreeWindow t : frame.treeWindows)
-              t.tree.loop();
+              t.tree.redraw();
        frame.repaint();
    }
 
@@ -678,7 +678,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 frame.consoleWindow.update("Unable to load " + ex.getMessage());
             }
             for(TreeWindow w : frame.treeWindows)
-                   w.tree.loop();
+                   w.tree.redraw();
             frame.otuSampleMapFile = inFile;
        }
        frame.repaint();

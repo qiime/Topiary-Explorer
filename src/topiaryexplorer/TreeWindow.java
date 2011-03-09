@@ -100,25 +100,42 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  			}
  		});
          
-         tree.addMouseMotionListener(new MouseMotionAdapter() {
- 			public void mouseMoved(java.awt.event.MouseEvent evt) {
- 			    if(!isActive()) return;
- 				Node node = tree.findNode(evt.getX(), evt.getY());
- 				if (node != null) {
-			      String status = "";
- 				  String prefix = "";
-                  if (node.isLocked())
-                    prefix += "(L)";
-                  String label = node.getConsensusLineage();
-                  if (label == null)
-                      label = "";
- 				  status += String.format("Sub-tree: %d leaves", node.getNumberOfLeaves());
- 				  treeToolbar.setStatus(prefix, status, label);
- 				}
- 				else
-                    treeToolbar.setStatus("","",""); 
- 			}
- 		});
+         tree.addMouseListener(new MouseListener() {
+             public void mousePressed(java.awt.event.MouseEvent evt) {
+                 if(!isActive()) return;
+                 Node node = tree.findNode(evt.getX(), evt.getY());
+                if (node != null) {
+                  String status = "";
+                  String prefix = "";
+                   if (node.isLocked())
+                     prefix += "(L)";
+                   String label = node.getConsensusLineage();
+                   if (label == null)
+                       label = "";
+                  status += String.format("Sub-tree: %d leaves", node.getNumberOfLeaves());
+                  treeToolbar.setStatus(prefix, status, label);
+                }
+                else
+                     treeToolbar.setStatus("","","");
+             
+            }
+            
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                
+            }
+            
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                
+            }
+            
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                
+            } 
+            
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                
+            }
+        });
 	     
 	     /*//set up the tree pop-up menu
 	              item = new JMenuItem("Collapse/Expand");
@@ -210,13 +227,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                           JOptionPane.YES_NO_OPTION);
                           if(del == JOptionPane.YES_OPTION)
                           {
-                              tree.noLoop();
+/*                              tree.noLoop();*/
                             clickedNode.getParent().nodes.remove(clickedNode);
                             for(Node n : clickedNode.getAnscestors())
-                                n.setConsensusLineage(n.getConsensusLineageF(0.0));
+                                n.setConsensusLineage(n.getConsensusLineageF(0.5));
                           }
                         tree.setTree(tree.getTree());
-                        tree.loop();
+/*                        tree.loop();*/
+                        tree.redraw();
                   }
               });
               treePopupMenu.add(item);
@@ -379,16 +397,16 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
               } else if (e.getActionCommand().equals("Export Tree Screen Capture...") && tree.getTree()!= null)  {
                   tree.noLoop();
      			  exportScreenCapture();
-                  if(this.isActive()) tree.loop();
+                  if(this.isActive()) tree.redraw();
               }
     }
     
     public void windowActivated(WindowEvent e)  {
-        tree.loop();
+        tree.redraw();
     }
     
     public void windowDeactivated(WindowEvent e)  {
-        tree.noLoop();
+/*        tree.noLoop();*/
     }
     
     public void windowClosed(WindowEvent e) {
@@ -398,15 +416,15 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     
     public void windowClosing(WindowEvent e) {}
     public void windowDeiconified(WindowEvent e){
-        tree.loop();
+        tree.redraw();
     }
     
     public void windowIconified(WindowEvent e)  {
-        tree.noLoop();
+/*        tree.noLoop();*/
     }
     
     public void windowOpened(WindowEvent e) {
-        tree.loop();
+        tree.redraw();
     }
 	
 	public void keyTyped(KeyEvent key) {
@@ -441,12 +459,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     }
 	
 	public void ladderize() {
-	    tree.noLoop();
+/*      tree.noLoop();*/
         tree.getTree().ladderize();
         tree.setTree(tree.getTree());
 	    
 /*      frame.repaint();*/
-	    tree.loop();
+	    tree.redraw();
 	}
 	
 	/**
@@ -461,7 +479,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	         } catch (java.io.IOException e) {}
 	     }
          if (inFile != null) {
-             tree.noLoop();
+/*             tree.noLoop();*/
              Node root = TopiaryFunctions.createTreeFromNewickFile(inFile);
              setTreeVals(root);
              tree.setTree(root);
@@ -469,7 +487,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 /*             removeColor();*/
              treeToolbar.setScale();
              verticalTreeToolbar.setScale();             
-             tree.loop();
+             tree.redraw();
              
              collapseTree();
 
@@ -491,7 +509,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              inFile = frame.fos.openFileDialog(null,null);
          } catch (java.io.IOException e) {}
          if (inFile != null) {
-              tree.noLoop();
+/*              tree.noLoop();*/
               Node root = TopiaryFunctions.createTreeFromNewickFile(inFile);
                setTreeVals(root);
                tree.setTree(root);
@@ -499,7 +517,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 /*              removeColor();*/
               treeToolbar.setScale();
               verticalTreeToolbar.setScale();
-              tree.loop();
+              tree.redraw();
               collapseTree();
 
               this.setVisible(true);
@@ -522,7 +540,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 /*        removeColor();*/
         treeToolbar.setScale();
         verticalTreeToolbar.setScale();
-        tree.loop();
+        tree.redraw();
         collapseTree();
         
         this.setVisible(true);
@@ -557,7 +575,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         tree.noLoop();
          ExportTreeDialog etd = new ExportTreeDialog(this);
          etd.setVisible(true);
-        if(this.isActive()) tree.loop();
+        if(this.isActive()) tree.redraw();
         treeEditToolbar.setStatus("Done exporting tree.");
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
@@ -578,6 +596,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         tree.resetTreeX();
         tree.resetTreeY();
         treeToolbar.syncZoomSliderWithTree();
+        tree.redraw();
     }
 	
 	/**
@@ -592,6 +611,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              }
         tree.setMirrored(!tree.getMirrored());
         tree.setRadialOffsets(tree.getTree());
+        tree.redraw();
      }
      
      /**
@@ -607,6 +627,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          }
 /*         tree.setYOffsets(tree.getTree(), 0);*/
          tree.setRadialOffsets(tree.getTree());
+         tree.redraw();
      }
 	
 	 /**
@@ -644,6 +665,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
        tree.getTree().updateBranchColorFromChildren();
        frame.repaint();
        treeEditToolbar.setStatus("Done coloring tree.");
+       tree.redraw();
        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
@@ -695,7 +717,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
           tree.getTree().updateBranchColorFromChildren();
           frame.repaint();
-         
+         tree.redraw();
          treeEditToolbar.setStatus("Done coloring tree.");
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
@@ -731,6 +753,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             }
             tree.getTree().updateLabelColorFromChildren();
             frame.repaint();
+            tree.redraw();
             treeEditToolbar.setStatus("Done coloring tree.");
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
          }
@@ -783,7 +806,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
                tree.getTree().updateLabelColorFromChildren();
                frame.repaint();
-
+               tree.redraw();
               treeEditToolbar.setStatus("Done coloring tree.");
               this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
           }
@@ -826,6 +849,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             n.setLineWidth(linevalue);
         }
         tree.getTree().updateLineWidthsFromChildren();
+        tree.redraw();
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
 
@@ -894,6 +918,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              }
          }
          tree.getTree().updateLineWidthsFromChildren();
+         tree.redraw();
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
@@ -917,8 +942,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          }
          for(Node n : tree.getTree().getNodes())
          {
-             n.setConsensusLineage(n.getConsensusLineageF(0.0));
+             n.setConsensusLineage(n.getConsensusLineageF(0.5));
          }
+         tree.redraw();
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
@@ -956,6 +982,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          }
          frame.lineWidthColumnIndex = colIndex;
          frame.resetLineWidths();
+         tree.redraw();
          tree.getTree().updateLineWidthsFromChildren();
       }
       
@@ -1061,7 +1088,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  	 }
 
       public void removeColor() {
-          tree.noLoop();
+/*          tree.noLoop();*/
             //reset the branchColorPanel.getColorMap()
             frame.branchColorPanel.setColorMap(new HashMap());
             //reset the colorKeyTable
@@ -1087,11 +1114,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                 }
             }
             frame.branchValue = "";
-            tree.loop();
+/*            tree.loop();*/
+            tree.redraw();
         }
                 
         public void colorBranchesByValue(String value) {
-            tree.noLoop();
+/*            tree.noLoop();*/
             frame.branchValue = value;
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             treeEditToolbar.setStatus("Coloring branches...");
@@ -1129,13 +1157,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              tree.getTree().updateBranchColorFromChildren();
              
              treeEditToolbar.setStatus("Branches colored by "+value);
-             tree.loop();
+/*             tree.loop();*/
+             tree.redraw();
              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
           }
           
           
           public void colorLabelsByValue(String value) {
-          tree.noLoop();
+/*          tree.noLoop();*/
           frame.labelValue = value;
           this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
           treeEditToolbar.setStatus("Coloring labels...");
@@ -1174,7 +1203,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
            treeEditToolbar.setStatus("Labels colored by "+value);
            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-           tree.loop();
+/*           tree.loop();*/
+            tree.redraw();
         }
       /**
         * 

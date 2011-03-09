@@ -275,19 +275,17 @@ public class TopiaryFunctions {
               // if the string that appears most often appears more than 
               // supplied level then it is the consensus string, add it to
               // the consensusLineage
-              if(max/consensus.size() > level && maxStr != null & maxStr != "null" && maxStr !="")
+              if(max/consensus.size() > level /*&& maxStr != null & maxStr != "null" && maxStr !=""*/)
               {
 /*                  String[] ans = {maxStr,((Double)max/consensus.size())+"%"};*/
                   String ans = String.format("%s[%3.0f%%]",maxStr,((Double)max/consensus.size())*100);
-                  if(ans.substring(0,4) == "null")
-                    return "";
                   return ans;
               }
               else
-                return "";
+                return null;
           }
           else
-            return "";
+            return null;
 	}
     
 }

@@ -74,6 +74,7 @@ class CollapseTreeToolbar extends JToolBar {
         if (frame.tree==null) return;
         frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         frame.tree.setCollapsedLevel(1-collapseSlider.getValue()/1000.0);
+        frame.tree.redraw();
         frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
