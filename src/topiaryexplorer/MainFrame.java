@@ -516,10 +516,16 @@ public class MainFrame extends JFrame {
          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
          if (currTable != null && currTable == otuMetadata) {
              for(TreeWindow t : treeWindows)
+             {
+/*                 if(!t.treeEditToolbar.branchEditPanel.coloringMenuItem.isSelected())*/
                   t.recolorBranchesByOtu();
+              }
          } else if (currTable != null && currTable == sampleMetadata) {
              for(TreeWindow t : treeWindows)
+             {
+/*                 if(!t.treeEditToolbar.branchEditPanel.coloringMenuItem.isSelected())*/
                   t.recolorBranchesBySample();
+              }
          } else {
              //it's null; don't do anything
          }

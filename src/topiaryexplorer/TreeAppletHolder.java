@@ -84,15 +84,31 @@ public class TreeAppletHolder extends JComponent {
 			}
 		});
 	}
+	
+	public void zoomScrollBars() {
+	    int oldRatio = verticalScroll.getValue()/verticalScroll.getVisibleAmount();
+	    verticalScroll.setValue(oldRatio*tree.getMaxVerticalScrollPosition());
+	    verticalScroll.setVisibleAmount(tree.getHeight());
+		verticalScroll.setBlockIncrement(tree.getHeight()*9/10);
+		verticalScroll.setUnitIncrement(tree.getHeight()/10);
+		
+		oldRatio = horizontalScroll.getValue()/horizontalScroll.getVisibleAmount();
+		horizontalScroll.setValue(oldRatio*tree.getMaxHorizontalScrollPosition());
+		horizontalScroll.setVisibleAmount(tree.getWidth());
+		horizontalScroll.setBlockIncrement(tree.getWidth()*9/10);
+		horizontalScroll.setUnitIncrement(tree.getWidth()/10);
+	}
 
 	public void syncScrollbarsWithTree() {
 		int newValue = tree.getCurrentVerticalScrollPosition();
+		
 		verticalScroll.setMaximum(tree.getMaxVerticalScrollPosition());
 		verticalScroll.setValue(newValue);
 		verticalScroll.setVisibleAmount(tree.getHeight());
 		verticalScroll.setBlockIncrement(tree.getHeight()*9/10);
 		verticalScroll.setUnitIncrement(tree.getHeight()/10);
-		//System.out.println(verticalScroll.getValue() + "; " + verticalScroll.getMaximum());
+		
+/*        System.out.println("value:"+verticalScroll.getValue() + "; visible amount" + verticalScroll.getVisibleAmount());*/
 
 		newValue = tree.getCurrentHorizontalScrollPosition();
 		horizontalScroll.setMaximum(tree.getMaxHorizontalScrollPosition());

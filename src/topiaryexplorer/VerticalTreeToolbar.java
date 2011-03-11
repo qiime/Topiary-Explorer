@@ -72,7 +72,8 @@ public class VerticalTreeToolbar extends JToolBar {
     public void syncTreeWithZoomSlider() {
         if (frame.tree.getTree() == null) return;
         double newScale = minYScale * zoomSlider.getValue();
-        frame.tree.setScaleFactor(frame.tree.getXScale(), newScale, frame.tree.getXStart(), frame.tree.getYStart());
+        frame.tree.setVerticalScaleFactor(newScale);
+/*        frame.tree.setScaleFactor(frame.tree.getXScale(), newScale, frame.tree.getXStart(), frame.tree.getYStart());*/
     }
 
     public void syncZoomSliderWithTree() {

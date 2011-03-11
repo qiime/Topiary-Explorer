@@ -128,7 +128,8 @@ public class TreeToolbar extends JToolBar {
     public void syncTreeWithZoomSlider() {
         if (frame.tree.getTree() == null) return;
         double newScale = minXScale *zoomSlider.getValue();
-        frame.tree.setScaleFactor(newScale, frame.tree.getYScale(), frame.tree.getXStart(), frame.tree.getYStart());
+        frame.tree.setHorizontalScaleFactor(newScale);
+/*        frame.tree.setScaleFactor(newScale, frame.tree.getYScale(), frame.tree.getXStart(), frame.tree.getYStart());*/
     }
 
     public void syncZoomSliderWithTree() {

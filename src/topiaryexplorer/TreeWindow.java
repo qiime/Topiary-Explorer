@@ -1114,10 +1114,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
       public void removeColor() {
 /*          tree.noLoop();*/
             //reset the branchColorPanel.getColorMap()
-            frame.branchColorPanel.setColorMap(new HashMap());
+/*            frame.branchColorPanel.setColorMap(new HashMap());*/
             //reset the colorKeyTable
-            ((ColorTableModel)((TableSorter)frame.branchColorPanel.getColorKeyTable().getModel()).getTableModel()).clearTable();
-            frame.branchColorPanel.getColorKeyTable().repaint();
+/*            ((ColorTableModel)((TableSorter)frame.branchColorPanel.getColorKeyTable().getModel()).getTableModel()).clearTable();*/
+/*            frame.branchColorPanel.getColorKeyTable().repaint();*/
             //reset the node colors
             for (Node n : tree.getTree().getLeaves()) {
                 n.noBranchColor();
