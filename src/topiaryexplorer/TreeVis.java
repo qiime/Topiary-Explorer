@@ -244,6 +244,7 @@ public class TreeVis extends PApplet {
             draggingLabel = false;
             mouseOverNode = findNode(mouseX, mouseY);
             mouseOverNodeToReplace = null;
+            redraw();
             if (mouseOverNode == null) {
                 cursor(ARROW);
             }
@@ -255,9 +256,11 @@ public class TreeVis extends PApplet {
         if (!draggingLabel && n!=null && !n.isLeaf() && key!=CODED && key!=BACKSPACE && key!=TAB &&
             key!=ENTER && key!=RETURN && key!= ESC && key!=DELETE) {
             n.setLabel(n.getLabel()+key);
+            redraw();
         } else if (!draggingLabel && n!=null && !n.isLeaf() && key==BACKSPACE) {
             if (n.getLabel().length() > 0){
                 n.setLabel(n.getLabel().substring(0,n.getLabel().length()-1));
+                redraw();
             }
         }
     }
@@ -321,7 +324,6 @@ public class TreeVis extends PApplet {
               draggingLabel = true;
               //find the node where the mouse is
               Node n = findNode(mouseX, mouseY);
-              //can't replace a leaf!
               if (n == null) {
                   mouseOverNodeToReplace = null;
               } else {
@@ -330,6 +332,7 @@ public class TreeVis extends PApplet {
                       this.mouseOverNodeToReplace = n;
                   }
               }
+              redraw();
           } else {
               this.mouseOverNode = null;
             this.mouseOverNodeToReplace = null;
@@ -338,9 +341,9 @@ public class TreeVis extends PApplet {
     }
 
     public void mouseReleased() {
-      
-      Node node = findNode(mouseX, mouseY);
-      mouseOverNode = node;
+/*      Node node = findNode(mouseX, mouseY);*/
+      mouseOverNodeToReplace = findNode(mouseX, mouseY);
+/*      mouseOverNode = node;*/
       cursor(ARROW);
       if (draggingLabel && mouseOverNodeToReplace != null) {
           //replace node label
@@ -355,13 +358,14 @@ public class TreeVis extends PApplet {
       draggingLabel = false;
       mouseOverNode = findNode(mouseX, mouseY);
       mouseOverNodeToReplace = null;
+      redraw();
     }
 
     /**
      * mouseMoved() is called whenever the mouse is moved.
      */
     public void mouseMoved() {
-       /* if(!frame.isActive())
+        if(!frame.isActive())
                    return;
              //is the mouse over a node?
              Node node = findNode(mouseX, mouseY);
@@ -379,7 +383,8 @@ public class TreeVis extends PApplet {
                //set outlined node to nothing
                mouseOverNode = null;
              }
-             mouseOverNodeToReplace = null;*/
+             mouseOverNodeToReplace = null;
+             redraw();
     }
 
     /**
@@ -405,6 +410,7 @@ public class TreeVis extends PApplet {
           selectedNode = null;
         }
       }
+      redraw();
     }
 
     /**
@@ -1034,9 +1040,9 @@ public class TreeVis extends PApplet {
                   (float)xp, (float)yp);
                   
               if(this.drawInternalNodeLabels && !node.nodes.get(i).isLeaf() && !node.nodes.get(i).isCollapsed() ) {
-                    int lc = node.getLabelColor(majorityColoring).getRGB();
-                    canvas.fill(lc);
-                    canvas.stroke(lc);
+/*                    int lc = node.getBranchColor(majorityColoring).getRGB();*/
+                    canvas.fill(c.getRGB());
+                    canvas.stroke(c.getRGB());
                       if (yscale > nodeFontSize) 
                       {
                           String n = node.nodes.get(i).getName();
