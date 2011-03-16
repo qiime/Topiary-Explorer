@@ -74,16 +74,7 @@ class BranchEditPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 majorityColoringMenuItem.setEnabled(!coloringMenuItem.isSelected());
                 vis.setColorBranches(!coloringMenuItem.isSelected());
-/*                if(coloringMenuItem.isSelected())
-                {
-                    majorityColoringMenuItem.setEnabled(false);
-                    vis.setColorBranches(!coloringMenuItem.isSelected());
-                }
-                else
-                {
-                    vis.setColorBranches(!coloringMenuItem.isSelected());
-                    majorityColoringMenuItem.setEnabled(true);
-                }*/
+                vis.redraw();
             }
         });
         add(coloringMenuItem);

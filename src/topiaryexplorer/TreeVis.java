@@ -67,7 +67,8 @@ public class TreeVis extends PApplet {
     private List listeners = new java.util.ArrayList();
     private float wedgeFontSize = 12;
     private int wedgeFontColor = 255;
-    private PFont wedgeFont = createFont("courier", (int)wedgeFontSize);
+    private String wFont = "SansSerif";
+    private PFont wedgeFont = createFont(wFont, (int)wedgeFontSize);
 
     private TreeWindow frame = null;
 
@@ -78,7 +79,8 @@ public class TreeVis extends PApplet {
     private boolean drawNodeLabels = false;
     private float nodeFontSize = 10;
     private int nodeFontColor = 0;
-    private PFont nodeFont = createFont("courier", (int)nodeFontSize);
+    private String nFont = "SansSerif";
+    private PFont nodeFont = createFont(nFont, (int)nodeFontSize);
 
     /**
      * setup() is called once to initialize the applet
@@ -148,23 +150,35 @@ public class TreeVis extends PApplet {
     public void setLineWidthScale(double f) { lineWidthScale = f; }
     public void setMajorityColoring(boolean cond) { majorityColoring = cond; }
     public boolean getMajorityColoring() { return majorityColoring; }
-    public void setLabelXOffset(int i) { labelXOffset = i; }
+    public void setLabelXOffset(int i) { labelXOffset = i; redraw(); }
     public int getLabelXOffset() { return labelXOffset; }
-    public void setLabelYOffset(int i) { labelYOffset = i; }
+    public void setLabelYOffset(int i) { labelYOffset = i; redraw();}
     public int getLabelYOffset() { return labelYOffset; }
     public void setWedgeHeight(double d) { wedgeHeightScale = d; }
     public double getWedgeHeight() { return wedgeHeightScale; }
-    public void setWedgeFontSize(float d) { if(d>0) { wedgeFontSize = d; wedgeFont = createFont("courier", (int)wedgeFontSize);} }
+    public void setWedgeFontFace(String s) { wFont = s; 
+        wedgeFont = createFont(wFont, (int)wedgeFontSize);}
+    public void setWedgeFontSize(float d) { 
+        if(d>0) { 
+            wedgeFontSize = d; 
+            wedgeFont = createFont(wFont, (int)wedgeFontSize);
+            redraw();
+            } 
+    }
     public float getWedgeFontSize() { return wedgeFontSize; }
-    public void setWedgeFontColor(int c) { wedgeFontColor = c; }
+    public void setWedgeFontColor(int c) { wedgeFontColor = c; redraw();}
     public boolean getMirrored() { return mirrored; }
-    public void setMirrored(boolean b) { mirrored = b; }
-    public void setDrawWedgeLabels(boolean b) { drawWedgeLabels = b; }
-    public void setDrawNodeLabels(boolean b) { drawNodeLabels = b; }
+    public void setMirrored(boolean b) { mirrored = b; redraw(); }
+    public void setDrawWedgeLabels(boolean b) { drawWedgeLabels = b; redraw(); }
+    public void setDrawNodeLabels(boolean b) { drawNodeLabels = b; redraw(); }
+    public void setNodeFontFace(String s) { nFont = s; 
+        nodeFont = createFont(nFont, (int)nodeFontSize);
+        }
     public void setNodeFontSize(float d) { 
         if(d>0){
             nodeFontSize = d;
-            nodeFont = createFont("courier", (int)nodeFontSize);
+            nodeFont = createFont(nFont, (int)nodeFontSize);
+            redraw();
             } 
     }
     public float getNodeFontSize() { return nodeFontSize; }
@@ -1305,7 +1319,7 @@ public class TreeVis extends PApplet {
           
           if(Math.abs((toScreenY(top)-toScreenY(bottom))) > wedgeFontSize)
           {
-              canvas.textFont(createFont("courier", wedgeFontSize));
+              canvas.textFont(wedgeFont);
               if(mirrored)
               {
                   canvas.text(s, (float)(toScreenX(x-(shortest)/2)+labelXOffset), (float)(toScreenY(bottom+(top-bottom)/2)+5)+labelYOffset);

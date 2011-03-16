@@ -24,7 +24,7 @@ public class WedgeEditPanel extends JPanel{
     JLabel heightLabel = new JLabel("Height:  ");
     JSlider wedgeHeightSlider = new JSlider(0,101,100);
     
-    JButton consensusButton = new JButton("Consensus Lineage");
+    JButton consensusButton = new JButton("Consensus Lineages");
     
     JLabel position = new JLabel("Position:  ");
     JPanel positionPanel = new JPanel();
@@ -35,6 +35,8 @@ public class WedgeEditPanel extends JPanel{
     JButton resetPosition = new JButton(" ");
     JPanel pPanel = new JPanel();
     
+    String[] fntFaces = {"SansSerif","Serif","Courier"};//PFont.list();
+    JComboBox fntFace = new JComboBox(fntFaces);
     JLabel fontSizeLabel = new JLabel("Size: ");
     JTextField fntSize = new JTextField("",3);
     JLabel ptLabel = new JLabel("pt");
@@ -68,6 +70,7 @@ public class WedgeEditPanel extends JPanel{
             public void stateChanged(ChangeEvent e) {
                 if (wedgeHeightSlider.getValueIsAdjusting()){
                     syncTreeWithWedgeSlider();
+                    vis.redraw();
                 }
             }
         });
@@ -80,6 +83,7 @@ public class WedgeEditPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 vis.setDrawWedgeLabels(wedgeLabelCheckBox.isSelected());
                 labelPanelCP.setVisible(wedgeLabelCheckBox.isSelected());
+/*                vis.redraw();*/
             }
         });
         holder.add(wedgeLabelCheckBox);
@@ -89,15 +93,6 @@ public class WedgeEditPanel extends JPanel{
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
 /*        labelPanel.setLayout(new FlowLayout());*/
         
-/*        addSeparator();*/
-        consensusButton.setToolTipText("Consensus Lineage");
-        consensusButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.resetConsensusLineage();
-            }
-        });
-/*        add(consensusButton);*/
-/*        add(separator);*/
         pPanel.add(position);
         positionPanel.setLayout(new GridLayout(3,3));
         positionPanel.setMaximumSize(new Dimension(35,35));
@@ -139,6 +134,16 @@ public class WedgeEditPanel extends JPanel{
         positionPanel.setToolTipText("Change the position of wedge labels.");
         pPanel.add(positionPanel);
         labelPanel.add(pPanel);
+        
+        fntFace.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+               vis.setWedgeFontFace((String)fntFace.getSelectedItem());
+               vis.redraw();
+/*               System.out.println((String)fntFace.getSelectedItem());*/
+            }
+        });
+/*        holder2.add(new JLabel("Font Face: "));*/
+        labelPanel.add(fntFace);
         
 /*        labelPanel.add(fontSizeLabel);*/
         fontSizePanel.add(fontSizeLabel);
