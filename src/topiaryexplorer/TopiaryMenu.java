@@ -448,14 +448,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 {
                     HashMap data = TopiaryFunctions.parseTep(inFile);
                     
-                    // load tree
-                    if(data.containsKey("tre")){
-                       /* for(TreeWindow w : frame.treeWindows)
-                                                      w.tree.noLoop();*/
-                        frame.newTreeWindow(((ArrayList<String>)data.get("tre")).get(0), true);
-    /*                    for(TreeWindow w : frame.treeWindows)
-                                   w.tree.loop();*/
-                    }
                     // load otu metadata
                      if(data.containsKey("otm")){
                          frame.setOtuMetadata(((ArrayList<String>)data.get("otm")));
@@ -467,6 +459,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                      // load sample metadata
                      if(data.containsKey("sam")){
                          frame.setSampleMetadata(((ArrayList<String>)data.get("sam")));
+                     }
+                     // load tree
+                     if(data.containsKey("tre")){
+                         frame.newTreeWindow(((ArrayList<String>)data.get("tre")).get(0), true);
                      }
                     frame.repaint();
                 }

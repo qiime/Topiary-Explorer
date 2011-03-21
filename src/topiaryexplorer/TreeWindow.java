@@ -72,10 +72,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          catch(IOException e)
          {}
          
-/*         colorBranchesBy = new ColorByMenu(frame,this,frame.branchColorPanel,0);*/
-/*         colorLabelsBy = new ColorByMenu(frame,this,frame.labelColorPanel,1);*/
-         
-/*         branchMenu = new BranchMenu(frame, this, "Branches");*/
 	     tree.addKeyListener(this);
 	     treeHolder = new TreeAppletHolder(tree, this);
 	     treeToolbar = new TreeToolbar(this);
@@ -83,7 +79,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     collapseTreeToolbar = new CollapseTreeToolbar(this);
 	     treeEditToolbar = new TreeEditToolbar(this, frame);
 	     treeEditPane.add(treeEditToolbar);
-/*       wedgeToolbar = new WedgeCustomizerToolbar(this);*/
 	     
 	     Container pane = getContentPane();
          pane.setLayout(new BorderLayout());
@@ -251,13 +246,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                           JOptionPane.YES_NO_OPTION);
                           if(del == JOptionPane.YES_OPTION)
                           {
-/*                              tree.noLoop();*/
                             clickedNode.getParent().nodes.remove(clickedNode);
                             for(Node n : clickedNode.getAnscestors())
                                 n.setConsensusLineage(n.getConsensusLineageF(0.5));
                           }
                         tree.setTree(tree.getTree());
-/*                        tree.loop();*/
                         tree.redraw();
                   }
               });
@@ -341,7 +334,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                   item.addActionListener(this);
                   treeMenu.add(item);*/
          resetCollapseByMenu();
-         treeMenu.add(collapseByMenu);
+/*         treeMenu.add(collapseByMenu);*/
 	     topMenu.add(treeMenu);
 	     
 	     setJMenuBar(topMenu);
@@ -349,6 +342,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 /*         pane.add(leftPanel, BorderLayout.WEST);*/
 	     pane.add(rightPanel, BorderLayout.CENTER);
 	     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+	}
+	
+	public void resetCollapseByMenu() {
+	    treeEditToolbar.treeViewPanel.resetCollapseByMenu();
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -1254,70 +1251,4 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 /*               branchMenu.resetLineWidthSampleMenu();*/
            }        
         
-         /**
-         * Resets collapse by menu when new OTU or Sample metadata
-         * files are loaded
-         */
-        public void resetCollapseByMenu() {
-            //NOTE: can only collapse on OTU metadata
-            collapseByMenu.removeAll();
-            JMenuItem item = new JMenuItem("Uncollapse All");
-            item.addActionListener(new ActionListener() {
-                 public void actionPerformed(ActionEvent e) {
-                     uncollapseTree();
-                 }
-            });
-            collapseByMenu.add(item);
-            item = new JMenuItem("Collapse All");
-            item.addActionListener(new ActionListener() {
-                 public void actionPerformed(ActionEvent e) {
-                     collapseTree();
-                 }
-            });
-            collapseByMenu.add(item);
-            item = new JMenuItem("Internal Node Labels");
-            item.addActionListener(new ActionListener() {
-                 public void actionPerformed(ActionEvent e) {
-                     collapseTreeByInternalNodeLabels();
-                 }
-            });
-            collapseByMenu.add(item);
-            collapseByMenu.add(new JSeparator());
-
-            if (frame.otuMetadata != null) {
-                   ArrayList<String> data = frame.otuMetadata.getColumnNames();
-                   //start at 1 to skip ID column
-                   for (int i = 1; i < data.size(); i++) {
-                        String value = data.get(i);
-                        item = new JMenuItem(value);
-                        item.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {
-                                //get the category to color by
-                                String value = e.getActionCommand();
-                                double level = Double.parseDouble(((String)JOptionPane.showInputDialog(
-                                                    thisWindow,
-                                                    "Enter percent threshold to collapse by:\n"+
-                                                    "Use 100(%) for completely homogeneous\n"+
-                                                    "collapsing",
-                                                    "Collapse by "+value,
-                                                    JOptionPane.PLAIN_MESSAGE,
-                                                    null,
-                                                    null,
-                                                    "90")))/100;
-                                if(level > 0 && level <= 1)
-                                {
-                                    collapseByValue(value,level);
-                                }
-                                else
-                                    JOptionPane.showMessageDialog(frame,
-                                        "Invalid threshold percentage.",
-                                        "Error",
-                                        JOptionPane.ERROR_MESSAGE);
-                                
-                            }
-                        });
-                        collapseByMenu.add(item);
-                   }
-               }
-        }
 }
