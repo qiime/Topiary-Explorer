@@ -68,7 +68,7 @@ class BranchEditPanel extends JPanel{
         colorByMenu = new ColorByPopupMenu(frame.frame, frame, frame.frame.branchColorPanel,0);
         this.setToolTipText("Customize Branches");
 /*        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));*/
-        setLayout(new GridLayout(5,1));
+        setLayout(new GridLayout(3,1));
         
         coloringMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -90,7 +90,7 @@ class BranchEditPanel extends JPanel{
         
         colorBy.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
-				colorByMenu.show(colorBy, colorBy.getX(), colorBy.getY());
+				colorByMenu.show(colorBy, colorBy.getX()+70, colorBy.getY()-30);
            } 
         });
         add(colorBy);

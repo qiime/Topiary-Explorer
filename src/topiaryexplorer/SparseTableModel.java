@@ -47,7 +47,7 @@ class SparseTableModel extends AbstractTableModel {
   }
   
   public boolean isCellEditable(int rowIndex, int colIndex) {
-  	  return false;
+  	  return true;
   }
   
   public Class getColumnClass(int c) {

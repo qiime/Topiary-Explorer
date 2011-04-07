@@ -314,32 +314,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          treeMenu.add(new JSeparator());
 	     
 	     //set up the "tree" submenus
-	     JMenuItem item;
-         item = new JMenuItem("Prune tree...");
-         item.addActionListener(this);
-/*         treeMenu.add(item);*/
-         item = new JMenuItem("Show hidden nodes");
-         item.addActionListener(this);
-/*         treeMenu.add(item);*/
-         item = new JMenuItem("Set consensus lineage");
-         item.addActionListener(this);
-/*         treeMenu.add(item);*/
-         item = new JMenuItem("Recenter");
-         item.addActionListener(this);
-/*         treeMenu.add(item);*/
-         /*item = new JMenuItem("Mirror left/right");
-                  item.addActionListener(this);
-                  treeMenu.add(item);
-                  item = new JMenuItem("Mirror up/down");
-                  item.addActionListener(this);
-                  treeMenu.add(item);*/
-         resetCollapseByMenu();
-/*         treeMenu.add(collapseByMenu);*/
 	     topMenu.add(treeMenu);
 	     
 	     setJMenuBar(topMenu);
          pane.add(treeEditPane, BorderLayout.WEST);
-/*         pane.add(leftPanel, BorderLayout.WEST);*/
 	     pane.add(rightPanel, BorderLayout.CENTER);
 	     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
@@ -1144,6 +1122,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             frame.branchValue = value;
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             treeEditToolbar.setStatus("Coloring branches...");
+            treeEditToolbar.branchEditPanel.colorBy.setEnabled(false);
              //get the column that this category is
              int colIndex = frame.currTable.getColumnNames().indexOf(value);
              if (colIndex == -1) {
@@ -1180,6 +1159,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              treeEditToolbar.setStatus("Branches colored by "+value);
 /*             tree.loop();*/
              tree.redraw();
+             treeEditToolbar.branchEditPanel.colorBy.setEnabled(true);
              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
           }
           
@@ -1189,6 +1169,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
           frame.labelValue = value;
           this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
           treeEditToolbar.setStatus("Coloring labels...");
+          treeEditToolbar.nodeEditPanel.colorByButton.setEnabled(false);
            //get the column that this category is
            int colIndex = frame.currTable.getColumnNames().indexOf(value);
            if (colIndex == -1) {
@@ -1223,6 +1204,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
            tree.getTree().updateLabelColorFromChildren();
 
            treeEditToolbar.setStatus("Labels colored by "+value);
+           treeEditToolbar.nodeEditPanel.colorByButton.setEnabled(true);
            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 /*           tree.loop();*/
             tree.redraw();

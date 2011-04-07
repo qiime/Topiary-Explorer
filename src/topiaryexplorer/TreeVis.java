@@ -1482,9 +1482,9 @@ public class TreeVis extends PApplet {
 		  double oldYScale = yscale;
 		  double oldXStart = xstart;
 		  double oldYStart = ystart;
-		  boolean oldDrawExternalNodeLabels = drawExternalNodeLabels;
-		  boolean oldDrawInternalNodeLabels = drawInternalNodeLabels;
-		  boolean oldDrawNodeLabels = drawNodeLabels;
+/*        boolean oldDrawExternalNodeLabels = drawExternalNodeLabels;*/
+/*        boolean oldDrawInternalNodeLabels = drawInternalNodeLabels;*/
+/*        boolean oldDrawNodeLabels = drawNodeLabels;*/
 	
 		  //reset the sizing and zooming so that the tree can be drawn visibly
 		  double longest = textWidth(root.getLongestLabel());
@@ -1531,9 +1531,9 @@ public class TreeVis extends PApplet {
 		  yscale = oldYScale;
 		  xstart = oldXStart;
 		  ystart = oldYStart;
-		  drawExternalNodeLabels = oldDrawExternalNodeLabels;
-		  drawInternalNodeLabels = oldDrawInternalNodeLabels;
-		  drawNodeLabels = oldDrawNodeLabels;
+/*        drawExternalNodeLabels = oldDrawExternalNodeLabels;*/
+/*        drawInternalNodeLabels = oldDrawInternalNodeLabels;*/
+/*        drawNodeLabels = oldDrawNodeLabels;*/
 		  redraw();
 	} catch (Exception ex) {
 	    System.out.println(ex);
