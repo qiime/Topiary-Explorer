@@ -164,6 +164,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	                  }
 	              });
 	              treePopupMenu.add(item);*/
+          item = new JMenuItem("Find Node in Metadata");
+           item.addActionListener(this);
+           treePopupMenu.add(item);
           item = new JMenuItem("Hide");
                 item.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
@@ -260,6 +263,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  			public void mousePressed(java.awt.event.MouseEvent evt) {
  				clickedNode = tree.findNode(evt.getX(), evt.getY());
  				if (evt.isPopupTrigger() && clickedNode != null) {
+ 				    if(clickedNode.isLeaf())
+ 				    {
+ 				        treePopupMenu.getComponent(0).setEnabled(true);
+ 				    }
+ 				    else
+ 				    {
+ 				        treePopupMenu.getComponent(0).setEnabled(false);
+ 				    }
  					treePopupMenu.show(tree, evt.getX(), evt.getY());
  				}
  			}
@@ -283,6 +294,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          treeEditPane.setViewportView(leftPanel);
 	     
 	     //set up the "node" submenus
+         item = new JMenuItem("Find Node in Metadata");
+         item.addActionListener(this);
+         nodeMenu.add(item);
          item = new JMenuItem("Collapse/Expand");
          item.addActionListener(this);
          nodeMenu.add(item);
@@ -365,6 +379,24 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                 }
                 tree.loop();
             }*/
+            else if (e.getActionCommand().equals("Find Node in Metadata")) {
+/*                if(frame.otuMetadata != null)
+                {*/
+                   if (clickedNode != null && clickedNode.isLeaf()) {
+                        frame.otuMetadataTable.scrollRectToVisible(frame.otuMetadataTable.getCellRect(frame.otuMetadata.getRowNames().indexOf(clickedNode.getName()),0,true));
+                       frame.otuMetadataTable.changeSelection(frame.otuMetadata.getRowNames().indexOf(clickedNode.getName()),0,true,false);
+/*                        frame.otuMetadataScrollPane.getVerticalScrollBar()
+                        .setValue(frame.otuMetadataScrollPane.getVerticalScrollBar().getBlockIncrement()
+                        *frame.otuMetadata.getRowNames().indexOf(clickedNode.getName()));
+                        System.out.println(clickedNode.getName());
+                        System.out.println(frame.otuMetadata.getRowNames().indexOf(clickedNode.getName()));*/
+                        frame.dataPane.setSelectedIndex(1);
+                        frame.otuMetadataTable.requestFocus();
+                        frame.setVisible(true);
+                        frame.repaint();
+                   }
+/*               }*/
+              }
                else if (e.getActionCommand().equals("Collapse/Expand All Children")) {
                    if (frame.clickedNode != null) {
                       ArrayList<Node> children = frame.clickedNode.getNodes();

@@ -199,6 +199,11 @@ public class DataTable {
 	    ArrayList<String> columnNames = new ArrayList<String>();
 	}
 	
+/*  public void highlightRow(Node n) {
+        String otuID = n.getName();
+        int idx = rowNames.indexOf(otuID);
+    }*/
+	
 	public String toString() {
 	    String s = "";
 	    
