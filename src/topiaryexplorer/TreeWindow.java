@@ -385,11 +385,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                    if (clickedNode != null && clickedNode.isLeaf()) {
                         frame.otuMetadataTable.scrollRectToVisible(frame.otuMetadataTable.getCellRect(frame.otuMetadata.getRowNames().indexOf(clickedNode.getName()),0,true));
                        frame.otuMetadataTable.changeSelection(frame.otuMetadata.getRowNames().indexOf(clickedNode.getName()),0,true,false);
-/*                        frame.otuMetadataScrollPane.getVerticalScrollBar()
-                        .setValue(frame.otuMetadataScrollPane.getVerticalScrollBar().getBlockIncrement()
-                        *frame.otuMetadata.getRowNames().indexOf(clickedNode.getName()));
-                        System.out.println(clickedNode.getName());
-                        System.out.println(frame.otuMetadata.getRowNames().indexOf(clickedNode.getName()));*/
                         frame.dataPane.setSelectedIndex(1);
                         frame.otuMetadataTable.requestFocus();
                         frame.setVisible(true);

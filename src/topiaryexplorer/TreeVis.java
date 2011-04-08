@@ -654,24 +654,57 @@ public class TreeVis extends PApplet {
       {
           double shortest = toScreenX(tree.shortestRootToTipDistance() - tree.getBranchLength());
           double longest = toScreenX(tree.longestRootToTipDistance() - tree.getBranchLength());
-      	  double top = toScreenY(tree.getMaximumYOffset())-nodeY;
-          top = top/2;
-          double bottom = nodeY-toScreenY(tree.getMinimumYOffset());
-          bottom = bottom/2;
-      	  maxY = nodeY + top;
-          minY = nodeY - bottom;
+            
+          if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+              
+          	  double top = toScreenY(tree.getMaximumYOffset())-nodeY;
+              top = (top/2)*wedgeHeightScale;
+              double bottom = nodeY-toScreenY(tree.getMinimumYOffset());
+              bottom = (bottom/2)*wedgeHeightScale;
+          	  maxY = nodeY + top;
+              minY = nodeY - bottom;
           
-          int[] xs = new int[]{(int)Math.floor(nodeX), (int)Math.floor(nodeX), (int)Math.ceil(nodeX+shortest), (int)Math.ceil(nodeX+longest)};
-          int[] ys = new int[]{(int)Math.floor(minY), (int)Math.ceil(maxY), (int)Math.ceil(maxY), (int)Math.floor(minY)};
+              int[] xs = new int[]{(int)Math.floor(nodeX), (int)Math.floor(nodeX), (int)Math.ceil(nodeX+shortest), (int)Math.ceil(nodeX+longest)};
+              int[] ys = new int[]{(int)Math.floor(minY), (int)Math.ceil(maxY), (int)Math.ceil(maxY), (int)Math.floor(minY)};
           
-          Polygon poly = new Polygon(xs,ys,4);
+              Polygon poly = new Polygon(xs,ys,4);
           
-          if(poly.contains(x,y))
-            {
-                return tree;
+              if(poly.contains(x,y))
+                {
+                    return tree;
+                }
+                else
+                    return null;
             }
-            else
-                return null;
+            else if (treeLayout.equals("Radial") || treeLayout.equals("Polar"))
+            {
+                double maxt = tree.getMaximumTOffset();
+                double mint = tree.getMinimumTOffset();
+
+                if(wedgeHeightScale < 1)
+                {
+                    double theta = Math.abs(maxt-mint);
+                    double f = (theta*(1-wedgeHeightScale))/2;
+                    mint = mint + f;
+                    maxt = maxt - f;
+                }
+
+                double x1 = tree.getParent().getRXOffset() + shortest * Math.cos(mint);
+                double y1 = tree.getParent().getRYOffset() + shortest * Math.sin(mint);
+                double x2 = tree.getParent().getRXOffset() + longest * Math.cos(maxt);
+                double y2 = tree.getParent().getRYOffset() + longest * Math.sin(maxt);
+
+                  int[] xs = new int[]{(int)nodeX, (int)toScreenX(x1), (int)toScreenX(x2)};
+                  int[] ys = new int[]{(int)nodeY, (int)toScreenY(y1), (int)toScreenY(y2)};
+                  Polygon poly = new Polygon(xs,ys,3);
+
+                  if(poly.contains(x,y))
+                      {
+                          return tree;
+                      }
+                      else
+                          return null;
+            }
       }
       
       double width = 0;
