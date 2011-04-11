@@ -108,7 +108,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                     String label = node.getConsensusLineage();
                     if (label == null)
                         label = "";
-                   status += String.format("Sub-tree: %d leaves", node.getNumberOfLeaves());
+                    if(node.isLeaf())
+                    {
+                        status += node.getName();
+                    }
+                    else
+                        status += String.format("Sub-tree: %d leaves", node.getNumberOfLeaves());
                    treeToolbar.setStatus(prefix, status, label);
                  }
                  else

@@ -84,6 +84,17 @@ public final class TreeViewPanel extends JPanel{
         
         pruneButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                 if(vis.getTree().getNumberOfLeaves() > 30000)
+                 {
+                    JOptionPane.showMessageDialog(null, "Tree will be pruned to less than 30,000 nodes.", "Prune Tree", JOptionPane.INFORMATION_MESSAGE);
+                 }
+                 else
+                 {
+                     JOptionPane.showMessageDialog(null, "Tree already has less than 30,000 nodes.", "Prune Tree", JOptionPane.ERROR_MESSAGE);
+                     return;
+                 }
+                    
+                
                  double total = vis.getTree().depth();
                  double perc = .01;
                  while(vis.getTree().getNumberOfLeaves() > 30000)

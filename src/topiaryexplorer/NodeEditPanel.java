@@ -30,7 +30,7 @@ public final class NodeEditPanel extends JPanel{
     JCheckBox internalLabelCheckBox = new JCheckBox("Internal Node Labels");
     JPanel labelPanel = new JPanel();
     CollapsablePanel labelPanelCP = new CollapsablePanel("Labels",labelPanel, false, true);
-    
+    Boolean warningShown = false;
     JButton tipLabelButton = new JButton("Customize...");
     
     JLabel fntSizeLabel = new JLabel("Size: ");
@@ -82,8 +82,11 @@ public final class NodeEditPanel extends JPanel{
         
         nodeLabelCheckBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                    if(nodeLabelCheckBox.isSelected())
+                    if(nodeLabelCheckBox.isSelected() && !warningShown)
+                    {
                         JOptionPane.showMessageDialog(null, "Node labels will not show unless you are zoomed in enough that the labels would not overlap.", "Warning", JOptionPane.WARNING_MESSAGE);
+                        warningShown = true;
+                    }
                     vis.setDrawNodeLabels(nodeLabelCheckBox.isSelected());
                     vis.redraw();
                     labelPanelCP.setVisible(nodeLabelCheckBox.isSelected());
