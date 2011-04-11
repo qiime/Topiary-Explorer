@@ -1016,7 +1016,7 @@ public class TreeVis extends PApplet {
      double minY = drawY - (nodeFont.descent()*nodeFont.size);
      double maxY = drawY + (nodeFont.ascent()*nodeFont.size);
      
-     if (node.isLeaf() && drawNodeLabels && zoomDrawNodeLabels) {           
+     if (node.isLeaf() && node.getDrawLabel() && drawNodeLabels && zoomDrawNodeLabels) {           
          Color lc = node.getLabelColor(majorityColoring);
            if(lc == null)
            {

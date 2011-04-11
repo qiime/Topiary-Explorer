@@ -90,6 +90,7 @@ public final class NodeEditPanel extends JPanel{
                     vis.setDrawNodeLabels(nodeLabelCheckBox.isSelected());
                     vis.redraw();
                     labelPanelCP.setVisible(nodeLabelCheckBox.isSelected());
+                    frame.treePopupMenu.getComponent(5).setEnabled(nodeLabelCheckBox.isSelected());
             }
         });
         holder.add(nodeLabelCheckBox);

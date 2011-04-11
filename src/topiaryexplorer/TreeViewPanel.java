@@ -123,6 +123,7 @@ public final class TreeViewPanel extends JPanel{
         setLineageButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.resetConsensusLineage();
+                frame.treePopupMenu.getComponent(6).setEnabled(true);
             }
         });
         buttonPanel.add(setLineageButton);
@@ -151,39 +152,46 @@ public final class TreeViewPanel extends JPanel{
         rectButton.setToolTipText("Rectangular");
         rectButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                frame.collapseTreeToolbar.sliderEnabled(true);
                 vis.setTreeLayout("Rectangular");
                 rotateSlider.setValue(0);
                 syncTreeWithRotateSlider();
                 rotatePanel.setVisible(false);
                 rotateSlider.setEnabled(false);
                 layoutChanged();
+                frame.lockButton.setEnabled(true);
             }
         });
 
         triButton.setToolTipText("Triangular");
         triButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                frame.collapseTreeToolbar.sliderEnabled(true);
                 vis.setTreeLayout("Triangular");
                 rotateSlider.setValue(0);
                 syncTreeWithRotateSlider();
                 rotatePanel.setVisible(false);
                 rotateSlider.setEnabled(false);
                 layoutChanged();
+                frame.lockButton.setEnabled(true);
             }
         });
 
         radialButton.setToolTipText("Radial");
         radialButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                frame.collapseTreeToolbar.sliderEnabled(true);
                 parent.treeStatus.setText("Calculating Offsets...");
                 vis.setRadialOffsets(vis.getTree());
                 vis.setTOffsets(vis.getTree(), 0);
                 vis.setROffsets(vis.getTree(), 0);
-                vis.redraw();
                 vis.setTreeLayout("Radial");
                 rotatePanel.setVisible(true);
                 rotateSlider.setEnabled(true);
                 layoutChanged();
+                vis.redraw();
+                frame.lockButton.setSelected(true);
+                frame.lockButton.setEnabled(false);
                 parent.treeStatus.setText("Done drawing tree.");
             }
         });
@@ -191,6 +199,8 @@ public final class TreeViewPanel extends JPanel{
         polarButton.setToolTipText("Polar");
         polarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                frame.collapseTreeToolbar.setMax();
+                frame.collapseTreeToolbar.sliderEnabled(false);
                 int size = vis.getTree().getNumberOfLeaves();
                 if(size > 8000)
                 {
@@ -206,11 +216,13 @@ public final class TreeViewPanel extends JPanel{
                 vis.setRadialOffsets(vis.getTree());
                 vis.setTOffsets(vis.getTree(), 0);
                 vis.setROffsets(vis.getTree(), 0);
-                vis.redraw();
                 vis.setTreeLayout("Polar");
                 rotatePanel.setVisible(true);
                 rotateSlider.setEnabled(true);
                 layoutChanged();
+                vis.redraw();
+                frame.lockButton.setSelected(true);
+                frame.lockButton.setEnabled(false);
                 parent.treeStatus.setText("Done drawing tree.");
             }
         });
@@ -287,8 +299,7 @@ public final class TreeViewPanel extends JPanel{
 	// }}}
 	
 	public void layoutChanged() {
-	    frame.treeToolbar.setScale();
-	    frame.verticalTreeToolbar.setScale();
+	    frame.recenter();
 	    vis.redraw();
 	}
 	

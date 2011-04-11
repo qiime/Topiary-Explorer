@@ -70,11 +70,12 @@ class BranchEditPanel extends JPanel{
 /*        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));*/
         setLayout(new GridLayout(3,1));
         
-        coloringMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        coloringMenuItem.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
                 majorityColoringMenuItem.setEnabled(!coloringMenuItem.isSelected());
                 vis.setColorBranches(!coloringMenuItem.isSelected());
                 vis.redraw();
+                frame.treePopupMenu.getComponent(4).setEnabled(!coloringMenuItem.isSelected());
             }
         });
         add(coloringMenuItem);

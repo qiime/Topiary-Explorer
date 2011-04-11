@@ -52,9 +52,17 @@ class CollapseTreeToolbar extends JToolBar {
     **/
     void setValue(int v) {
         // Slider only goes from 0 to 1000
-        if(v >= 0 && v <= 1000)
+        if(v >= 0 && v <= 1001)
             collapseSlider.setValue(v);  
         syncTreeWithCollapseSlider();      
+    }
+    
+    void setMax() {
+        collapseSlider.setValue(collapseSlider.getMaximum());
+    }
+    
+    void sliderEnabled(boolean b) {
+        collapseSlider.setEnabled(b);
     }
 
     /**

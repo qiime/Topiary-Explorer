@@ -12,7 +12,7 @@ public class TreeToolbar extends JToolBar {
 
     JButton zoomOutButton  = new JButton("-");
     JButton zoomInButton = new JButton("+");
-    JSlider zoomSlider = new JSlider(1, 100, 1);
+    JSlider zoomSlider = new JSlider(1, 500, 1);
     JTextField search = new JTextField();
     JPanel spacer1 = new JPanel();    
     TreeWindow frame = null;
@@ -28,14 +28,23 @@ public class TreeToolbar extends JToolBar {
         zoomOutButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
+                if(frame.zoomLocked)
+                {
+                    frame.zoomOut();
+                    return;
+                }
                 zoomSlider.setValue(zoomSlider.getValue() - 1);
                 syncTreeWithZoomSlider();
             }
 
         });
         zoomInButton.addActionListener(new ActionListener() {
-
             public void actionPerformed(ActionEvent arg0) {
+                if(frame.zoomLocked)
+                {
+                    frame.zoomIn();
+                    return;
+                }
                 zoomSlider.setValue(zoomSlider.getValue() + 1);
                 syncTreeWithZoomSlider();
             }
@@ -49,6 +58,11 @@ public class TreeToolbar extends JToolBar {
         zoomSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 if (zoomSlider.getValueIsAdjusting()){
+                    if(frame.zoomLocked)
+                    {
+                        frame.verticalTreeToolbar.setValue(zoomSlider.getValue());
+                        frame.verticalTreeToolbar.syncTreeWithZoomSlider();
+                    }
                     syncTreeWithZoomSlider();
                 }
             }
@@ -106,13 +120,16 @@ public class TreeToolbar extends JToolBar {
         add(search);
     }
     
+    public void sliderEnabled(boolean b) {
+        zoomSlider.setEnabled(b);
+    }
+    
+    public void setValue(int i) {
+        zoomSlider.setValue(i);
+        syncTreeWithZoomSlider();
+    }
+    
     public void setStatus(String p, String s, String s2) {
-/*        if(s.length() > 56)
-        {
-            s = p +"..." + s.substring(s.length()-Math.min(56-p.length(),s.length()),s.length()-1);
-        }
-        else
-            s = p+s;*/
         status.setText(p+s);
         statusLine2.setText(s2);
     }
@@ -129,7 +146,7 @@ public class TreeToolbar extends JToolBar {
         if (frame.tree.getTree() == null) return;
         double newScale = minXScale *zoomSlider.getValue();
         frame.tree.setHorizontalScaleFactor(newScale);
-/*        frame.tree.setScaleFactor(newScale, frame.tree.getYScale(), frame.tree.getXStart(), frame.tree.getYStart());*/
+        frame.tree.redraw();
     }
 
     public void syncZoomSliderWithTree() {

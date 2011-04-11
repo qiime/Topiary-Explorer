@@ -22,13 +22,10 @@ import java.text.SimpleDateFormat;
 public class TreeWindow extends TopiaryWindow implements KeyListener, ActionListener, WindowListener{
     JMenuBar topMenu = new JMenuBar();
     JMenu treeMenu = new JMenu("File");
-    JMenu nodeMenu = new JMenu("Node");
     
-    JMenu collapseByMenu = new JMenu("Collapse by");
+/*    JMenu collapseByMenu = new JMenu("Collapse by");
     JCheckBoxMenuItem externalLabelsMenuItem = new JCheckBoxMenuItem("Tip Labels");
-    JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");
-    
-    ButtonGroup treeLayoutGroup = new ButtonGroup();
+    JCheckBoxMenuItem internalLabelsMenuItem = new JCheckBoxMenuItem("Internal Node Labels");*/
     
 /*    JPanel toolbars = new JPanel();*/
     JPanel leftPanel = new JPanel();
@@ -40,7 +37,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     TreeAppletHolder treeHolder = null;
     TreeVis tree = new TreeVis();
     JPanel treePanel = new JPanel();
+    JToggleButton lockButton = new JToggleButton(new ImageIcon("./src/images/lock.gif"), false);
+    Boolean zoomLocked = false;
     TreeToolbar treeToolbar = null;
+    JPanel bottomPanel = new JPanel();
     VerticalTreeToolbar verticalTreeToolbar = null;
     CollapseTreeToolbar collapseTreeToolbar = null;
     TreeEditToolbar treeEditToolbar = null;
@@ -164,6 +164,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              public void actionPerformed(ActionEvent arg0) {
                  clickedNode.rotate();
                  tree.setYOffsets(tree.getTree(), 0);
+                 tree.redraw();
              }
          });
          treePopupMenu.add(item);
@@ -171,15 +172,19 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          item.addActionListener(new ActionListener() {
              public void actionPerformed(ActionEvent arg0) {
                  clickedNode.setDrawPie(!clickedNode.getDrawPie());
+                 tree.redraw();
              }
          });
+         item.setEnabled(false);
          treePopupMenu.add(item);
          item = new JMenuItem("Toggle Node Label");
           item.addActionListener(new ActionListener() {
               public void actionPerformed(ActionEvent arg0) {
                   clickedNode.setDrawLabel(!clickedNode.getDrawLabel());
+                  tree.redraw();
               }
           });
+          item.setEnabled(false);
           treePopupMenu.add(item);
           item = new JMenuItem("Consensus Lineage");
             item.addActionListener(new ActionListener() {
@@ -190,6 +195,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                         JOptionPane.PLAIN_MESSAGE);
                 }
             });
+            item.setEnabled(false);
             treePopupMenu.add(item);
             item = new JMenuItem("View Subtree in new Window");
               item.addActionListener(new ActionListener() {
@@ -242,8 +248,22 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              }
          });
          
+         
+         
          treePanel.setLayout(new BorderLayout());
-         treePanel.add(treeToolbar, BorderLayout.SOUTH);
+         bottomPanel.setLayout(new BorderLayout());
+         lockButton.setToolTipText("Lock zooming");
+         lockButton.addChangeListener(new ChangeListener() {
+               public void stateChanged(ChangeEvent e) {
+                   zoomLocked = lockButton.isSelected();
+                   treeToolbar.sliderEnabled(!lockButton.isSelected());
+                   verticalTreeToolbar.sliderEnabled(!lockButton.isSelected());
+               }
+           });
+         bottomPanel.add(lockButton, BorderLayout.WEST);
+         bottomPanel.add(treeToolbar, BorderLayout.CENTER);
+/*         treePanel.add(lockButton, BorderLayout.SOUTH);*/
+         treePanel.add(bottomPanel, BorderLayout.SOUTH);
          treePanel.add(verticalTreeToolbar, BorderLayout.WEST);
          treePanel.add(treeHolder, BorderLayout.CENTER);
          treePanel.add(collapseTreeToolbar, BorderLayout.NORTH);
@@ -251,26 +271,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          rightPanel.add(treePanel, BorderLayout.CENTER);
          leftPanel.add(treeEditToolbar);
          treeEditPane.setViewportView(leftPanel);
-	     
-	     //set up the "node" submenus
-         item = new JMenuItem("Find Node in Metadata");
-         item.addActionListener(this);
-         nodeMenu.add(item);
-         item = new JMenuItem("Collapse/Expand");
-         item.addActionListener(this);
-         nodeMenu.add(item);
-         item = new JMenuItem("Collapse/Expand All Children");
-         item.addActionListener(this);
-         nodeMenu.add(item);
-         item = new JMenuItem("Rotate (Swap Children)");
-         item.addActionListener(this);
-         nodeMenu.add(item);
-         item = new JCheckBoxMenuItem("Pie Chart");
-         item.addActionListener(this);
-         nodeMenu.add(item);
-         item = new JCheckBoxMenuItem("Node Label");
-         item.addActionListener(this);
-         nodeMenu.add(item);
 	     
 	     
 	     //options menu
@@ -302,11 +302,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getActionCommand().equals("Save Tree...")) {
              saveTree();
-         }    else if (e.getActionCommand().equals("Tip Labels")) {
-/*                    setTipLabels(externalLabelsMenuItem.getState());*/
-              } else if (e.getActionCommand().equals("Internal Node Labels")) {
-                  tree.setDrawInternalNodeLabels(internalLabelsMenuItem.getState());
-              } else if (e.getActionCommand().equals("Lock/Unlock")) {
+         }    else if (e.getActionCommand().equals("Lock/Unlock")) {
                     if (frame.clickedNode != null) {
                        frame.clickedNode.setLocked(!frame.clickedNode.isLocked());
                     } 
@@ -315,29 +311,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      frame.clickedNode.setCollapsed(!frame.clickedNode.isCollapsed());
                   }
               }
-/*              else if (e.getActionCommand().equals("Show hidden nodes")) {
-                     for(Node n: tree.getTree().getNodes())
-                        n.setHidden(false);
-                 }*/
-/*             else if (e.getActionCommand().equals("Set consensus lineage")) {
-                      resetConsensusLineage();
-                  }*/
-/*             else if (e.getActionCommand().equals("Prune tree")) {
-                 tree.noLoop();
-                 double total = tree.getTree().depth();
-                 double perc = .01;
-                 while(tree.getTree().getNumberOfLeaves() > 30000)
-                 {
-                      for(Node n: tree.getTree().getLeaves())
-                        {
-                            n.prune(total, perc);
-                        }
-                        perc += .01;
-                        setTreeVals(tree.getTree());
-                        tree.setTree(tree.getTree());
-                }
-                tree.loop();
-            }*/
             else if (e.getActionCommand().equals("Find Node in Metadata")) {
 /*                if(frame.otuMetadata != null)
                 {*/
@@ -420,19 +393,28 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
     public void keyPressed(KeyEvent key) {
 	    if(key.getKeyCode() == 61)
-	    {
-	        treeToolbar.zoomSlider.setValue(treeToolbar.zoomSlider.getValue() + 1);
-	        treeToolbar.syncTreeWithZoomSlider();
-            verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() + 1);
-            verticalTreeToolbar.syncTreeWithZoomSlider();
-	    }
+	        zoomIn();
 	    if(key.getKeyCode() == 45)
-	    {
-	        treeToolbar.zoomSlider.setValue(treeToolbar.zoomSlider.getValue() - 1);
-	        treeToolbar.syncTreeWithZoomSlider();
-            verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() - 1);
-            verticalTreeToolbar.syncTreeWithZoomSlider();
-	    }
+	        zoomOut();
+    }
+    
+    public void zoomIn() {
+        treeToolbar.zoomSlider.setValue(treeToolbar.zoomSlider.getValue() + 1);
+        treeToolbar.syncTreeWithZoomSlider();
+        verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() + 1);
+        verticalTreeToolbar.syncTreeWithZoomSlider();
+    }
+    
+    public void zoomOut() {
+        treeToolbar.zoomSlider.setValue(treeToolbar.zoomSlider.getValue() - 1);
+        treeToolbar.syncTreeWithZoomSlider();
+        verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() - 1);
+        verticalTreeToolbar.syncTreeWithZoomSlider();
+    }
+    
+    public void syncTreeWithZoomSliders() {
+        treeToolbar.syncTreeWithZoomSlider();
+        verticalTreeToolbar.syncTreeWithZoomSlider();
     }
     
     public void setTreeVals(Node root) {
@@ -580,7 +562,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     public void recenter() {
         tree.resetTreeX();
         tree.resetTreeY();
+        treeToolbar.setScale();
+        verticalTreeToolbar.setScale();
         treeToolbar.syncZoomSliderWithTree();
+        verticalTreeToolbar.syncZoomSliderWithTree();
         tree.redraw();
     }
 	
@@ -952,8 +937,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
      */
      public void setTipLabels(boolean state) {
          for(Node n: tree.getTree().getNodes())
-             n.setDrawLabel(externalLabelsMenuItem.getState());
-         tree.setDrawExternalNodeLabels(externalLabelsMenuItem.getState());
+             n.setDrawLabel(treeEditToolbar.nodeEditPanel.nodeLabelCheckBox.isSelected());
+         tree.setDrawExternalNodeLabels(treeEditToolbar.nodeEditPanel.nodeLabelCheckBox.isSelected());
          tree.redraw();
      }
 
