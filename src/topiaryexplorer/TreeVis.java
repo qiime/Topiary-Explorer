@@ -1116,9 +1116,9 @@ public class TreeVis extends PApplet {
                   (float)xp, (float)yp);
                   
               if(this.drawInternalNodeLabels && !node.nodes.get(i).isLeaf() && !node.nodes.get(i).isCollapsed() ) {
-/*                    int lc = node.getBranchColor(majorityColoring).getRGB();*/
-/*                    canvas.fill(c.getRGB());*/
-/*                    canvas.stroke(c.getRGB());*/
+                    int lc = node.getLabelColor(majorityColoring).getRGB();
+                    canvas.fill(lc);
+                    canvas.stroke(lc);
                       if (yscale > nodeFontSize) 
                       {
                           String n = node.nodes.get(i).getName();
@@ -1134,7 +1134,6 @@ public class TreeVis extends PApplet {
           //loop over all of the children
           for (int i=0; i < node.nodes.size(); i++) {
               //draw line from parent to the child node
-/*              canvas.stroke(node.nodes.get(i).getBranchColor(majorityColoring).getRGB());*/
               if(!colorBranches)
               {
                 canvas.stroke(0);
@@ -1151,12 +1150,17 @@ public class TreeVis extends PApplet {
               canvas.line((float)xs, (float)ys,
                   (float)xp, (float)yp);
                   
-              if(this.drawInternalNodeLabels) {
-/*                      int lc = node.getLabelColor(majorityColoring).getRGB();*/
-/*                      canvas.fill(lc);*/
-/*                      canvas.stroke(lc);*/
+              if(this.drawInternalNodeLabels && !node.nodes.get(i).isLeaf() && !node.nodes.get(i).isCollapsed() ) {
+                      int lc = node.getLabelColor(majorityColoring).getRGB();
+                      canvas.fill(lc);
+                      canvas.stroke(lc);
                         if (yscale > nodeFontSize) 
-                            canvas.text(s, (float)(xp + 1), (float)(yp));
+                        {
+                            String n = node.nodes.get(i).getName();
+                             if(node.nodes.get(i).getLabel().length() > 0)
+                                 n = node.nodes.get(i).getLabel();
+                            canvas.text(n, (float)(xp + 1), (float)(yp+1));
+                        }
                   }
           }
       } else if (treeLayout.equals("Radial")) {
@@ -1184,7 +1188,27 @@ public class TreeVis extends PApplet {
               double yp = toScreenY(k.getRYOffset());
               canvas.line((float)xs, (float)ys,
                   (float)xp, (float)yp);
+              if(this.drawInternalNodeLabels && !node.nodes.get(i).isLeaf() && !node.nodes.get(i).isCollapsed() ) {
+                      int lc = node.getLabelColor(majorityColoring).getRGB();
+                      canvas.fill(lc);
+                      canvas.stroke(lc);
+                        if (yscale > nodeFontSize) 
+                        {
+                            String n = node.nodes.get(i).getName();
+                             if(node.nodes.get(i).getLabel().length() > 0)
+                                 n = node.nodes.get(i).getLabel();
+                            canvas.text(n, (float)(xp + 1), (float)(yp+1));
+                        }
+                  }
           }
+          /*if(this.drawInternalNodeLabels) {
+                        int lc = node.getLabelColor(majorityColoring).getRGB();
+                        canvas.fill(lc);
+                        canvas.stroke(lc);
+                          if (yscale > nodeFontSize) 
+                              canvas.text(s, (float)(toScreenX(node.getRXOffset) + 1), (float)(toScreenY(node.getRYOffset)));
+                    }*/
+          
       } else if (treeLayout.equals("Polar")) {
           canvas.ellipseMode(CENTER);
           //draw curved line through the node
@@ -1197,7 +1221,7 @@ public class TreeVis extends PApplet {
           canvas.arc((float)xstart, (float)ystart, (float)(xscale*2*radius), 
             (float)(yscale*2*radius), (float)(minradius),
             (float)(maxradius));
-                        
+          
           //loop over all of the children
           for (int i=0; i < node.nodes.size(); i++) {
               //draw line from parent to the child node
@@ -1212,7 +1236,6 @@ public class TreeVis extends PApplet {
                       canvas.stroke(c.getRGB());
                   }
               double d = k.getLineWidth();
-/*              canvas.stroke(k.getBranchColor(majorityColoring).getRGB());*/
               canvas.strokeWeight((float) (d*getLineWidthScale()));
               double xp = k.getROffset() * Math.cos(k.getTOffset());
               double yp = k.getROffset() * Math.sin(k.getTOffset());
@@ -1221,10 +1244,21 @@ public class TreeVis extends PApplet {
               double yin = radius * Math.sin(ctheta);
               canvas.line((float)toScreenX(xin), (float)toScreenY(yin),
                   (float)toScreenX(xp), (float)toScreenY(yp));
-          }
+                  
+              if(this.drawInternalNodeLabels && !node.nodes.get(i).isLeaf() && !node.nodes.get(i).isCollapsed() ) {
+                        int lc = node.getLabelColor(majorityColoring).getRGB();
+                        canvas.fill(lc);
+                        canvas.stroke(lc);
+                          if (yscale > nodeFontSize) 
+                          {
+                              String n = k.getName();
+                               if(k.getLabel().length() > 0)
+                                   n = k.getLabel();
+                              canvas.text(n, (float)(toScreenX(xp) + 1), (float)(toScreenY(yp)+1));
+                          }
+                    }   
+          }   
       }
-      
-
     }
 
 
@@ -1332,6 +1366,7 @@ public class TreeVis extends PApplet {
             (float)toScreenX(x1),  (float)toScreenY(y1),  //top to longest branch length
             (float)toScreenX(x2),  (float)toScreenY(y2) );  //bottom to shortest branch length
       }
+      
       canvas.fill(wedgeFontColor);
       canvas.stroke(wedgeFontColor);
       if(drawWedgeLabels){
