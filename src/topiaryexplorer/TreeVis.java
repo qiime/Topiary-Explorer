@@ -1117,8 +1117,8 @@ public class TreeVis extends PApplet {
                   
               if(this.drawInternalNodeLabels && !node.nodes.get(i).isLeaf() && !node.nodes.get(i).isCollapsed() ) {
 /*                    int lc = node.getBranchColor(majorityColoring).getRGB();*/
-                    canvas.fill(c.getRGB());
-                    canvas.stroke(c.getRGB());
+/*                    canvas.fill(c.getRGB());*/
+/*                    canvas.stroke(c.getRGB());*/
                       if (yscale > nodeFontSize) 
                       {
                           String n = node.nodes.get(i).getName();

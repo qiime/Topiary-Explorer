@@ -90,8 +90,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
                 collapseTreeToolbar.resetLayout();
  				treeHolder.syncScrollbarsWithTree();
- 				//frame.updateZoomBounds();
- 				//frame.syncZoomSliderWithTree();
  			}
  		});
          
@@ -124,51 +122,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              }
          });
          
-         /*tree.addMouseListener(new MouseListener() {
-                      public void mousePressed(java.awt.event.MouseEvent evt) {
-                          if(!isActive()) return;
-                          Node node = tree.findNode(evt.getX(), evt.getY());
-                         if (node != null) {
-                           String status = "";
-                           String prefix = "";
-                            if (node.isLocked())
-                              prefix += "(L)";
-                            String label = node.getConsensusLineage();
-                            if (label == null)
-                                label = "";
-                           status += String.format("Sub-tree: %d leaves", node.getNumberOfLeaves());
-                           treeToolbar.setStatus(prefix, status, label);
-                         }
-                         else
-                              treeToolbar.setStatus("","","");
-                      
-                     }
-                     
-                     public void mouseClicked(java.awt.event.MouseEvent evt) {
-                         
-                     }
-                     
-                     public void mouseExited(java.awt.event.MouseEvent evt) {
-                         
-                     }
-                     
-                     public void mouseEntered(java.awt.event.MouseEvent evt) {
-                         
-                     } 
-                     
-                     public void mouseReleased(java.awt.event.MouseEvent evt) {
-                         
-                     }
-                 });
-                 */
-	     /*//set up the tree pop-up menu
-	              item = new JMenuItem("Collapse/Expand");
-	              item.addActionListener(new ActionListener() {
-	                  public void actionPerformed(ActionEvent e) {
-	                      clickedNode.setCollapsed(!clickedNode.isCollapsed());
-	                  }
-	              });
-	              treePopupMenu.add(item);*/
+         
           item = new JMenuItem("Find Node in Metadata");
            item.addActionListener(this);
            treePopupMenu.add(item);
