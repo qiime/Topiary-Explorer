@@ -99,6 +99,7 @@ public class TipLabelCustomizer extends JFrame {
     }
     
     public void okbuttonpressed() {
+        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 /*        int rowIndexStart = optionsTable.getSelectedRow();
         ArrayList<String> ops = new ArrayList<String>();
         if(rowIndexStart != -1)
@@ -159,6 +160,8 @@ public class TipLabelCustomizer extends JFrame {
             }
         }
         treeWindow.tree.redraw();
+        this.hide();
+        frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
     public void allclrbuttonpressed() {
