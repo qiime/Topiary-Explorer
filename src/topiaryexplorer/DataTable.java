@@ -140,6 +140,13 @@ public class DataTable {
 		this.data = data;
 	}
 
+    public void addColumn(ArrayList<Object> newColumn) {
+        columnNames.add((String)newColumn.get(0));
+        newColumn.remove(0);
+        for(int i = 0; i < newColumn.size(); i++)
+            data.add(i, columnNames.size()-1, newColumn.get(i));
+    }
+
     public ArrayList<Object> getColumn(int index) {
         ArrayList<Object> result = new ArrayList<Object>();
         for (int i = 0; i < data.maxRow(); i++) {
@@ -177,9 +184,17 @@ public class DataTable {
 	public int getColumnCount() {
 		return columnNames.size();
 	}
+	
+	public int getRowCount() {
+	    return rowNames.size();
+	}
 
 	public String getColumnName(int index) {
 		return columnNames.get(index);
+	}
+	
+	public int getColumnIndex(String name) {
+	    return columnNames.indexOf(name);
 	}
 	
 	public ArrayList<String> getRowNames() {

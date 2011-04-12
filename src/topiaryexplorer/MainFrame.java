@@ -47,6 +47,8 @@ public class MainFrame extends JFrame {
     JTabbedPane dataPane = new JTabbedPane();
     //JTabbedPane tabbedPane = new JTabbedPane();
     JTabbedPane databaseTabPane = new JTabbedPane();
+    AddColumnDialog addColumnDialog = null;
+/*    JButton addColumnButton = new JButton("+");*/
     JScrollPane databaseScrollPane = new JScrollPane();
     JScrollPane otuMetadataScrollPane = new JScrollPane();
     JScrollPane otuSampleMapScrollPane = new JScrollPane();
@@ -81,7 +83,6 @@ public class MainFrame extends JFrame {
     DataTable sampleMetadata = new DataTable();
     DataTable otuSampleMap = new DataTable();
     DataTable database = new DataTable();
-
 
     ColorPanel branchColorPanel;// = null;//new ColorPanel(this);
     ColorPanel labelColorPanel;// = null;
@@ -120,7 +121,7 @@ public class MainFrame extends JFrame {
 
         //set up the color panel
         interpolateButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(ActionEvent e) {
                 ((ColorPanel)colorPane.getSelectedComponent()).interpolateColors();
                 recolorBranches();
                 recolorLabels();
@@ -141,7 +142,7 @@ public class MainFrame extends JFrame {
         databaseTopPanel.setLayout(new GridLayout(1,5));
         back.setEnabled(false);
         back.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(ActionEvent e) {
                 showAllTables();
             }
         });
@@ -150,14 +151,14 @@ public class MainFrame extends JFrame {
         databaseTopPanel.add(new JLabel(""));
         showData.setEnabled(false);
         showData.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(ActionEvent e) {
                 showSelectedTable();
             }
         });
         
         databaseTopPanel.add(showData);
         setAs.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(ActionEvent e) {
                 setDatabaseResultsAs();
             }
         });
@@ -189,11 +190,15 @@ public class MainFrame extends JFrame {
         otuMetadataTable.setCellSelectionEnabled(true);
         //otuMetadataTable.setAutoCreateRowSorter(true);
         otuMetadataScrollPane = new JScrollPane(otuMetadataTable);
+        otuMetadataScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        otuMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuMetadata, otuMetadataTable));
         dataPane.addTab("OTU Metadata", otuMetadataScrollPane);
 
         otuSampleMapTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         //otuSampleMapTable.setAutoCreateRowSorter(true);
         otuSampleMapScrollPane = new JScrollPane(otuSampleMapTable);
+        otuSampleMapScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
         dataPane.addTab("OTU-Sample Map", otuSampleMapScrollPane);
 
         sampleMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -202,6 +207,8 @@ public class MainFrame extends JFrame {
         sampleMetadataTable.setCellSelectionEnabled(true);
         //sampleMetadataTable.setAutoCreateRowSorter(true);
         sampleMetadataScrollPane = new JScrollPane(sampleMetadataTable);
+        sampleMetadataScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));
         dataPane.addTab("Sample Metadata", sampleMetadataScrollPane);
         dataPane.setSelectedIndex(0);
         
@@ -329,7 +336,6 @@ public class MainFrame extends JFrame {
         
     public void setOtuMetadata(ArrayList<String> data) {
         otuMetadata = new DataTable(data);
-
 	     SparseTableModel model = new SparseTableModel(otuMetadata.getData(),
 		 otuMetadata.getColumnNames());
 		 TableSorter sorter = new TableSorter(model, otuMetadataTable.getTableHeader());
@@ -337,24 +343,24 @@ public class MainFrame extends JFrame {
          
 /*         frame.consoleWindow.update("Loaded OTU metadata.");*/
          resetOtuMenus();
+         otuMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuMetadata, otuMetadataTable));
          dataPane.setSelectedIndex(1);
     }
     
     public void setOtuSampleMap(ArrayList<String> data) {
          otuSampleMap = new DataTable(data);
-         
          SparseTableModel model = new SparseTableModel(otuSampleMap.getData(),
 		 otuSampleMap.getColumnNames());
 		 TableSorter sorter = new TableSorter(model, otuSampleMapTable.getTableHeader());
 		 otuSampleMapTable.setModel(sorter);
 		 
 /*         consoleWindow.update("Loaded OTU to sample map");*/
+         otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
          dataPane.setSelectedIndex(2);
     }
     
     public void setSampleMetadata(ArrayList<String> data) {
         sampleMetadata = new DataTable(data);
-         
          SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
 		 sampleMetadata.getColumnNames());
 		 TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
@@ -362,6 +368,7 @@ public class MainFrame extends JFrame {
 		 
 /*         frame.consoleWindow.update("Loaded sample metadata.");*/
          resetSampleMenus();
+         sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));
          dataPane.setSelectedIndex(3);
     }
      
@@ -433,6 +440,7 @@ public class MainFrame extends JFrame {
 					 otuSampleMap.getColumnNames());
 					 sorter = new TableSorter(model, otuSampleMapTable.getTableHeader());
 					 otuSampleMapTable.setModel(sorter);
+					 otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
 					 dataPane.setSelectedIndex(2);
                      break;
                  case 'M':
@@ -443,16 +451,17 @@ public class MainFrame extends JFrame {
 					 otuMetadataTable.setModel(sorter);
 /*                   resetColorByOtuMenus();*/
                      resetOtuMenus();
+                     otuMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuMetadata, otuMetadataTable));
                      dataPane.setSelectedIndex(1);
                      break;
                  case 'l':
                      sampleMetadata = new DataTable(database.toStrings());
-                  
                      model = new SparseTableModel(sampleMetadata.getData(),
     				 sampleMetadata.getColumnNames());
     				 sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
     				 sampleMetadataTable.setModel(sorter);
                      resetSampleMenus();
+                     sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));
                      dataPane.setSelectedIndex(3);
                      break;
                  default:

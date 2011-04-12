@@ -35,7 +35,7 @@ public class TipLabelCustomizer extends JFrame {
     JTextArea delim = new JTextArea(", ");
     JScrollBar scroller = new JScrollBar();
     JScrollPane optionsPane = new JScrollPane();
-    JTable optionsTable = new JTable();
+    JList optionsTable = new JList();
     String[] metaTypes = {"OTU Metadata", "Sample Metadata"};
     JComboBox metaCombo = new JComboBox();
     Vector<Object> cheader = new Vector<Object>();
@@ -54,18 +54,16 @@ public class TipLabelCustomizer extends JFrame {
                     metaCombo.addItem(metaTypes[1]);*/
         mainPanel.add(metaCombo, BorderLayout.NORTH);
         
-        for(String s : frame.otuMetadata.getColumnNames())
+/*        for(String s : frame.otuMetadata.getColumnNames())
         {
             Vector<Object> temp = new Vector<Object>();
             temp.add(s);
             vals.add(temp);
         }
-        cheader.add("Values");
+        cheader.add("Values");*/
         
-        optionsTable = new JTable(vals, cheader);
+        optionsTable = new JList(frame.otuMetadata.getColumnNames().toArray());
         optionsTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        optionsTable.setColumnSelectionAllowed(true);
-        optionsTable.setRowSelectionAllowed(true);
         optionsPane = new JScrollPane(optionsTable);
         
         mainPanel.add(optionsPane, BorderLayout.CENTER);
@@ -101,7 +99,7 @@ public class TipLabelCustomizer extends JFrame {
     }
     
     public void okbuttonpressed() {
-        int rowIndexStart = optionsTable.getSelectedRow();
+/*        int rowIndexStart = optionsTable.getSelectedRow();
         ArrayList<String> ops = new ArrayList<String>();
         if(rowIndexStart != -1)
         {
@@ -118,14 +116,16 @@ public class TipLabelCustomizer extends JFrame {
                     }
                 }
             }
-        }
-
+        }*/
+        ArrayList<Object> ops = new ArrayList(Arrays.asList(optionsTable.getSelectedValues()));
+        
         for(Node n :treeWindow.tree.getTree().getNodes()) {
             n.setDrawLabel(true);
             String name = "";
             ArrayList<String> vals = new ArrayList<String>();
-            for(String o : ops)
+            for(Object o : ops)
             {
+                o = (String)o;
                 int colIndex = 0;
                 for (String val : frame.otuMetadata.getColumnNames()) {
                     if (val.equals(o)) {
@@ -164,7 +164,7 @@ public class TipLabelCustomizer extends JFrame {
     public void allclrbuttonpressed() {
         if(allclrButton.getText() == "ALL")
         {
-            optionsTable.selectAll();
+            optionsTable.setSelectionInterval(0,frame.otuMetadata.getColumnNames().size());
             allclrButton.setText("CLR");
         }
         else
@@ -175,14 +175,10 @@ public class TipLabelCustomizer extends JFrame {
     }
     
     public void invbuttonpressed() {
-         int rowIndexEnd = optionsTable.getSelectionModel().getMaxSelectionIndex();
-         int colIndexEnd = optionsTable.getColumnModel().getSelectionModel().getMaxSelectionIndex();
-         // Check each cell
-         for (int r=0; r<=rowIndexEnd; r++) {
-             for (int c=0; c<=colIndexEnd; c++) {
-                 optionsTable.changeSelection(r, c, false,false);
-             }
-         }
+         int[] selected = optionsTable.getSelectedIndices();
+         optionsTable.setSelectionInterval(0,frame.otuMetadata.getColumnNames().size());
+         for(int i : selected)
+             optionsTable.removeSelectionInterval(i,i);         
     }
 
     /**
