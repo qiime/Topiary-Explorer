@@ -147,7 +147,6 @@ public final class TreeViewPanel extends JPanel{
          rotatePanel.add(rotateLabel);
          rotatePanel.add(rotateSlider);
          rotatePanel.setVisible(false);
-         rotateSlider.setEnabled(false);
         
         rectButton.setToolTipText("Rectangular");
         rectButton.addActionListener(new ActionListener() {
@@ -157,7 +156,6 @@ public final class TreeViewPanel extends JPanel{
                 rotateSlider.setValue(0);
                 syncTreeWithRotateSlider();
                 rotatePanel.setVisible(false);
-                rotateSlider.setEnabled(false);
                 layoutChanged();
                 frame.lockButton.setEnabled(true);
             }
@@ -171,7 +169,8 @@ public final class TreeViewPanel extends JPanel{
                 rotateSlider.setValue(0);
                 syncTreeWithRotateSlider();
                 rotatePanel.setVisible(false);
-                rotateSlider.setEnabled(false);
+/*                rotatePanel.setVisible(false);
+                rotateSlider.setEnabled(false);*/
                 layoutChanged();
                 frame.lockButton.setEnabled(true);
             }
@@ -187,7 +186,6 @@ public final class TreeViewPanel extends JPanel{
                 vis.setROffsets(vis.getTree(), 0);
                 vis.setTreeLayout("Radial");
                 rotatePanel.setVisible(true);
-                rotateSlider.setEnabled(true);
                 layoutChanged();
                 vis.redraw();
                 frame.lockButton.setSelected(true);
@@ -218,7 +216,6 @@ public final class TreeViewPanel extends JPanel{
                 vis.setROffsets(vis.getTree(), 0);
                 vis.setTreeLayout("Polar");
                 rotatePanel.setVisible(true);
-                rotateSlider.setEnabled(true);
                 layoutChanged();
                 vis.redraw();
                 frame.lockButton.setSelected(true);
@@ -238,7 +235,7 @@ public final class TreeViewPanel extends JPanel{
         buttonPanel.add(radialButton);
         buttonPanel.add(polarButton);
         
-        layoutPanel.setLayout(new GridLayout(2,1));
+        layoutPanel.setLayout(new BoxLayout(layoutPanel, BoxLayout.Y_AXIS));
         layoutPanel.add(buttonPanel);
         layoutPanel.add(rotatePanel);
         
@@ -298,6 +295,7 @@ public final class TreeViewPanel extends JPanel{
 	    frame.recenter();
 	    vis.checkBounds();
 	    vis.redraw();
+	    validate();
 	}
 	
 	public void syncTreeWithRotateSlider() {
