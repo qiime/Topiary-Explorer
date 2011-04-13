@@ -70,7 +70,6 @@ public final class NodeEditPanel extends JPanel{
             frame.frame.labelColorPanel,1);
         this.setToolTipText("Customize Nodes");
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-/*        setLayout(new GridLayout(1,1));*/
         
         internalLabelCheckBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -108,7 +107,7 @@ public final class NodeEditPanel extends JPanel{
         add(holder);
         
 /*        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));*/
-        labelPanel.setLayout(new GridLayout(5,1));
+        labelPanel.setLayout(new GridLayout(4,1));
         
         tipLabelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -145,7 +144,7 @@ public final class NodeEditPanel extends JPanel{
 /*        fntSize.setMaximumSize(new Dimension(20,10));*/
 /*        fntSizePanel.add(fntSize);*/
 /*        fntSizePanel.add(ptLabel);*/
-        fntPanel.setLayout(new GridLayout(2,1));
+/*        fntPanel.setLayout(new GridLayout(2,1));*/
 /*        fntPanel.setMaximumSize(new Dimension(10,10));*/
         fntDecButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -194,9 +193,9 @@ public final class NodeEditPanel extends JPanel{
             public void mousePressed(MouseEvent e) {}
         }); 
         colorLabel.setToolTipText("Change the node label font color...");
-        fntColorPanel.add(new JLabel("Font Color: "));
-        fntColorPanel.add(colorLabel);
-        labelPanel.add(fntColorPanel);
+/*        fntColorPanel.add(new JLabel("Font Color: "));*/
+/*        fntColorPanel.add(colorLabel);*/
+/*        labelPanel.add(fntColorPanel);*/
         
         colorByButton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {

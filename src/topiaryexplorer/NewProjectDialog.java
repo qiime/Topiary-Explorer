@@ -158,6 +158,7 @@ public class NewProjectDialog extends JFrame{
 	// }}}
 	
 	public boolean okButtonPressed() {
+	    this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	    File temp = null;
         
 	    if(treeFile!=null)
@@ -186,6 +187,7 @@ public class NewProjectDialog extends JFrame{
 	    }
       else
             {frame.mainMenu.clearSampleMetadata();}
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	    return true;
 	}
 }
