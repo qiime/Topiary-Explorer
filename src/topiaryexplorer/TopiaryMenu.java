@@ -93,10 +93,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item = new JMenuItem("Load OTU Metadata...");
         item.addActionListener(this);
         fileMenu.add(item);
-        item = new JMenuItem("Load OTU-Sample Map...");
+        item = new JMenuItem("Load OTU Abundance Table...");
         item.addActionListener(this);
         fileMenu.add(item);
-        item = new JMenuItem("Load Sample Metadata...");
+        item = new JMenuItem("Load Sample Metadata Mapping...");
         item.addActionListener(this);
         fileMenu.add(item);
         fileMenu.add(new JSeparator());
@@ -417,9 +417,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     saveProject();
         } else if (e.getActionCommand().equals("Load OTU Metadata...")) {
            loadOtuMetadata(null);
-         } else if (e.getActionCommand().equals("Load Sample Metadata...")) {
+         } else if (e.getActionCommand().equals("Load Sample Metadata Mapping...")) {
            loadSampleMetadata(null);
-         } else if (e.getActionCommand().equals("Load OTU-Sample Map...")) {
+         } else if (e.getActionCommand().equals("Load OTU Abundance Table...")) {
              loadOtuSampleMap(null);
          }  else if (e.getActionCommand().equals("PCoA Window")) {
                   frame.pcoaWindow.setVisible(!frame.pcoaWindow.isVisible());
@@ -556,7 +556,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             {
                 t.tree.redraw();
             }
-            /*frame.treeWindow.resetTipLabelCustomizer(externalLabelsMenuItem.getState())*/;
             frame.otuMetadataFile = inFile;
        }
        frame.repaint();
@@ -610,11 +609,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    }
    
    public void clearSampleMetadata() {
-/*       for(TreeWindow t : frame.treeWindows)
-              t.tree.noLoop();*/
-/*       ((SparseTableModel)frame.sampleMetadataTable.getModel()).clearTable();*/
-/*       frame.resetColorBySampleMenus();*/
-       /*resetLineWidthSampleMenu();*/
        frame.resetSampleMenus();
        frame.sampleMetadataFile = null;
        for(TreeWindow t : frame.treeWindows)

@@ -27,22 +27,23 @@ public class NewProjectDialog extends JFrame{
     
     JPanel treePanel = new JPanel();
     JLabel treeFileLabel = new JLabel("Tree File: ");
-    JTextField treeFileField = new JTextField("", 20);
+    JTextField treeFileField = new JTextField("", 30);
+    BrowseButton tButton = null;
 
     JPanel otuMetaPanel = new JPanel();
     JLabel otuMetaLabel = new JLabel("OTU Metadata: ");
-    JTextField otuMetaField = new JTextField("", 20);
+    JTextField otuMetaField = new JTextField("", 30);
+    BrowseButton omButton = null;
     
     JPanel otuSamplePanel = new JPanel();
-    JLabel otuSampleLabel = new JLabel("OTU-Sample Map: ");
-    JTextField otuSampleField = new JTextField("", 20);
+    JLabel otuSampleLabel = new JLabel("OTU Abundnace Table: ");
+    JTextField otuSampleField = new JTextField("", 30);
+    BrowseButton osButton = null;
     
     JPanel sampleMetaPanel = new JPanel();
-    JLabel sampleMetaLabel = new JLabel("Sample Metadata: ");
-    JTextField sampleMetaField = new JTextField("", 20);
-    
-    JLabel projectNameLabel = new JLabel("Name: ");
-    JTextField projectName = new JTextField("", 30);
+    JLabel sampleMetaLabel = new JLabel("Sample Metadata Mapping: ");
+    JTextField sampleMetaField = new JTextField("", 30);
+    BrowseButton smButton = null;
     
     JButton okButton = new JButton("Create Project");
     JButton cancelButton = new JButton("Cancel");
@@ -59,38 +60,13 @@ public class NewProjectDialog extends JFrame{
      */
     public NewProjectDialog(MainFrame _frame) {
         frame = _frame;
-        this.setSize(new Dimension(500,300));
+        this.setSize(new Dimension(500,190));
         this.setTitle("Create new project");
         
-        this.setLayout(new BorderLayout());
-        topPanel.setLayout(new FlowLayout());
-        topPanel.add(projectNameLabel);
-        topPanel.add(projectName);
-        this.add(topPanel, BorderLayout.NORTH);
-        
-        mainPanel.setLayout(new GridLayout(4,1));
-        
-        treePanel.add(treeFileLabel);
-        treePanel.add(treeFileField);
-        treePanel.add(new BrowseButton(this, treeFileField, "tree"));
-        mainPanel.add(treePanel);
-        
-        otuMetaPanel.add(otuMetaLabel);
-        otuMetaPanel.add(otuMetaField);
-        otuMetaPanel.add(new BrowseButton(this, otuMetaField, "otuMetadata"));
-        mainPanel.add(otuMetaPanel);
-        
-        otuSamplePanel.add(otuSampleLabel);
-        otuSamplePanel.add(otuSampleField);
-        otuSamplePanel.add(new BrowseButton(this, otuSampleField, "otuSampleMap"));
-        mainPanel.add(otuSamplePanel);
-        
-        sampleMetaPanel.add(sampleMetaLabel);
-        sampleMetaPanel.add(sampleMetaField);
-        sampleMetaPanel.add(new BrowseButton(this, sampleMetaField, "sampleMetadata"));
-        mainPanel.add(sampleMetaPanel);
-        
-        this.add(mainPanel, BorderLayout.CENTER);
+        tButton = new BrowseButton(this, treeFileField, "tree");
+        omButton = new BrowseButton(this, otuMetaField, "otuMetadata");
+        osButton = new BrowseButton(this, otuSampleField, "otuSampleMap");
+        smButton = new BrowseButton(this, sampleMetaField, "sampleMetadata");
         
         cancelButton.addActionListener(new ActionListener() {
                public void actionPerformed(ActionEvent e) {
@@ -98,7 +74,7 @@ public class NewProjectDialog extends JFrame{
                }
         });
         
-        bottomPanel.add(cancelButton);
+/*        bottomPanel.add(cancelButton);*/
         
         okButton.addActionListener(new ActionListener() {
                public void actionPerformed(ActionEvent e) {
@@ -111,9 +87,72 @@ public class NewProjectDialog extends JFrame{
                }
         });
         
-        bottomPanel.add(okButton);
+/*        bottomPanel.add(okButton);*/
+/*        this.add(bottomPanel, BorderLayout.SOUTH);*/
+
+        GroupLayout layout = new GroupLayout(getContentPane());
+        this.setLayout(layout);
         
-        this.add(bottomPanel, BorderLayout.SOUTH);
+        layout.setAutoCreateContainerGaps(true);
+        
+        layout.setHorizontalGroup(
+           layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+           .addGroup(layout.createSequentialGroup()
+               .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addComponent(treeFileLabel)
+                  .addComponent(otuMetaLabel)
+                  .addComponent(otuSampleLabel)
+                  .addComponent(sampleMetaLabel)
+                  )
+              .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                   .addComponent(treeFileField, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                   .addComponent(otuMetaField, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                   .addComponent(otuSampleField, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                   .addComponent(sampleMetaField, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                   )
+               .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                      .addComponent(tButton)
+                      .addComponent(omButton)
+                      .addComponent(osButton)
+                      .addComponent(smButton)
+                      )
+                )
+/*            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)*/
+/*                      .addComponent(cancelButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)*/
+              .addComponent(okButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+/*                      )*/
+        );
+        layout.setVerticalGroup(
+           layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+           .addGroup(layout.createSequentialGroup()
+               .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                      .addComponent(treeFileLabel)
+                      .addComponent(treeFileField)
+                      .addComponent(tButton)
+                      ) 
+              .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                     .addComponent(otuMetaLabel)
+                     .addComponent(otuMetaField)
+                     .addComponent(omButton)
+                     )
+             .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                      .addComponent(otuSampleLabel)
+                      .addComponent(otuSampleField)
+                      .addComponent(osButton)
+                      )
+              .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(sampleMetaLabel)
+                        .addComponent(sampleMetaField)
+                        .addComponent(smButton)
+                        )
+/*               .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)*/
+/*                      .addComponent(cancelButton)*/
+              .addComponent(okButton)
+/*                      )*/
+                      )
+        );
+
+
         this.setVisible(true);
     }
 	// }}}
