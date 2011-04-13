@@ -34,7 +34,6 @@ public final class AddColumnButton extends JButton{
         table = _table;
         this.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-/*                System.out.println(index);*/
                 frame.addColumnDialog = new AddColumnDialog(frame, data, table);
             }
         });

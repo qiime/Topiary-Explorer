@@ -29,9 +29,10 @@ public final class NodeEditPanel extends JPanel{
     JCheckBox nodeLabelCheckBox = new JCheckBox("Tip Labels");
     JCheckBox internalLabelCheckBox = new JCheckBox("Internal Node Labels");
     JPanel labelPanel = new JPanel();
-    CollapsablePanel labelPanelCP = new CollapsablePanel("Labels",labelPanel, false, true);
+    CollapsablePanel labelPanelCP = new CollapsablePanel("Labels",labelPanel, 
+        false, true);
     Boolean warningShown = false;
-    JButton tipLabelButton = new JButton("Customize...");
+    JButton tipLabelButton = new JButton("Set Labels As...");
     
     JLabel fntSizeLabel = new JLabel("Size: ");
     JTextField fntSize = new JTextField("",3);
@@ -65,14 +66,16 @@ public final class NodeEditPanel extends JPanel{
         super();
         frame = _frame;
         vis = frame.tree;
-        colorByMenu = new ColorByPopupMenu(frame.frame, frame, frame.frame.labelColorPanel,1);
+        colorByMenu = new ColorByPopupMenu(frame.frame, frame, 
+            frame.frame.labelColorPanel,1);
         this.setToolTipText("Customize Nodes");
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 /*        setLayout(new GridLayout(1,1));*/
         
         internalLabelCheckBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                vis.setDrawInternalNodeLabels(internalLabelCheckBox.isSelected());
+                vis.setDrawInternalNodeLabels(
+                    internalLabelCheckBox.isSelected());
                 vis.redraw();
             }
         });
@@ -82,15 +85,22 @@ public final class NodeEditPanel extends JPanel{
         
         nodeLabelCheckBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                    if(nodeLabelCheckBox.isSelected() && !warningShown)
+                    if(nodeLabelCheckBox.isSelected() && !warningShown && 
+                    !vis.getZoomDrawNodeLabels())
                     {
-                        JOptionPane.showMessageDialog(null, "Node labels will not show unless you are zoomed in enough that the labels would not overlap.", "Warning", JOptionPane.WARNING_MESSAGE);
-                        warningShown = true;
+                        JCheckBox checkbox = new JCheckBox("Do not show this message again.");  
+                        String message = "Node labels will not show at your current zoom level.\nYou must zoom in more along the y-axis for the labels to appear.\n";  
+                        Object[] params = {message, checkbox};  
+                        JOptionPane.showMessageDialog(null, params, 
+                            "Node labels not shown", 
+                            JOptionPane.WARNING_MESSAGE);  
+                        warningShown = checkbox.isSelected();
                     }
                     vis.setDrawNodeLabels(nodeLabelCheckBox.isSelected());
                     vis.redraw();
                     labelPanelCP.setVisible(nodeLabelCheckBox.isSelected());
-                    frame.treePopupMenu.getComponent(5).setEnabled(nodeLabelCheckBox.isSelected());
+                    frame.treePopupMenu.getComponent(5).setEnabled(
+                    nodeLabelCheckBox.isSelected());
             }
         });
         holder.add(nodeLabelCheckBox);
@@ -190,7 +200,8 @@ public final class NodeEditPanel extends JPanel{
         
         colorByButton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
-				colorByMenu.show(colorByButton, colorByLabel.getX(), colorByLabel.getY());
+				colorByMenu.show(colorByButton, colorByLabel.getX(), 
+				    colorByLabel.getY());
            } 
         });
         

@@ -188,17 +188,15 @@ public class MainFrame extends JFrame {
         otuMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         otuMetadataTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         otuMetadataTable.setCellSelectionEnabled(true);
-        //otuMetadataTable.setAutoCreateRowSorter(true);
         otuMetadataScrollPane = new JScrollPane(otuMetadataTable);
         otuMetadataScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        otuMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuMetadata, otuMetadataTable));
         dataPane.addTab("OTU Metadata", otuMetadataScrollPane);
 
         otuSampleMapTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         //otuSampleMapTable.setAutoCreateRowSorter(true);
         otuSampleMapScrollPane = new JScrollPane(otuSampleMapTable);
         otuSampleMapScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
+/*        otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));*/
         dataPane.addTab("OTU-Sample Map", otuSampleMapScrollPane);
 
         sampleMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -208,7 +206,7 @@ public class MainFrame extends JFrame {
         //sampleMetadataTable.setAutoCreateRowSorter(true);
         sampleMetadataScrollPane = new JScrollPane(sampleMetadataTable);
         sampleMetadataScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));
+/*        sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));*/
         dataPane.addTab("Sample Metadata", sampleMetadataScrollPane);
         dataPane.setSelectedIndex(0);
         
@@ -262,17 +260,6 @@ public class MainFrame extends JFrame {
          resetSampleMenus();
          setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
-     
-/*     public void newTreeWindow(Node root) {
-         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-          TreeWindow tempTreeWindow = new TreeWindow(this);
-          tempTreeWindow.loadTree(root);
-          treeWindows.add(tempTreeWindow);
-          tempTreeWindow.setTitle("Tree "+treeWindows.size());
-          resetOtuMenus();
-          resetSampleMenus();
-          setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-     }*/
      
      public void newTreeWindow(String treeString) {
           setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -335,11 +322,31 @@ public class MainFrame extends JFrame {
             }
         
     public void setOtuMetadata(ArrayList<String> data) {
-        otuMetadata = new DataTable(data);
+         otuMetadata = new DataTable(data);
 	     SparseTableModel model = new SparseTableModel(otuMetadata.getData(),
 		 otuMetadata.getColumnNames());
 		 TableSorter sorter = new TableSorter(model, otuMetadataTable.getTableHeader());
-		 otuMetadataTable.setModel(sorter);
+         otuMetadataTable.setModel(sorter);
+         
+/*         frame.consoleWindow.update("Loaded OTU metadata.");*/
+         resetOtuMenus();
+         otuMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuMetadata, otuMetadataTable));
+         dataPane.setSelectedIndex(1);
+    }
+    
+    public void setOtuMetadata(InputStream data) {
+        try{
+         otuMetadata = new DataTable(data);
+
+         } catch (IOException ex) {
+             JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+             ex.printStackTrace();
+             return;
+         }
+	     SparseTableModel model = new SparseTableModel(otuMetadata.getData(),
+		 otuMetadata.getColumnNames());
+		 TableSorter sorter = new TableSorter(model, otuMetadataTable.getTableHeader());
+         otuMetadataTable.setModel(sorter);
          
 /*         frame.consoleWindow.update("Loaded OTU metadata.");*/
          resetOtuMenus();
@@ -359,13 +366,53 @@ public class MainFrame extends JFrame {
          dataPane.setSelectedIndex(2);
     }
     
+    public void setOtuSampleMap(InputStream data) {
+        try{
+         otuSampleMap = new DataTable(data);
+         
+         } catch (IOException ex) {
+             JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+             ex.printStackTrace();
+             return;
+         }
+         SparseTableModel model = new SparseTableModel(otuSampleMap.getData(),
+		 otuSampleMap.getColumnNames());
+		 TableSorter sorter = new TableSorter(model, otuSampleMapTable.getTableHeader());
+		 otuSampleMapTable.setModel(sorter);
+
+/*         consoleWindow.update("Loaded OTU to sample map");*/
+         otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
+         dataPane.setSelectedIndex(2);
+    }
+    
     public void setSampleMetadata(ArrayList<String> data) {
         sampleMetadata = new DataTable(data);
+
          SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
 		 sampleMetadata.getColumnNames());
 		 TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
 		 sampleMetadataTable.setModel(sorter);
 		 
+/*         frame.consoleWindow.update("Loaded sample metadata.");*/
+         resetSampleMenus();
+         sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));
+         dataPane.setSelectedIndex(3);
+    }
+    
+    public void setSampleMetadata(InputStream data) {
+        try {
+        sampleMetadata = new DataTable(data);
+        
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+            return;
+        }
+         SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
+		 sampleMetadata.getColumnNames());
+		 TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
+		 sampleMetadataTable.setModel(sorter);
+
 /*         frame.consoleWindow.update("Loaded sample metadata.");*/
          resetSampleMenus();
          sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));

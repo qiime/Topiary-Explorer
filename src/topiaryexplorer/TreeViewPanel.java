@@ -241,10 +241,6 @@ public final class TreeViewPanel extends JPanel{
         layoutPanel.setLayout(new GridLayout(2,1));
         layoutPanel.add(buttonPanel);
         layoutPanel.add(rotatePanel);
-/*        layoutPanel
-        layoutPanel.
-        layoutPanel.
-        layoutPanel.*/
         
         mirrorvertButton.setToolTipText("Flip Vertical");
         mirrorvertButton.addActionListener(new ActionListener() {
@@ -300,6 +296,7 @@ public final class TreeViewPanel extends JPanel{
 	
 	public void layoutChanged() {
 	    frame.recenter();
+	    vis.checkBounds();
 	    vis.redraw();
 	}
 	

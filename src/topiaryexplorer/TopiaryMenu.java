@@ -532,10 +532,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    	       } catch (java.io.IOException e) {}
    	   }
        if(inFile != null)
-       {
-/*           for(TreeWindow t : frame.treeWindows)
-               t.tree.noLoop();*/
-               
+       {               
            if(frame.otuMetadata != null)
                 clearOtuMetadata();
                 
@@ -543,17 +540,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.dataPane.setSelectedIndex(1);
             try {
                 InputStream is = inFile.getInputStream();
-                frame.otuMetadata = new DataTable(is);
-                SparseTableModel model = new SparseTableModel(frame.otuMetadata.getData(),
-                frame.otuMetadata.getColumnNames());
-                TableSorter sorter = new TableSorter(model, frame.otuMetadataTable.getTableHeader());
-			    frame.otuMetadataTable.setModel(sorter);
+                frame.setOtuMetadata(is);
 
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
-                
-                frame.consoleWindow.update("Unable to load " + ex.getMessage());
             }
             if (frame.currTable == frame.otuMetadata) {
                 for(TreeWindow w : frame.treeWindows)
@@ -573,10 +564,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    }
    
    public void clearOtuMetadata() {
-/*       frame.treeWindow.tree.noLoop();*/
        frame.resetOtuMenus();
        frame.otuMetadataFile = null;
-/*       frame.treeWindow.tree.loop();*/
        frame.repaint();
    }
 
@@ -601,18 +590,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             frame.dataPane.setSelectedIndex(3);
             try {
                 InputStream is = inFile.getInputStream();
-                frame.sampleMetadata = new DataTable(is);
-                
-                SparseTableModel model = new SparseTableModel(frame.sampleMetadata.getData(),
-                frame.sampleMetadata.getColumnNames());
-                TableSorter sorter = new TableSorter(model, frame.sampleMetadataTable.getTableHeader());
-			    frame.sampleMetadataTable.setModel(sorter);
+                frame.setSampleMetadata(is);
 			    
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
-                
-                frame.consoleWindow.update("Unable to load " + ex.getMessage() + "");
             }
             if (frame.currTable == frame.sampleMetadata) {
                 for(TreeWindow t : frame.treeWindows)
@@ -658,21 +640,14 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 clearOtuSampleMap();
             //set view
             frame.dataPane.setSelectedIndex(2);
-            try {
-                InputStream is = inFile.getInputStream();
-                frame.otuSampleMap = new DataTable(is);
-                
-                SparseTableModel model = new SparseTableModel(frame.otuSampleMap.getData(),
-                frame.otuSampleMap.getColumnNames());
-                TableSorter sorter = new TableSorter(model, frame.otuSampleMapTable.getTableHeader());
-			    frame.otuSampleMapTable.setModel(sorter);
-
+            try{
+            InputStream is = inFile.getInputStream();
+            frame.setOtuSampleMap(is);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
-                
-                frame.consoleWindow.update("Unable to load " + ex.getMessage());
             }
+
             for(TreeWindow w : frame.treeWindows)
                    w.tree.redraw();
             frame.otuSampleMapFile = inFile;

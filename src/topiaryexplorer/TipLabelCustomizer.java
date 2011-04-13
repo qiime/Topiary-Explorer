@@ -31,7 +31,7 @@ public class TipLabelCustomizer extends JFrame {
     JCheckBox item = new JCheckBox();
     ArrayList<JCheckBox> itemlist = new ArrayList<JCheckBox>();
     JPanel optionspanel = new JPanel();
-    JLabel delimlabel = new JLabel("Delimter:");
+    JLabel delimlabel = new JLabel("Separator:");
     JTextArea delim = new JTextArea(", ");
     JScrollBar scroller = new JScrollBar();
     JScrollPane optionsPane = new JScrollPane();
@@ -53,14 +53,7 @@ public class TipLabelCustomizer extends JFrame {
         /*if(sampleMeta)
                     metaCombo.addItem(metaTypes[1]);*/
         mainPanel.add(metaCombo, BorderLayout.NORTH);
-        
-/*        for(String s : frame.otuMetadata.getColumnNames())
-        {
-            Vector<Object> temp = new Vector<Object>();
-            temp.add(s);
-            vals.add(temp);
-        }
-        cheader.add("Values");*/
+
         
         optionsTable = new JList(frame.otuMetadata.getColumnNames().toArray());
         optionsTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -100,24 +93,6 @@ public class TipLabelCustomizer extends JFrame {
     
     public void okbuttonpressed() {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-/*        int rowIndexStart = optionsTable.getSelectedRow();
-        ArrayList<String> ops = new ArrayList<String>();
-        if(rowIndexStart != -1)
-        {
-            int rowIndexEnd = optionsTable.getSelectionModel().getMaxSelectionIndex();
-            int colIndexStart = optionsTable.getSelectedColumn();
-            int colIndexEnd = optionsTable.getColumnModel().getSelectionModel().getMaxSelectionIndex();
-            String temp = "";
-            // Check each cell in the range
-            for (int r=rowIndexStart; r<=rowIndexEnd; r++) {
-                for (int c=colIndexStart; c<=colIndexEnd; c++) {
-                    if (optionsTable.isCellSelected(r, c)) {
-                        // cell is selected
-                        ops.add(optionsTable.getValueAt(r,c).toString());
-                    }
-                }
-            }
-        }*/
         ArrayList<Object> ops = new ArrayList(Arrays.asList(optionsTable.getSelectedValues()));
         
         for(Node n :treeWindow.tree.getTree().getNodes()) {
@@ -159,6 +134,7 @@ public class TipLabelCustomizer extends JFrame {
                 n.setLabel(name);
             }
         }
+        treeWindow.tree.checkBounds();
         treeWindow.tree.redraw();
         this.hide();
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

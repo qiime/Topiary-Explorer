@@ -185,6 +185,7 @@ public class TreeVis extends PApplet {
     public void setNodeFontColor(int c) { nodeFontColor = c; }
     public void setColorBranches(boolean b) { colorBranches = b; }
     public boolean getColorBranches() { return colorBranches; }
+    public boolean getZoomDrawNodeLabels() { return zoomDrawNodeLabels; }
 
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
@@ -435,6 +436,13 @@ public class TreeVis extends PApplet {
     	
       //if there's no tree, we can't check the bounds
       if (root==null) return;
+      
+      float width = 0;
+      String s = root.getLongestLabel();
+      for (int i = 0; i < s.length(); i++) {
+          width += nodeFont.width(s.charAt(i));
+      }
+      TREEMARGIN = MARGIN + width*nodeFont.size + 10;
 
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
           //check horizontal tree scaling
@@ -555,7 +563,7 @@ public class TreeVis extends PApplet {
       fireStateChanged();
       //redraw the tree
       redraw();          
-}
+    }
 
     public void setVerticalScaleFactor(double yvalue) {
         yscale = yvalue;
