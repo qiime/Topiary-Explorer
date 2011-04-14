@@ -33,7 +33,7 @@ class CollapsablePanel extends JPanel {
 		// Images for open and closed state of panel
 		BufferedImage open, closed;
 		// Offsets for the text in the header and padding for the image
-		final int OFFSET = 30, PAD = 5;
+		int OFFSET = 30, PAD = 5;
 
         /**
         * Creates a header panel with a title.
@@ -47,6 +47,8 @@ class CollapsablePanel extends JPanel {
 			if(nested)
 			{
                 setPreferredSize(new Dimension(190, 20));
+                PAD += 10;
+                OFFSET += 10;
             }
             else
                 setPreferredSize(new Dimension(200, 20));
@@ -79,6 +81,7 @@ class CollapsablePanel extends JPanel {
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			int h = getHeight();
+			
 	        if (selected)
 	               g2.drawImage(open, PAD, 0, h, h, this);
 	           else

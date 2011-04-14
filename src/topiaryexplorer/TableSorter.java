@@ -433,6 +433,8 @@ public class TableSorter extends AbstractTableModel {
                 setSortingStatus(column, status);
             }
         }
+        
+        
     }
 
     private static class Arrow implements Icon {

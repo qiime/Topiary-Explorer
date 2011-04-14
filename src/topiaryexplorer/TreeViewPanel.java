@@ -122,6 +122,7 @@ public final class TreeViewPanel extends JPanel{
         
         setLineageButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                
                 frame.resetConsensusLineage();
                 frame.treePopupMenu.getComponent(6).setEnabled(true);
             }

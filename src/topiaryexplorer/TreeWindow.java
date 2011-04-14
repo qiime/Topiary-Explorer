@@ -894,6 +894,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
      
      public void resetConsensusLineage() {
          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+         
          ArrayList<String> colNames = frame.otuMetadata.getColumnNames();
          int col = colNames.indexOf("Consensus Lineage");
          if(col == -1)
@@ -905,6 +906,20 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             return;
           }
             
+          Double[] ops = {.10,.20,.30,.40,.50,.60,.70,.80,.90,.95,.96,.97,.98,
+              .99,1.00};
+/*           for(int i = 1; i <= 20; i ++)*/
+/*              ops[i-1] = (i*5.0)/100;*/
+
+           JComboBox options = new JComboBox(ops);  
+           options.setSelectedIndex(12);
+           String message = "Choose a threshold level for assigning consensus lineage.";  
+           Object[] params = {message, options};  
+           JOptionPane.showMessageDialog(null, params, 
+               "Choose Threshold", 
+               JOptionPane.QUESTION_MESSAGE);  
+           double f = (Double)options.getSelectedItem();
+            
          for (Node n : tree.getTree().getLeaves()) {
             String nodeName = n.getName();
             int id = frame.otuMetadata.getRowNames().indexOf(nodeName);
@@ -912,7 +927,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          }
          for(Node n : tree.getTree().getNodes())
          {
-             n.setConsensusLineage(n.getConsensusLineageF(0.5));
+             n.setConsensusLineage(n.getConsensusLineageF(f));
          }
          tree.redraw();
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

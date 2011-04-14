@@ -9,6 +9,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
+import javax.swing.border.*;
 
 /**
  *
@@ -19,20 +20,21 @@ public class TipLabelCustomizer extends JFrame {
     TreeWindow treeWindow = null;
     JLabel title = new JLabel("Choose metadata columns to include in node labels:");
     JPanel mainPanel = new JPanel();
-    JPanel buttonPanel = new JPanel();
-    JPanel selectionPanel = new JPanel();
+    JPanel delimPanel = new JPanel();
+/*    JPanel buttonPanel = new JPanel();
+    JPanel selectionPanel = new JPanel();*/
     JButton okButton = new JButton("Set Labels");
     JButton cancelButton = new JButton("Cancel");
     JLabel selectlabel = new JLabel("Select:");
-    JButton allclrButton = new JButton("ALL");
-    JButton invertButton = new JButton("INV");
+    JButton allclrButton = new JButton("Select All");
+    JButton invertButton = new JButton("Invert Selection");
     JScrollPane selectionPane = new JScrollPane();
     JLabel searchLabel = new JLabel("Set tip labels with select options");
     JCheckBox item = new JCheckBox();
     ArrayList<JCheckBox> itemlist = new ArrayList<JCheckBox>();
     JPanel optionspanel = new JPanel();
     JLabel delimlabel = new JLabel("Separator:");
-    JTextArea delim = new JTextArea(", ");
+    JTextField delim = new JTextField(", ", 5);
     JScrollBar scroller = new JScrollBar();
     JScrollPane optionsPane = new JScrollPane();
     JList optionsTable = new JList();
@@ -44,15 +46,17 @@ public class TipLabelCustomizer extends JFrame {
     public TipLabelCustomizer(MainFrame _frame, TreeWindow _treeWindow, boolean otuMeta, boolean sampleMeta) {
         frame = _frame;
         treeWindow = _treeWindow;
-        this.setSize(new Dimension(400,300));
+        this.setSize(new Dimension(400,200));
         this.setTitle("Choose metadata columns to include in node labels");
+        this.setLayout(new BorderLayout());
         mainPanel.setLayout(new BorderLayout());
+        mainPanel.setBorder(new TitledBorder("Set Tip Labels As"));
         
         if(otuMeta)
             metaCombo.addItem(metaTypes[0]);
         /*if(sampleMeta)
                     metaCombo.addItem(metaTypes[1]);*/
-        mainPanel.add(metaCombo, BorderLayout.NORTH);
+/*        mainPanel.add(metaCombo, BorderLayout.NORTH);*/
 
         
         optionsTable = new JList(frame.otuMetadata.getColumnNames().toArray());
@@ -61,8 +65,8 @@ public class TipLabelCustomizer extends JFrame {
         
         mainPanel.add(optionsPane, BorderLayout.CENTER);
         
-        optionspanel.setLayout(new GridLayout(3,3));
-        optionspanel.add(selectlabel);
+        optionspanel.setLayout(new GridLayout(4,1));
+/*        optionspanel.add(selectlabel);*/
         allclrButton.addActionListener(new ActionListener() {
                public void actionPerformed(ActionEvent e) {
                    allclrbuttonpressed();
@@ -75,20 +79,23 @@ public class TipLabelCustomizer extends JFrame {
         });
         optionspanel.add(allclrButton);
         optionspanel.add(invertButton);
-        optionspanel.add(new JLabel(""));
-        optionspanel.add(delimlabel);
-        optionspanel.add(delim);
-        optionspanel.add(new JLabel(""));
-        optionspanel.add(new JLabel(""));
+/*        optionspanel.add(new JLabel(""));*/
+        delimPanel.add(delimlabel);
+        delimPanel.add(delim);
+        optionspanel.add(delimPanel);
+/*        optionspanel.add(delim);*/
+/*        optionspanel.add(new JLabel(""));*/
+/*        optionspanel.add(new JLabel(""));*/
         okButton.addActionListener(new ActionListener() {
               public void actionPerformed(ActionEvent e) {
                   okbuttonpressed();
               }
         });
-        optionspanel.add(okButton);
-        mainPanel.add(optionspanel, BorderLayout.SOUTH);
-
+/*        optionspanel.add(okButton);*/
+        mainPanel.add(optionspanel, BorderLayout.WEST);
         this.add(mainPanel, BorderLayout.CENTER);
+        
+        this.add(okButton, BorderLayout.SOUTH);
     }
     
     public void okbuttonpressed() {
@@ -141,15 +148,15 @@ public class TipLabelCustomizer extends JFrame {
     }
     
     public void allclrbuttonpressed() {
-        if(allclrButton.getText() == "ALL")
+        if(allclrButton.getText() == "Select All")
         {
             optionsTable.setSelectionInterval(0,frame.otuMetadata.getColumnNames().size());
-            allclrButton.setText("CLR");
+            allclrButton.setText("Clear Selection");
         }
         else
         {
             optionsTable.clearSelection();
-            allclrButton.setText("ALL");
+            allclrButton.setText("Select All");
         }
     }
     
