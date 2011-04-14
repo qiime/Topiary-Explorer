@@ -84,30 +84,7 @@ public final class TreeViewPanel extends JPanel{
         
         pruneButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                 if(vis.getTree().getNumberOfLeaves() > 30000)
-                 {
-                    JOptionPane.showMessageDialog(null, "Tree will be pruned to less than 30,000 nodes.", "Prune Tree", JOptionPane.INFORMATION_MESSAGE);
-                 }
-                 else
-                 {
-                     JOptionPane.showMessageDialog(null, "Tree already has less than 30,000 nodes.", "Prune Tree", JOptionPane.ERROR_MESSAGE);
-                     return;
-                 }
-                    
-                
-                 double total = vis.getTree().depth();
-                 double perc = .01;
-                 while(vis.getTree().getNumberOfLeaves() > 30000)
-                 {
-                      for(Node n: vis.getTree().getLeaves())
-                        {
-                            n.prune(total, perc);
-                        }
-                        perc += .01;
-                        frame.setTreeVals(vis.getTree());
-                        vis.setTree(vis.getTree());
-                }
-                vis.redraw();
+                 pruneTree();
             }
         });
         buttonPanel.add(pruneButton);
@@ -116,6 +93,7 @@ public final class TreeViewPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 for(Node n: vis.getTree().getNodes())
                     n.setHidden(false);
+                vis.redraw();
             }
         });
         buttonPanel.add(showHiddenButton);
@@ -157,8 +135,9 @@ public final class TreeViewPanel extends JPanel{
                 rotateSlider.setValue(0);
                 syncTreeWithRotateSlider();
                 rotatePanel.setVisible(false);
-                layoutChanged();
+                frame.lockButton.setSelected(false);
                 frame.lockButton.setEnabled(true);
+                layoutChanged();
             }
         });
 
@@ -170,10 +149,9 @@ public final class TreeViewPanel extends JPanel{
                 rotateSlider.setValue(0);
                 syncTreeWithRotateSlider();
                 rotatePanel.setVisible(false);
-/*                rotatePanel.setVisible(false);
-                rotateSlider.setEnabled(false);*/
-                layoutChanged();
+                frame.lockButton.setSelected(false);
                 frame.lockButton.setEnabled(true);
+                layoutChanged();
             }
         });
 
@@ -290,7 +268,43 @@ public final class TreeViewPanel extends JPanel{
     }
 	// }}}
 	
+/*  public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("Recenter")) {}
+        else if (e.getActionCommand().equals("Ladderize")) {}
+        else if (e.getActionCommand().equals("Ladderize")) {}
+    }*/
+	
+	
+	public void pruneTree() {
+	    if(vis.getTree().getNumberOfLeaves() > 30000)
+         {
+            JOptionPane.showMessageDialog(null, "Tree will be pruned to less than 30,000 nodes.", "Prune Tree", JOptionPane.INFORMATION_MESSAGE);
+         }
+         else
+         {
+             JOptionPane.showMessageDialog(null, "Tree already has less than 30,000 nodes.", "Prune Tree", JOptionPane.ERROR_MESSAGE);
+             return;
+         }
+            
+        
+         double total = vis.getTree().depth();
+         double perc = .01;
+         while(vis.getTree().getNumberOfLeaves() > 30000)
+         {
+              for(Node n: vis.getTree().getLeaves())
+                {
+                    n.prune(total, perc);
+                }
+                perc += .01;
+                frame.setTreeVals(vis.getTree());
+                vis.setTree(vis.getTree());
+        }
+        vis.redraw();
+	}
+	
 	public void layoutChanged() {
+	    frame.treeToolbar.setScale();
+	    frame.verticalTreeToolbar.setScale();
 	    frame.recenter();
 	    vis.checkBounds();
 /*      vis.redraw();*/

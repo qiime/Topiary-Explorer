@@ -414,7 +414,7 @@ public class TreeVis extends PApplet {
           if (mouseEvent.getClickCount() == 1) {
             //if they single-left-clicked on a node, select it
             selectedNode = node;
-          } else if (mouseEvent.getClickCount() == 2) {
+          } else if (mouseEvent.getClickCount() == 2 && !treeLayout.equals("Polar")) {
             //if they double-left-clicked on a node, collapse it
             node.setCollapsed(!node.isCollapsed());
           }

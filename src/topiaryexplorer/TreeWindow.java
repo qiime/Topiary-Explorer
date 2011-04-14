@@ -399,17 +399,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     }
     
     public void zoomIn() {
-        treeToolbar.zoomSlider.setValue(treeToolbar.zoomSlider.getValue() + 1);
-        treeToolbar.syncTreeWithZoomSlider();
-        verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() + 1);
-        verticalTreeToolbar.syncTreeWithZoomSlider();
+        treeToolbar.zoomIn();
+        verticalTreeToolbar.zoomIn();
     }
     
     public void zoomOut() {
-        treeToolbar.zoomSlider.setValue(treeToolbar.zoomSlider.getValue() - 1);
-        treeToolbar.syncTreeWithZoomSlider();
-        verticalTreeToolbar.zoomSlider.setValue(verticalTreeToolbar.zoomSlider.getValue() - 1);
-        verticalTreeToolbar.syncTreeWithZoomSlider();
+        treeToolbar.zoomOut();
+        verticalTreeToolbar.zoomOut();
     }
     
     public void syncTreeWithZoomSliders() {
@@ -630,7 +626,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                //set the node to this color
                n.clearBranchColor();
                n.addBranchColor(c, 1.0);
-           
        }
        tree.getTree().updateBranchColorFromChildren();
        frame.repaint();

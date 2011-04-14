@@ -60,11 +60,6 @@ public class VerticalTreeToolbar extends JToolBar {
         zoomSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 if (zoomSlider.getValueIsAdjusting()){
-                    if(frame.zoomLocked)
-                    {
-                        frame.treeToolbar.setValue(zoomSlider.getValue());
-                        frame.treeToolbar.syncTreeWithZoomSlider();
-                    }
                     syncTreeWithZoomSlider();
                 }
             }
@@ -82,6 +77,16 @@ public class VerticalTreeToolbar extends JToolBar {
 
     public void setValue(int i) {
         zoomSlider.setValue(i);
+        syncTreeWithZoomSlider();
+    }
+    
+    public void zoomIn() {
+        zoomSlider.setValue(zoomSlider.getValue()+1);
+        syncTreeWithZoomSlider();
+    }
+    
+    public void zoomOut() {
+        zoomSlider.setValue(zoomSlider.getValue()-1);
         syncTreeWithZoomSlider();
     }
 
