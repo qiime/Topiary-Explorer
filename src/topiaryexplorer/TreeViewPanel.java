@@ -182,13 +182,12 @@ public final class TreeViewPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 frame.collapseTreeToolbar.sliderEnabled(true);
                 parent.treeStatus.setText("Calculating Offsets...");
-                vis.setRadialOffsets(vis.getTree());
                 vis.setTOffsets(vis.getTree(), 0);
                 vis.setROffsets(vis.getTree(), 0);
+                vis.setRadialOffsets(vis.getTree());
                 vis.setTreeLayout("Radial");
                 rotatePanel.setVisible(true);
                 layoutChanged();
-                vis.redraw();
                 frame.lockButton.setSelected(true);
                 frame.lockButton.setEnabled(false);
                 parent.treeStatus.setText("Done drawing tree.");
@@ -200,7 +199,7 @@ public final class TreeViewPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 frame.collapseTreeToolbar.setMax();
                 frame.collapseTreeToolbar.sliderEnabled(false);
-                int size = vis.getTree().getNumberOfLeaves();
+/*                int size = vis.getTree().getNumberOfLeaves();
                 if(size > 8000)
                 {
                     if(JOptionPane.showConfirmDialog(null, 
@@ -210,7 +209,7 @@ public final class TreeViewPanel extends JPanel{
                     JOptionPane.WARNING_MESSAGE) 
                     == JOptionPane.CANCEL_OPTION)
                         return;
-                }
+                }*/
                 parent.treeStatus.setText("Calculating Offsets...");
                 vis.setRadialOffsets(vis.getTree());
                 vis.setTOffsets(vis.getTree(), 0);
@@ -218,7 +217,6 @@ public final class TreeViewPanel extends JPanel{
                 vis.setTreeLayout("Polar");
                 rotatePanel.setVisible(true);
                 layoutChanged();
-                vis.redraw();
                 frame.lockButton.setSelected(true);
                 frame.lockButton.setEnabled(false);
                 parent.treeStatus.setText("Done drawing tree.");
@@ -295,7 +293,7 @@ public final class TreeViewPanel extends JPanel{
 	public void layoutChanged() {
 	    frame.recenter();
 	    vis.checkBounds();
-	    vis.redraw();
+/*      vis.redraw();*/
 	    validate();
 	}
 	

@@ -63,6 +63,10 @@ class CollapseTreeToolbar extends JToolBar {
     
     void sliderEnabled(boolean b) {
         collapseSlider.setEnabled(b);
+        if(b)
+            collapseSlider.setToolTipText("Drag slider to collapse tree.");
+        else
+            collapseSlider.setToolTipText("The collapse slider is not available in this view.");
     }
 
     /**
