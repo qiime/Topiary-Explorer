@@ -160,12 +160,7 @@ public class NewProjectDialog extends JFrame{
 	public boolean okButtonPressed() {
 	    this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	    File temp = null;
-        
-	    if(treeFile!=null)
-	    {
-            frame.newTreeWindow(treeFile, true);
-	    }
-    
+            
 	    if(otuMetadataFile != null)
 	    {
             frame.mainMenu.loadOtuMetadata(otuMetadataFile);    
@@ -187,6 +182,11 @@ public class NewProjectDialog extends JFrame{
 	    }
       else
             {frame.mainMenu.clearSampleMetadata();}
+            
+        if(treeFile!=null)
+	    {
+            frame.newTreeWindow(treeFile, true);
+	    }
       this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	    return true;
 	}
