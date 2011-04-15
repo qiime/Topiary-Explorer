@@ -56,10 +56,15 @@ public class TreeToolbar extends JToolBar {
         zoomSlider.setPreferredSize(new Dimension(200,28));
         zoomSlider.setMaximumSize(new Dimension(200,28));
         zoomSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
+            public synchronized void stateChanged(ChangeEvent e) {
                 if (zoomSlider.getValueIsAdjusting()){
                     syncTreeWithZoomSlider();
+                    if(frame.zoomLocked)
+                    {
+                        frame.verticalTreeToolbar.syncTreeWithZoomSlider(zoomSlider);
+                    }
                 }
+                frame.tree.redraw();
             }
         });
         
@@ -125,15 +130,33 @@ public class TreeToolbar extends JToolBar {
     }
     
     public void zoomIn() {
+        if (frame.tree.getTree() == null) return;      
+        frame.tree.setHorizontalScaleFactor(frame.tree.getXScale()+minXScale); 
+        zoomSlider.setValue((int)(frame.tree.getXScale()/minXScale));
+/*        double newScale = minXScale*zoomSlider.getValue();*/
+/*        frame.tree.setHorizontalScaleFactor(newScale);*/
+        frame.tree.redraw();
 /*        System.out.println(zoomSlider.getValue());*/
-        zoomSlider.setValue(zoomSlider.getValue()+1);
+/*        zoomSlider.setValue(zoomSlider.getValue()+1);*/
 /*        System.out.println(zoomSlider.getValue());*/
-        syncTreeWithZoomSlider();
+/*        syncTreeWithZoomSlider();*/
     }
     
     public void zoomOut() {
-        zoomSlider.setValue(zoomSlider.getValue()-1);
-        syncTreeWithZoomSlider();
+        if (frame.tree.getTree() == null) return;      
+        if(frame.tree.getXScale()-minXScale >= minXScale)
+            frame.tree.setHorizontalScaleFactor(frame.tree.getXScale()-minXScale); 
+        else
+            frame.tree.setHorizontalScaleFactor(minXScale);
+
+        zoomSlider.setValue((int)(frame.tree.getXScale()/minXScale));
+/*        double newScale = minXScale*zoomSlider.getValue();*/
+/*        frame.tree.setHorizontalScaleFactor(newScale);*/
+        frame.tree.redraw();
+/*        System.out.println(zoomSlider.getValue());*/
+/*        zoomSlider.setValue(zoomSlider.getValue()+1);*/
+/*        System.out.println(zoomSlider.getValue());*/
+/*        syncTreeWithZoomSlider();*/
     }
     
     public void setStatus(String p, String s, String s2) {

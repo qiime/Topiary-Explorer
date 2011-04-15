@@ -62,6 +62,7 @@ public class VerticalTreeToolbar extends JToolBar {
                 if (zoomSlider.getValueIsAdjusting()){
                     syncTreeWithZoomSlider();
                 }
+                frame.tree.redraw();
             }
         });
 
@@ -81,13 +82,33 @@ public class VerticalTreeToolbar extends JToolBar {
     }
     
     public void zoomIn() {
-        zoomSlider.setValue(zoomSlider.getValue()+1);
-        syncTreeWithZoomSlider();
+        if (frame.tree.getTree() == null) return;      
+        frame.tree.setVerticalScaleFactor(frame.tree.getYScale()+minYScale); 
+        zoomSlider.setValue((int)(frame.tree.getYScale()/minYScale));
+/*        double newScale = minXScale*zoomSlider.getValue();*/
+/*        frame.tree.setHorizontalScaleFactor(newScale);*/
+        frame.tree.redraw();
+/*        System.out.println(zoomSlider.getValue());*/
+/*        zoomSlider.setValue(zoomSlider.getValue()+1);*/
+/*        System.out.println(zoomSlider.getValue());*/
+/*        syncTreeWithZoomSlider();*/
     }
     
     public void zoomOut() {
-        zoomSlider.setValue(zoomSlider.getValue()-1);
-        syncTreeWithZoomSlider();
+        if (frame.tree.getTree() == null) return;
+        if (frame.tree.getYScale()-minYScale >= minYScale)
+            frame.tree.setVerticalScaleFactor(frame.tree.getYScale()-minYScale); 
+        else
+            frame.tree.setVerticalScaleFactor(minYScale); 
+        
+        zoomSlider.setValue((int)(frame.tree.getYScale()/minYScale));
+/*        double newScale = minXScale*zoomSlider.getValue();*/
+/*        frame.tree.setHorizontalScaleFactor(newScale);*/
+        frame.tree.redraw();
+/*        System.out.println(zoomSlider.getValue());*/
+/*        zoomSlider.setValue(zoomSlider.getValue()+1);*/
+/*        System.out.println(zoomSlider.getValue());*/
+/*        syncTreeWithZoomSlider();*/
     }
 
     public void setScale() {
@@ -96,6 +117,13 @@ public class VerticalTreeToolbar extends JToolBar {
         } else {
 		    minYScale = (Math.min(frame.tree.getWidth(), frame.tree.getHeight())*0.5-frame.tree.getMargin())/frame.tree.getTree().depth();
         }
+    }
+    
+    public void syncTreeWithZoomSlider(JSlider slider) {
+        if (frame.tree.getTree() == null) return;
+        double newScale = minYScale * slider.getValue();
+        frame.tree.setVerticalScaleFactor(newScale);
+        frame.tree.redraw();
     }
     
     public void syncTreeWithZoomSlider() {

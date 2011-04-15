@@ -567,9 +567,9 @@ public class TreeVis extends PApplet {
 
     public void setVerticalScaleFactor(double yvalue) {
         yscale = yvalue;
-        double oldYstart = ystart;
+/*        double oldYstart = ystart;*/
 /*        setVerticalScrollPosition(getMaxVerticalScrollPosition()/2);*/
-        checkBounds();
+/*        checkBounds();*/
         fireStateChanged();
 /*        double r = toRow(y);*/
 /*        ystart = -(yscale*MARGIN);*/
@@ -579,7 +579,7 @@ public class TreeVis extends PApplet {
     public void setHorizontalScaleFactor(double xvalue) {
         xscale = xvalue;
 /*        setHorizontalScrollPosition(getMaxHorizontalScrollPosition()/2);*/
-        checkBounds();
+/*        checkBounds();*/
         fireStateChanged();
 /*        xstart = -(xscale*MARGIN);*/
         redraw();

@@ -256,7 +256,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          lockButton.addChangeListener(new ChangeListener() {
                public void stateChanged(ChangeEvent e) {
                    zoomLocked = lockButton.isSelected();
-                   treeToolbar.sliderEnabled(!lockButton.isSelected());
+/*                   treeToolbar.sliderEnabled(!lockButton.isSelected());*/
                    verticalTreeToolbar.sliderEnabled(!lockButton.isSelected());
                }
            });
