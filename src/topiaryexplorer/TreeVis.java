@@ -223,7 +223,7 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
         return (int) (root.getNumberOfLeaves()*yscale + 2*MARGIN);
       } else {
-        return (int) (2*root.depth()*yscale);
+        return (int) (2*root.depth()*yscale+1);
       }
     }
     public int getMaxHorizontalScrollPosition() {
@@ -231,7 +231,7 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
         return (int) (root.depth()*xscale + MARGIN + TREEMARGIN);
       } else {
-        return (int) (2*root.depth()*xscale);
+        return (int) (2*root.depth()*xscale+1);
       }      
     }
     
