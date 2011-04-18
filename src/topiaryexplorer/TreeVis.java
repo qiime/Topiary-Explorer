@@ -784,7 +784,7 @@ public class TreeVis extends PApplet {
       if(node.isHidden()) return;
       
       boolean isInternal = !node.isLeaf();
-
+      
       if(node.depth()/rootdepth <= collapsedLevel && node.getParent() != null)
         {
             node.setSliderCollapsed(true);
@@ -794,7 +794,7 @@ public class TreeVis extends PApplet {
 
       // Draw the branches first, so they get over-written by the nodes later
       if (isInternal) {
-        if (node.isCollapsed()){
+        if (node.isCollapsed() && !treeLayout.equals("Polar")){
           //if it's an internal, collapsed node, then draw a wedge in its place
           drawWedge(node, canvas);
         }
@@ -806,7 +806,7 @@ public class TreeVis extends PApplet {
 
 
       //if it's internal and not collapsed, draw all the subtrees
-      if (isInternal && !node.isCollapsed()) {
+      if ((isInternal && !node.isCollapsed()) || (node.isCollapsed() && isInternal && treeLayout.equals("Polar"))) {
         for (int i=0; i < node.nodes.size(); i++) {
           Node child = node.nodes.get(i);
           drawTree(child, canvas);

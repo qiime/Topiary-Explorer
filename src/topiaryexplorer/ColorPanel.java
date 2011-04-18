@@ -188,6 +188,7 @@ public class ColorPanel extends JPanel{
  			{
  			    for (int i = first+1; i < second; i++) 
  			        sorterModel.setValueAt(firstColor, i, 1);
+ 			        colorKeyTable.repaint();
 		        
  			}else
  			{
@@ -200,6 +201,7 @@ public class ColorPanel extends JPanel{
      					(1-frac)*firstColor.getGreen()/255.0f + frac*secondColor.getGreen()/255.0f,
      					(1-frac)*firstColor.getBlue()/255.0f + frac*secondColor.getBlue()/255.0f);
                      sorterModel.setValueAt(c, i, 1);
+                     colorKeyTable.repaint();
      			}
 		    }
  		}
