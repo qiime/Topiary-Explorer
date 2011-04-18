@@ -104,7 +104,7 @@ public class TreeToolbar extends JToolBar {
 				ArrayList<Node> nodes = frame.tree.getTree().getNodes();
 				boolean first = true;
 				for (Node n : nodes) {
-					if (str.length() > 0 && n.getName().toUpperCase().indexOf(str) != -1) {
+					if (str.length() > 0 && n.getLabel().toUpperCase().indexOf(str) != -1) {
 						if (first) {
 							frame.tree.setSelectedNode(n);
 							first = false;
