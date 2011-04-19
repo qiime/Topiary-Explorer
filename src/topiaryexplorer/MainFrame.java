@@ -167,6 +167,7 @@ public class MainFrame extends JFrame {
         databasePanel.add(databaseTopPanel, BorderLayout.NORTH);
         
         databaseScrollPane = new JScrollPane(databaseTable);
+        databaseScrollPane.setWheelScrollingEnabled(true);
         databasePanel.add(databaseScrollPane, BorderLayout.CENTER);
         databaseBottomPanel.setLayout(new BorderLayout());
         databaseBottomPanel.add(databaseStatus, BorderLayout.SOUTH);
@@ -189,12 +190,14 @@ public class MainFrame extends JFrame {
         otuMetadataTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         otuMetadataTable.setCellSelectionEnabled(true);
         otuMetadataScrollPane = new JScrollPane(otuMetadataTable);
+        otuMetadataScrollPane.setWheelScrollingEnabled(true);
         otuMetadataScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         dataPane.addTab("OTU Metadata", otuMetadataScrollPane);
 
         otuSampleMapTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         //otuSampleMapTable.setAutoCreateRowSorter(true);
         otuSampleMapScrollPane = new JScrollPane(otuSampleMapTable);
+        otuSampleMapScrollPane.setWheelScrollingEnabled(true);
         otuSampleMapScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 /*        otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));*/
         dataPane.addTab("OTU Abundance Table", otuSampleMapScrollPane);
@@ -205,6 +208,7 @@ public class MainFrame extends JFrame {
         sampleMetadataTable.setCellSelectionEnabled(true);
         //sampleMetadataTable.setAutoCreateRowSorter(true);
         sampleMetadataScrollPane = new JScrollPane(sampleMetadataTable);
+        sampleMetadataScrollPane.setWheelScrollingEnabled(true);
         sampleMetadataScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 /*        sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));*/
         dataPane.addTab("Sample Metadata Mapping", sampleMetadataScrollPane);
