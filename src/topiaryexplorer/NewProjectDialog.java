@@ -61,6 +61,7 @@ public class NewProjectDialog extends JFrame{
     public NewProjectDialog(MainFrame _frame) {
         frame = _frame;
         this.setSize(new Dimension(500,190));
+        this.setLocation(frame.getWidth()/2, frame.getHeight()/2);
         this.setTitle("Create new project");
         
         tButton = new BrowseButton(this, treeFileField, "tree");

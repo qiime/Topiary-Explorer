@@ -43,6 +43,7 @@ public class AddColumnDialog extends JFrame {
         table = _table;
         
         this.setSize(new Dimension(500,200));
+        this.setLocation(frame.getWidth()/2, frame.getHeight()/2);
         this.setTitle("Create a new column");
         
         emptyButton.addChangeListener(new ChangeListener() {

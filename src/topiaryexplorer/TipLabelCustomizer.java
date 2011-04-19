@@ -47,6 +47,7 @@ public class TipLabelCustomizer extends JFrame {
         frame = _frame;
         treeWindow = _treeWindow;
         this.setSize(new Dimension(400,200));
+        this.setLocation(frame.getWidth()/2, frame.getHeight()/2);
         this.setTitle("Choose metadata columns to include in node labels");
         this.setLayout(new BorderLayout());
         mainPanel.setLayout(new BorderLayout());
