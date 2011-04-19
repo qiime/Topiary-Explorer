@@ -215,8 +215,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                           if(del == JOptionPane.YES_OPTION)
                           {
                             clickedNode.getParent().nodes.remove(clickedNode);
-                            for(Node n : clickedNode.getAnscestors())
-                                n.setConsensusLineage(n.getConsensusLineageF(0.5));
+                            // for(Node n : clickedNode.getAnscestors())
+                            //     n.setConsensusLineage(n.getConsensusLineageF(0.5));
                           }
                         tree.setTree(tree.getTree());
                         tree.redraw();
@@ -901,19 +901,23 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             return;
           }
             
-          Double[] ops = {.10,.20,.30,.40,.50,.60,.70,.80,.90,.95,.96,.97,.98,
-              .99,1.00};
+          Integer[] ops = {10,20,30,40,50,60,70,80,90,95,96,97,98,
+              99,100};
 /*           for(int i = 1; i <= 20; i ++)*/
 /*              ops[i-1] = (i*5.0)/100;*/
 
-           JComboBox options = new JComboBox(ops);  
+           JComboBox options = new JComboBox(ops);
+           JPanel panel = new JPanel();  
+           JLabel perLabel = new JLabel("%");
            options.setSelectedIndex(12);
+           panel.add(options);
+           panel.add(perLabel);
            String message = "Choose a threshold level for assigning consensus lineage.";  
-           Object[] params = {message, options};  
+           Object[] params = {message, panel};  
            JOptionPane.showMessageDialog(null, params, 
                "Choose Threshold", 
                JOptionPane.QUESTION_MESSAGE);  
-           double f = (Double)options.getSelectedItem();
+           double f = ((Integer)options.getSelectedItem())/100.0;
             
          for (Node n : tree.getTree().getLeaves()) {
             String nodeName = n.getName();
