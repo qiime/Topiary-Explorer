@@ -462,7 +462,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                      }
                      // load tree
                      if(data.containsKey("tre")){
-                         frame.newTreeWindow(((ArrayList<String>)data.get("tre")).get(0), true);
+                         for(String s : (ArrayList<String>)data.get("tre"))
+                             frame.newTreeWindow(s, true);
                      }
                     frame.repaint();
                 }

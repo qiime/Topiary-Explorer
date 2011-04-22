@@ -216,6 +216,7 @@ public class TopiaryFunctions {
     	    BufferedReader br = new BufferedReader(new InputStreamReader(inFile.getInputStream()));
             String dataType = "";
             HashMap data = new HashMap();
+            // ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
             String line = br.readLine();
             while(line != null)
             {
@@ -223,7 +224,8 @@ public class TopiaryFunctions {
                 if(line.startsWith(">>"))
                 {
                     dataType = line.substring(2,5);
-                    data.put(dataType, new ArrayList<String>());
+                    if(!data.containsKey(dataType))
+                        data.put(dataType, new ArrayList<String>());                    
                 }
                 else
                     ((ArrayList<String>)data.get(dataType)).add(line);
