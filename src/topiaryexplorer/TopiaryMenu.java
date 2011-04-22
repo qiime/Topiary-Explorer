@@ -488,17 +488,17 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         		    lines.add(TopiaryFunctions.createNewickStringFromTree(w.tree.getTree()));
     	        }
 		    }
-			if(frame.otuMetadata != null)
+			if(frame.otuMetadata.getColumnCount() > 0)
 			    {
 			        lines.add("\n>>otm\n");
 			        lines.addAll(frame.otuMetadata.toStrings());
 		        }
-			if(frame.otuSampleMap != null) 
+			if(frame.otuSampleMap.getColumnCount() > 0) 
 			    {
 			        lines.add(">>osm\n"); 
 			        lines.addAll(frame.otuSampleMap.toStrings());
 		        }
-			if(frame.sampleMetadata != null)
+			if(frame.sampleMetadata.getColumnCount() > 0)
 			{
 			    lines.add(">>sam\n");
 			    lines.addAll(frame.sampleMetadata.toStrings());

@@ -211,7 +211,8 @@ public class DataTable {
 	
 	public void clearTable() {
 	    data = new SparseTable();
-	    ArrayList<String> columnNames = new ArrayList<String>();
+	    columnNames = new ArrayList<String>();
+	    rowNames = new ArrayList<String>();
 	}
 	
 /*  public void highlightRow(Node n) {

@@ -595,6 +595,108 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          tree.setRadialOffsets(tree.getTree());
          tree.redraw();
      }
+     
+     public void pruneTreeByBranchLength(double cutoff) {
+         double total = tree.getTree().depth();
+         for(Node n: tree.getTree().getLeaves())
+             n.prune(total, cutoff);
+         
+         setTreeVals(tree.getTree());
+         tree.setTree(tree.getTree());
+     }
+     
+     public void pruneTreeByNumNodes(int cutoff) {
+         double total = tree.getTree().depth();
+          double perc = .01;
+          while(tree.getTree().getNumberOfLeaves() > cutoff)
+          {
+               for(Node n: tree.getTree().getLeaves())
+                 n.prune(total, perc);
+
+               perc += .01;
+               setTreeVals(tree.getTree());
+               tree.setTree(tree.getTree());
+         }
+     }
+	
+	public void pruneTreeByOtu(String category, Object value) {
+        // treeEditToolbar.setStatus("Pruning tree...");
+	    int colIndex = frame.otuMetadata.getColumnIndex(category);
+	    ArrayList<Node> ns = tree.getTree().getLeaves();
+       //loop over each node
+       for (Node n : ns){
+               //get the node's name
+               String nodeName = n.getName();
+               //get the row of the OTU metadata table with this name
+               int rowIndex = frame.otuMetadata.getRowNames().indexOf(nodeName);
+               if (rowIndex == -1) {
+/*                   JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);*/
+/*                   frame.consoleWindow.update("ERROR: OTU ID "+nodeName+" not found in OTU Metadata Table.");*/
+                   continue;
+               }
+               if(frame.otuMetadata.getValueAt(rowIndex, colIndex).equals(value))
+               {
+                 n.getParent().clearBranchColor();
+                 n.prune(true);
+               }
+       }
+       tree.getTree().prune();
+       // treeEditToolbar.setStatus("Done pruning tree.");
+       tree.redraw();
+	}
+	
+	public void pruneTreeBySample(String category, Object value) {
+	    ArrayList<Node> ns = tree.getTree().getLeaves();        
+	    int colIndex = frame.sampleMetadata.getColumnIndex(category);
+        //loop over each node
+         for (Node n : ns) {
+             //get the node's name
+
+                 String nodeName = n.getName();
+                 //get the row of the OTU-Sample map with this name
+                 int rowIndex = frame.otuSampleMap.getRowNames().indexOf(nodeName);
+                 
+                 if (rowIndex == -1) {
+                    continue;
+                 }
+                 //get the row
+/*                     ArrayList<Object> row = frame.otuSampleMap.getRow(rowIndex);*/
+                 HashMap row = frame.otuSampleMap.getRow(rowIndex);
+                //for each non-zero column value (starting after the ID column)
+                 for (Object i : row.keySet()) {
+                     Object v = row.get(i);
+                     //if it's not an Integer, skip it
+                     if (!(v instanceof Integer)) continue;
+                     Integer weight = (Integer)v;
+                     if (weight == 0) continue;
+                     
+                     String sampleID = frame.otuSampleMap.getColumnName(((Number)i).intValue());
+                     
+                     //find the row that has this sampleID                         
+                     int sampleRowIndex = frame.sampleMetadata.getRowNames().indexOf(sampleID);
+                     
+                     if (sampleRowIndex == -1)
+                        continue;
+                     
+                     if(frame.sampleMetadata.getValueAt(sampleRowIndex, colIndex) == null)
+                        continue;
+                     
+                     if(frame.sampleMetadata.getValueAt(sampleRowIndex, colIndex).equals(value))                                                          
+                        {
+                            n.getParent().clearBranchColor();
+                            n.prune(true);
+                            break;
+                        }
+                 }
+        }
+        tree.getTree().prune();
+        // setTreeVals(tree.getTree());
+        // tree.setTree(tree.getTree());
+        // tree.getTree().updateBranchColorFromChildren();
+        // frame.repaint();
+        // treeEditToolbar.setStatus("Done pruning tree.");
+        tree.redraw();
+	}
 	
 	 /**
      * Recolors the tree based on selected OTU metadata field
@@ -903,8 +1005,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             
           Integer[] ops = {10,20,30,40,50,60,70,80,90,95,96,97,98,
               99,100};
-/*           for(int i = 1; i <= 20; i ++)*/
-/*              ops[i-1] = (i*5.0)/100;*/
 
            JComboBox options = new JComboBox(ops);
            JPanel panel = new JPanel();  

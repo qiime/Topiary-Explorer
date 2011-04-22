@@ -268,38 +268,11 @@ public final class TreeViewPanel extends JPanel{
     }
 	// }}}
 	
-/*  public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Recenter")) {}
-        else if (e.getActionCommand().equals("Ladderize")) {}
-        else if (e.getActionCommand().equals("Ladderize")) {}
-    }*/
-	
-	
 	public void pruneTree() {
-	    if(vis.getTree().getNumberOfLeaves() > 30000)
-         {
-            JOptionPane.showMessageDialog(null, "Tree will be pruned to less than 30,000 nodes.", "Prune Tree", JOptionPane.INFORMATION_MESSAGE);
-         }
-         else
-         {
-             JOptionPane.showMessageDialog(null, "Tree already has less than 30,000 nodes.", "Prune Tree", JOptionPane.ERROR_MESSAGE);
-             return;
-         }
-            
-        
-         double total = vis.getTree().depth();
-         double perc = .01;
-         while(vis.getTree().getNumberOfLeaves() > 30000)
-         {
-              for(Node n: vis.getTree().getLeaves())
-                {
-                    n.prune(total, perc);
-                }
-                perc += .01;
-                frame.setTreeVals(vis.getTree());
-                vis.setTree(vis.getTree());
-        }
-        vis.redraw();
+	    PruneTreeDialog d = new PruneTreeDialog(frame.frame, frame, 
+	        (frame.frame.otuMetadata.getColumnCount() > 0),
+	        (frame.frame.sampleMetadata.getColumnCount() > 0 && 
+	        frame.frame.otuSampleMap.getColumnCount() > 0));
 	}
 	
 	public void layoutChanged() {
@@ -307,7 +280,6 @@ public final class TreeViewPanel extends JPanel{
 	    frame.verticalTreeToolbar.setScale();
 	    frame.recenter();
 	    vis.checkBounds();
-/*      vis.redraw();*/
 	    validate();
 	}
 	

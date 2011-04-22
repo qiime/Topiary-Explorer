@@ -70,7 +70,7 @@ class BranchEditPanel extends JPanel{
 /*        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));*/
         setLayout(new GridLayout(3,1));
         
-        coloringMenuItem.setEnabled(false);
+        // coloringMenuItem.setEnabled(false);
         coloringMenuItem.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 majorityColoringMenuItem.setEnabled(!coloringMenuItem.isSelected());

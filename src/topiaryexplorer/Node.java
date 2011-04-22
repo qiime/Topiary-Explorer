@@ -55,9 +55,12 @@ public class Node implements Comparable{
   
   private double lineWidth = 1;
 
-  private boolean collapsed = false; //if true, the children are not shown (draws a wedge)
+  // if true, the children are not shown (draws a wedge)
+  private boolean collapsed = false; 
   private boolean sliderCollapsed = true;
   private boolean hidden = false;
+  
+  private boolean toPrune = false;
 
   Object userObject = null;
   String userString = "";
@@ -190,8 +193,34 @@ public class Node implements Comparable{
       
       if(parent == null)
         return;
+        
       parent.setName(parent.getName() +","+ this.name);
       parent.nodes.remove(this);
+  }
+  
+  public void prune() {          
+        if(toPrune)
+        {
+            parent.setName(parent.getName() +","+ this.name);
+            parent.nodes.remove(this);
+        }
+        
+        ArrayList<Node> children = new ArrayList<Node>(nodes);
+        for(Node c : children)
+          c.prune();
+    }
+  
+  public void prune(boolean p) {
+      if(parent == null)
+        return;
+        
+      toPrune = true;
+      for(Node s : parent.nodes)
+      {
+          if(!s.toPrune)
+            return;
+      }
+      parent.prune(true);
   }
   
   public void setLocked(boolean l) { 

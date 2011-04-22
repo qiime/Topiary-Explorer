@@ -7,7 +7,6 @@ import java.awt.*;
 class SparseTable {
 
     private ArrayList<HashMap> data = new ArrayList<HashMap>();
-/*    private HashMap data = new HashMap();*/
     private int maxrow = 0;
     private int maxcol = 0;
     
