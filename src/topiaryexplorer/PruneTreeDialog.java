@@ -176,10 +176,9 @@ public class PruneTreeDialog extends JFrame{
                                 .addComponent(sampleRadioButton)))))
                 // .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 )
-            // .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                // .addContainerGap(249, Short.MAX_VALUE)
-                // )
-                .addComponent(okButton)
+            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(249, Short.MAX_VALUE)
+                .addComponent(okButton))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
