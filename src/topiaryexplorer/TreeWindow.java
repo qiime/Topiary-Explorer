@@ -1074,7 +1074,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
       * Uncollapses all tree branches
       */
       public void uncollapseTree(){
-          collapseTreeToolbar.setValue(1000);
+          for(Node n: tree.getTree().getNodes())
+            n.setCollapsed(false);
       }
 
       /**
