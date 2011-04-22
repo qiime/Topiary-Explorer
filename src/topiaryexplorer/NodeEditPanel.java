@@ -199,8 +199,7 @@ public final class NodeEditPanel extends JPanel{
         
         colorByButton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
-				colorByMenu.show(colorByButton, colorByLabel.getX(), 
-				    colorByLabel.getY());
+				colorByMenu.show(colorByButton, 100, 10);
            } 
         });
         

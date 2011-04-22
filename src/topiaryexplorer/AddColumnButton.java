@@ -23,6 +23,10 @@ public final class AddColumnButton extends JButton{
     DataTable data = null;
     JTable table = null;
     
+    JPopupMenu menu = new JPopupMenu();
+    
+    String dir_path = "";
+    
 	// {{{ AddColumnButton constructor
     /**
      * 
@@ -32,11 +36,56 @@ public final class AddColumnButton extends JButton{
         frame = _frame;
         data = _data;
         table = _table;
+        
+        try{
+        dir_path = (new File(".")).getCanonicalPath();
+        }
+        catch(IOException e)
+        {}
+        
+        JMenuItem item = new JMenuItem("Add column...");
+        item.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent e) {
+                  frame.addColumnDialog = new AddColumnDialog(frame, data, table);
+              }
+        });
+        menu.add(item);
+        item = new JMenuItem("Save as tab delimited text");
+        item.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent e) {
+                  exportTable();
+              }
+        }); 
+        menu.add(item);
+        
         this.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.addColumnDialog = new AddColumnDialog(frame, data, table);
+                showMenu();
             }
         });
+        
+    }
+    
+    public void showMenu() {
+        menu.show(this, 0, 0);
+    }
+    
+    public void exportTable() {
+        try
+		{
+            ArrayList<String> lines = data.toStrings();
+            ByteArrayOutputStream b = new ByteArrayOutputStream();
+	    
+    	    for(int i = 0; i < lines.size(); i++)
+    	        b.write(lines.get(i).getBytes());
+	        
+            FileContents fc = frame.fss.saveFileDialog(dir_path, new String[]{"txt"}, 
+    			new ByteArrayInputStream(b.toByteArray()),null);
+		}
+		catch(IOException e)
+		{
+            JOptionPane.showMessageDialog(null, "Error exporting table.\n"+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 	// }}}
 }

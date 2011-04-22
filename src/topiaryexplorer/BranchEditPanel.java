@@ -92,7 +92,7 @@ class BranchEditPanel extends JPanel{
         
         colorBy.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
-				colorByMenu.show(colorBy, colorBy.getX()+70, colorBy.getY()-30);
+				colorByMenu.show(colorBy, 100, 10);
            } 
         });
         add(colorBy);
