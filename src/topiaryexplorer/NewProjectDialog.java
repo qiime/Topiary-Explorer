@@ -36,7 +36,7 @@ public class NewProjectDialog extends JFrame{
     BrowseButton omButton = null;
     
     JPanel otuSamplePanel = new JPanel();
-    JLabel otuSampleLabel = new JLabel("OTU Abundnace Table: ");
+    JLabel otuSampleLabel = new JLabel("OTU Abundance Table: ");
     JTextField otuSampleField = new JTextField("", 30);
     BrowseButton osButton = null;
     

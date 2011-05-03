@@ -47,7 +47,7 @@ public class Node implements Comparable{
   private ArrayList<Color> groupBranchColor = new ArrayList<Color>();
   private ArrayList<Double> groupBranchWeight = new ArrayList<Double>();
   
-  private boolean labelColored = true;
+  private boolean labelColored = false;
   HashMap labelColorMap = new HashMap();
   private Color labelColor = null;
   private ArrayList<Color> groupLabelColor = new ArrayList<Color>();
@@ -648,6 +648,7 @@ public class Node implements Comparable{
       }
     }
     aggregateLabelData();
+    labelColored = true;
   }
   
   public double getLineWidthF() {
