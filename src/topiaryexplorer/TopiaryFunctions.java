@@ -83,7 +83,8 @@ public class TopiaryFunctions {
         
         
         //remove whitespace
-        data = data.replaceAll("[ |\n|\r]", "");
+        // data = data.replaceAll("[ |\n|\r]", "");
+        data = data.replaceAll("[ \n\r]", "");
         
         ArrayList<String> tokens = tokenizeTree(data);
         Node curr_node = null;

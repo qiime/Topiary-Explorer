@@ -25,6 +25,7 @@ public class TreeEditToolbar extends JToolBar {
     WedgeEditPanel wedgeEditPanel;// = new WedgeEditPanel(frame);
     CollapsablePanel wedgeEditPanelCP; // = new CollapsablePanel("Wedge",wedgeEditPanel);
     
+    GroupLayout gLayout;
     
     JLabel treeStatus = new JLabel("");
 
@@ -46,8 +47,7 @@ public class TreeEditToolbar extends JToolBar {
         wedgeEditPanelCP = new CollapsablePanel("Wedge",wedgeEditPanel);
         
         
-        
-        GroupLayout gLayout = new GroupLayout(this);
+        gLayout = new GroupLayout(this);
         setLayout(gLayout);
         
         gLayout.setAutoCreateGaps(true);
@@ -59,7 +59,8 @@ public class TreeEditToolbar extends JToolBar {
                 .addComponent(nodeEditPanelCP)
                 .addComponent(branchEditPanelCP)
                 .addComponent(wedgeEditPanelCP)
-                .addComponent(treeStatus))
+                // .addComponent(treeStatus)
+                )
         );
         
         gLayout.setVerticalGroup(gLayout.createSequentialGroup()
@@ -68,7 +69,7 @@ public class TreeEditToolbar extends JToolBar {
                 .addComponent(nodeEditPanelCP, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(branchEditPanelCP, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(wedgeEditPanelCP, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(treeStatus, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                // .addComponent(treeStatus, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         setFloatable(false);

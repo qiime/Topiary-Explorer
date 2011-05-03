@@ -326,7 +326,7 @@ public class Node implements Comparable{
      {
          double max = -100;
          Color majorityColor = new Color(0);
-         if(groupBranchColor.size() == 1)
+         if(groupBranchColor.size() == 1 || groupBranchWeight.size() == 1)
             return groupBranchColor.get(0);
 
          for(int i = 0; i < groupBranchColor.size(); i++)
