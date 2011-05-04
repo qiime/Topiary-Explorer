@@ -117,16 +117,7 @@ public class TipLabelCustomizer extends JFrame {
                     }
                     colIndex++;
                 }
-                int rowIndex = -1;
-                for (int i = 0; i < frame.otuMetadata.getData().maxRow(); i++) {
-                    Object val = frame.otuMetadata.getData().get(i,0);
-                    if(val == null)
-                        continue;
-                    if (val.equals(TopiaryFunctions.objectify(n.getName()))) {
-                        rowIndex = i;
-                        break;
-                    }
-                }
+                int rowIndex = frame.otuMetadata.getRowNames().indexOf(n.getName());
                 if (rowIndex == -1) {
 /*                    JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+n.getName()+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);*/
                     continue;

@@ -562,6 +562,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         verticalTreeToolbar.setScale();
         treeToolbar.syncZoomSliderWithTree();
         verticalTreeToolbar.syncZoomSliderWithTree();
+        tree.checkBounds();
         tree.redraw();
     }
 	

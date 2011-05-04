@@ -140,7 +140,7 @@ public class TreeVis extends PApplet {
     public Set getHilightedNodes() { return hilightedNodes; }
     public boolean getDrawExternalNodeLabels() { return drawExternalNodeLabels; }
     public boolean getDrawInternalNodeLabels() { return drawInternalNodeLabels; }
-    public void setDrawExternalNodeLabels(boolean b) { drawExternalNodeLabels = b; }
+    public void setDrawExternalNodeLabels(boolean b) { drawExternalNodeLabels = b; checkBounds();}
     public void setDrawInternalNodeLabels(boolean b) { drawInternalNodeLabels = b; }
     public void setCollapsedPixel(float pixel) { collapsedPixel = pixel; }
     public float getCollapsedPixel() { return collapsedPixel; }
@@ -438,11 +438,16 @@ public class TreeVis extends PApplet {
       if (root==null) return;
       
       float width = 0;
-      String s = root.getLongestLabel();
+      String s = "";
+      
+      if(drawExternalNodeLabels)
+        s = root.getLongestLabel();
+        
       for (int i = 0; i < s.length(); i++) {
           width += nodeFont.width(s.charAt(i));
       }
-      TREEMARGIN = MARGIN + width*nodeFont.size + 10;
+      
+      TREEMARGIN = MARGIN + width*nodeFont.size + 5;
 
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
           //check horizontal tree scaling
@@ -454,6 +459,7 @@ public class TreeVis extends PApplet {
           if (xstart > MARGIN) {
             xstart = MARGIN;
           } else if (xstart + xscale*root.depth() < getWidth()-TREEMARGIN) {
+               // } else if (xstart + xscale*root.depth() < getWidth()) {
             xstart = getWidth()-MARGIN - xscale*root.depth();
           }
     
@@ -1023,7 +1029,7 @@ public class TreeVis extends PApplet {
      double minY = drawY - (nodeFont.descent()*nodeFont.size);
      double maxY = drawY + (nodeFont.ascent()*nodeFont.size);
      
-     if (node.isLeaf() && node.getDrawLabel() && drawNodeLabels && zoomDrawNodeLabels) {           
+     if (node.isLeaf() && node.getDrawLabel() && drawExternalNodeLabels && zoomDrawNodeLabels) {           
          Color lc = node.getLabelColor(majorityColoring);
            if(lc == null)
            {

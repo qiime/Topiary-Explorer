@@ -78,6 +78,7 @@ public final class NodeEditPanel extends JPanel{
                 labelPanelCP.setVisible(nodeLabelCheckBox.isSelected() || internalLabelCheckBox.isSelected());
                 frame.treePopupMenu.getComponent(5).setEnabled(
                 nodeLabelCheckBox.isSelected() || internalLabelCheckBox.isSelected());
+                vis.checkBounds();
                 vis.redraw();
             }
         });
@@ -98,7 +99,8 @@ public final class NodeEditPanel extends JPanel{
                             JOptionPane.WARNING_MESSAGE);  
                         warningShown = checkbox.isSelected();
                     }
-                    vis.setDrawNodeLabels(nodeLabelCheckBox.isSelected());
+                    vis.setDrawExternalNodeLabels(nodeLabelCheckBox.isSelected());
+                    vis.checkBounds();
                     vis.redraw();
                     labelPanelCP.setVisible(nodeLabelCheckBox.isSelected() || internalLabelCheckBox.isSelected());
                     frame.treePopupMenu.getComponent(5).setEnabled(

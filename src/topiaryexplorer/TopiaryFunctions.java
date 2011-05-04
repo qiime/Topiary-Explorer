@@ -125,9 +125,11 @@ public class TopiaryFunctions {
               while (t.charAt(0) == '\'' || t.charAt(0) == '"') t = t.substring(1);
               while (t.charAt(t.length()-1) == '\'' || t.charAt(t.length()-1) == '"') t = t.substring(0,t.length()-1);
               curr_node.setName(t.replace("'", "").replace("\"", ""));
+              curr_node.setLabel(t.replace("'", "").replace("\"", ""));
           }
           else if (state.equals("PreColon") && state1.equals("PostClosed")) {
               curr_node.setName(t);
+              curr_node.setLabel(t);
           }
           else if (state.equals("PostColon")) {  //length data for the current node
               float bl = Float.valueOf(t).floatValue();

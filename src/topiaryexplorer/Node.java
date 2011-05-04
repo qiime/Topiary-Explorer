@@ -68,9 +68,9 @@ public class Node implements Comparable{
 
   Node() {}
 
-  Node(String _label, double _branchlength) {
+  Node(String _label, String _name, double _branchlength) {
     label = _label;
-    name = _label;
+    name = _name;
     branchlength = _branchlength;
   }
   
@@ -113,7 +113,7 @@ public class Node implements Comparable{
   public void setLabel(String s) { label = s; }
   public String getLabel() { return label; }
   public double getBranchLength() { return branchlength; }
-  public void setName(String s) { name = s; }
+  public void setName(String s) { name = s; label = s; }
   public String getName() { return name; }
   public void setLineage(String s) { lineage = s; }
   public String getLineage() { 
@@ -522,8 +522,8 @@ public class Node implements Comparable{
       return getBranchLength();
     }
     double longest = -100000000;
-    for (int i = 0; i < nodes.size(); i++) {
-      double l = nodes.get(i).longestRootToTipDistance();
+    for (Node n : nodes) {
+      double l = n.longestRootToTipDistance();
       if (l > longest) {
         longest = l;
       }
@@ -536,14 +536,31 @@ public class Node implements Comparable{
    */
   public String getLongestLabel() {
     String longest = getLabel();
-    for (int i = 0; i < nodes.size(); i++) {
-      String lbl = nodes.get(i).getLongestLabel();
+    if (nodes.size() == 0) {
+      return longest;
+    }
+    for(Node n : nodes) {
+      String lbl = n.getLongestLabel();
       if (lbl.length() > longest.length()) {
         longest = lbl;
       }
     }
     return longest;
   }
+  
+  public String getLongestName() {
+      String longest = getName();
+      if (nodes.size() == 0) {
+        return longest;
+      }
+      for(Node n : nodes) {
+        String lbl = n.getLongestName();
+        if (lbl.length() > longest.length()) {
+          longest = lbl;
+        }
+      }
+      return longest;
+    }
 
 
   //SORTING METHODS
