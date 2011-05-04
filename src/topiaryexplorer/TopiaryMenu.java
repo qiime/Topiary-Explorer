@@ -93,10 +93,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item = new JMenuItem("Load OTU Metadata...");
         item.addActionListener(this);
         fileMenu.add(item);
-        item = new JMenuItem("Load OTU Abundance Table...");
+        item = new JMenuItem("Load OTU Table...");
         item.addActionListener(this);
         fileMenu.add(item);
-        item = new JMenuItem("Load Sample Metadata Mapping...");
+        item = new JMenuItem("Load Sample Mapping...");
         item.addActionListener(this);
         fileMenu.add(item);
         fileMenu.add(new JSeparator());

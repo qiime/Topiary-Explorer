@@ -36,12 +36,12 @@ public class NewProjectDialog extends JFrame{
     BrowseButton omButton = null;
     
     JPanel otuSamplePanel = new JPanel();
-    JLabel otuSampleLabel = new JLabel("OTU Abundance Table: ");
+    JLabel otuSampleLabel = new JLabel("OTU Table: ");
     JTextField otuSampleField = new JTextField("", 30);
     BrowseButton osButton = null;
     
     JPanel sampleMetaPanel = new JPanel();
-    JLabel sampleMetaLabel = new JLabel("Sample Metadata Mapping: ");
+    JLabel sampleMetaLabel = new JLabel("Sample Mapping: ");
     JTextField sampleMetaField = new JTextField("", 30);
     BrowseButton smButton = null;
     

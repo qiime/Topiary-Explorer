@@ -200,7 +200,7 @@ public class MainFrame extends JFrame {
         otuSampleMapScrollPane.setWheelScrollingEnabled(true);
         otuSampleMapScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 /*        otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));*/
-        dataPane.addTab("OTU Abundance Table", otuSampleMapScrollPane);
+        dataPane.addTab("OTU Table", otuSampleMapScrollPane);
 
         sampleMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         //sampleMetadataTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -211,7 +211,7 @@ public class MainFrame extends JFrame {
         sampleMetadataScrollPane.setWheelScrollingEnabled(true);
         sampleMetadataScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 /*        sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));*/
-        dataPane.addTab("Sample Metadata Mapping", sampleMetadataScrollPane);
+        dataPane.addTab("Sample Mapping", sampleMetadataScrollPane);
         dataPane.setSelectedIndex(0);
         
         dataPanel.setLayout(new BorderLayout());

@@ -476,13 +476,13 @@ public class TreeVis extends PApplet {
           }
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
           //check horizontal tree scaling
-          if (xscale < (Math.min(getWidth(), getHeight())*0.5-MARGIN)/root.depth()) {
+          if (xscale < (Math.min(getWidth(), getHeight())*0.5-TREEMARGIN)/root.depth()) {
             //need to rescale tree
             resetTreeX();
           }
 
           //check vertical tree scaling
-          if (yscale < (Math.min(getWidth(), getHeight())*0.5-MARGIN)/root.depth()) {
+          if (yscale < (Math.min(getWidth(), getHeight())*0.5-TREEMARGIN)/root.depth()) {
             //need to rescale tree
             resetTreeY();
           }
@@ -517,7 +517,7 @@ public class TreeVis extends PApplet {
 /*            xscale = (Math.min(getWidth(), getHeight())*0.5-MARGIN)/root.depth();*/
           xstart = MARGIN;
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-          xscale = (Math.min(getWidth(), getHeight())*0.5-MARGIN)/root.depth();
+          xscale = (Math.min(getWidth(), getHeight())*0.5-TREEMARGIN)/root.depth();
           xstart = getWidth()*0.5;
       }
      }
@@ -532,8 +532,9 @@ public class TreeVis extends PApplet {
 /*          ystart = getHeight()*0.5;*/
           ystart = MARGIN;
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-          yscale = (Math.min(getWidth(), getHeight())*0.5-MARGIN)/root.depth();
-          ystart = getHeight()*0.5;
+          // yscale = (getHeight()-TREEMARGIN)/root.depth();
+          yscale = (Math.min(getWidth(), getHeight())*0.5-TREEMARGIN)/root.depth();
+          ystart = getHeight()*0.5-TREEMARGIN;
       }
     }
     
