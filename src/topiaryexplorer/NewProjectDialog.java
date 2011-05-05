@@ -31,7 +31,7 @@ public class NewProjectDialog extends JFrame{
     BrowseButton tButton = null;
 
     JPanel otuMetaPanel = new JPanel();
-    JLabel otuMetaLabel = new JLabel("OTU Metadata: ");
+    JLabel otuMetaLabel = new JLabel("Tip Data: ");
     JTextField otuMetaField = new JTextField("", 30);
     BrowseButton omButton = null;
     
@@ -41,7 +41,7 @@ public class NewProjectDialog extends JFrame{
     BrowseButton osButton = null;
     
     JPanel sampleMetaPanel = new JPanel();
-    JLabel sampleMetaLabel = new JLabel("Sample Mapping: ");
+    JLabel sampleMetaLabel = new JLabel("Sample Data: ");
     JTextField sampleMetaField = new JTextField("", 30);
     BrowseButton smButton = null;
     

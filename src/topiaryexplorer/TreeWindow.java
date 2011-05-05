@@ -993,17 +993,19 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
      public void resetConsensusLineage() {
          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
          
-         ArrayList<String> colNames = frame.otuMetadata.getColumnNames();
-         int col = colNames.indexOf("Consensus Lineage");
-         if(col == -1)
-         {
-             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-             JOptionPane.showMessageDialog(null, "ERROR: No consensus lineage"+
-             " column defined. Column must have title \"Consensus Lineage\","+
-             " case sensistive.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-          }
-            
+         // ArrayList<String> colNames = frame.otuMetadata.getColumnNames();
+         // int col = colNames.indexOf("Consensus Lineage");
+         // 
+         // if(col == -1)
+         // {
+         //     this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+         //     JOptionPane.showMessageDialog(null, "ERROR: No consensus lineage"+
+         //     " column defined. Column must have title \"Consensus Lineage\","+
+         //     " case sensistive.", "Error", JOptionPane.ERROR_MESSAGE);
+         //    return;
+         //  }
+         JLabel colLabel = new JLabel("Taxonomy Column: \n");
+          JComboBox columns = new JComboBox(frame.otuMetadata.getColumnNames().toArray());
           Integer[] ops = {10,20,30,40,50,60,70,80,90,95,96,97,98,
               99,100};
 
@@ -1013,13 +1015,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
            options.setSelectedIndex(12);
            panel.add(options);
            panel.add(perLabel);
-           String message = "Choose a threshold level for assigning consensus lineage.";  
-           Object[] params = {message, panel};  
+           String message = "Choose options for assigning consensus lineage.";  
+           Object[] params = {colLabel, columns, message, panel};  
            JOptionPane.showMessageDialog(null, params, 
                "Choose Threshold", 
                JOptionPane.QUESTION_MESSAGE);  
            double f = ((Integer)options.getSelectedItem())/100.0;
-            
+         
+         int col = columns.getSelectedIndex();
          for (Node n : tree.getTree().getLeaves()) {
             String nodeName = n.getName();
             int id = frame.otuMetadata.getRowNames().indexOf(nodeName);

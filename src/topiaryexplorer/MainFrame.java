@@ -192,7 +192,7 @@ public class MainFrame extends JFrame {
         otuMetadataScrollPane = new JScrollPane(otuMetadataTable);
         otuMetadataScrollPane.setWheelScrollingEnabled(true);
         otuMetadataScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        dataPane.addTab("OTU Metadata", otuMetadataScrollPane);
+        dataPane.addTab("Tip Data", otuMetadataScrollPane);
 
         otuSampleMapTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         //otuSampleMapTable.setAutoCreateRowSorter(true);
@@ -211,7 +211,7 @@ public class MainFrame extends JFrame {
         sampleMetadataScrollPane.setWheelScrollingEnabled(true);
         sampleMetadataScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 /*        sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));*/
-        dataPane.addTab("Sample Mapping", sampleMetadataScrollPane);
+        dataPane.addTab("Sample Data", sampleMetadataScrollPane);
         dataPane.setSelectedIndex(0);
         
         dataPanel.setLayout(new BorderLayout());

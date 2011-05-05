@@ -90,13 +90,13 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item = new JMenuItem("Load Tree...");
         item.addActionListener(this);
         fileMenu.add(item);
-        item = new JMenuItem("Load OTU Metadata...");
+        item = new JMenuItem("Load Tip Data...");
         item.addActionListener(this);
         fileMenu.add(item);
         item = new JMenuItem("Load OTU Table...");
         item.addActionListener(this);
         fileMenu.add(item);
-        item = new JMenuItem("Load Sample Mapping...");
+        item = new JMenuItem("Load Sample Data...");
         item.addActionListener(this);
         fileMenu.add(item);
         fileMenu.add(new JSeparator());
@@ -415,11 +415,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                   frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         } else if (e.getActionCommand().equals("Save Project...")) {
                     saveProject();
-        } else if (e.getActionCommand().equals("Load OTU Metadata...")) {
+        } else if (e.getActionCommand().equals("Load Tip Data...")) {
            loadOtuMetadata(null);
-         } else if (e.getActionCommand().equals("Load Sample Metadata Mapping...")) {
+         } else if (e.getActionCommand().equals("Load Sample Data...")) {
            loadSampleMetadata(null);
-         } else if (e.getActionCommand().equals("Load OTU Abundance Table...")) {
+         } else if (e.getActionCommand().equals("Load OTU Table...")) {
              loadOtuSampleMap(null);
          }  else if (e.getActionCommand().equals("PCoA Window")) {
                   frame.pcoaWindow.setVisible(!frame.pcoaWindow.isVisible());
