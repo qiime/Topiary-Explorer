@@ -6,6 +6,7 @@ import javax.swing.event.*;
 import java.util.*;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import javax.jnlp.*;
 import java.io.*;
 import java.awt.image.*;
@@ -476,13 +477,13 @@ public class TreeVis extends PApplet {
           }
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
           //check horizontal tree scaling
-          if (xscale < (Math.min(getWidth(), getHeight())*0.5-TREEMARGIN)/root.depth()) {
+          if (xscale < (Math.min(getWidth(), getHeight())*0.5-2*TREEMARGIN)/root.depth()) {
             //need to rescale tree
             resetTreeX();
           }
 
           //check vertical tree scaling
-          if (yscale < (Math.min(getWidth(), getHeight())*0.5-TREEMARGIN)/root.depth()) {
+          if (yscale < (Math.min(getWidth(), getHeight())*0.5-2*TREEMARGIN)/root.depth()) {
             //need to rescale tree
             resetTreeY();
           }
@@ -1572,14 +1573,27 @@ public class TreeVis extends PApplet {
 		  double longest = textWidth(root.getLongestLabel());
 		  double l = root.longestRootToTipDistance();
 		  double s = root.shortestRootToTipDistance();
+          // checkBounds();
 /*        drawExternalNodeLabels = true;*/
 /*        drawInternalNodeLabels = true;*/
 /*        drawNodeLabels = true;*/
+
+          width = 0;
+          String st = "";
+           if(drawExternalNodeLabels)
+               st = root.getLongestLabel();
+
+             for (int i = 0; i < st.length(); i++) {
+                 width += nodeFont.width(st.charAt(i));
+             }
+
+             TREEMARGIN = MARGIN + width*nodeFont.size + 5;
+
 		  if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
 			  xscale = (dims[0]-MARGIN-TREEMARGIN)/root.depth();
 			  xstart = MARGIN;
 		  } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-			  xscale = (Math.min(dims[0], dims[1])*0.5-MARGIN)/root.depth();
+			  xscale = (Math.min(dims[0], dims[1])*0.5-2*TREEMARGIN)/root.depth();
 			  xstart = dims[0]*0.5;
 		  }
 		  
@@ -1587,7 +1601,7 @@ public class TreeVis extends PApplet {
 			  yscale = (dims[1]-2*MARGIN)/root.getNumberOfLeaves();
 			  ystart = MARGIN;
 		  } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-			  yscale = (Math.min(dims[0], dims[1])*0.5-MARGIN)/root.depth();
+			  yscale = (Math.min(dims[0], dims[1])*0.5-2*TREEMARGIN)/root.depth();
 			  ystart = dims[1]*0.5;
 		  }
 		  
@@ -1617,6 +1631,15 @@ public class TreeVis extends PApplet {
 /*        drawInternalNodeLabels = oldDrawInternalNodeLabels;*/
 /*        drawNodeLabels = oldDrawNodeLabels;*/
 		  redraw();
+		  
+		  if (Desktop.isDesktopSupported()) {
+              try {
+                  File myFile = new File(path);
+                  Desktop.getDesktop().open(myFile);
+              } catch (IOException ex) {
+                  // no application registered for PDFs
+              }
+          }
 	} catch (Exception ex) {
 	    System.out.println(ex);
 	    }

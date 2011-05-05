@@ -21,7 +21,7 @@ class PDFDimensionsDialog extends JDialog implements ActionListener, DocumentLis
     public PDFDimensionsDialog(final Frame frame) {
         super(frame, true);
         this.setLocation(frame.getWidth()/2, frame.getHeight()/2);
-        setTitle("Set PDF Dimensions");
+        setTitle("Export Tree Image");
         
         TreeVis tree = ((TreeWindow)frame).tree;
         String treeLayout = tree.getTreeLayout();
@@ -73,7 +73,7 @@ class PDFDimensionsDialog extends JDialog implements ActionListener, DocumentLis
               dispose();
           }
        });
-       JButton okbutton = new JButton("OK");
+       JButton okbutton = new JButton("Export");
        okbutton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
                dispose();

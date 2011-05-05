@@ -24,7 +24,7 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
     TreeVis tree = null;
     
     JPanel mainPanel = new JPanel();
-    JLabel dimsLabel = new JLabel("Dimensions:");
+    JLabel dimsLabel = new JLabel("PDF Dimensions:");
     JPanel dimsPanel = new JPanel();
     JLabel horzLabel = new JLabel("Horizontal: ");
     JTextField xdim = new JTextField(10);
@@ -33,7 +33,7 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
     JLabel saveName = new JLabel("Save as:");
     JTextField saveField = new JTextField(100);
     JPanel okCancelPanel = new JPanel();
-    JButton okButton = new JButton("Save");
+    JButton okButton = new JButton("Export");
     JButton cancelButton = new JButton("Cancel");
     
     public double dims[] = {0, 0};
@@ -42,7 +42,7 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
     public ExportTreeDialog(TreeWindow _frame) {
         super((Frame)_frame, true);
         frame = _frame;
-        this.setTitle("Save Tree Image");
+        this.setTitle("Export Tree Image");
         this.setSize(new Dimension(350,150));
         
         //dimensions stuff
@@ -107,7 +107,7 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
 	public void exportTree() {
 	    //Determine PDF dimensions
          if (dims[0]!=0 && dims[1]!=0 && saveField.getText().length() > 0) {
-            tree.exportTreeImage(frame.dir_path+"/tree_export_images/"+saveField.getText(), dims);
+            tree.exportTreeImage(frame.dir_path+"/tree_export_images/"+saveField.getText()+".pdf", dims);
 		}
 		else
 		{
