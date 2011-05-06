@@ -1306,7 +1306,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              if (tree.getTree() == null) return;
              double value = treeEditToolbar.branchEditPanel.lineWidthSlider.getValue();
              value = value/20.0;
-             tree.setLineWidthScale(value);
+             tree.setLineWidthScale((float)value);
              tree.redraw();
          }
 
