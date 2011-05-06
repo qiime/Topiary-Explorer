@@ -205,11 +205,11 @@ public class TopiaryFunctions {
                     double f = Double.parseDouble(str);
                     return f;
                 } catch (NumberFormatException nfx2) {
-                    if (str.equals("NA")) {
-                        return null;
-                    } else {
+                    // if (str.equals("NA")) {
+                    //     return null;
+                    // } else {
                         return str;
-                    }
+                    // }
                 }
 			}
 	}

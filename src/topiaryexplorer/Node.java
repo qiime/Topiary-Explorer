@@ -254,46 +254,29 @@ public class Node implements Comparable{
         return null;
       
       String consensusLineage = "";
-      ArrayList<String> curr = new ArrayList<String>();
-      ArrayList<String> newLabels = new ArrayList<String>();
-      // test if strings have at least one entry ie "bacteria;"
-      String test = currLabels.get(0); 
       boolean loop = true;
-      boolean testb = true;
       
-      // while test string has one entry and continue looping
-      while(test.indexOf(";") != -1 && loop)
+      while(currLabels.size() > 0)
       {
-          curr = new ArrayList<String>();
-          newLabels = new ArrayList<String>();
-          testb = true;
+          ArrayList<String> curr = new ArrayList<String>();
+          ArrayList<String> newLabels = new ArrayList<String>();
           for(String l: currLabels)
-          {                
-              try {
-              // add first entry to curr, keep rest of labels in newLabels
-              String entry = l.substring(0,l.indexOf(";")).trim();
-              curr.add(entry);        
-            }
-          catch(StringIndexOutOfBoundsException e)
-            {
-                // if there is no ";"
-                curr.add(l.trim());
-                testb = false;
-            }
-            if(l.length() > 0)
-                newLabels.add(l.substring(l.indexOf(";")+1, l.length()).trim());      
+          {
+              l = l.trim().replace("\"", "");
+              if(l.indexOf(";") == -1)
+                curr.add(l);
+              else 
+              {
+                  curr.add(l.substring(0,l.indexOf(";")));
+                  newLabels.add(l.substring(l.indexOf(";")+1, l.length()).trim());   
+              }  
           }
-        
+    
           String c = TopiaryFunctions.getConsensus(curr,perc);
           if(c != null)
-          {
-          consensusLineage += c + ";";
+            consensusLineage += c + ";";
+
           currLabels = newLabels;
-          }
-          else
-              break;
-              
-        test = currLabels.get(0);
       }
       return consensusLineage;
   }
