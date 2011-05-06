@@ -128,8 +128,11 @@ public class TopiaryFunctions {
               curr_node.setLabel(t.replace("'", "").replace("\"", ""));
           }
           else if (state.equals("PreColon") && state1.equals("PostClosed")) {
+              if(t != null)
+              {
               curr_node.setName(t);
               curr_node.setLabel(t);
+            }
           }
           else if (state.equals("PostColon")) {  //length data for the current node
               float bl = Float.valueOf(t).floatValue();

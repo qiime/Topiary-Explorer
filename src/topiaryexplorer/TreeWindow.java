@@ -59,11 +59,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          super(_frame);
 	     this.setSize(new Dimension(1000,800));
 	     frame = _frame;
-/*       this.addWindowListener(new WindowAdapter() {
+       this.addWindowListener(new WindowAdapter() {
                public void windowClosing(WindowEvent e) {
                  frame.treeWindows.remove(this);
                }
-             });*/
+             });
          
          tree.setParent(this);         
          try{
