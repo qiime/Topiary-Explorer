@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,14 +12,15 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
+        URL_ROOT:    '',
         VERSION:     '1',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="TopiaryExplorer v1 documentation" href="index.html" />
     <link rel="up" title="Interface Guide" href="interface_guide.html" />
@@ -33,7 +36,7 @@
         <li class="right" >
           <a href="tree_window.html" title="Tree Window"
              accesskey="P">previous</a> |</li>
-        <li><a href="tutorial.html">TopiaryExplorer v1 documentation</a> &raquo;</li>
+        <li><a href="index.html">TopiaryExplorer v1 documentation</a> &raquo;</li>
           <li><a href="interface_guide.html" accesskey="U">Interface Guide</a> &raquo;</li> 
       </ul>
     </div>  
@@ -46,15 +49,15 @@
   <div class="section" id="tree-toolbar">
 <span id="id1"></span><h1>Tree Toolbar<a class="headerlink" href="#tree-toolbar" title="Permalink to this headline">¶</a></h1>
 <p>This guide explains all of the functions that a user can perform on a tree using the tree toolbar.</p>
-<div align="center" class="figure">
-<img alt="_images/tree_toolbar.png" src="_images/tree_toolbar.png" />
+<div class="figure align-center">
+<img alt="_images/tree_toolbar1.png" src="_images/tree_toolbar1.png" />
 </div>
 <div class="section" id="tree-panel">
 <h2>Tree Panel<a class="headerlink" href="#tree-panel" title="Permalink to this headline">¶</a></h2>
 <p>The tree panel is the first panel on the tree toolbar.</p>
 <p>This panel is used to:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>Recenter the tree</li>
 <li>Ladderize the tree</li>
 <li>Prune the tree</li>
@@ -66,7 +69,7 @@
 <li>Rotate the tree</li>
 <li>Mirror the tree</li>
 </ul>
-</blockquote>
+</div></blockquote>
 <div class="section" id="recenter">
 <h3>Recenter<a class="headerlink" href="#recenter" title="Permalink to this headline">¶</a></h3>
 <p>The recenter button brings the tree back to the original zoom level and x,y location.</p>
@@ -79,16 +82,16 @@
 <h3>Prune<a class="headerlink" href="#prune" title="Permalink to this headline">¶</a></h3>
 <p>The prune button opens a dialog which offers a few different options for pruning the tree.</p>
 <p>Pruning the tree based on metadata can be done using either OTU or sample metadata. If you choose to prune based on OTU metadata, each OTU which matches the values that you have selected will be pruned. If you choose to prune based on sample metadata, each OTU found in a sample that matches at least one of the values selected will be pruned. Clades that contain only pruned tips after the initial pruning step are also pruned.</p>
-<div align="center" class="figure">
-<img alt="_images/prune_metadata.png" src="_images/prune_metadata.png" />
+<div class="figure align-center">
+<img alt="_images/prune_metadata1.png" src="_images/prune_metadata1.png" />
 </div>
 <p>Pruning the tree by branch length takes an integer value between 0 and 100, and will then prune all branches with length less than the selected percent of total branch length.</p>
-<div align="center" class="figure">
-<img alt="_images/prune_branch_length.png" src="_images/prune_branch_length.png" />
+<div class="figure align-center">
+<img alt="_images/prune_branch_length1.png" src="_images/prune_branch_length1.png" />
 </div>
 <p>Pruning the tree by number of nodes takes an integer value smaller than the size of the current tree. Then, starting with a threshold of 1%, branches with length less than the threshold percent of total length are pruned. This step is performed iteratively with increasing threshold until a tree with less or equal to the selected number of nodes is found.</p>
-<div align="center" class="figure">
-<img alt="_images/prune_number_nodes.png" src="_images/prune_number_nodes.png" />
+<div class="figure align-center">
+<img alt="_images/prune_number_nodes1.png" src="_images/prune_number_nodes1.png" />
 </div>
 </div>
 <div class="section" id="show-hidden-nodes">
@@ -99,8 +102,8 @@
 <h3>Set consensus lineage<a class="headerlink" href="#set-consensus-lineage" title="Permalink to this headline">¶</a></h3>
 <p>In order to set the consensus lineage for a tree, you must supply an OTU mapping table with a column titled &#8216;Consensus Lineage&#8217;, case sensitive.</p>
 <p>The user will be prompted to choose a threshold level for consensus lineage cutoff. In order for a lineage to be assigned to a wedge, at least the threshold percentage of tips in that wedge must have that lineage.</p>
-<div align="center" class="figure">
-<img alt="_images/consensus_lineage.png" src="_images/consensus_lineage.png" />
+<div class="figure align-center">
+<img alt="_images/consensus_lineage1.png" src="_images/consensus_lineage1.png" />
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -115,15 +118,15 @@
 <h3>Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h3>
 <p>There are four tree layouts currently available, listed in order of their appearance in the Layout subpanel:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>Rectangular</li>
 <li>Triangular</li>
 <li>Radial</li>
 <li>Polar</li>
 </ul>
-</blockquote>
-<div align="center" class="figure">
-<img alt="_images/layout.png" src="_images/layout.png" />
+</div></blockquote>
+<div class="figure align-center">
+<img alt="_images/layout1.png" src="_images/layout1.png" />
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -140,7 +143,7 @@
 <p>The node panel is the second panel on the tree toolbar.</p>
 <p>This panel is used to:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>Turn on/off internal node labels</li>
 <li>Turn on/off tip labels</li>
 <li>Specify tip labels</li>
@@ -148,7 +151,7 @@
 <li>Adjust node label size</li>
 <li>Color node labels by metadata</li>
 </ul>
-</blockquote>
+</div></blockquote>
 <div class="section" id="turning-on-off-labels">
 <h3>Turning on/off labels<a class="headerlink" href="#turning-on-off-labels" title="Permalink to this headline">¶</a></h3>
 <p>The program decides whether or not to draw labels as a function of zoom level and font size. Node labels will not show unless the view is zoomed in enough that the labels will not overlap.</p>
@@ -160,8 +163,8 @@
 <div class="section" id="set-labels-as">
 <h3>Set labels as<a class="headerlink" href="#set-labels-as" title="Permalink to this headline">¶</a></h3>
 <p>This button produces a dialog which allows the user to set the tip labels as some metadata field or combination of fields.</p>
-<div align="center" class="figure">
-<img alt="_images/set_tip_labels.png" src="_images/set_tip_labels.png" />
+<div class="figure align-center">
+<img alt="_images/set_tip_labels1.png" src="_images/set_tip_labels1.png" />
 </div>
 </div>
 <div class="section" id="color-by">
@@ -174,17 +177,17 @@
 <p>The branch panel is the third panel on the tree toolbar.</p>
 <p>This panel is used to:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>Turn on/off branch coloring</li>
 <li>Turn on/off majority coloring</li>
 <li>Color branches by metadata</li>
 </ul>
-</blockquote>
+</div></blockquote>
 <div class="section" id="majority-coloring">
 <h3>Majority Coloring<a class="headerlink" href="#majority-coloring" title="Permalink to this headline">¶</a></h3>
 <p>When the majority coloring checkbox is selected, internal nodes will take on the color that appears most often in its tips. When unchecked, internal nodes will take on a color that is a combination of the colors of all of its tips.</p>
-<div align="center" class="figure">
-<img alt="_images/majority_coloring.png" src="_images/majority_coloring.png" />
+<div class="figure align-center">
+<img alt="_images/majority_coloring1.png" src="_images/majority_coloring1.png" />
 <p class="caption">A tree with majority coloring selected on top, the same tree with combination coloring on bottom.</p>
 </div>
 </div>
@@ -198,7 +201,7 @@
 <p>The wedge panel is the last panel in the tree toolbar.</p>
 <p>This panel is used to:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>Adjust the height of wedges</li>
 <li>Turn on/off wedge labels</li>
 <li>Adjust the position of wedge labels</li>
@@ -206,7 +209,7 @@
 <li>Adjust the wedge label size</li>
 <li>Change the wedge label color</li>
 </ul>
-</blockquote>
+</div></blockquote>
 <div class="section" id="wedge-height">
 <h3>Wedge height<a class="headerlink" href="#wedge-height" title="Permalink to this headline">¶</a></h3>
 <p>The wedge height slider will adjust the height of all wedges. This function is especially useful in radial view where some wedges may overlap.</p>
@@ -220,59 +223,59 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="tutorial.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">Tree Toolbar</a><ul>
-<li><a class="reference external" href="#tree-panel">Tree Panel</a><ul>
-<li><a class="reference external" href="#recenter">Recenter</a></li>
-<li><a class="reference external" href="#ladderize">Ladderize</a></li>
-<li><a class="reference external" href="#prune">Prune</a></li>
-<li><a class="reference external" href="#show-hidden-nodes">Show hidden nodes</a></li>
-<li><a class="reference external" href="#set-consensus-lineage">Set consensus lineage</a></li>
-<li><a class="reference external" href="#collapse-by">Collapse by</a></li>
-<li><a class="reference external" href="#layout">Layout</a></li>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tree Toolbar</a><ul>
+<li><a class="reference internal" href="#tree-panel">Tree Panel</a><ul>
+<li><a class="reference internal" href="#recenter">Recenter</a></li>
+<li><a class="reference internal" href="#ladderize">Ladderize</a></li>
+<li><a class="reference internal" href="#prune">Prune</a></li>
+<li><a class="reference internal" href="#show-hidden-nodes">Show hidden nodes</a></li>
+<li><a class="reference internal" href="#set-consensus-lineage">Set consensus lineage</a></li>
+<li><a class="reference internal" href="#collapse-by">Collapse by</a></li>
+<li><a class="reference internal" href="#layout">Layout</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#node-panel">Node Panel</a><ul>
-<li><a class="reference external" href="#turning-on-off-labels">Turning on/off labels</a></li>
-<li><a class="reference external" href="#set-labels-as">Set labels as</a></li>
-<li><a class="reference external" href="#color-by">Color by</a></li>
+<li><a class="reference internal" href="#node-panel">Node Panel</a><ul>
+<li><a class="reference internal" href="#turning-on-off-labels">Turning on/off labels</a></li>
+<li><a class="reference internal" href="#set-labels-as">Set labels as</a></li>
+<li><a class="reference internal" href="#color-by">Color by</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#branch-panel">Branch Panel</a><ul>
-<li><a class="reference external" href="#majority-coloring">Majority Coloring</a></li>
-<li><a class="reference external" href="#id2">Color by</a></li>
+<li><a class="reference internal" href="#branch-panel">Branch Panel</a><ul>
+<li><a class="reference internal" href="#majority-coloring">Majority Coloring</a></li>
+<li><a class="reference internal" href="#id2">Color by</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#wedge-panel">Wedge Panel</a><ul>
-<li><a class="reference external" href="#wedge-height">Wedge height</a></li>
+<li><a class="reference internal" href="#wedge-panel">Wedge Panel</a><ul>
+<li><a class="reference internal" href="#wedge-height">Wedge height</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="tree_window.html"
-                                  title="previous chapter">Tree Window</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/tree_toolbar.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tree_window.html"
+                        title="previous chapter">Tree Window</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tree_toolbar.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -286,13 +289,13 @@
         <li class="right" >
           <a href="tree_window.html" title="Tree Window"
              >previous</a> |</li>
-        <li><a href="tutorial.html">TopiaryExplorer v1 documentation</a> &raquo;</li>
+        <li><a href="index.html">TopiaryExplorer v1 documentation</a> &raquo;</li>
           <li><a href="interface_guide.html" >Interface Guide</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2011, Meg Pirrung.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+        &copy; Copyright 2011, TopiaryExplorer Development Group.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

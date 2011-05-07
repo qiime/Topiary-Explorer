@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,14 +12,15 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
+        URL_ROOT:    '',
         VERSION:     '1',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="TopiaryExplorer v1 documentation" href="index.html" />
     <link rel="next" title="Quickstart Tutorial" href="quickstart.html" /> 
@@ -43,26 +46,28 @@
             
   <div class="section" id="topiaryexplorer-tutorial">
 <h1>TopiaryExplorer Tutorial<a class="headerlink" href="#topiaryexplorer-tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference external" href="quickstart.html">Quickstart Tutorial</a><ul>
-<li class="toctree-l2"><a class="reference external" href="quickstart.html#files-needed">Files needed</a></li>
-<li class="toctree-l2"><a class="reference external" href="quickstart.html#step-1-running-topiaryexplorer">Step 1. Running TopiaryExplorer</a></li>
-<li class="toctree-l2"><a class="reference external" href="quickstart.html#step-2-opening-the-tep-file">Step 2. Opening the .tep file</a></li>
-<li class="toctree-l2"><a class="reference external" href="quickstart.html#step-3-uncollapsing-the-tree">Step 3. Uncollapsing the tree</a></li>
-<li class="toctree-l2"><a class="reference external" href="quickstart.html#step-4-editing-saving-metadata">Step 4. Editing &amp; saving metadata</a></li>
-<li class="toctree-l2"><a class="reference external" href="quickstart.html#step-5-coloring-the-tree">Step 5. Coloring the tree</a></li>
-<li class="toctree-l2"><a class="reference external" href="quickstart.html#step-6-opening-a-subtree">Step 6. Opening a subtree</a></li>
-<li class="toctree-l2"><a class="reference external" href="quickstart.html#step-7-pruning-the-tree">Step 7. Pruning the tree</a></li>
-<li class="toctree-l2"><a class="reference external" href="quickstart.html#step-8-saving-a-new-project">Step 8. Saving a new project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#files-needed">Files needed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#step-1-running-topiaryexplorer">Step 1. Running TopiaryExplorer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#step-2-opening-the-tep-file">Step 2. Opening the .tep file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#step-3-uncollapsing-the-tree">Step 3. Uncollapsing the tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#step-4-editing-saving-metadata">Step 4. Editing &amp; saving metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#step-5-coloring-the-tree">Step 5. Coloring the tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#step-6-opening-a-subtree">Step 6. Opening a subtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#step-7-pruning-the-tree">Step 7. Pruning the tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#step-8-saving-a-new-project">Step 8. Saving a new project</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="interface_guide.html">Interface Guide</a><ul>
-<li class="toctree-l2"><a class="reference external" href="topiaryexplorer_window.html">TopiaryExplorer Window</a></li>
-<li class="toctree-l2"><a class="reference external" href="tree_window.html">Tree Window</a></li>
-<li class="toctree-l2"><a class="reference external" href="tree_toolbar.html">Tree Toolbar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interface_guide.html">Interface Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="topiaryexplorer_window.html">TopiaryExplorer Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tree_window.html">Tree Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tree_toolbar.html">Tree Toolbar</a></li>
 </ul>
 </li>
 </ul>
+</div>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>This tutorial explains how to use TopiaryExplorer, a phylogenetic tree viewing tool.</p>
@@ -80,7 +85,7 @@
 <div class="section" id="features">
 <h3>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>Tree visualization and manipulation</li>
 <li>Integrated metadata</li>
 <li>Dynamic coloring</li>
@@ -88,7 +93,7 @@
 <li>Database connectivity</li>
 <li>Project management</li>
 </ul>
-</blockquote>
+</div></blockquote>
 </div>
 </div>
 </div>
@@ -99,40 +104,40 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="#">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">TopiaryExplorer Tutorial</a><ul>
-<li><a class="reference external" href="#introduction">Introduction</a><ul>
-<li><a class="reference external" href="#who-should-use-topiaryexplorer">Who should use TopiaryExplorer?</a></li>
-<li><a class="reference external" href="#who-should-not-use-topiaryexplorer">Who should not use TopiaryExplorer?</a></li>
-<li><a class="reference external" href="#features">Features</a></li>
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">TopiaryExplorer Tutorial</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#who-should-use-topiaryexplorer">Who should use TopiaryExplorer?</a></li>
+<li><a class="reference internal" href="#who-should-not-use-topiaryexplorer">Who should not use TopiaryExplorer?</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 
-            <h4>Next topic</h4>
-            <p class="topless"><a href="quickstart.html"
-                                  title="next chapter">Quickstart Tutorial</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/tutorial.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="quickstart.html"
+                        title="next chapter">Quickstart Tutorial</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -150,8 +155,8 @@
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2011, Meg Pirrung.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+        &copy; Copyright 2011, Meg Pirrung.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

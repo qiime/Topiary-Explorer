@@ -34,11 +34,11 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8'
 
 # The master toctree document.
-master_doc = 'tutorial'
+master_doc = 'index'
 
 # General information about the project.
 project = u'TopiaryExplorer'
-copyright = u'2011, Meg Pirrung'
+copyright = u'2011, TopiaryExplorer Development Group'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

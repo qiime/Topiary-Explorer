@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,14 +12,15 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
+        URL_ROOT:    '',
         VERSION:     '1',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="TopiaryExplorer v1 documentation" href="index.html" />
     <link rel="up" title="Interface Guide" href="interface_guide.html" />
@@ -37,7 +40,7 @@
         <li class="right" >
           <a href="topiaryexplorer_window.html" title="TopiaryExplorer Window"
              accesskey="P">previous</a> |</li>
-        <li><a href="tutorial.html">TopiaryExplorer v1 documentation</a> &raquo;</li>
+        <li><a href="index.html">TopiaryExplorer v1 documentation</a> &raquo;</li>
           <li><a href="interface_guide.html" accesskey="U">Interface Guide</a> &raquo;</li> 
       </ul>
     </div>  
@@ -52,7 +55,7 @@
 <p>This guide explains all of the functions that a user can perform on a tree using the tree window.</p>
 <p>The tree window contains the following elements:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li><a class="reference external" href="./tree_toolbar.html">Tree toolbar</a></li>
 <li>Collapse tree toolbar</li>
 <li>Tree view</li>
@@ -61,9 +64,9 @@
 <li>Zoom lock button</li>
 <li>Node search field</li>
 </ul>
-</blockquote>
-<div align="center" class="figure">
-<img alt="_images/tree_window.png" src="_images/tree_window.png" />
+</div></blockquote>
+<div class="figure align-center">
+<img alt="_images/tree_window1.png" src="_images/tree_window1.png" />
 </div>
 <div class="section" id="collapse-tree-toolbar">
 <h2>Collapse tree toolbar<a class="headerlink" href="#collapse-tree-toolbar" title="Permalink to this headline">¶</a></h2>
@@ -76,13 +79,13 @@
 <div class="section" id="tree-view">
 <h2>Tree view<a class="headerlink" href="#tree-view" title="Permalink to this headline">¶</a></h2>
 <p>The tree view holds the tree, and when focused, hovering over nodes will give more information about each node.</p>
-<div align="center" class="figure">
-<img alt="_images/tree_info.png" src="_images/tree_info.png" />
+<div class="figure align-center">
+<img alt="_images/tree_info1.png" src="_images/tree_info1.png" />
 </div>
 <p>Right clicking on a node in the tree view will give access to a context menu with different options that can be performed on the clicked node.</p>
 <p>These options include:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>Find in metadata</li>
 <li>Hide</li>
 <li>Lock/Unlock</li>
@@ -93,7 +96,7 @@
 <li>View subtree in new window</li>
 <li>Delete</li>
 </ul>
-</blockquote>
+</div></blockquote>
 <div class="section" id="find-in-metadata">
 <h3>Find in metadata<a class="headerlink" href="#find-in-metadata" title="Permalink to this headline">¶</a></h3>
 <p>This option will bring the OTU metadata table to the front with the selected node highlighted(if the node can be found in the metadata).</p>
@@ -117,8 +120,8 @@
 <div class="section" id="toggle-pie-chart">
 <h3>Toggle pie chart<a class="headerlink" href="#toggle-pie-chart" title="Permalink to this headline">¶</a></h3>
 <p>Pie charts are a convenient way of displaying the percentage of branches of an internal node painted by different metadata values.</p>
-<div align="center" class="figure">
-<img alt="_images/pie_chart.png" src="_images/pie_chart.png" />
+<div class="figure align-center">
+<img alt="_images/pie_chart1.png" src="_images/pie_chart1.png" />
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -132,8 +135,8 @@
 <div class="section" id="consensus-lineage">
 <h3>Consensus lineage<a class="headerlink" href="#consensus-lineage" title="Permalink to this headline">¶</a></h3>
 <p>Once the consensus lineage is set using the button in the <a class="reference external" href="./tree_toolbar.html">Tree toolbar</a>, a full string can be viewed using this function.</p>
-<div align="center" class="figure">
-<img alt="_images/consensus_popup.png" src="_images/consensus_popup.png" />
+<div class="figure align-center">
+<img alt="_images/consensus_popup1.png" src="_images/consensus_popup1.png" />
 </div>
 </div>
 <div class="section" id="view-subtree-in-new-window">
@@ -163,8 +166,8 @@
 <div class="section" id="node-search">
 <h2>Node search<a class="headerlink" href="#node-search" title="Permalink to this headline">¶</a></h2>
 <p>A user can search for nodes with labels matching a given string using the node search box located at the bottom right corner of the tree window.</p>
-<div align="center" class="figure">
-<img alt="_images/node_search.png" src="_images/node_search.png" />
+<div class="figure align-center">
+<img alt="_images/node_search1.png" src="_images/node_search1.png" />
 </div>
 </div>
 </div>
@@ -175,51 +178,51 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="tutorial.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">Tree Window</a><ul>
-<li><a class="reference external" href="#collapse-tree-toolbar">Collapse tree toolbar</a></li>
-<li><a class="reference external" href="#tree-view">Tree view</a><ul>
-<li><a class="reference external" href="#find-in-metadata">Find in metadata</a></li>
-<li><a class="reference external" href="#hide">Hide</a></li>
-<li><a class="reference external" href="#lock-unlock">Lock/Unlock</a></li>
-<li><a class="reference external" href="#toggle-pie-chart">Toggle pie chart</a></li>
-<li><a class="reference external" href="#toggle-label">Toggle label</a></li>
-<li><a class="reference external" href="#consensus-lineage">Consensus lineage</a></li>
-<li><a class="reference external" href="#view-subtree-in-new-window">View subtree in new window</a></li>
-<li><a class="reference external" href="#delete">Delete</a></li>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tree Window</a><ul>
+<li><a class="reference internal" href="#collapse-tree-toolbar">Collapse tree toolbar</a></li>
+<li><a class="reference internal" href="#tree-view">Tree view</a><ul>
+<li><a class="reference internal" href="#find-in-metadata">Find in metadata</a></li>
+<li><a class="reference internal" href="#hide">Hide</a></li>
+<li><a class="reference internal" href="#lock-unlock">Lock/Unlock</a></li>
+<li><a class="reference internal" href="#toggle-pie-chart">Toggle pie chart</a></li>
+<li><a class="reference internal" href="#toggle-label">Toggle label</a></li>
+<li><a class="reference internal" href="#consensus-lineage">Consensus lineage</a></li>
+<li><a class="reference internal" href="#view-subtree-in-new-window">View subtree in new window</a></li>
+<li><a class="reference internal" href="#delete">Delete</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#zooming">Zooming</a></li>
-<li><a class="reference external" href="#node-search">Node search</a></li>
+<li><a class="reference internal" href="#zooming">Zooming</a></li>
+<li><a class="reference internal" href="#node-search">Node search</a></li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="topiaryexplorer_window.html"
-                                  title="previous chapter">TopiaryExplorer Window</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="tree_toolbar.html"
-                                  title="next chapter">Tree Toolbar</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/tree_window.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="topiaryexplorer_window.html"
+                        title="previous chapter">TopiaryExplorer Window</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tree_toolbar.html"
+                        title="next chapter">Tree Toolbar</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tree_window.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -236,13 +239,13 @@
         <li class="right" >
           <a href="topiaryexplorer_window.html" title="TopiaryExplorer Window"
              >previous</a> |</li>
-        <li><a href="tutorial.html">TopiaryExplorer v1 documentation</a> &raquo;</li>
+        <li><a href="index.html">TopiaryExplorer v1 documentation</a> &raquo;</li>
           <li><a href="interface_guide.html" >Interface Guide</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2011, Meg Pirrung.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+        &copy; Copyright 2011, TopiaryExplorer Development Group.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>
