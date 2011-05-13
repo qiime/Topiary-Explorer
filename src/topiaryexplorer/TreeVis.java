@@ -1574,7 +1574,7 @@ public class TreeVis extends PApplet {
 		  double longest = textWidth(root.getLongestLabel());
 		  double l = root.longestRootToTipDistance();
 		  double s = root.shortestRootToTipDistance();
-		  setLineWidthScale(oldLineWidth*(float).1);
+          setLineWidthScale(oldLineWidth*(float).2);
           // checkBounds();
 /*        drawExternalNodeLabels = true;*/
 /*        drawInternalNodeLabels = true;*/
@@ -1625,7 +1625,7 @@ public class TreeVis extends PApplet {
 
 	
 		  //go back to how it was
-		  setLineWidthScale(oldLineWidth);
+          setLineWidthScale(oldLineWidth);
 		  xscale = oldXScale;
 		  yscale = oldYScale;
 		  xstart = oldXStart;
