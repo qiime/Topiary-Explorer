@@ -17,12 +17,13 @@ public class TreeToolbar extends JToolBar {
     JPanel spacer1 = new JPanel();    
     TreeWindow frame = null;
     JPanel statusPanel = new JPanel();
-    JLabel status = new JLabel("");
-    JLabel statusLine2 = new JLabel("");
+    JLabel status = new JLabel("  ");
+    JLabel statusLine2 = new JLabel("  ");
     double minXScale = 0;
 
     public TreeToolbar(TreeWindow _frame) {
 
+        // this.setPreferredSize(new Dimension(600,))
         frame = _frame;
 
         zoomOutButton.addActionListener(new ActionListener() {
@@ -76,7 +77,7 @@ public class TreeToolbar extends JToolBar {
         add(spacer1);
         statusPanel.setLayout(new GridLayout(2,1));
         status.setFont(new Font("Courier",Font.PLAIN,10));
-        statusLine2.setFont(new Font("Courier",Font.PLAIN,12));
+        statusLine2.setFont(new Font("Courier",Font.PLAIN,10));
         statusPanel.add(status);
         statusPanel.add(statusLine2);
         add(statusPanel);
