@@ -1,5 +1,0 @@
-.. _treetoolbar:
-
-============
-Tree Toolbar
-============
