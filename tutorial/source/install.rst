@@ -13,7 +13,7 @@ TopiaryExplorer requires that you have at least 2GB of RAM.
 Installing the release version of TopiaryExplorer
 -------------------------------------------------
 
-To install the release version of TopiaryExplorer download the release version of the software. After downloading, change to the directory where you've downloaded the file and from the command line unzip with the command::
+To install the release version of TopiaryExplorer `download the release version here <http://sourceforge.net/projects/topiaryexplorer/files/releases/TopiaryExplorer-0.9.0.tgz/download>`_. After downloading, change to the directory where you've downloaded the file and from the command line unzip with the command::
 
 	tar -xzf TopiaryExplorer-0.9.0.tgz
 	cd TopiaryExplorer-0.9.0
@@ -27,7 +27,7 @@ Installing the development version of TopiaryExplorer
 
 Alternatively you can work with the development version of TopiaryExplorer by checking the latest code out of the svn repository. Note that you may experience more bugs in the development version, but you'll also have access to the latest features. Instead of downloading the release version, you'll run the following commands::
 
-	svn co https://topiaryexplorer.svn.sourceforge.net/svnroot/ topiaryexplorer/trunk/main TopiaryExplorer
+	svn co https://topiaryexplorer.svn.sourceforge.net/svnroot/topiaryexplorer/trunk/main TopiaryExplorer
 	cd TopiaryExplorer
 
 Then to run TopiaryExplorer, run the command::

@@ -10,13 +10,14 @@ TopiaryExplorer UserGuide
 .. toctree::
    :maxdepth: 2
 	
+   install
    quickstart
    interface_guide
 
 
 Introduction
 ============
-This user guide contains a quickstart tutorial illustrating how to use TopiaryExplorer with an example data set, as well as a detailed interface guide. We recommend getting started by working through the `quick start tutorial <./quickstart.html>`_ and moving on to the `interface guide <./interface_guide.html>`_ as needed.
+This user guide contains install instructions, a quickstart tutorial illustrating how to use TopiaryExplorer with an example data set, and a detailed interface guide. We recommend that after `installing <./install.html>`_ you get started by working through the `quick start tutorial <./quickstart.html>`_ and moving on to the `interface guide <./interface_guide.html>`_ as needed.
 
 
 About TopiaryExplorer
