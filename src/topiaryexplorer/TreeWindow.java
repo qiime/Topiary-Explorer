@@ -1,12 +1,12 @@
 package topiaryexplorer;
 
-import com.sun.opengl.util.*;
+// import com.sun.opengl.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.media.opengl.*;
+// import javax.media.opengl.*;
 import java.sql.*;
 import javax.swing.table.*;
 import java.io.*;
@@ -226,6 +226,20 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
          tree.addMouseListener(new java.awt.event.MouseAdapter() {
  			public void mousePressed(java.awt.event.MouseEvent evt) {
+ 				clickedNode = tree.findNode(evt.getX(), evt.getY());
+ 				if (evt.isPopupTrigger() && clickedNode != null) {
+ 				    if(clickedNode.isLeaf())
+ 				    {
+ 				        treePopupMenu.getComponent(0).setEnabled(true);
+ 				    }
+ 				    else
+ 				    {
+ 				        treePopupMenu.getComponent(0).setEnabled(false);
+ 				    }
+ 					treePopupMenu.show(tree, evt.getX(), evt.getY());
+ 				}
+ 			}
+ 			public void mouseReleased(java.awt.event.MouseEvent evt){
  				clickedNode = tree.findNode(evt.getX(), evt.getY());
  				if (evt.isPopupTrigger() && clickedNode != null) {
  				    if(clickedNode.isLeaf())
