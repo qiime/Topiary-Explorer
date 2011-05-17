@@ -25,19 +25,7 @@ The ``examples/keyboard.tep`` file is a Topiary Explorer Project file (.tep) cre
 Step 0. Installing TopiaryExplorer
 ----------------------------------
 
-To install the release version of TopiaryExplorer down the release version of the software. After downloading, change to the directory where you've downloaded the file and from the command line unzip with the command::
-
-	tar -xzf TopiaryExplorer-0.9.0.tgz
-	cd TopiaryExplorer-0.9.0
-	javaws topiaryexplorer.jnlp
-
-Alternatively you can work with the development version of TopiaryExplorer by checking the latest code out of the svn repository. Note that you may experience more bugs in the development version, but you'll also have access to the latest features. Instead of downloading the release version, you'll run the following commands::
-
-	svn co https://topiaryexplorer.svn.sourceforge.net/svnroot/ topiaryexplorer/trunk/main TopiaryExplorer
-	cd TopiaryExplorer
-	javaws topiaryexplorer.jnlp
-
-This tutorial specifically covers working with the release version of TopiaryExplorer.
+If you haven't yet installed TopiaryExplorer, start on the `Topiary Explorer install page <./install.html>`_. This tutorial specifically covers working with the release version of TopiaryExplorer.
 
 Step 1. Running TopiaryExplorer
 -------------------------------
