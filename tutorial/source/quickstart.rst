@@ -5,9 +5,7 @@ Quickstart Tutorial
 *******************
 This quick start tutorial is a task-oriented example showing the shortest path to a dynamically colored tree that can be explored, manipulated, and exported as a PDF.
 
-This tutorial uses a tree and metadata derived from a reanalysis of the data from `"Forensic identification using skin bacterial communities" (Fierer et al., 2010 PNAS) <http://www.ncbi.nlm.nih.gov/pubmed/20231444>`_. Basic data analysis was performed in May of 2011 using `QIIME <http://www.qiime.org>`_.
-
-In this tutorial we will illustrate how to recreate the conclusions of the Fierer PNAS paper, that microbial communities on an individual's keyboard is more similar to the microbial communities on their hands than on the hand's of other individuals. We show how to recreate the plots created in Figure 1 of the TopiaryExplorer paper (currently under review).
+This tutorial uses a tree and metadata derived from a reanalysis of the data from `"Forensic identification using skin bacterial communities" (Fierer et al., 2010 PNAS) <http://www.ncbi.nlm.nih.gov/pubmed/20231444>`_. Basic data analysis was performed in May of 2011 using `QIIME <http://www.qiime.org>`_. The Fierer PNAS paper showed that microbial communities on an individual's keyboard are more similar to the microbial communities on their hands than on the hand's of other individuals, opening the door to potential forensic applications for microbial community profiling. In this study microbial communities were sequenced from the finger tips of three individuals and the keys on their keyboards, and it is these data that we'll focus on for this application. Here we'll visualize the distribution of the sequence observations from one individual's keyboard on a phylogenetic tree constructed from representatives of all 16S sequences obtain in this study, learn how to decorate the tree with (pre-existing) taxonomic assignments, prune subtrees from the tree, and export the trees as PDFs for use in publications.
 
 Tutorial Input Files
 --------------------
@@ -68,12 +66,14 @@ Step 4. Editing & saving metadata
 ---------------------------------
 In the Topiary Explorer window, you will find a ``+`` button in the top right corner of the metadata table. This button allows you to add new columns to a table or to save a table as tab delimited text.
 
-In the Sample Metadata Mapping tab, add a new column by clicking the ``+`` button. Name the new column ``IndividualKeyHand`` by typing this in the text field. Then click the ``Combine`` button. Select both the ``KeyHand`` and ``Individual`` options in the text window by holding the "Command" key (on OS X) or the "Control" key (on Windows). Click ``Add`` to add the new column. Now if you scroll to the right in the Topiary Explorer window you will see this new column on the right end.
+In the "Sample Data" tab, add a new column by clicking the ``+`` button. Name the new column ``IndividualKeyHand`` by typing this in the text field. Then click the ``Combine`` button. Select both the ``KeyHand`` and ``Individual`` options in the text window by holding the "Command" key (on OS X) or the "Control" key (on Windows). Click ``Add`` to add the new column. Now if you scroll to the right in the Topiary Explorer window you will see this new column on the right end.
 
 .. figure::  _images/add_column.png
    :align:   center
 
    Add column dialog with the ``+`` button highlighted.
+
+For the keyboard samples, the ``KeyHand`` column of the sample data describes the hand that strikes the corresponding key (Left, Right, or Ambiguous, where Ambiguous refers to keys that may be hit with either hand such as the space bar). For the skin samples ``KeyHand`` contains ``NA``. The ``Individual`` column contains the subject identifier (e.g., ``M3`` refers to male subject number 3).
 
 Step 5. Coloring the tree
 -------------------------
