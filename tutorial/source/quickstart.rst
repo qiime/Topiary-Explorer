@@ -100,7 +100,7 @@ Switch back to the Topiary Explorer window and uncheck the "No coloring" and "Ma
 
 Step 6. Set consensus lineages and collapse branches in the tree.
 -----------------------------------------------------------------
-Now we'll add consensus lineages to the tree and collapse some of the branches into wedges. In the Tree window, click the "Set Consensus Lineage" button. In the "Choose Threshold" window, select "Greengenes Taxonomy" in the "Taxonomy Column" dropdown box and "70%" in the "Choose options..." dropdown box. This indicates that you want to use the Greengenes taxonomy to assign taxonomy to the tips in the tree, and that you want to label a wedge with a taxonomy string if it represents at least 70% of the tips descending from that node. 
+Now we'll add consensus lineages to the tree and collapse some of the branches into wedges. In the Tree window, click the "Set Consensus Lineage" button. In the "Choose Threshold" window, select "Greengenes Taxonomy" in the "Taxonomy Column" dropdown box and "70%" in the "Choose options..." dropdown box. This indicates that you want to use the Greengenes taxonomy to label taxonomy to the tips in the tree, and that you want to label wedges only when the taxonomy string represents at least 70% of the tips descending from that node. 
 
 .. figure::  _images/set_consensus_lineage.png
    :align:   center
@@ -118,7 +118,7 @@ You can change the font or font size for the wedge labels by expanding the "Wedg
 
 Step 7. Export tree as PDF.
 ---------------------------
-To save this view of the tree as a PDF, choose 'File > Export Tree Image' in the Topiary Explorer window. Type a name for the tree in the 'Save as...' field - this name should end with ``.pdf``. Just enter a file name - not a path. Click the Export button, and the PDF will be opened in your default PDF viewer. For there you can save the file to where ever you'd like in your file system.
+To save this view of the tree as a PDF, choose 'File > Export Tree Image' in the Topiary Explorer window. Type a name for the tree in the 'Save as...' field. The extension  ``.pdf``. Just enter a file name - not a path. Click the Export button, and the PDF will be opened in your default PDF viewer. For there you can save the file to where ever you'd like in your file system.
 
 .. figure::  _images/export_tree_image.png
    :align:   center
