@@ -16,14 +16,14 @@ TopiaryExplorer UserGuide
 
 Introduction
 ============
-This user guide contains a quickstart tutorial illustrating how to use TopiaryExplorer with an example data set, as well as a detailed interface guide. We recommend getting started by working through the **quick start tutorial** and moving on to the **interface guide** as needed.
+This user guide contains a quickstart tutorial illustrating how to use TopiaryExplorer with an example data set, as well as a detailed interface guide. We recommend getting started by working through the `quick start tutorial <./quickstart.html>`_ and moving on to the `interface guide <./interface_guide.html>`_ as needed.
 
 
 About TopiaryExplorer
 =====================
-TopiaryExplorer is developed in the **Knight Lab** at the University of Colorado at Boulder with the initial goals of supporting visualization of large phylogenetic trees and associated tip metadata and environmental data.
+TopiaryExplorer is developed in the `Knight Lab <http://chem.colorado.edu/knightgroup/>`_ at the University of Colorado at Boulder with the initial goals of supporting visualization of large phylogenetic trees and associated tip metadata and environmental data.
 
-Current technologies for high-throughput sequencing provide an investigator with massive amounts of data. In microbial ecology, tools such as **QIIME (www.qiime.org)** have kept pace with the increasing quantity of sequences allowing computational processing and statistical analysis of those data, but tools for visualization of phylogenetic trees have lagged behind. 
+Current technologies for high-throughput sequencing provide an investigator with massive amounts of data. In microbial ecology, tools such as `QIIME <http://www.qiime.org>`_ have kept pace with the increasing quantity of sequences allowing computational processing and statistical analysis of those data, but tools for visualization of phylogenetic trees have lagged behind. 
 
 TopiaryExplorer supports visualization of very large trees (it has been tested on trees with > 100,000 tips) while providing convenient interfaces for decorating the tree with taxonomic information, automatically coloring branches based on data about environments where they are observed, selecting subtrees for independent analysis, interactive expanding and collapsing of clades, and many other features. TopiaryExplorer supports database connectivity, allowing investigators to obtain, combine, edit, search and save metadata from multiple studies. Multiple tree layouts such as rectangular or polar views are available and results can be exported as publication quality PDF images. 
 
@@ -38,4 +38,9 @@ Features
  * Publication-quality image exporting
  * Database connectivity
  * Project management using .tep files
+
+Citing TopiaryExplorer
+======================
+
+TopiaryExplorer is currently under review. In the meantime please cite TopiaryExplorer using the URL: `http://topiaryexplorer.sourceforge.net/ <http://topiaryexplorer.sourceforge.net/>`_.
 
