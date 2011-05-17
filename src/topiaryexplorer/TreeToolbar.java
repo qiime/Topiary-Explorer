@@ -75,7 +75,7 @@ public class TreeToolbar extends JToolBar {
         spacer1.setPreferredSize(new Dimension(10,10));
         add(spacer1);
         statusPanel.setLayout(new GridLayout(2,1));
-        status.setFont(new Font("Courier",Font.PLAIN,12));
+        status.setFont(new Font("Courier",Font.PLAIN,10));
         statusLine2.setFont(new Font("Courier",Font.PLAIN,12));
         statusPanel.add(status);
         statusPanel.add(statusLine2);
