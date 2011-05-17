@@ -7,6 +7,8 @@ This quick start tutorial is a task-oriented example showing the shortest path t
 
 This tutorial uses a tree and metadata derived from a reanalysis of the data from `"Forensic identification using skin bacterial communities" (Fierer et al., 2010 PNAS) <http://www.ncbi.nlm.nih.gov/pubmed/20231444>`_. Basic data analysis was performed in May of 2011 using `QIIME <http://www.qiime.org>`_.
 
+In this tutorial we will illustrate how to recreate the conclusions of the Fierer PNAS paper, that microbial communities on an individual's keyboard is more similar to the microbial communities on their hands than on the hand's of other individuals. We show how to recreate the plots created in Figure 1 of the TopiaryExplorer paper (currently under review).
+
 Tutorial Input Files
 --------------------
 All of the files you need to complete this tutorial are packaged in the ``examples`` directory of the TopiaryExplorer package. (See the **install page** if you haven't yet installed TopiaryExplorer. **MEG: please add link to the install page**) 
@@ -25,9 +27,9 @@ The ``examples/keyboard.tep`` file is a Topiary Explorer Project file (.tep) cre
 
 Step 1. Running TopiaryExplorer
 -------------------------------
-Navigate to the /main directory after checking out the package from SVN.
+Navigate to the unpacked topiaryexplorer directory from the command line.
 
-To run TopiaryExplorer::
+Run with the command TopiaryExplorer::
 	
 	javaws topiaryexplorer.jnlp
 
@@ -40,45 +42,91 @@ When successfully run, you should get a window that looks like the following.
 
 Step 2. Opening the .tep file
 -----------------------------
-Using the Open Project button located at the top of the TopiaryExplorer window, navigate to the examples folder containing :file:`keyboard.tep` and open the file.
+Using the Open Project button located at the top of the TopiaryExplorer window, navigate to the ``examples`` folder containing :file:`keyboard.tep` and open the file. Two new windows will open, and will look like the following. These will be referred to as the "Tree window" and the "Topiary Explorer window", respectively.
 
-.. figure::  _images/open_project.png
+.. figure::  _images/open_project_tree.png
    :align:   center
 
-   A newly opened project.
+   "Tree window" upon opening keyboard.tep.
+
+
+.. figure::  _images/open_project_data.png
+   :align:   center
+
+   "Topiary Explorer window" upon opening keyboard.tep
 
 Step 3. Uncollapsing the tree
 -----------------------------
-Using the collapse tree toolbar located near the top of the new TreeWindow, drag the slider to the right to fully uncollapse the tree.
+Drag the "Collapse tree" slider at the top of the new Tree Window to the right to fully uncollapse the tree.
+
+.. figure::  _images/expanded_tree.png
+   :align:   center
+
+   Tree window after dragging the "Collapse tree" slider to the right.
 
 Step 4. Editing & saving metadata
 ---------------------------------
-In the TopiaryExplorer window, you will find a button in the top right corner of each metadata table. This button allows you to add new columns to a table or to save a table as tab delimited text.
+In the Topiary Explorer window, you will find a ``+`` button in the top right corner of the metadata table. This button allows you to add new columns to a table or to save a table as tab delimited text.
 
-In the Sample Metadata Mapping tab, add a new column by combining the columns Individual and Source. If you scroll to the right you will see this column at the end.
-
-Now save your edited Sample Metadata Mapping table as tab delimited text.
+In the Sample Metadata Mapping tab, add a new column by clicking the ``+`` button. Name the new column ``IndividualKeyHand`` by typing this in the text field. Then click the ``Combine`` button. Select both the ``KeyHand`` and ``Individual`` options in the text window by holding the "Command" key (on OS X) or the "Control" key (on Windows). Click ``Add`` to add the new column. Now if you scroll to the right in the Topiary Explorer window you will see this new column on the right end.
 
 .. figure::  _images/add_column.png
    :align:   center
 
-   Add column dialog.
+   Add column dialog with the ``+`` button highlighted.
 
 Step 5. Coloring the tree
 -------------------------
-To color the tree's branches, open the branch panel of the Tree Toolbar which is located on the left side of the TreeWindow. Click the "Color By..." button and select a sample metadata category to color by, such as "Individual". 
+Next we'll use this new metadata field to color the tree's branches. Move back to the Tree Window and expand the ``Branch`` option by clicking the word ``Branch`` in the toolbar on the left (which we'll refer to as the ``Tree Toolbar``). Click the "Color By..." button, then select ``Sample Metadata``, and select the new metadata category, ``IndividualKeyHand``. 
 
-By default each option for the category will be colored gray. In the TopiaryExplorer window use the Color Key to select the desired colors. The small boxes in the same row as the intended option are used to show the current color, and when clicked will change the color of the corresponding option. 
-
-To reproduce the images shown in this tutorial, color the DM option blue, the NF option red and the RK option green. 
-
-.. figure::  _images/color_by.png
+.. figure::  _images/color_by_dialog.png
    :align:   center
 
-   A tree colored by metadata.
+   Dialog to color by metadata.
 
-Step 6. Opening a subtree
--------------------------
+By default each option for the category will be colored gray. To change this, switch to the Topiary Explorer window. The Color Key window on the left is used to choose colors on a per-category basis. To change the color for a given value click the small grey box, which will open a the "Pick a Color" window. Choose blue for the RightM3, LeftM3, and AmbiguousM3 values.
+
+.. figure::  _images/choose_colors.png
+   :align:   center
+
+   Dialog to choose colors for metadata.
+
+Switch back to the Topiary Explorer window and uncheck the "No coloring" and "Majority coloring" checkboxes. Your tree should look like the one pictured here.
+
+.. figure::  _images/M3_keyhand_colored.png
+   :align:   center
+
+   Tree with M3 keys colored.
+
+Step 6. Set consensus lineages and collapse branches in the tree.
+-----------------------------------------------------------------
+Now we'll add consensus lineages to the tree and collapse some of the branches into wedges. In the Tree window, click the "Set Consensus Lineage" button. In the "Choose Threshold" window, select "Greengenes Taxonomy" in the "Taxonomy Column" dropdown box and "70%" in the "Choose options..." dropdown box. This indicates that you want to use the Greengenes taxonomy to assign taxonomy to the tips in the tree, and that you want to label a wedge with a taxonomy string if it represents at least 70% of the tips descending from that node. 
+
+.. figure::  _images/set_consensus_lineage.png
+   :align:   center
+
+   Set the consensus lineage for nodes on the tree.
+
+Next click the "Collapse tree" slider bar and slide to the left. You'll notice that branches collapse into wedges when the slider passes the root of their clade. The coloring of the wedge will be determined by the percentage of the tips represented by that wedge which are blue (i.e., associated with M3 in this example).
+
+.. figure::  _images/M3_keyhand_colored_w_lineage.png
+   :align:   center
+
+   Collapsed tree with consensus lineages.
+
+You can change the font or font size for the wedge labels by expanding the "Wedge" menu in the Tree Toolbar of the Tree Window.
+
+Step 7. Export tree as PDF.
+---------------------------
+To save this view of the tree as a PDF, choose 'File > Export Tree Image' in the Topiary Explorer window. Type a name for the tree in the 'Save as...' field - this name should end with ``.pdf``. Just enter a file name - not a path. Click the Export button, and the PDF will be opened in your default PDF viewer. For there you can save the file to where ever you'd like in your file system.
+
+.. figure::  _images/export_tree_image.png
+   :align:   center
+
+   Export tree as a PDF.
+
+Step 8. Opening a subtree.
+--------------------------
 In order to study the tree more carefully, you may want to focus on smaller subtrees of a larger tree.
 
 To view a subtree more closely, right click on the root node of the subtree of interest and then click View Subtree in new Window.
@@ -86,25 +134,29 @@ To view a subtree more closely, right click on the root node of the subtree of i
 .. figure::  _images/view_subtree.png
    :align:   center
 
-   Subtree viewed in a new window.
+   Choose the subtree to view in a new window.
 
-Step 7. Pruning the tree
-------------------------
-To remove unwanted branches, use the prune tree button at the top of the tree toolbar.
+Step 9. Prune the tree.
+-------------------------
+To remove unwanted branches, use the prune tree button at the top of the Tree Toolbar.
 
-In the subtree window, we are going to remove branches based on sample metadata. Click the prune tree button, then select the metadata radio button, followed by the sample metadata radio button, and then choose a field to prune by. Since we already have the trees colored by individual, select this field, and then some value.
+In the subtree window, we are going to remove branches based on sample metadata. Click the "Prune tree" button, then select the "Metadata" button, followed by the "Sample Metadata" button. In the dropdown box select the "IndividualKeyHand" value, and then select the three categories associated beginning with "NA" as shown in the image below. 
 
 .. figure::  _images/prune_dialog.png
    :align:   left
 
-When you click prune, you should see that all of the branches that were colored by whichever value you chose have now been pruned.
+   Prune dialog box.
 
-.. figure::  _images/pruned.png
+Click the "Prune" button in the bottom right of this window to prune the tips associated with the "NA" samples (i.e., the skin samples as opposed to the keyboard samples) from the tree. The resulting tree should look like this:
+
+.. figure::  _images/pruned_tree.png
    :align:   left
 
-Step 8. Saving a new project
-----------------------------
-To save your modified metadata and trees, click the Save Project button at the top of the TopiaryExplorer window.
+   Pruned tree.
+
+Step 10. Saving a new project.
+------------------------------
+To save your modified metadata and trees, click the Save Project button at the top of the Topiary Explorer window. This will create a new .tep file that will allow you to pick up where you've left off.
 
 .. _newick: http://en.wikipedia.org/wiki/Newick_format
 .. _QIIME: http://qiime.org
