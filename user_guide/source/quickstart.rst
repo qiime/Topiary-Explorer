@@ -9,7 +9,7 @@ This tutorial uses a tree and metadata derived from a reanalysis of the data fro
 
 Tutorial Input Files
 --------------------
-All of the files you need to complete this tutorial are packaged in the ``examples`` directory of the TopiaryExplorer package. (See the **install page** if you haven't yet installed TopiaryExplorer. **MEG: please add link to the install page**) 
+All of the files you need to complete this tutorial are packaged in the ``examples`` directory of the TopiaryExplorer package.
 
 The TopiaryExplorer project file (.tep)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -29,8 +29,6 @@ If you haven't yet installed TopiaryExplorer, start on the `Topiary Explorer ins
 
 Step 1. Running TopiaryExplorer
 -------------------------------
-You'll need at least 1GB of RAM to run TopiaryExplorer, but if you have more it will help run TopiaryExplorer faster. We recommend starting with 3GB of RAM.
-
 Navigate to the unpacked topiaryexplorer directory from the command line.
 
 Run with the command TopiaryExplorer::
@@ -70,7 +68,7 @@ Drag the "Collapse tree" slider at the top of the new Tree Window to the right t
 
 Step 4. Editing & saving metadata
 ---------------------------------
-In the Topiary Explorer window, you will find a ``+`` button in the top right corner of the metadata table. This button allows you to add new columns to a table or to save a table as tab delimited text.
+In the Topiary Explorer window, you will find a ``+`` button in the top right corner of the metadata table (this button is ``...`` on Windows). This button allows you to add new columns to a table or to save a table as tab delimited text.
 
 In the "Sample Data" tab, add a new column by clicking the ``+`` button. Name the new column ``IndividualKeyHand`` by typing this in the text field. Then click the ``Combine`` button. Select both the ``KeyHand`` and ``Individual`` options in the text window by holding the "Command" key (on OS X) or the "Control" key (on Windows). Click ``Add`` to add the new column. Now if you scroll to the right in the Topiary Explorer window you will see this new column on the right end.
 
