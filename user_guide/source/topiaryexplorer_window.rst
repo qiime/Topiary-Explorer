@@ -90,7 +90,20 @@ The database pane is used to connect to external databases and pull down informa
 .. figure::  _images/database_tab.png
    :align:   center
 
-Once a user has navigated to a table of interest within the database, the table can be set as any of the data tables.
+To connect to a database, enter the database information into the dialog at the bottom of the database tab.
+
+.. figure:: _images/database_dialog.png
+   :align:	center
+
+Once you are connected to the database, the dialog will be disabled and you will be able to navigate to different tables in the database.
+
+.. figure:: _images/database_connected.png
+   :align: center
+
+Once you have navigated to a table of interest within the database, the table can be set as any of the data tables using the "Set as..." button.
+
+.. figure:: _images/database_show.png
+   :align: center
 
 OTU metadata pane/ OTU abundance table pane/ Sample metadata mapping pane
 -------------------------------------------------------------------------
