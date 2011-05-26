@@ -12,7 +12,7 @@ Assumptions made in this tutorial
 
  * You should also first review the `TopiaryExplorer Window <./topiaryexplorer_window.html>`_ guide, which covers the Database Pane.
 
- * [DOUG PLEASE EDIT!!] You have a working mysql database on your system, with a user account already create 
+ * [DOUG PLEASE EDIT!!] You have a working mysql database on your system, with a user account already created.
 
 Tutorial Input Files
 --------------------
