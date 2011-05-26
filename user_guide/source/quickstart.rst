@@ -122,7 +122,7 @@ You can change the font or font size for the wedge labels by expanding the "Wedg
 
 Step 7. Export tree as PDF.
 ---------------------------
-To save this view of the tree as a PDF, choose 'File > Export Tree Image' in the Topiary Explorer window. Type a name for the tree in the 'Save as...' field. The extension  ``.pdf``. Just enter a file name - not a path. Click the Export button, and the PDF will be opened in your default PDF viewer. For there you can save the file to where ever you'd like in your file system.
+To save this view of the tree as a PDF, choose 'File > Export Tree Image' in the Topiary Explorer window. Type a name for the tree in the 'Save as...' field. The extension  ``.pdf`` will be automatically added. Just enter a file name - not a path. Click the Export button, and the PDF will be opened in your default PDF viewer. For there you can save the file to where ever you'd like in your file system. After clicking the Export button it may take several seconds before the resulting PDF is generated and opened.
 
 .. figure::  _images/export_tree_image.png
    :align:   center
