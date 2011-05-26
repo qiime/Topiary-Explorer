@@ -81,21 +81,21 @@ For the keyboard samples, the ``KeyHand`` column of the sample data describes th
 
 Step 5. Coloring the tree
 -------------------------
-Next we'll use this new metadata field to color the tree's branches. Move back to the Tree Window and expand the ``Branch`` option by clicking the word ``Branch`` in the toolbar on the left (which we'll refer to as the ``Tree Toolbar``). Click the "Color By..." button, then select ``Sample Metadata``, and select the new metadata category, ``IndividualKeyHand``. 
+Next we'll use this new metadata field to color the tree's branches. Move back to the Tree Window and expand the ``Branch`` panel by clicking the word ``Branch`` in the toolbar on the left (which we'll refer to as the ``Tree Toolbar``). Click the "Color By..." button, then select ``Sample Metadata``, and select the new metadata category, ``IndividualKeyHand``. 
 
 .. figure::  _images/color_by_dialog.png
    :align:   center
 
    Dialog to color by metadata.
 
-By default each option for the category will be colored gray. To change this, switch to the Topiary Explorer window. The Color Key window on the left is used to choose colors on a per-category basis. To change the color for a given value click the small grey box, which will open a the "Pick a Color" window. Choose blue for the RightM3, LeftM3, and AmbiguousM3 values.
+By default each option for the category will be colored gray. To change this, switch to the Topiary Explorer window. The Color Key toolbar on the left is used to choose colors on a per-category basis. To change the color for a given value click the small grey box, which will open a the "Pick a Color" window. Choose blue for the RightM3, LeftM3, and AmbiguousM3 values.
 
 .. figure::  _images/choose_colors.png
    :align:   center
 
    Dialog to choose colors for metadata.
 
-Switch back to the Topiary Explorer window and uncheck the "No coloring" and "Majority coloring" checkboxes. Your tree should look like the one pictured here.
+Switch back to the Topiary Explorer window and uncheck the "Majority coloring" checkbox. Your tree should look like the one pictured here.
 
 .. figure::  _images/M3_keyhand_colored.png
    :align:   center
