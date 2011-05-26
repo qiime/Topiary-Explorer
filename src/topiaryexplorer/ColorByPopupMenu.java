@@ -22,8 +22,8 @@ class ColorByPopupMenu extends JPopupMenu{
     private MainFrame frame;
     private ColorPanel colorPanel;
     private int elementType = 0;
-    private JMenu colorByOtuMetadataMenu = new JMenu("OTU Metadata");
-    private JMenu colorBySampleMetadataMenu = new JMenu("Sample Metadata");
+    private JMenu colorByOtuMetadataMenu = new JMenu("Tip Data");
+    private JMenu colorBySampleMetadataMenu = new JMenu("Sample Data");
     
     private ButtonGroup colorByGroup = new ButtonGroup();
     
@@ -83,11 +83,14 @@ class ColorByPopupMenu extends JPopupMenu{
      void resetColorBySampleMenu() {
  /*        noColoringMenuItem.setSelected(true);*/
          colorBySampleMetadataMenu.removeAll();
+         // colorBySampleMetadataMenu.add(new JRadioButtonMenuItem("hurf"));
          ArrayList<String> data = frame.sampleMetadata.getColumnNames();
          //start at 1 to skip ID column
+         // System.out.println(frame.sampleMetadata.getColumnNames().size());
          for (int i = 1; i < data.size(); i++) {
               String value = data.get(i);
               JRadioButtonMenuItem item = new JRadioButtonMenuItem(value);
+              // System.out.println("["+value+"]");
               item.addActionListener(new ActionListener() {
                   public void actionPerformed(ActionEvent e) {
                       //get the category to color by
@@ -112,5 +115,6 @@ class ColorByPopupMenu extends JPopupMenu{
               colorByGroup.add(item);
               colorBySampleMetadataMenu.add(item);
          }
+         // colorBySampleMetadataMenu.add(new JRadioButtonMenuItem("durf"));
      }
 }

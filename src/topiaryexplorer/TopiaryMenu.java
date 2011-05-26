@@ -39,29 +39,29 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     JMenu fileMenu = new JMenu("File");
     JMenu viewMenu = new JMenu("View");
     JMenu nodeMenu = new JMenu("Node");
-    JMenu pcoaMenu = new JMenu("PCoA");
+    // JMenu pcoaMenu = new JMenu("PCoA");
     JMenu distanceMetricMenu = new JMenu("Distance Metric");
     JMenu sampleShapeMenu = new JMenu("Sample Shape");
     JMenu otuShapeMenu = new JMenu("OTU Shape");
     JRadioButtonMenuItem uniformLineWidthItem = new JRadioButtonMenuItem("Uniform");
-    JMenu pcoaLayoutMenu = new JMenu("Layout");
-    JSlider pcoaLineWidthSlider = new JSlider(1, 1000, 10);
+    // JMenu pcoaLayoutMenu = new JMenu("Layout");
+    // JSlider pcoaLineWidthSlider = new JSlider(1, 1000, 10);
 
-    ButtonGroup distanceMetricGroup = new ButtonGroup();
-    ButtonGroup pcoaLayoutGroup = new ButtonGroup();
-    ButtonGroup sampleShapeGroup = new ButtonGroup();
-    ButtonGroup otuShapeGroup = new ButtonGroup();
+    // ButtonGroup distanceMetricGroup = new ButtonGroup();
+    // ButtonGroup pcoaLayoutGroup = new ButtonGroup();
+    // ButtonGroup sampleShapeGroup = new ButtonGroup();
+    // ButtonGroup otuShapeGroup = new ButtonGroup();
 
-    JCheckBoxMenuItem samplesMenuItem = new JCheckBoxMenuItem("Samples");
-    JCheckBoxMenuItem otusMenuItem = new JCheckBoxMenuItem("OTUs");
-    JCheckBoxMenuItem connectionsMenuItem = new JCheckBoxMenuItem("Connections");
-    JCheckBoxMenuItem axesMenuItem = new JCheckBoxMenuItem("Axes");
-    JCheckBoxMenuItem axisLabelsMenuItem = new JCheckBoxMenuItem("Axis Labels");
-    JCheckBoxMenuItem sampleLabelsMenuItem = new JCheckBoxMenuItem("Sample Labels");
-    JCheckBoxMenuItem otuLabelsMenuItem = new JCheckBoxMenuItem("OTU Labels");
-    
-    JCheckBoxMenuItem colorSamplesMenuItem = new JCheckBoxMenuItem("Color Samples");
-    JCheckBoxMenuItem colorOtusMenuItem = new JCheckBoxMenuItem("Color OTUs");
+    // JCheckBoxMenuItem samplesMenuItem = new JCheckBoxMenuItem("Samples");
+    // JCheckBoxMenuItem otusMenuItem = new JCheckBoxMenuItem("OTUs");
+    // JCheckBoxMenuItem connectionsMenuItem = new JCheckBoxMenuItem("Connections");
+    // JCheckBoxMenuItem axesMenuItem = new JCheckBoxMenuItem("Axes");
+    // JCheckBoxMenuItem axisLabelsMenuItem = new JCheckBoxMenuItem("Axis Labels");
+    // JCheckBoxMenuItem sampleLabelsMenuItem = new JCheckBoxMenuItem("Sample Labels");
+    // JCheckBoxMenuItem otuLabelsMenuItem = new JCheckBoxMenuItem("OTU Labels");
+    // 
+    // JCheckBoxMenuItem colorSamplesMenuItem = new JCheckBoxMenuItem("Color Samples");
+    // JCheckBoxMenuItem colorOtusMenuItem = new JCheckBoxMenuItem("Color OTUs");
 
     String dir_path = "";// = (new File(".")).getCanonicalPath();
     /**
@@ -115,290 +115,290 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         checkbox.addActionListener(this);
         viewMenu.add(checkbox);
         
-        //set up the "pcoa" submenus"
-        JRadioButtonMenuItem button;
-        button = new JRadioButtonMenuItem("Bray-Curtis");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-        button.setSelected(true);
-		button = new JRadioButtonMenuItem("Canberra");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Chi-squared");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Chord");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Euclidean");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Gower");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Hellinger");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Kulczynski");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Manhattan");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Morisita-Horn");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Pearson");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Soergel");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Spearman-Approx");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Species-Profile");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Binary-Chi-Squared");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Binary-Chord");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Binary-Euclidean");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Binary-Hamming");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Binary-Jaccard");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Binary-Lennon");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Binary-Ochiai");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Binary-Pearson");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Binary-Sorensen-Dice");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-		button = new JRadioButtonMenuItem("Load from file");
-        distanceMetricGroup.add(button);
-        distanceMetricMenu.add(button);
-        pcoaMenu.add(distanceMetricMenu);
+        //         //set up the "pcoa" submenus"
+        //         JRadioButtonMenuItem button;
+        //         button = new JRadioButtonMenuItem("Bray-Curtis");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        //         button.setSelected(true);
+        // button = new JRadioButtonMenuItem("Canberra");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Chi-squared");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Chord");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Euclidean");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Gower");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Hellinger");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Kulczynski");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Manhattan");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Morisita-Horn");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Pearson");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Soergel");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Spearman-Approx");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Species-Profile");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Binary-Chi-Squared");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Binary-Chord");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Binary-Euclidean");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Binary-Hamming");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Binary-Jaccard");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Binary-Lennon");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Binary-Ochiai");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Binary-Pearson");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Binary-Sorensen-Dice");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        // button = new JRadioButtonMenuItem("Load from file");
+        //         distanceMetricGroup.add(button);
+        //         distanceMetricMenu.add(button);
+        //         pcoaMenu.add(distanceMetricMenu);
 
-        button = new JRadioButtonMenuItem("None");
-        button.setSelected(true);
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setDyamicLayout("None");
-            }
-        });
-        pcoaLayoutGroup.add(button);
-        pcoaLayoutMenu.add(button);
-        button = new JRadioButtonMenuItem("Spring");
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setDyamicLayout("Spring");
-            }
-        });
-        pcoaLayoutGroup.add(button);
-        pcoaLayoutMenu.add(button);
-        button = new JRadioButtonMenuItem("Force");
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setDyamicLayout("Force");
-            }
-        });
-        pcoaLayoutGroup.add(button);
-        pcoaLayoutMenu.add(button);
-        pcoaMenu.add(pcoaLayoutMenu);
+        // button = new JRadioButtonMenuItem("None");
+        //         button.setSelected(true);
+        //         button.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setDyamicLayout("None");
+        //             }
+        //         });
+        //         pcoaLayoutGroup.add(button);
+        //         pcoaLayoutMenu.add(button);
+        //         button = new JRadioButtonMenuItem("Spring");
+        //         button.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setDyamicLayout("Spring");
+        //             }
+        //         });
+        //         pcoaLayoutGroup.add(button);
+        //         pcoaLayoutMenu.add(button);
+        //         button = new JRadioButtonMenuItem("Force");
+        //         button.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setDyamicLayout("Force");
+        //             }
+        //         });
+        //         pcoaLayoutGroup.add(button);
+        //         pcoaLayoutMenu.add(button);
+        //         pcoaMenu.add(pcoaLayoutMenu);
+        //         
+        //         
+        //         pcoaLineWidthSlider.addChangeListener(new ChangeListener() {
+        //             public void stateChanged(ChangeEvent e) {
+        //                 if (pcoaLineWidthSlider.getValueIsAdjusting()){
+        //                     syncPcoaWithLineWidthSlider();
+        //                 }
+        //             }
+        //         });
+        //         JMenu pcoaLineWidthMenu = new JMenu("Line width");
+        //         pcoaLineWidthMenu.add(pcoaLineWidthSlider);
+        //         pcoaMenu.add(pcoaLineWidthMenu);
+        //         
+        //         item = new JMenuItem("Background Color...");        
+        //         item.addActionListener(new ActionListener() {        
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.setBackgroundColor();
+        //                 }
+        //         });
+        //         pcoaMenu.add(item);
+        //         
+        //         item = new JMenuItem("Set axes...");        
+        //         item.addActionListener(new ActionListener() {        
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.setAxes();
+        //             }
+        //         });
+        //         pcoaMenu.add(item);
+        //         
+        //         pcoaMenu.add(new JSeparator());
+        //         
+        // button = new JRadioButtonMenuItem("Cube");
+        //         button.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setSampleShape("Cube");
+        //             }
+        //         });
+        //         sampleShapeGroup.add(button);
+        //         sampleShapeMenu.add(button);
+        //      button = new JRadioButtonMenuItem("Sphere");
+        //      button.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setSampleShape("Sphere");
+        //             }
+        //         });
+        //         button.setSelected(true);
+        //         sampleShapeGroup.add(button);
+        //         sampleShapeMenu.add(button);
+        //         button = new JRadioButtonMenuItem("Tetrahedron");
+        //      button.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setSampleShape("Tetrahedron");
+        //             }
+        //         });
+        //         sampleShapeGroup.add(button);
+        //         sampleShapeMenu.add(button);
+        //         button = new JRadioButtonMenuItem("Octahedron");
+        //      button.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setSampleShape("Octahedron");
+        //             }
+        //         });
+        //         sampleShapeGroup.add(button);
+        //         sampleShapeMenu.add(button);
+        //         pcoaMenu.add(sampleShapeMenu);
+        //         
+        //         button = new JRadioButtonMenuItem("Cube");
+        //         button.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setOtuShape("Cube");
+        //             }
+        //         });
+        //         button.setSelected(true);
+        //         otuShapeGroup.add(button);
+        //         otuShapeMenu.add(button);
+        //      button = new JRadioButtonMenuItem("Sphere");
+        //      button.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setOtuShape("Sphere");
+        //             }
+        //         });
+        //         otuShapeGroup.add(button);
+        //         otuShapeMenu.add(button);
+        //         button = new JRadioButtonMenuItem("Tetrahedron");
+        //      button.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setOtuShape("Tetrahedron");
+        //             }
+        //         });
+        //         otuShapeGroup.add(button);
+        //         otuShapeMenu.add(button);
+        //         button = new JRadioButtonMenuItem("Octahedron");
+        //      button.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setOtuShape("Octahedron");
+        //             }
+        //         });
+        //         otuShapeGroup.add(button);
+        //         otuShapeMenu.add(button);
+        //         pcoaMenu.add(otuShapeMenu);
+        //         
+        //         
+        //         pcoaMenu.add(new JSeparator());
         
+        // samplesMenuItem.setSelected(true);
+        //         samplesMenuItem.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setDisplaySamples(samplesMenuItem.getState());
+        //             }
+        //         });
+        //         pcoaMenu.add(samplesMenuItem);
+        //         sampleLabelsMenuItem.setSelected(false);
+        //         sampleLabelsMenuItem.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setDisplaySampleIDs(sampleLabelsMenuItem.getState());
+        //             }
+        //         });
+        //         pcoaMenu.add(sampleLabelsMenuItem);
+        //         otusMenuItem.setSelected(true);
+        //         otusMenuItem.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setDisplayOtus(otusMenuItem.getState());
+        //             }
+        //         });
+        //         pcoaMenu.add(otusMenuItem);
+        //         otuLabelsMenuItem.setSelected(false);
+        //         otuLabelsMenuItem.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setDisplayOtuIDs(otuLabelsMenuItem.getState());
+        //             }
+        //         });
+        //         pcoaMenu.add(otuLabelsMenuItem);
+        //         connectionsMenuItem.setSelected(true);
+        //         connectionsMenuItem.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setDisplayConnections(connectionsMenuItem.getState());
+        //             }
+        //         });
+        //         pcoaMenu.add(connectionsMenuItem);
+        //         axesMenuItem.setSelected(true);
+        //         axesMenuItem.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setDisplayAxes(axesMenuItem.getState());
+        //             }
+        //         });
+        //         pcoaMenu.add(axesMenuItem);
+        //         axisLabelsMenuItem.setSelected(true);
+        //         axisLabelsMenuItem.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setDisplayAxisLabels(axisLabelsMenuItem.getState());
+        //             }
+        //         });
+        //         pcoaMenu.add(axisLabelsMenuItem);        
+        //         
+        //         pcoaMenu.add(new JSeparator());
         
-        pcoaLineWidthSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                if (pcoaLineWidthSlider.getValueIsAdjusting()){
-                    syncPcoaWithLineWidthSlider();
-                }
-            }
-        });
-        JMenu pcoaLineWidthMenu = new JMenu("Line width");
-        pcoaLineWidthMenu.add(pcoaLineWidthSlider);
-        pcoaMenu.add(pcoaLineWidthMenu);
-        
-        item = new JMenuItem("Background Color...");        
-        item.addActionListener(new ActionListener() {        
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.setBackgroundColor();
-                }
-        });
-        pcoaMenu.add(item);
-        
-        item = new JMenuItem("Set axes...");        
-        item.addActionListener(new ActionListener() {        
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.setAxes();
-            }
-        });
-        pcoaMenu.add(item);
-        
-        pcoaMenu.add(new JSeparator());
-        
-        button = new JRadioButtonMenuItem("Cube");
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setSampleShape("Cube");
-            }
-        });
-        sampleShapeGroup.add(button);
-        sampleShapeMenu.add(button);
-		button = new JRadioButtonMenuItem("Sphere");
-	    button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setSampleShape("Sphere");
-            }
-        });
-        button.setSelected(true);
-        sampleShapeGroup.add(button);
-        sampleShapeMenu.add(button);
-        button = new JRadioButtonMenuItem("Tetrahedron");
-	    button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setSampleShape("Tetrahedron");
-            }
-        });
-        sampleShapeGroup.add(button);
-        sampleShapeMenu.add(button);
-        button = new JRadioButtonMenuItem("Octahedron");
-	    button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setSampleShape("Octahedron");
-            }
-        });
-        sampleShapeGroup.add(button);
-        sampleShapeMenu.add(button);
-        pcoaMenu.add(sampleShapeMenu);
-        
-        button = new JRadioButtonMenuItem("Cube");
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setOtuShape("Cube");
-            }
-        });
-        button.setSelected(true);
-        otuShapeGroup.add(button);
-        otuShapeMenu.add(button);
-		button = new JRadioButtonMenuItem("Sphere");
-		button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setOtuShape("Sphere");
-            }
-        });
-        otuShapeGroup.add(button);
-        otuShapeMenu.add(button);
-        button = new JRadioButtonMenuItem("Tetrahedron");
-		button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setOtuShape("Tetrahedron");
-            }
-        });
-        otuShapeGroup.add(button);
-        otuShapeMenu.add(button);
-        button = new JRadioButtonMenuItem("Octahedron");
-		button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setOtuShape("Octahedron");
-            }
-        });
-        otuShapeGroup.add(button);
-        otuShapeMenu.add(button);
-        pcoaMenu.add(otuShapeMenu);
-        
-        
-        pcoaMenu.add(new JSeparator());
-        
-        samplesMenuItem.setSelected(true);
-        samplesMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setDisplaySamples(samplesMenuItem.getState());
-            }
-        });
-        pcoaMenu.add(samplesMenuItem);
-        sampleLabelsMenuItem.setSelected(false);
-        sampleLabelsMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setDisplaySampleIDs(sampleLabelsMenuItem.getState());
-            }
-        });
-        pcoaMenu.add(sampleLabelsMenuItem);
-        otusMenuItem.setSelected(true);
-        otusMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setDisplayOtus(otusMenuItem.getState());
-            }
-        });
-        pcoaMenu.add(otusMenuItem);
-        otuLabelsMenuItem.setSelected(false);
-        otuLabelsMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setDisplayOtuIDs(otuLabelsMenuItem.getState());
-            }
-        });
-        pcoaMenu.add(otuLabelsMenuItem);
-        connectionsMenuItem.setSelected(true);
-        connectionsMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setDisplayConnections(connectionsMenuItem.getState());
-            }
-        });
-        pcoaMenu.add(connectionsMenuItem);
-        axesMenuItem.setSelected(true);
-        axesMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setDisplayAxes(axesMenuItem.getState());
-            }
-        });
-        pcoaMenu.add(axesMenuItem);
-        axisLabelsMenuItem.setSelected(true);
-        axisLabelsMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setDisplayAxisLabels(axisLabelsMenuItem.getState());
-            }
-        });
-        pcoaMenu.add(axisLabelsMenuItem);        
-        
-        pcoaMenu.add(new JSeparator());
-        
-        colorSamplesMenuItem.setSelected(true);
-        colorSamplesMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setColorSamples(colorSamplesMenuItem.getState());
-            }
-        });
-        pcoaMenu.add(colorSamplesMenuItem); 
-        
-        colorOtusMenuItem.setSelected(true);
-        colorOtusMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.pcoaWindow.pcoa.setColorOtus(colorOtusMenuItem.getState());
-            }
-        });
-        pcoaMenu.add(colorOtusMenuItem); 
-        
-        pcoaMenu.add(new JSeparator());
-        
-        item = new JMenuItem("Run PCoA Analysis...");
-        item.addActionListener(this);
-        pcoaMenu.add(item);
-
-        //add all the menus to the menu bar
-        pcoaMenu.setEnabled(false);
-        add(fileMenu);
+        // colorSamplesMenuItem.setSelected(true);
+        //         colorSamplesMenuItem.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setColorSamples(colorSamplesMenuItem.getState());
+        //             }
+        //         });
+        //         pcoaMenu.add(colorSamplesMenuItem); 
+        //         
+        //         colorOtusMenuItem.setSelected(true);
+        //         colorOtusMenuItem.addActionListener(new ActionListener() {
+        //             public void actionPerformed(ActionEvent e) {
+        //                 frame.pcoaWindow.pcoa.setColorOtus(colorOtusMenuItem.getState());
+        //             }
+        //         });
+        //         pcoaMenu.add(colorOtusMenuItem); 
+        //         
+        //         pcoaMenu.add(new JSeparator());
+        //         
+        //         item = new JMenuItem("Run PCoA Analysis...");
+        //         item.addActionListener(this);
+        //         pcoaMenu.add(item);
+        // 
+        //         //add all the menus to the menu bar
+        //         pcoaMenu.setEnabled(false);
+                add(fileMenu);
 /*        add(viewMenu);*/
      }
 
@@ -422,14 +422,14 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
          } else if (e.getActionCommand().equals("Load OTU Table...")) {
              loadOtuSampleMap(null);
          }  else if (e.getActionCommand().equals("PCoA Window")) {
-                  frame.pcoaWindow.setVisible(!frame.pcoaWindow.isVisible());
+                  // frame.pcoaWindow.setVisible(!frame.pcoaWindow.isVisible());
         }else if (e.getActionCommand().equals("PCoA Window")) {
-                frame.consoleWindow.setVisible(!frame.consoleWindow.isVisible());
+                // frame.consoleWindow.setVisible(!frame.consoleWindow.isVisible());
         } else if (e.getActionCommand().equals("Quit")) {
              frame.db_conn.c.close_connection();
              System.exit(0);
          } else if(e.getActionCommand().equals("Run PCoA Analysis...")) {
-             frame.pcoaWindow.runPcoaAnalysis();
+             // frame.pcoaWindow.runPcoaAnalysis();
          }
     }
     
@@ -662,11 +662,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
     /**
     * 
     */
-    public void syncPcoaWithLineWidthSlider() {
-        double value = pcoaLineWidthSlider.getValue();
-        value = value/10.0;
-        frame.pcoaWindow.pcoa.setLineWidthScale((float)value);
-    }
+    // public void syncPcoaWithLineWidthSlider() {
+    //     double value = pcoaLineWidthSlider.getValue();
+    //     value = value/10.0;
+    //     frame.pcoaWindow.pcoa.setLineWidthScale((float)value);
+    // }
 
     /**
     * Resets tip labels on the tree

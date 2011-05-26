@@ -95,7 +95,7 @@ public class WindowViewToolbar extends JToolBar {
         treeButton.setToolTipText("Tree Window");
         treeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.treeWindow.setVisible(!frame.treeWindow.isVisible());
+                // frame.treeWindow.setVisible(!frame.treeWindow.isVisible());
             }
         });
         

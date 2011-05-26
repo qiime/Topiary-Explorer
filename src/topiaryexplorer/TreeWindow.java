@@ -1206,16 +1206,16 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             this.repaint();
 
             //reset the pcoa vertex colors
-            if (frame.pcoaWindow.pcoa.sampleData != null) {
-                for (VertexData v : frame.pcoaWindow.pcoa.sampleData) {
-                    v.clearColor();
-                }
-            }
-            if (frame.pcoaWindow.pcoa.spData != null) {
-                for (VertexData v : frame.pcoaWindow.pcoa.spData) {
-                    v.clearColor();
-                }
-            }
+            // if (frame.pcoaWindow.pcoa.sampleData != null) {
+            //     for (VertexData v : frame.pcoaWindow.pcoa.sampleData) {
+            //         v.clearColor();
+            //     }
+            // }
+            // if (frame.pcoaWindow.pcoa.spData != null) {
+            //     for (VertexData v : frame.pcoaWindow.pcoa.spData) {
+            //         v.clearColor();
+            //     }
+            // }
             frame.branchValue = "";
 /*            tree.loop();*/
             tree.redraw();

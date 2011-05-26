@@ -43,8 +43,9 @@ public class DataTable {
 		        c = c + 1;
 		    }
         }
-		int numCols = conn.colNames.size();
-		columnNames = parseLine(conn.colNamesStr);
+        // int numCols = conn.colNames.size();
+        // System.out.println(conn.colNamesStr);
+		columnNames = conn.colNames;
     }
     
     public void loadData(ArrayList<String> lines) {
@@ -52,7 +53,7 @@ public class DataTable {
         int c = 0;
         String vals[];
         Object val;
-        columnNames = parseLine(lines.get(0));
+        columnNames = parseLine(lines.get(0).trim());
         lines.remove(0);
 		for(int r = 0; r < lines.size(); r++) {
 		    vals = lines.get(r).split("\t");

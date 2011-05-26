@@ -7,7 +7,7 @@ import java.util.*;
 class SparseTableModel extends AbstractTableModel {
 
   private SparseTable lookup = new SparseTable();
-
+  private boolean editable = true;
   private final ArrayList<String> headers;
   
   public SparseTableModel() {
@@ -20,6 +20,12 @@ class SparseTableModel extends AbstractTableModel {
     headers = columnHeaders;
     lookup = table;
   }
+  
+  public SparseTableModel(SparseTable table, ArrayList<String> columnHeaders, boolean edit) {
+      headers = columnHeaders;
+      lookup = table;
+      editable = edit;
+    }
   
   public void clearTable() {
       lookup.removeElements();
@@ -46,8 +52,13 @@ class SparseTableModel extends AbstractTableModel {
       lookup.add(row, column, value);
   }
   
+  public void setEditable(boolean b)
+  {
+      editable = b;
+  }
+  
   public boolean isCellEditable(int rowIndex, int colIndex) {
-  	  return true;
+  	  return editable;
   }
   
   public Class getColumnClass(int c) {

@@ -17,7 +17,7 @@ public class dbConnect
     ArrayList<String> resultLines = new ArrayList<String>();
     ArrayList<String> colNames = new ArrayList<String>();
     String colNamesStr = new String();
-    OracleDataSource ods = null;// new OracleDataSource();
+    OracleDataSource ods = null; // new OracleDataSource();
     Statement stmt = null;
     
     public dbConnect(String un, String pw, String dbName, String svName)
@@ -41,7 +41,10 @@ public class dbConnect
 
           try {
               stmt = conn.createStatement();
-              this.res = stmt.executeQuery("select object_name from user_objects where object_type = 'TABLE'");
+              // this.res = stmt.executeQuery("select object_name from user_objects where object_type = 'TABLE'");
+              this.res = stmt.executeQuery("show tables");
+              // this.res = conn.getTables(null, null, null, 
+                       // new String[] {"TABLE"});
               parseResultSet();
               }
               // Now do something with the ResultSet ....
@@ -154,20 +157,25 @@ public class dbConnect
         int numberOfColumns = rsMetaData.getColumnCount();
 
         // get the column names; column indexes start from 1
-        for (int i = 1; i < numberOfColumns + 1; i++) {
-          String columnName = rsMetaData.getColumnName(i);
-          colNamesStr += columnName + '\t';
-          colNames.add(columnName);
+        for (int i = 0; i < numberOfColumns; i++) {
+          String columnName = rsMetaData.getColumnLabel(i+1);
+          // System.out.println("{"+columnName+"}");
+          // colNamesStr += columnName + '\t';
+          colNames.add(columnName.trim());
         }
-            
+        // colNamesStr = colNamesStr.substring(0,colNamesStr.length()-1);
+        // colNamesStr = colNamesStr.substring(0,colNamesStr.lastIndexOf('\n'));
+        // colNamesStr = colNamesStr.replace('\n','');
         String temp = "";
         while(this.res.next())
         {
-            for(int i = 0; i < this.colNames.size(); i++)
+            // for(int i = 0; i < this.colNames.size(); i++)
+            for(String colName : colNames)
             {
-                temp += this.res.getString(this.colNames.get(i)) + "\t";
+                // temp += this.res.getString(this.colNames.get(i)) + "\t";
+                temp += this.res.getString(colName) + "\t";
             }
-            this.resultLines.add(temp);
+            this.resultLines.add(temp.trim());
             temp = "";
         }
     }
@@ -176,15 +184,18 @@ public class dbConnect
     {
         try
            {
-               ods = new OracleDataSource();
-               ods.setDriverType("thin");
-               ods.setServerName(serverName);
-               ods.setPortNumber(1521);
-               ods.setDatabaseName(databaseName);
-               ods.setUser(userName);
-               ods.setPassword(password);
-             // Connect to the databse
-             this.conn = ods.getConnection();
+               Class.forName ("com.mysql.jdbc.Driver").newInstance();
+               this.conn = DriverManager.getConnection("jdbc:mysql://" + serverName+"/"+databaseName, userName, password);
+               
+             //   ods = new OracleDataSource();
+             //   ods.setDriverType("thin");
+             //   ods.setServerName(serverName);
+             //   ods.setPortNumber(1521);
+             //   ods.setDatabaseName(databaseName);
+             //   ods.setUser(userName);
+             //   ods.setPassword(password);
+             // // Connect to the databse
+             // this.conn = ods.getConnection();
              return true;
            }
            catch (Exception e)

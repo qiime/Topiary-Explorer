@@ -72,7 +72,7 @@ public class MainFrame extends JFrame {
     
     ArrayList<TreeWindow> treeWindows = new ArrayList<TreeWindow>();
 /*    TreeWindow treeWindow = null;*/
-    PcoaWindow pcoaWindow = new PcoaWindow(this);
+    // PcoaWindow pcoaWindow = new PcoaWindow(this);
     ConsoleWindow consoleWindow = new ConsoleWindow(this);
     
     DbConnectWindow db_conn = new DbConnectWindow(this);
@@ -162,7 +162,7 @@ public class MainFrame extends JFrame {
                 setDatabaseResultsAs();
             }
         });
-        setAs.setEnabled(false);
+        // setAs.setEnabled(false);
         databaseTopPanel.add(setAs);
         databasePanel.add(databaseTopPanel, BorderLayout.NORTH);
         
@@ -177,7 +177,8 @@ public class MainFrame extends JFrame {
         databaseTabPane.addTab("Search", db_search);
         
         databaseTabPane.setEnabledAt(1, false);
-
+        
+        ((SparseTableModel)databaseTable.getModel()).setEditable(false);
         databaseTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         databaseTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         databaseTable.setCellSelectionEnabled(true);
@@ -455,7 +456,7 @@ public class MainFrame extends JFrame {
      public void resetDatabaseTable() {
          database = new DataTable(db_conn.c);
          SparseTableModel model = new SparseTableModel(database.getData(),
-   		 	database.getColumnNames());
+   		 	database.getColumnNames(), false);
    		 TableSorter sorter = new TableSorter(model, databaseTable.getTableHeader());
    		 databaseTable.setModel(sorter);
      }
@@ -464,28 +465,28 @@ public class MainFrame extends JFrame {
          db_conn.c.getAvailableTables();
          resetDatabaseTable();
   		 back.setEnabled(false);
-  		 setAs.setEnabled(false);
+         // setAs.setEnabled(false);
   		 showData.setEnabled(true);
      }
      
      public void setDatabaseResultsAs() {
-         Object[] possibilities = {"Otu Sample Map", "Otu Metadata", "Sample Metadata"};
+         Object[] possibilities = {"Tip Data", "OTU Table", "Sample Data"};
          String tableName = (String)JOptionPane.showInputDialog(
                              this,
                              "Use database results in which table?",
-                             "Customized Dialog",
+                             "Set results as",
                              JOptionPane.PLAIN_MESSAGE,
                              null,
                              possibilities,
-                             possibilities[1]);
+                             possibilities[0]);
 
          //If a string was returned, say so.
          if (tableName != null) {
              SparseTableModel model = null;
              TableSorter sorter = null;
-             switch(tableName.charAt(4))
+             switch(tableName.charAt(0))
              {
-                 case 'S':
+                 case 'O':
                      otuSampleMap = new DataTable(database.toStrings());
                      model = new SparseTableModel(otuSampleMap.getData(),
 					 otuSampleMap.getColumnNames());
@@ -494,7 +495,7 @@ public class MainFrame extends JFrame {
 					 otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
 					 dataPane.setSelectedIndex(2);
                      break;
-                 case 'M':
+                 case 'T':
                      otuMetadata = new DataTable(database.toStrings());
 				     model = new SparseTableModel(otuMetadata.getData(),
 					 otuMetadata.getColumnNames());
@@ -505,7 +506,7 @@ public class MainFrame extends JFrame {
                      otuMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuMetadata, otuMetadataTable));
                      dataPane.setSelectedIndex(1);
                      break;
-                 case 'l':
+                 case 'S':
                      sampleMetadata = new DataTable(database.toStrings());
                      model = new SparseTableModel(sampleMetadata.getData(),
     				 sampleMetadata.getColumnNames());
@@ -597,11 +598,11 @@ public class MainFrame extends JFrame {
           if (currTable != null && currTable == otuMetadata) {
               for(TreeWindow t : treeWindows)
                   t.recolorLabelsByOtu();
-              pcoaWindow.recolorPcoaByOtu();
+              // pcoaWindow.recolorPcoaByOtu();
           } else if (currTable != null && currTable == sampleMetadata) {
               for(TreeWindow t : treeWindows)
                 t.recolorLabelsBySample();
-              pcoaWindow.recolorPcoaBySample();
+              // pcoaWindow.recolorPcoaBySample();
           } else {
               //it's null; don't do anything
           }
