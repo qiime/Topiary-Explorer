@@ -19,6 +19,10 @@
 -- Table structure for table `keyboard_mapping`
 --
 
+drop database if exists forensic_keyboard;
+create database forensic_keyboard;
+use forensic_keyboard;
+
 DROP TABLE IF EXISTS `keyboard_mapping`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
