@@ -63,7 +63,7 @@ class SparseTableModel extends AbstractTableModel {
   
   public Class getColumnClass(int c) {
       try {
-          Class cl = lookup.get(1, c).getClass();
+          Class cl = lookup.get(0, c).getClass();
           for(int i = 0; i < getRowCount(); i++)
           {
               if(!cl.equals(lookup.get(i, c).getClass()))

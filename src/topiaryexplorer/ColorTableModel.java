@@ -53,7 +53,7 @@ class ColorTableModel extends AbstractTableModel {
 
     public Class getColumnClass(int c) {
         try {
-              Class cl = getValueAt(1, c).getClass();
+              Class cl = getValueAt(0, c).getClass();
               for(int i = 0; i < getRowCount(); i++)
               {
                   if(!cl.equals(getValueAt(i, c).getClass()))

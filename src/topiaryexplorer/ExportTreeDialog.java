@@ -105,12 +105,14 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
 	// }}}
 	
 	public void exportTree() {
+	    this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	    //Determine PDF dimensions
          if (dims[0]!=0 && dims[1]!=0 && saveField.getText().length() > 0) {
             tree.exportTreeImage(frame.dir_path+"/tree_export_images/"+saveField.getText()+".pdf", dims);
 		}
 		else
 		{
+		    this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		    JOptionPane.showMessageDialog(frame,
                 "Please check inputs.\n"+
                 "Dimensions cannot be 0 and \n"+
@@ -118,6 +120,7 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
                 "Save error",
                 JOptionPane.ERROR_MESSAGE);
 		}
+		this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 	
 	public void change(DocumentEvent e) {
