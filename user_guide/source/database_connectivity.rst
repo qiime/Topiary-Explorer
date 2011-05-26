@@ -8,7 +8,7 @@ This tutorial shows how to load data from a locally running mysql database into 
 Assumptions made in this tutorial
 ---------------------------------
 
- * Prior to working through this tutorial we recommend running through the `TopiaryExplorer Overview Tutorial <./quickstart.rst>`_ which will show you how to work with the basic features of TopiaryExplorer. This tutorial assumes that you already know how to load the TopiaryExplorer application and that you have some familiarity with the basic interface.
+ * Prior to working through this tutorial we recommend running through the `TopiaryExplorer Overview Tutorial <./quickstart.html>`_ which will show you how to work with the basic features of TopiaryExplorer. This tutorial assumes that you already know how to load the TopiaryExplorer application and that you have some familiarity with the basic interface.
 
  * You should also first review the `TopiaryExplorer Window <./topiaryexplorer_window.html>`_ guide, which covers the Database Pane.
 
@@ -18,7 +18,7 @@ Tutorial Input Files
 --------------------
 All of the files you need to complete this tutorial are packaged in the ``examples`` directory of the TopiaryExplorer package.
 
- * mysql Database Dump File (keyboard.sql): This is a mysql database dump that contains all of the tip data (keyboard_otu_metadata.txt), OTU abundance data (keyboard_otu_table.txt), and sample data (keyboard_mapping.txt) included in the ``examples`` directory and the `TopiaryExplorer Overview Tutorial <./quickstart.rst>`_.
+ * mysql Database Dump File (keyboard.sql): This is a mysql database dump that contains all of the tip data (keyboard_otu_metadata.txt), OTU abundance data (keyboard_otu_table.txt), and sample data (keyboard_mapping.txt) included in the ``examples`` directory and the `TopiaryExplorer Overview Tutorial <./quickstart.html>`_.
 
  * Newick-format tree (keyboard.tre): a tree in newick format with tip labels and branch lengths.
 
@@ -53,7 +53,9 @@ Once you've filled in the details, click the ``Connect`` button on the bottom ri
 
 Step 4. Select the the data that you'd like to use
 --------------------------------------------------
-You'll next select the type of data that you'd like to load from the database. The ``tables_in_forensic_keyboard`` column lists the tables that are available in the database. Select the ``keyboard_otu_metadata`` option and click the ``Show Table`` button on the top right (be sure to click ``Show Table`` here, not ``Set As...``).
+You'll next select the type of data that you'd like to load from the database. The ``Tables_in_forensic_keyboard`` column lists the tables that are available in the database. Select the ``keyboard_otu_metadata`` option and click the ``Show Table`` button on the top right (be sure to click ``Show Table`` here, not ``Set As...``). 
+
+Note: To view the full text in the ``Tables_in_forensic_keyboard`` column, you can expand the column by dragging the vertical bar just to the right of ``Tables_in...`` to the right.
 
 
 .. figure::  _images/show_table.png
@@ -68,7 +70,7 @@ Next click the ``Set As...`` button. A new window will open. Select ``Tip Data``
 
 Step 6. Set another data type
 -----------------------------
-To set another data type, click on the ``Database`` tab in the top of the window. Click the ``<<`` button to return to the list of available tables. Select the ``keyboard_mapping`` option, and set this as ``Sample Data`` (as in Step 5). This will open the ``SampleData`` tab.
+To set another data type, click on the ``Database`` tab in the top of the window. Click the ``<<`` button to return to the list of available tables. Select the ``keyboard_mapping`` option and click ``Show Table``. Then set this as ``Sample Data`` by clicking ``Set As...`` (as in Step 5). This will open the ``SampleData`` tab.
 
 .. figure:: _images/set_results_as_otu_sample_data.png
    :align:  center
@@ -82,4 +84,4 @@ Next switch to the Tree Window. Uncollapse the tree by dragging the slider on to
    :align:   center
 
 
-This last step was covered very quickly here: if you got lost you should refer to the `TopiaryExplorer Overview Tutorial <./quickstart.rst>`_ which goes through the steps for coloring a tree in a lot more detail.
+This last step was covered very quickly here: if you got lost you should refer to the `TopiaryExplorer Overview Tutorial <./quickstart.html>`_ which goes through the steps for coloring a tree in a lot more detail.
