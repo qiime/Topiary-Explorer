@@ -72,12 +72,12 @@ Step 6. Set the OTU Table data
 ------------------------------
 To set the OTU table data, click on the ``Database`` tab in the top of the TopiaryExplorer window. Click the ``<<`` button to return to the list of available tables. Select the ``keyboard_otu_table`` option. Click ``Show Table``, then click ``Set As..``, and choose ``OTU Table`` from the drop down box. Click ``OK``. This will open the ``OTU Table`` tab.
 
+.. figure:: _images/set_results_as_otu_sample_data.png
+   :align:  center
+
 Step 7. Set the Sample Data
 -----------------------------
 To set the Sample Data, click on the ``Database`` tab in the top of the window. Click the ``<<`` button to return to the list of available tables. Select the ``keyboard_mapping`` option and click ``Show Table``. Then set this as ``Sample Data`` by clicking ``Set As...``, choosing ``Sample Data``, and then ``OK``. This will open the ``Sample Data`` tab.
-
-.. figure:: _images/set_results_as_otu_sample_data.png
-   :align:  center
 
 Step 8. Color tree using Tip Data
 ---------------------------------
@@ -86,6 +86,5 @@ Next switch to the Tree Window. Uncollapse the tree by dragging the slider on to
 
 .. figure::  _images/db_tree_colored_by_individual.png
    :align:   center
-
 
 This last step was covered very quickly here: if you got lost you should refer to the `TopiaryExplorer Overview Tutorial <./quickstart.html>`_ which goes through the steps for coloring a tree in a lot more detail.
