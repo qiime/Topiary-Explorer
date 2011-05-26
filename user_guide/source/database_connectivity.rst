@@ -68,14 +68,18 @@ Next click the ``Set As...`` button. A new window will open. Select ``Tip Data``
 .. figure:: _images/set_results_as_otu_tip_data.png
    :align:  center
 
-Step 6. Set another data type
+Step 6. Set the OTU Table data
+------------------------------
+To set the OTU table data, click on the ``Database`` tab in the top of the TopiaryExplorer window. Click the ``<<`` button to return to the list of available tables. Select the ``keyboard_otu_table`` option. Click ``Show Table``, then click ``Set As..``, and choose ``OTU Table`` from the drop down box. Click ``OK``. This will open the ``OTU Table`` tab.
+
+Step 7. Set the Sample Data
 -----------------------------
-To set another data type, click on the ``Database`` tab in the top of the window. Click the ``<<`` button to return to the list of available tables. Select the ``keyboard_mapping`` option and click ``Show Table``. Then set this as ``Sample Data`` by clicking ``Set As...`` (as in Step 5). This will open the ``SampleData`` tab.
+To set the Sample Data, click on the ``Database`` tab in the top of the window. Click the ``<<`` button to return to the list of available tables. Select the ``keyboard_mapping`` option and click ``Show Table``. Then set this as ``Sample Data`` by clicking ``Set As...``, choosing ``Sample Data``, and then ``OK``. This will open the ``Sample Data`` tab.
 
 .. figure:: _images/set_results_as_otu_sample_data.png
    :align:  center
 
-Step 7. Color tree using Tip Data
+Step 8. Color tree using Tip Data
 ---------------------------------
 
 Next switch to the Tree Window. Uncollapse the tree by dragging the slider on top to the right. Color the branches in the tree by expanding the branch panel on the left, clicking ``Color by`` and then ``Sample Metadata`` and ``Individual``. Then switch to the TopiaryExplorer window and select colors for the different individuals. Switch back to the TreeWindow and your tree will now be colored by individual. 
