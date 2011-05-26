@@ -12,7 +12,7 @@ Assumptions made in this tutorial
 
  * You should also first review the `TopiaryExplorer Window <./topiaryexplorer_window.html>`_ guide, which covers the Database Pane.
 
- * [DOUG PLEASE EDIT!!] You have a working mysql database on your system, with a user account already created.
+ * You have a working mysql database on your system, with a user account already created. You can download the current version of MySQL here: http://dev.mysql.com/downloads/mysql/
 
 Tutorial Input Files
 --------------------
@@ -26,7 +26,9 @@ Step 1. Load the example database
 ---------------------------------
 You'll first need to load the example data into your locally running mysql database. You can do this with the following command::
 
-	mysqlimport [DOUG WILL WRITE]
+	mysql -uusername -ppassword < forensic_keyboard.sql
+	
+By default, ``username`` will be root and ``password`` will be based on your settings. 
 
 Step 2. Load the tree
 ---------------------
@@ -39,7 +41,7 @@ This will open a new Tree Window. Switch back to the TopiaryExplorer Window.
 
 Step 3. Connect to the local database
 --------------------------------------
-Fill in database connection information in the Connect dialog at the bottom of the Database Pane. The relevant information is: Server: ``localhost``, Database: ``forensic_keyboard``, Username: ``root``, and your password will be system specific. 
+Fill in database connection information in the Connect dialog at the bottom of the Database Pane. The relevant information is: Server: ``localhost``, Database: ``forensic_keyboard``, Username: ``root``, and your password will be based on your settings. 
 
 .. figure::  _images/connect_to_database.png
    :align:   center
