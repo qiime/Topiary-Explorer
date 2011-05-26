@@ -42,7 +42,7 @@ If you're working with very large trees 2GB of RAM (the default used by TopiaryE
 	javaws topiaryexplorer_4000mb.jnlp
 	javaws topiaryexplorer_8000mb.jnlp
 	
-If you have less that 2GB of RAM in your system, you can work with a version of TopiaryExploer that requires only 1GB of RAM, but you will likely begin to notice performance issues. To work with that version open TopiaryExplorer with the command::
+If you have less that 2GB of RAM in your system, you can work with a version of TopiaryExplorer that requires only 1GB of RAM, but you will likely begin to notice performance issues. To work with that version open TopiaryExplorer with the command::
 
 	javaws topiaryexplorer_1000mb.jnlp
 
