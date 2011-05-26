@@ -74,7 +74,7 @@ The interpolate button is used to create a gradient which interpolates across se
 
 Data table tab pane
 ===================
-The data table tab pane contains tables for each of the data files that can be used in TopiaryExplorer.
+The data table tab pane contains tables for each of the data files that can be used in TopiaryExplorer. An example of using this functionality is covered in the `database connectivity tutorial <./database_connectivity.html>`_.
 
 These panes are:
 

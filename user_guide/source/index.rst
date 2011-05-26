@@ -13,6 +13,7 @@ TopiaryExplorer UserGuide
    install
    quickstart
    interface_guide
+   database_connectivity
 
 
 Introduction
@@ -43,5 +44,9 @@ Features
 Citing TopiaryExplorer
 ======================
 
-TopiaryExplorer is currently under review. In the meantime please cite TopiaryExplorer using the URL: `http://topiaryexplorer.sourceforge.net/ <http://topiaryexplorer.sourceforge.net/>`_.
+TopiaryExplorer is currently under review. In the meantime please cite TopiaryExplorer with the following reference:
+
+TopiaryExplorer: An application for connecting large phylogenetic trees to environmental metadata; Meg Pirrung, Ryan Kennedy, J. Gregory Caporaso and Rob Knight; Under review (2011).
+
+Contact gregcaporaso@gmail.com with questions about citing TopiaryExplorer.
 
