@@ -5,8 +5,8 @@
     <title>TopiaryExplorer</title>
     <vendor>University of Colorado</vendor>
     <description>TopiaryExplorer</description>
-    <!--<icon href="icon.png"/>-->
-    <!--<icon kind="splash" href="images/splash.gif"/>-->
+    <!-- <icon href="web/images/leaf_icon.png"/> -->
+    <!-- <icon kind="splash" href="web/images/leaf_logo.png/> -->
     
     <offline-allowed/>
      
@@ -18,7 +18,7 @@
   </security>
   
   <resources>
-    <j2se version="1.5+" initial-heap-size="500M" max-heap-size="2000m" />
+    <j2se version="1.6+" initial-heap-size="500M" max-heap-size="2000m" />
 	<extension name="jogl" href="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp" />
 	
 	<jar href="topiaryexplorer.jar" />

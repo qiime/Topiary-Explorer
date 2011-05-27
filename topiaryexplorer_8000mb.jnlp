@@ -18,7 +18,7 @@
   </security>
   
   <resources>
-    <j2se version="1.5+" initial-heap-size="500M" max-heap-size="8000m" />
+    <j2se version="1.6+" initial-heap-size="500M" max-heap-size="8000m" />
 	<extension name="jogl" href="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp" />
 	
 	<jar href="topiaryexplorer.jar" />
