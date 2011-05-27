@@ -6,9 +6,17 @@ Installing TopiaryExplorer
 
 Requirements
 ------------
-TopiaryExplorer is written in Java and requires you to have Java version 6 installed on your machine. You can `download that here <http://www.oracle.com/technetwork/java/javase/downloads/jdk-6u25-download-346242.html>`_. Follow the instructions on the Oracle website to ensure that you have Java installed correctly.
+**TopiaryExplorer requires Java 6.** 
 
-TopiaryExplorer requires that you have at least 2GB of RAM. 
+To check your version of Java open a command terminal and run the following::
+
+	java -version
+
+If you are running a version less than 1.6.x (i.e., Java 6), you'll need to upgrade to Java 6 before you can use TopiaryExplorer. 
+ * If you're running Mac OS 10.5 (Leopard), you can find `update instructions here <http://support.apple.com/kb/TS3489>`_. On Mac OS 10.5 you likely already have Java 6 installed, but are not using it by default. 
+ * If you're not using OS X, you can `download Java 6 here <http://www.oracle.com/technetwork/java/javase/downloads/jdk-6u25-download-346242.html>`_. Follow the instructions on the Oracle website to ensure that you have Java installed correctly.
+
+TopiaryExplorer additionally requires that you have at least 2GB of RAM. 
 
 Installing the release version of TopiaryExplorer
 -------------------------------------------------
