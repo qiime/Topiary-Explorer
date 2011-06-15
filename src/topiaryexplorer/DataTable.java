@@ -50,11 +50,21 @@ public class DataTable {
     
     public void loadData(ArrayList<String> lines) {
         data = new SparseTable();
+        List<String> commentedLines = new java.util.ArrayList<String>();
+        
+        for(String line:lines)
+        {
+            if(line.charAt(0)=='#')
+                commentedLines.add(line);
+        }
+        
+        for(String line:commentedLines)
+            lines.remove(line);
+        
+        
         int c = 0;
         String vals[];
         Object val;
-        columnNames = parseLine(lines.get(0).trim());
-        lines.remove(0);
 		for(int r = 0; r < lines.size(); r++) {
 		    vals = lines.get(r).split("\t");
 		    rowNames.add(vals[0]);
@@ -67,6 +77,14 @@ public class DataTable {
 		        c = c + 1;
 		    }
         }
+        int numCols = c;
+        //parse each commented line until we get one that has the same number of
+        //rows as the data
+        for (String currline : commentedLines) {
+			//parse it, removing leading '#'
+			columnNames = parseLine(currline.substring(1));
+			if (columnNames.size() == numCols) break;
+		}
     }
 
     public void loadData(InputStream is) throws IOException{
@@ -85,7 +103,7 @@ public class DataTable {
 			line = br.readLine();
 		}
 		//now we've gone one line too far, so return to our last mark
-/*      br.reset();*/
+      // br.reset();
 
 
         data = new SparseTable();
