@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <jnlp codebase="file:." >
     
     <information>
     <title>TopiaryExplorer</title>
     <vendor>University of Colorado</vendor>
     <description>TopiaryExplorer</description>
-    <!-- <icon href="web/images/leaf_icon.png"/> -->
-    <!-- <icon kind="splash" href="web/images/leaf_logo.png/> -->
     
     <offline-allowed/>
      
@@ -30,7 +29,11 @@
 	<jar href="lib/mysql-connector-java-5.1.10-bin.jar" />
 	<jar href="lib/javaws.jar" />
 	<jar href="lib/classes12.jar" />
+	<jar href="lib/jogl.jar" />
+	
   </resources>
   
-  <application-desc main-class="topiaryexplorer.TopiaryExplorer" />
+  <application-desc main-class="topiaryexplorer.TopiaryExplorer">
+	</application-desc>
+
 </jnlp>

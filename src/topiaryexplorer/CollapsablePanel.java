@@ -64,8 +64,10 @@ class CollapsablePanel extends JPanel {
             setBackground(currentColor);
             
             try {
-                open = ImageIO.read(new File("./src/images/down_mini.gif"));
-                closed = ImageIO.read(new File("./src/images/right_mini.gif"));
+                open = (ImageIO.read(this.getClass().getClassLoader().getResource("down_mini.gif")));
+                // open = ImageIO.read(new File("./src/images/down_mini.gif"));
+                closed = (ImageIO.read(this.getClass().getClassLoader().getResource("right_mini.gif")));
+                // closed = ImageIO.read(new File("./src/images/right_mini.gif"));
             } catch (IOException e) {
                 e.printStackTrace();
             }

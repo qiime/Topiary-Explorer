@@ -28,6 +28,7 @@ import javax.swing.table.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.jnlp.*;
+import java.net.URL;
 
 
 /**
@@ -473,6 +474,44 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 frame.consoleWindow.update("Error opening project.");
             }
             
+        }
+    
+    public void openProject(String projectPath){
+
+        try {
+            // this.getClass().getClassLoader().getResource(projectPath)
+            // FileContents inFile = frame.ps.get(new URL(projectPath));
+            // FileContents inFile = frame.fos.openFileDialog(projectPath, new String[]{"tep"});
+            FileReader inFile = new FileReader(projectPath);
+    	        if(inFile != null)
+                {
+                    HashMap data = TopiaryFunctions.parseTep(inFile);
+
+                    // load otu metadata
+                     if(data.containsKey("otm")){
+                         frame.setOtuMetadata(((ArrayList<String>)data.get("otm")));
+                     }
+                     // load otu sample map
+                     if(data.containsKey("osm")){
+                         frame.setOtuSampleMap(((ArrayList<String>)data.get("osm")));
+                     }
+                     // load sample metadata
+                     if(data.containsKey("sam")){
+                         frame.setSampleMetadata(((ArrayList<String>)data.get("sam")));
+                     }
+                     // load tree
+                     if(data.containsKey("tre")){
+                         for(String s : (ArrayList<String>)data.get("tre"))
+                             frame.newTreeWindow(s, true);
+                     }
+                    frame.repaint();
+                }
+            }
+            catch(IOException e)
+            {
+                System.out.println("Error opening project."+e);
+            }
+
         }
     
     public void saveProject(){

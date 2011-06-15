@@ -6,7 +6,7 @@
 		<path id="compile.path">
 			<fileset dir="lib" includes="*.jar" />
 		</path>
-        <javac debug="on" target="1.5"
+        <javac debug="on" target="1.6"
                classpathref="compile.path"
                srcdir="src" destdir="build/classes"
                />
@@ -18,18 +18,21 @@
 
 		<jar jarfile="topiaryexplorer.jar">
 			<fileset dir="build/classes" />
+			<fileset dir="src/images/">
+	            <include name="**/*.gif" />
+	        </fileset>
 			<manifest>
 				<attribute name="Main-Class" value="topiaryexplorer.TopiaryExplorer" />
                 <attribute name="Class-Path" value="lib/core.jar lib/gluegen-rt-natives-linux-amd64.jar lib/gluegen-rt-natives-linux-i586.jar lib/gluegen-rt-natives-macosx-ppc.jar lib/gluegen-rt-natives-macosx-universal.jar lib/gluegen-rt-natives-windows-amd64.jar lib/gluegen-rt-natives-windows-i586.jar lib/gluegen-rt.jar lib/itext.jar lib/jogl.jar lib/opengl.jar lib/pdf.jar lib/mysql-connector-java-5.1.10-bin.jar lib/javaws.jar lib/ojdbc14.jar lib/classes12.jar" />
 			</manifest>
 		</jar>
 		
-		<jar jarfile="pcoaserver.jar">
-			<fileset dir="build/classes" />
-			<manifest>
-				<attribute name="Main-Class" value="pcoaserver.PcoaServer" />
-			</manifest>
-		</jar>
+		<!-- <jar jarfile="pcoaserver.jar">
+					<fileset dir="build/classes" />
+					<manifest>
+						<attribute name="Main-Class" value="pcoaserver.PcoaServer" />
+					</manifest>
+				</jar> -->
 	</target>
 	
 	<target name="clean">

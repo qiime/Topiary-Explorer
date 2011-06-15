@@ -11,13 +11,14 @@ import java.sql.*;
 import javax.swing.table.*;
 import java.io.*;
 import javax.jnlp.*;
+import javax.imageio.ImageIO;
 /**
  * <<Class summary>>
  *
  * @author Meg Pirrung &lt;&gt;
  * @version $Rev$
  */
-public final class TreeViewPanel extends JPanel{
+public final class TreeViewPanel extends JPanel {
     TreeWindow frame = null;
     TreeEditToolbar parent = null;
     TreeVis vis = null;
@@ -38,16 +39,17 @@ public final class TreeViewPanel extends JPanel{
     ButtonGroup layoutGroup = new ButtonGroup();
     JPanel layoutPanel = new JPanel();
     CollapsablePanel layoutCP = new CollapsablePanel("Layout", layoutPanel, true, true);
-    JToggleButton rectButton = new JToggleButton(new ImageIcon("./src/images/rectangular.gif"),true);
-    JToggleButton triButton = new JToggleButton(new ImageIcon("./src/images/triangular.gif"));
-    JToggleButton radialButton = new JToggleButton(new ImageIcon("./src/images/radial.gif"));
-    JToggleButton polarButton = new JToggleButton(new ImageIcon("./src/images/polar.gif"));
+    JToggleButton rectButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("rectangular.gif"))),true);
+    // JToggleButton rectButton = new JToggleButton(new ImageIcon("./src/images/rectangular.gif"),true);
+    JToggleButton triButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("triangular.gif"))));
+    JToggleButton radialButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("radial.gif"))));
+    JToggleButton polarButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("polar.gif"))));
     
     JPanel mirrorPanel = new JPanel();
     CollapsablePanel mirrorCP = new CollapsablePanel("Mirror", mirrorPanel, false, true);
     
-    JToggleButton mirrorvertButton = new JToggleButton(new ImageIcon("./src/images/mirror_vert.gif"));
-    JToggleButton mirrorhorzButton = new JToggleButton(new ImageIcon("./src/images/mirror_horz.gif"));
+    JToggleButton mirrorvertButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("mirror_vert.gif"))));
+    JToggleButton mirrorhorzButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("mirror_horz.gif"))));
     
     JPanel bgColorPanel = new JPanel();
     JLabel bgColorLabel = new JLabel("Background Color: ");
@@ -58,7 +60,7 @@ public final class TreeViewPanel extends JPanel{
     /**
      * 
      */
-    public TreeViewPanel(TreeWindow _frame, TreeEditToolbar _parent) {
+    public TreeViewPanel(TreeWindow _frame, TreeEditToolbar _parent) throws IOException{
         super();
         frame = _frame;
         parent = _parent;

@@ -18,8 +18,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-
-//package net.sourceforge.topiarytool;
  
 import javax.swing.*;
 
@@ -39,8 +37,19 @@ public class TopiaryExplorer {
         frame.setVisible(true);
      }
      
+     public static void createAndShowGUI(String project) {
+        //create the main window
+        JFrame frame = new MainFrame();
+        frame.pack();
+        frame.setVisible(true);
+        ((MainFrame)frame).mainMenu.openProject(project);
+     }
+     
      public static void main(String[] args) {
-        createAndShowGUI();
+         if(args.length > 0)
+            createAndShowGUI(args[0]);
+         else
+             createAndShowGUI();
      }
 
 }

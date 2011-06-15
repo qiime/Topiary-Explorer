@@ -22,6 +22,7 @@ public class MainFrame extends JFrame {
     FileSaveService fss;
     ExtendedService es;
     BasicService bs;
+    PersistenceService ps;
     String dir_path = "";//(new File(".")).getCanonicalPath();
     
     String DATABASE_URL = ""; // jdbc:mysql://127.0.0.1/topiarytool
@@ -251,6 +252,9 @@ public class MainFrame extends JFrame {
     	try { 
         	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
     	} catch (UnavailableServiceException e) { bs=null; }   
+    	try { 
+        	ps = (PersistenceService)ServiceManager.lookup("javax.jnlp.PersistenceService");
+    	} catch (UnavailableServiceException e) { ps=null; }
     	
       setDefaultCloseOperation(DISPOSE_ON_CLOSE);
      }

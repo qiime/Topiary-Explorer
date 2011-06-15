@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <jnlp codebase="file:." >
     
     <information>
     <title>TopiaryExplorer</title>
     <vendor>University of Colorado</vendor>
     <description>TopiaryExplorer</description>
-    <!--<icon href="icon.png"/>-->
-    <!--<icon kind="splash" href="images/splash.gif"/>-->
     
     <offline-allowed/>
      
@@ -18,7 +17,7 @@
   </security>
   
   <resources>
-    <j2se version="1.6+" initial-heap-size="500M" max-heap-size="1000m" />
+    <j2se version="1.6+" initial-heap-size="500M" max-heap-size="2000m" />
 	<extension name="jogl" href="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp" />
 	
 	<jar href="topiaryexplorer.jar" />
@@ -31,7 +30,13 @@
 	<jar href="lib/javaws.jar" />
 	<jar href="lib/classes12.jar" />
 	<jar href="lib/jogl.jar" />
+	
   </resources>
   
-  <application-desc main-class="topiaryexplorer.TopiaryExplorer" />
+  <application-desc main-class="topiaryexplorer.TopiaryExplorer">
+	
+  <argument>examples/keyboard.tep</argument>
+
+	</application-desc>
+
 </jnlp>

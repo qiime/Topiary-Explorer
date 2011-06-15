@@ -246,6 +246,35 @@ public class TopiaryFunctions {
         }
 	}
 	
+	public static HashMap parseTep(FileReader file) {
+	    try {
+    	    BufferedReader br = new BufferedReader(file);
+            String dataType = "";
+            HashMap data = new HashMap();
+            // ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
+            String line = br.readLine();
+            while(line != null)
+            {
+                line = line.trim();
+                if(line.startsWith(">>"))
+                {
+                    dataType = line.substring(2,5);
+                    if(!data.containsKey(dataType))
+                        data.put(dataType, new ArrayList<String>());                    
+                }
+                else
+                    ((ArrayList<String>)data.get(dataType)).add(line);
+                line = br.readLine();
+            }
+            br.close();
+            return data;
+        }
+        catch(IOException e)
+        {
+            return null;
+        }
+	}
+	
 	public static String getConsensus(ArrayList<String> consensus, double level) {
         while(consensus.contains(null))
             consensus.remove(consensus.indexOf(null));
@@ -295,5 +324,9 @@ public class TopiaryFunctions {
           else
             return null;
 	}
+    // 
+    // public static HashMap parsePrefsFile(){
+    //     
+    // }
     
 }

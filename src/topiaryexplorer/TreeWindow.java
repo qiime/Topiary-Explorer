@@ -14,6 +14,7 @@ import javax.jnlp.*;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import javax.imageio.ImageIO;
 
 /**
  * TreeWindow is the window that contains the tree visualization.
@@ -37,7 +38,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     TreeAppletHolder treeHolder = null;
     TreeVis tree = new TreeVis();
     JPanel treePanel = new JPanel();
-    JToggleButton lockButton = new JToggleButton(new ImageIcon("./src/images/lock.gif"), false);
+    JToggleButton lockButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("lock.gif"))), false);
     Boolean zoomLocked = false;
     TreeToolbar treeToolbar = null;
     JPanel bottomPanel = new JPanel();
@@ -55,7 +56,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     /**
     * Class Constructor
     */
-	 public TreeWindow(MainFrame _frame) {
+	 public TreeWindow(MainFrame _frame) throws IOException{
          super(_frame);
 	     this.setSize(new Dimension(1000,800));
 	     frame = _frame;

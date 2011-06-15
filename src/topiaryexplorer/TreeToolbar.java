@@ -34,7 +34,7 @@ public class TreeToolbar extends JToolBar {
                     frame.zoomOut();
                     return;
                 }
-                zoomSlider.setValue(zoomSlider.getValue() - 1);
+                zoomSlider.setValue(zoomSlider.getValue() - 10);
                 syncTreeWithZoomSlider();
             }
 
@@ -46,7 +46,7 @@ public class TreeToolbar extends JToolBar {
                     frame.zoomIn();
                     return;
                 }
-                zoomSlider.setValue(zoomSlider.getValue() + 1);
+                zoomSlider.setValue(zoomSlider.getValue() + 10);
                 syncTreeWithZoomSlider();
             }
 
