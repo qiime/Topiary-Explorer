@@ -268,7 +268,7 @@ public class DataTable {
 	
 	public ArrayList<String> toStrings() {
 	    ArrayList<String> lines = new ArrayList<String>();
-	    String s = "";
+	    String s = "#";
 	    
 	    for(String h : getColumnNames())
 	        s += h + '\t';
