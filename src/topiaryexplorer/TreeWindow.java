@@ -1007,18 +1007,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
      
      public void resetConsensusLineage() {
          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-         
-         // ArrayList<String> colNames = frame.otuMetadata.getColumnNames();
-         // int col = colNames.indexOf("Consensus Lineage");
-         // 
-         // if(col == -1)
-         // {
-         //     this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-         //     JOptionPane.showMessageDialog(null, "ERROR: No consensus lineage"+
-         //     " column defined. Column must have title \"Consensus Lineage\","+
-         //     " case sensistive.", "Error", JOptionPane.ERROR_MESSAGE);
-         //    return;
-         //  }
+
          JLabel colLabel = new JLabel("Taxonomy Column: \n");
           JComboBox columns = new JComboBox(frame.otuMetadata.getColumnNames().toArray());
           Integer[] ops = {10,20,30,40,50,60,70,80,90,95,96,97,98,
@@ -1050,10 +1039,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          tree.redraw();
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
-     
-/*     public void tipLabels() {
-         setTipLabels(showTips);
-     }*/
      
      /**
      * Resets tipLabelCustomizer object based on new OTU metadata

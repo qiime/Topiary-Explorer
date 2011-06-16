@@ -653,25 +653,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        frame.repaint();
        frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
    }
-   
-    /**
-    * 
-    */
-    // public void syncPcoaWithLineWidthSlider() {
-    //     double value = pcoaLineWidthSlider.getValue();
-    //     value = value/10.0;
-    //     frame.pcoaWindow.pcoa.setLineWidthScale((float)value);
-    // }
 
-    /**
-    * Resets tip labels on the tree
-    */
-    public void resetTipLabels() {
-/*        frame.treeWindow.tlc = new TipLabelCustomizer(frame.treeWindow);
-        frame.treeWindow.tlc.setVisible(false);
-        for(Node n : frame.treeWindow.tree.getTree().getNodes())
-            n.setLabel(n.getName());*/
-/*        frame.treeWindow.tree.redraw();*/
-    }
 
 }

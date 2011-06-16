@@ -115,7 +115,10 @@ public class Node implements Comparable{
   public double getBranchLength() { return branchlength; }
   public void setName(String s) { name = s; label = s; }
   public String getName() { return name; }
-  public void setLineage(String s) { lineage = s; }
+  public void setLineage(String s) { 
+      if(s.charAt(s.length()-1) == ';')
+      s = s.substring(0,s.length()-1);
+    lineage = s; }
   public String getLineage() { 
       if(!lineage.equals("Unclassified-Screened"))
           return lineage;
