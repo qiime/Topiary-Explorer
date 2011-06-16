@@ -261,7 +261,16 @@ public class MainFrame extends JFrame {
      
      public void newTreeWindow() {
          setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-         TreeWindow tempTreeWindow = new TreeWindow(this);
+         TreeWindow tempTreeWindow = null;
+         try {
+         tempTreeWindow = new TreeWindow(this);
+        }
+        catch(IOException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Unable to load tree.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+              setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+              return;   
+        }
          tempTreeWindow.loadTree();
          treeWindows.add(tempTreeWindow);
          tempTreeWindow.setTitle("Tree "+treeWindows.size());
@@ -272,8 +281,17 @@ public class MainFrame extends JFrame {
      
      public void newTreeWindow(String treeString) {
           setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-          TreeWindow tempTreeWindow = new TreeWindow(this);
-          tempTreeWindow.loadTree(treeString);
+          TreeWindow tempTreeWindow = null;
+          try {
+           tempTreeWindow = new TreeWindow(this);
+           tempTreeWindow.loadTree(treeString);
+          }
+          catch(IOException ex)
+          {
+              JOptionPane.showMessageDialog(null, "Unable to load tree.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                return;   
+          }
           treeWindows.add(tempTreeWindow);
           tempTreeWindow.setTitle("Tree "+treeWindows.size());
           resetOtuMenus();
@@ -290,9 +308,17 @@ public class MainFrame extends JFrame {
       
       public void newTreeWindow(String treeString, Boolean t) {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            TreeWindow tempTreeWindow = new TreeWindow(this);
-            tempTreeWindow.loadTree(treeString);
-            treeWindows.add(tempTreeWindow);
+            TreeWindow tempTreeWindow = null;
+            try {
+               tempTreeWindow = new TreeWindow(this);
+               tempTreeWindow.loadTree(treeString);
+              }
+              catch(IOException ex)
+              {
+                  JOptionPane.showMessageDialog(null, "Unable to load tree.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                    return;   
+              }
             tempTreeWindow.removeColor();
             tempTreeWindow.setTitle("Tree "+treeWindows.size());
             resetOtuMenus();
@@ -309,8 +335,18 @@ public class MainFrame extends JFrame {
       
       public void newTreeWindow(FileContents treeFile) {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            TreeWindow tempTreeWindow = new TreeWindow(this);
-            tempTreeWindow.loadTree(treeFile);
+            TreeWindow tempTreeWindow = null;
+            try {
+                tempTreeWindow = new TreeWindow(this);
+                tempTreeWindow.loadTree(treeFile);
+              }
+              catch(IOException ex)
+              {
+                  JOptionPane.showMessageDialog(null, "Unable to load tree.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                    return;   
+              }
+            
             treeWindows.add(tempTreeWindow);
             tempTreeWindow.setTitle("Tree "+treeWindows.size());
             resetOtuMenus();
@@ -320,8 +356,17 @@ public class MainFrame extends JFrame {
         
         public void newTreeWindow(FileContents treeFile, Boolean t) {
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                TreeWindow tempTreeWindow = new TreeWindow(this);
-                tempTreeWindow.loadTree(treeFile);
+                TreeWindow tempTreeWindow = null;
+                try {
+                    tempTreeWindow = new TreeWindow(this);
+                    tempTreeWindow.loadTree(treeFile);
+                  }
+                  catch(IOException ex)
+                  {
+                      JOptionPane.showMessageDialog(null, "Unable to load tree.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                        return;   
+                  }
                 tempTreeWindow.removeColor();
                 treeWindows.add(tempTreeWindow);
                 tempTreeWindow.setTitle("Tree "+treeWindows.size());
@@ -331,102 +376,121 @@ public class MainFrame extends JFrame {
             }
         
     public void setOtuMetadata(ArrayList<String> data) {
+        try{
          otuMetadata = new DataTable(data);
-	     SparseTableModel model = new SparseTableModel(otuMetadata.getData(),
-		 otuMetadata.getColumnNames());
-		 TableSorter sorter = new TableSorter(model, otuMetadataTable.getTableHeader());
-         otuMetadataTable.setModel(sorter);
-         
-/*         frame.consoleWindow.update("Loaded OTU metadata.");*/
-         resetOtuMenus();
-         otuMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuMetadata, otuMetadataTable));
-         dataPane.setSelectedIndex(1);
+        } catch (Exception ex) {
+              JOptionPane.showMessageDialog(null, "Unable to load Tip metadata file.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+              // ex.printStackTrace();
+              return;
+          }
+	     setOtuMetadataModels();
     }
     
     public void setOtuMetadata(InputStream data) {
         try{
          otuMetadata = new DataTable(data);
 
-         } catch (IOException ex) {
-             JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-             ex.printStackTrace();
+         } catch (Exception ex) {
+             JOptionPane.showMessageDialog(null, "Unable to load Tip metadata file.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+             // ex.printStackTrace();
              return;
          }
-	     SparseTableModel model = new SparseTableModel(otuMetadata.getData(),
+	     setOtuMetadataModels();
+    }
+    
+    public void setOtuMetadataModels() {
+        SparseTableModel model = new SparseTableModel(otuMetadata.getData(),
 		 otuMetadata.getColumnNames());
 		 TableSorter sorter = new TableSorter(model, otuMetadataTable.getTableHeader());
          otuMetadataTable.setModel(sorter);
-         
-/*         frame.consoleWindow.update("Loaded OTU metadata.");*/
          resetOtuMenus();
          otuMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuMetadata, otuMetadataTable));
          dataPane.setSelectedIndex(1);
+
+         for(TreeWindow w : treeWindows)
+                w.removeColor();
     }
     
     public void setOtuSampleMap(ArrayList<String> data) {
+        try {
          otuSampleMap = new DataTable(data);
-         SparseTableModel model = new SparseTableModel(otuSampleMap.getData(),
-		 otuSampleMap.getColumnNames());
-		 TableSorter sorter = new TableSorter(model, otuSampleMapTable.getTableHeader());
-		 otuSampleMapTable.setModel(sorter);
-		 
-/*         consoleWindow.update("Loaded OTU to sample map");*/
-         otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
-         dataPane.setSelectedIndex(2);
+        } catch (Exception ex) {
+              JOptionPane.showMessageDialog(null, "Unable to load OTU table file.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+              // ex.printStackTrace();
+              return;
+          }
+         setOtuSampleMapModels();
     }
     
     public void setOtuSampleMap(InputStream data) {
         try{
          otuSampleMap = new DataTable(data);
          
-         } catch (IOException ex) {
-             JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-             ex.printStackTrace();
+         } catch (Exception ex) {
+             JOptionPane.showMessageDialog(null, "Unable to load OTU table file.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+             // ex.printStackTrace();
              return;
          }
+         setOtuSampleMapModels();
+    }
+    
+    public void setOtuSampleMapModels() {
          SparseTableModel model = new SparseTableModel(otuSampleMap.getData(),
 		 otuSampleMap.getColumnNames());
 		 TableSorter sorter = new TableSorter(model, otuSampleMapTable.getTableHeader());
 		 otuSampleMapTable.setModel(sorter);
-
-/*         consoleWindow.update("Loaded OTU to sample map");*/
          otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
          dataPane.setSelectedIndex(2);
+         for(TreeWindow w : treeWindows)
+            w.tree.redraw();
     }
     
     public void setSampleMetadata(ArrayList<String> data) {
+        try{
         sampleMetadata = new DataTable(data);
-
-         SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
-		 sampleMetadata.getColumnNames());
-		 TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
-		 sampleMetadataTable.setModel(sorter);
-		 
-/*         frame.consoleWindow.update("Loaded sample metadata.");*/
-         resetSampleMenus();
-         sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));
-         dataPane.setSelectedIndex(3);
+        }catch (Exception ex) {
+             JOptionPane.showMessageDialog(null, "Unable to load Sample metadata file.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+             // ex.printStackTrace();
+             return;
+         }
+         setSampleMetadataModels();
     }
     
     public void setSampleMetadata(InputStream data) {
         try {
         sampleMetadata = new DataTable(data);
         
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Unable to load Sample metadata file.\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            // ex.printStackTrace();
             return;
         }
-         SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
+         setSampleMetadataModels();
+    }
+    
+    public void setSampleMetadataModels() {
+        SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
 		 sampleMetadata.getColumnNames());
 		 TableSorter sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
 		 sampleMetadataTable.setModel(sorter);
-
-/*         frame.consoleWindow.update("Loaded sample metadata.");*/
-         resetSampleMenus();
-         sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));
-         dataPane.setSelectedIndex(3);
+        resetSampleMenus();
+        sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));
+        dataPane.setSelectedIndex(3);
+        for(TreeWindow t : treeWindows)
+            t.removeColor();
     }
+     
+     public void resetOtuTable() {
+         otuSampleMap = new DataTable();
+     }
+     
+     public void resetTipMetadataTable() {
+         otuMetadata = new DataTable();
+     }
+     
+     public void resetSampleMetadataTable() {
+         sampleMetadata = new DataTable();
+     }
      
      public void resetOtuMenus() {
          for(TreeWindow w : treeWindows)
@@ -486,39 +550,16 @@ public class MainFrame extends JFrame {
 
          //If a string was returned, say so.
          if (tableName != null) {
-             SparseTableModel model = null;
-             TableSorter sorter = null;
              switch(tableName.charAt(0))
              {
                  case 'O':
-                     otuSampleMap = new DataTable(database.toStrings());
-                     model = new SparseTableModel(otuSampleMap.getData(),
-					 otuSampleMap.getColumnNames());
-					 sorter = new TableSorter(model, otuSampleMapTable.getTableHeader());
-					 otuSampleMapTable.setModel(sorter);
-					 otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
-					 dataPane.setSelectedIndex(2);
+                     setOtuSampleMap(database.toStrings());
                      break;
                  case 'T':
-                     otuMetadata = new DataTable(database.toStrings());
-				     model = new SparseTableModel(otuMetadata.getData(),
-					 otuMetadata.getColumnNames());
-					 sorter = new TableSorter(model, otuMetadataTable.getTableHeader());
-					 otuMetadataTable.setModel(sorter);
-/*                   resetColorByOtuMenus();*/
-                     resetOtuMenus();
-                     otuMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuMetadata, otuMetadataTable));
-                     dataPane.setSelectedIndex(1);
+                     setOtuMetadata(database.toStrings());
                      break;
                  case 'S':
-                     sampleMetadata = new DataTable(database.toStrings());
-                     model = new SparseTableModel(sampleMetadata.getData(),
-    				 sampleMetadata.getColumnNames());
-    				 sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
-    				 sampleMetadataTable.setModel(sorter);
-                     resetSampleMenus();
-                     sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));
-                     dataPane.setSelectedIndex(3);
+                     setSampleMetadata(database.toStrings());
                      break;
                  default:
              }
