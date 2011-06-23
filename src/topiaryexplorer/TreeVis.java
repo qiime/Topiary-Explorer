@@ -460,7 +460,6 @@ public class TreeVis extends PApplet {
           if (xstart > MARGIN) {
             xstart = MARGIN;
           } else if (xstart + xscale*root.depth() < getWidth()-TREEMARGIN) {
-               // } else if (xstart + xscale*root.depth() < getWidth()) {
             xstart = getWidth()-MARGIN - xscale*root.depth();
           }
     
@@ -1575,12 +1574,13 @@ public class TreeVis extends PApplet {
 		  double l = root.longestRootToTipDistance();
 		  double s = root.shortestRootToTipDistance();
           setLineWidthScale(oldLineWidth*(float).2);
-          // checkBounds();
+          
 /*        drawExternalNodeLabels = true;*/
 /*        drawInternalNodeLabels = true;*/
 /*        drawNodeLabels = true;*/
 
-          width = 0;
+          width = (int)dims[0];
+          height = (int)dims[1];
           String st = "";
            if(drawExternalNodeLabels)
                st = root.getLongestLabel();
@@ -1589,27 +1589,28 @@ public class TreeVis extends PApplet {
                  width += nodeFont.width(st.charAt(i));
              }
 
-             TREEMARGIN = MARGIN + width*nodeFont.size + 5;
+             TREEMARGIN = MARGIN + width*nodeFont.size + 10;
 
-		  if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-			  xscale = (dims[0]-MARGIN-TREEMARGIN)/root.depth();
-			  xstart = MARGIN;
-		  } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-			  xscale = (Math.min(dims[0], dims[1])*0.5-2*TREEMARGIN)/root.depth();
-			  xstart = dims[0]*0.5;
-		  }
-		  
-		 if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-			  yscale = (dims[1]-2*MARGIN)/root.getNumberOfLeaves();
-			  ystart = MARGIN;
-		  } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-			  yscale = (Math.min(dims[0], dims[1])*0.5-2*TREEMARGIN)/root.depth();
-			  ystart = dims[1]*0.5;
-		  }
+         //  if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+         //               xscale = (dims[0]-MARGIN-TREEMARGIN)/root.depth();
+         //               xstart = MARGIN;
+         //  } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
+         //               xscale = (Math.min(dims[0], dims[1])*0.5-2*TREEMARGIN)/root.depth();
+         //               xstart = dims[0]*0.5;
+         //  }
+         //  
+         // if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+         //               yscale = (dims[1]-2*MARGIN)/root.getNumberOfLeaves();
+         //               ystart = MARGIN;
+         //  } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
+         //               yscale = (Math.min(dims[0], dims[1])*0.5-2*TREEMARGIN)/root.depth();
+         //               ystart = dims[1]*0.5;
+         //  }
+		  checkBounds();
 		  
 		  PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), PDF, path);
-	
-	
+	    
+	    
 		  //draw the tree to the file
 		  canvas.beginDraw();
 		  canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
