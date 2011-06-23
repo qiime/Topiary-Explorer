@@ -38,7 +38,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     TreeAppletHolder treeHolder = null;
     TreeVis tree = new TreeVis();
     JPanel treePanel = new JPanel();
-    JToggleButton lockButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("lock.gif"))), false);
+    JToggleButton lockButton = new JToggleButton();
+
     Boolean zoomLocked = false;
     TreeToolbar treeToolbar = null;
     JPanel bottomPanel = new JPanel();
@@ -56,7 +57,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     /**
     * Class Constructor
     */
-	 public TreeWindow(MainFrame _frame) throws IOException{
+	 public TreeWindow(MainFrame _frame) {
          super(_frame);
 	     this.setSize(new Dimension(1000,800));
 	     frame = _frame;
@@ -80,6 +81,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     collapseTreeToolbar = new CollapseTreeToolbar(this);
 	     treeEditToolbar = new TreeEditToolbar(this, frame);
 	     treeEditPane.add(treeEditToolbar);
+	     
+	     try{
+         lockButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("lock.gif"))), false);
+         }
+         catch(IOException e)
+         {}
 	     
 	     Container pane = getContentPane();
          pane.setLayout(new BorderLayout());

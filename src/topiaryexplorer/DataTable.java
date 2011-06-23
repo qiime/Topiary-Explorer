@@ -17,7 +17,7 @@ public class DataTable {
 		rowNames = new ArrayList<String>();
     }
     
-    public DataTable(ArrayList<String> lines) throws Exception{
+    public DataTable(ArrayList<String> lines){
         loadData(lines);
     }
     
@@ -25,22 +25,22 @@ public class DataTable {
         loadData(conn);
     }
 
-    public DataTable(InputStream is) throws Exception{
+    public DataTable(InputStream is) throws IOException{
         loadData(is);
     }
     
     public void loadData(dbConnect conn) {
         data = new SparseTable();
-        int curr_c = 0;
+        int c = 0;
         for(int r = 0; r < conn.resultLines.size(); r++) {
 		    String vals[] = conn.resultLines.get(r).split("\t");
-            curr_c = 0;
+            c = 0;
 		    for (String obj : vals) {
 		        Object val = TopiaryFunctions.objectify(obj);
 		        if (val != null) {
-		            data.add(r, curr_c, val);
+		            data.add(r, c, val);
 		        }
-		        curr_c = curr_c + 1;
+		        c = c + 1;
 		    }
         }
         // int numCols = conn.colNames.size();
@@ -48,7 +48,7 @@ public class DataTable {
 		columnNames = conn.colNames;
     }
     
-    public void loadData(ArrayList<String> lines) throws Exception{
+    public void loadData(ArrayList<String> lines) {
         data = new SparseTable();
         List<String> commentedLines = new java.util.ArrayList<String>();
         
@@ -62,29 +62,22 @@ public class DataTable {
             lines.remove(line);
         
         
-        int curr_c = 0;
-        int old_c = 0;
+        int c = 0;
         String vals[];
         Object val;
 		for(int r = 0; r < lines.size(); r++) {
 		    vals = lines.get(r).split("\t");
 		    rowNames.add(vals[0]);
-		    curr_c = 0;
+		    c = 0;
 		    for (String obj : vals) {
 		        val = TopiaryFunctions.objectify(obj);
 		        if (val != null) {
-		            data.add(r, curr_c, val);
+		            data.add(r, c, val);
 		        }
-		        curr_c = curr_c + 1;
+		        c = c + 1;
 		    }
-		    if(r == 0)
-		        old_c = curr_c;
-		    
-		    if(old_c != curr_c)
-		        throw new Exception("Number of columns in table are not consistant across rows.");
-
         }
-        int numCols = curr_c;
+        int numCols = c;
         //parse each commented line until we get one that has the same number of
         //rows as the data
         for (String currline : commentedLines) {
@@ -94,7 +87,7 @@ public class DataTable {
 		}
     }
 
-    public void loadData(InputStream is) throws Exception{
+    public void loadData(InputStream is) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
 		//mark the beginning of the file so that we can come back if the next line is not commented out
@@ -115,34 +108,26 @@ public class DataTable {
 
         data = new SparseTable();
         int r = 0;
-        int curr_c = 0;
-        int old_c = 0;
+        int c = 0;
         String vals[];
         Object val;
 		while ((line) != null) {
 		    vals = line.split("\t");
 		    rowNames.add(vals[0]);
-		    curr_c = 0;
+		    c = 0;
 		    for (String obj : vals) {
 /*              val = obj;*/
 		        val = TopiaryFunctions.objectify(obj);
 		        if (val != null) {
-		            data.add(r, curr_c, val);
+		            data.add(r, c, val);
 		        }
-		        curr_c = curr_c + 1;
+		        c = c + 1;
 		    }
-		    
-		    if(r == 0)
-		        old_c = curr_c;
-		    
-		    if(old_c != curr_c)
-		        throw new Exception("Number of columns in table are not consistant across rows.");
-
-	        r = r + 1;
+		    r = r + 1;
 		    line = br.readLine();
         }
 
-        int numCols = curr_c;
+        int numCols = c;
     
 
         //parse each commented line until we get one that has the same number of

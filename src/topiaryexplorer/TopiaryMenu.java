@@ -28,7 +28,7 @@ import javax.swing.table.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.jnlp.*;
-import java.net.URL;
+import java.net.*;
 
 
 /**
@@ -476,42 +476,81 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             
         }
     
-    public void openProject(String projectPath){
+        public void openProject(String projectPath){
 
         try {
-            // this.getClass().getClassLoader().getResource(projectPath)
-            // FileContents inFile = frame.ps.get(new URL(projectPath));
-            // FileContents inFile = frame.fos.openFileDialog(projectPath, new String[]{"tep"});
-            FileReader inFile = new FileReader(projectPath);
-    	        if(inFile != null)
-                {
-                    HashMap data = TopiaryFunctions.parseTep(inFile);
+                // this.getClass().getClassLoader().getResource(projectPath)
+                try {
+                     URL projectURL = new URL(projectPath);
 
-                    // load otu metadata
-                     if(data.containsKey("otm")){
-                         frame.setOtuMetadata(((ArrayList<String>)data.get("otm")));
-                     }
-                     else
-                        frame.resetTipMetadataTable();
-                     // load otu sample map
-                     if(data.containsKey("osm")){
-                         frame.setOtuSampleMap(((ArrayList<String>)data.get("osm")));
-                     }
-                     else
-                        frame.resetOtuTable();
-                     // load sample metadata
-                     if(data.containsKey("sam")){
-                         frame.setSampleMetadata(((ArrayList<String>)data.get("sam")));
-                     }
-                     else
-                        frame.resetSampleMetadataTable();
-                     // load tree
-                     if(data.containsKey("tre")){
-                         for(String s : (ArrayList<String>)data.get("tre"))
-                             frame.newTreeWindow(s, true);
-                     }
-                    frame.repaint();
+                    if(projectURL != null)
+                    {
+                        HashMap data = TopiaryFunctions.parseTep(projectURL);
+
+                        // load otu metadata
+                         if(data.containsKey("otm")){
+                             frame.setOtuMetadata(((ArrayList<String>)data.get("otm")));
+                         }
+                         else
+                            // frame.resetTipMetadataTable();
+                         // load otu sample map
+                         if(data.containsKey("osm")){
+                             frame.setOtuSampleMap(((ArrayList<String>)data.get("osm")));
+                         }
+                         else
+                            // frame.resetOtuTable();
+                         // load sample metadata
+                         if(data.containsKey("sam")){
+                             frame.setSampleMetadata(((ArrayList<String>)data.get("sam")));
+                         }
+                         else
+                            // frame.resetSampleMetadataTable();
+                         // load tree
+                         if(data.containsKey("tre")){
+                             for(String s : (ArrayList<String>)data.get("tre"))
+                                 frame.newTreeWindow(s, true);
+                         }
+                        frame.repaint();
+                    }
                 }
+                catch(MalformedURLException e){
+                    System.out.println(e.getMessage());
+                    try {
+                        FileReader inFile = new FileReader(projectPath);
+                        if(inFile != null)
+                        {
+                            HashMap data = TopiaryFunctions.parseTep(inFile);
+
+                            // load otu metadata
+                             if(data.containsKey("otm")){
+                                 frame.setOtuMetadata(((ArrayList<String>)data.get("otm")));
+                             }
+                             else
+                                // frame.resetTipMetadataTable();
+                             // load otu sample map
+                             if(data.containsKey("osm")){
+                                 frame.setOtuSampleMap(((ArrayList<String>)data.get("osm")));
+                             }
+                             else
+                                // frame.resetOtuTable();
+                             // load sample metadata
+                             if(data.containsKey("sam")){
+                                 frame.setSampleMetadata(((ArrayList<String>)data.get("sam")));
+                             }
+                             else
+                                // frame.resetSampleMetadataTable();
+                             // load tree
+                             if(data.containsKey("tre")){
+                                 for(String s : (ArrayList<String>)data.get("tre"))
+                                     frame.newTreeWindow(s, true);
+                             }
+                            frame.repaint();
+                        }
+                    }
+                    catch(FileNotFoundException ex){
+
+                    }
+                } 
             }
             catch(Exception e)
             {
@@ -519,7 +558,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
 
         }
-    
+
     public void saveProject(){
         frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		try
@@ -579,6 +618,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    	   }
        if(inFile != null)
        {               
+           if(frame.otuMetadata != null)
+                clearOtuMetadata();
+                
+            //set view
+            frame.dataPane.setSelectedIndex(1);
             try {
                 InputStream is = inFile.getInputStream();
                 frame.setOtuMetadata(is);
@@ -587,12 +631,27 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
+            if (frame.currTable == frame.otuMetadata) {
+                for(TreeWindow w : frame.treeWindows)
+                       w.removeColor();
+                
+            }
+            frame.resetOtuMenus();
+            for(TreeWindow t : frame.treeWindows)
+            {
+                t.tree.redraw();
+            }
             frame.otuMetadataFile = inFile;
        }
        frame.repaint();
        frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
    }
    
+   public void clearOtuMetadata() {
+       frame.resetOtuMenus();
+       frame.otuMetadataFile = null;
+       frame.repaint();
+   }
 
    /**
    * Loads sample metadata from a file selected by the user.
@@ -606,7 +665,13 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    	       } catch (java.io.IOException e) {}
    	   }
        if (inFile != null) {
+/*           for(TreeWindow t : frame.treeWindows)
+               t.tree.noLoop();*/
+           if(frame.sampleMetadata != null)
+                clearSampleMetadata();
                 
+            //set view
+            frame.dataPane.setSelectedIndex(3);
             try {
                 InputStream is = inFile.getInputStream();
                 frame.setSampleMetadata(is);
@@ -615,6 +680,13 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
+            if (frame.currTable == frame.sampleMetadata) {
+                for(TreeWindow t : frame.treeWindows)
+                    t.removeColor();
+            }
+            frame.resetSampleMenus();
+            for(TreeWindow t : frame.treeWindows)
+                t.tree.redraw();
             frame.sampleMetadataFile = inFile;
        }
        frame.repaint();
@@ -641,6 +713,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
    	       } catch (java.io.IOException e) {}
    	   }   
        if (inFile != null) {
+           for(TreeWindow w : frame.treeWindows)
+               w.tree.noLoop();
+           if(frame.otuSampleMap != null)
+                clearOtuSampleMap();
+            //set view
+            frame.dataPane.setSelectedIndex(2);
             try{
             InputStream is = inFile.getInputStream();
             frame.setOtuSampleMap(is);
@@ -648,11 +726,41 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
+
+            for(TreeWindow w : frame.treeWindows)
+                   w.tree.redraw();
             frame.otuSampleMapFile = inFile;
        }
        frame.repaint();
        frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
    }
+   
+   public void clearOtuSampleMap() {
+/*       frame.treeWindow.tree.noLoop();*/
+/*       ((SparseTableModel)frame.otuSampleMapTable.getModel()).clearTable();*/
+       frame.otuSampleMapFile = null;
+/*       frame.treeWindow.tree.loop();*/
+       frame.repaint();
+   }
+   
+    /**
+    * 
+    */
+    // public void syncPcoaWithLineWidthSlider() {
+    //     double value = pcoaLineWidthSlider.getValue();
+    //     value = value/10.0;
+    //     frame.pcoaWindow.pcoa.setLineWidthScale((float)value);
+    // }
 
+    /**
+    * Resets tip labels on the tree
+    */
+    public void resetTipLabels() {
+/*        frame.treeWindow.tlc = new TipLabelCustomizer(frame.treeWindow);
+        frame.treeWindow.tlc.setVisible(false);
+        for(Node n : frame.treeWindow.tree.getTree().getNodes())
+            n.setLabel(n.getName());*/
+/*        frame.treeWindow.tree.redraw();*/
+    }
 
 }

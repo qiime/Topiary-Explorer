@@ -6,6 +6,7 @@ import java.util.*;
 import javax.swing.*;
 import java.text.*;
 import javax.jnlp.*;
+import java.net.*;
 
 public class TopiaryFunctions {
 
@@ -220,6 +221,37 @@ public class TopiaryFunctions {
 	public static HashMap parseTep(FileContents inFile) {
 	    try {
     	    BufferedReader br = new BufferedReader(new InputStreamReader(inFile.getInputStream()));
+            String dataType = "";
+            HashMap data = new HashMap();
+            // ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
+            String line = br.readLine();
+            while(line != null)
+            {
+                line = line.trim();
+                if(line.startsWith(">>"))
+                {
+                    dataType = line.substring(2,5);
+                    if(!data.containsKey(dataType))
+                        data.put(dataType, new ArrayList<String>());                    
+                }
+                else
+                    ((ArrayList<String>)data.get(dataType)).add(line);
+                line = br.readLine();
+            }
+            br.close();
+            return data;
+        }
+        catch(IOException e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+	}
+	
+	public static HashMap parseTep(URL inFile) {
+	    try {
+	        InputStream is = inFile.openStream();
+    	    BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String dataType = "";
             HashMap data = new HashMap();
             // ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();

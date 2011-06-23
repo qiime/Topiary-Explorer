@@ -33,8 +33,13 @@ public class TreeEditToolbar extends JToolBar {
         super(JToolBar.VERTICAL);
         frame = _frame;
         mainframe = _mainframe;
-        
+        try{
         treeViewPanel = new TreeViewPanel(frame, this);
+        }
+        catch(IOException e)
+        {
+            System.out.println(e.getMessage());
+        }
         treeViewPanelCP = new CollapsablePanel("Tree", treeViewPanel, true, false);
         
         nodeEditPanel = new NodeEditPanel(frame);
