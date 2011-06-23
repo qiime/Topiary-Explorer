@@ -2,6 +2,7 @@ package topiaryexplorer;
 
 import java.util.*;
 import java.io.*;
+import java.text.*;
 
 /**
 * 
@@ -17,7 +18,7 @@ public class DataTable {
 		rowNames = new ArrayList<String>();
     }
     
-    public DataTable(ArrayList<String> lines){
+    public DataTable(ArrayList<String> lines) throws ParseException{
         loadData(lines);
     }
     
@@ -25,7 +26,7 @@ public class DataTable {
         loadData(conn);
     }
 
-    public DataTable(InputStream is) throws IOException{
+    public DataTable(InputStream is) throws IOException, ParseException{
         loadData(is);
     }
     
@@ -48,7 +49,7 @@ public class DataTable {
 		columnNames = conn.colNames;
     }
     
-    public void loadData(ArrayList<String> lines) {
+    public void loadData(ArrayList<String> lines) throws ParseException{
         data = new SparseTable();
         List<String> commentedLines = new java.util.ArrayList<String>();
         
@@ -62,22 +63,29 @@ public class DataTable {
             lines.remove(line);
         
         
-        int c = 0;
+        int curr_c = 0;
+        int old_c = 0;
         String vals[];
         Object val;
 		for(int r = 0; r < lines.size(); r++) {
 		    vals = lines.get(r).split("\t");
 		    rowNames.add(vals[0]);
-		    c = 0;
+		    curr_c = 0;
 		    for (String obj : vals) {
 		        val = TopiaryFunctions.objectify(obj);
 		        if (val != null) {
-		            data.add(r, c, val);
+		            data.add(r, curr_c, val);
 		        }
-		        c = c + 1;
+		        curr_c = curr_c + 1;
 		    }
+		    if(r == 0)
+		        old_c = curr_c;
+		    
+		    if(old_c != curr_c)
+		        throw new ParseException("Number of columns in table are not consistant across rows.",curr_c);
+
         }
-        int numCols = c;
+        int numCols = curr_c;
         //parse each commented line until we get one that has the same number of
         //rows as the data
         for (String currline : commentedLines) {
@@ -87,7 +95,7 @@ public class DataTable {
 		}
     }
 
-    public void loadData(InputStream is) throws IOException{
+    public void loadData(InputStream is) throws IOException,ParseException{
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
 		//mark the beginning of the file so that we can come back if the next line is not commented out
@@ -108,26 +116,34 @@ public class DataTable {
 
         data = new SparseTable();
         int r = 0;
-        int c = 0;
+        int curr_c = 0;
+        int old_c = 0;
         String vals[];
         Object val;
 		while ((line) != null) {
 		    vals = line.split("\t");
 		    rowNames.add(vals[0]);
-		    c = 0;
+		    curr_c = 0;
 		    for (String obj : vals) {
 /*              val = obj;*/
 		        val = TopiaryFunctions.objectify(obj);
 		        if (val != null) {
-		            data.add(r, c, val);
+		            data.add(r, curr_c, val);
 		        }
-		        c = c + 1;
+		        curr_c = curr_c + 1;
 		    }
-		    r = r + 1;
+		    
+		    if(r == 0)
+		        old_c = curr_c;
+		    
+		    if(old_c != curr_c)
+		        throw new ParseException("Number of columns in table are not consistant across rows.",curr_c);
+
+	        r = r + 1;
 		    line = br.readLine();
         }
 
-        int numCols = c;
+        int numCols = curr_c;
     
 
         //parse each commented line until we get one that has the same number of
