@@ -11,6 +11,7 @@ public class Node implements Comparable{
   private Node parent = null;
   public ArrayList<Node> nodes = new ArrayList(); //children
   private ArrayList<Node> anscestors = new ArrayList();
+  private HashSet pruneVals = new HashSet();
 
   private String label = "";
   private String name = "";
@@ -202,12 +203,18 @@ public class Node implements Comparable{
   }
   
   public void prune() {          
+      if(pruneVals.size() > 1)
+      {
+        toPrune = false;
+        pruneVals = new HashSet();
+      }
+          
         if(toPrune)
         {
             parent.setName(parent.getName() +","+ this.name);
             parent.nodes.remove(this);
         }
-        
+    
         ArrayList<Node> children = new ArrayList<Node>(nodes);
         for(Node c : children)
           c.prune();
@@ -217,14 +224,30 @@ public class Node implements Comparable{
       if(parent == null)
         return;
         
-      toPrune = true;
+      toPrune = p;
       for(Node s : parent.nodes)
       {
           if(!s.toPrune)
             return;
       }
-      parent.prune(true);
+      parent.prune(p);
   }
+  
+  public void prune(boolean p, Object k, Object v) {
+        if(parent == null)
+          return;
+        
+        pruneVals.add(v.toString());
+        pruneVals.add(k.toString());
+        
+        toPrune = p;
+        for(Node s : parent.nodes)
+        {
+            if(!s.toPrune)
+              return;
+        }
+        parent.prune(p);
+    }
   
   public void setLocked(boolean l) { 
       locked=l; 

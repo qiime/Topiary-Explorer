@@ -703,21 +703,22 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      
                      if(frame.sampleMetadata.getValueAt(sampleRowIndex, colIndex) == null)
                         continue;
+                     // n.getParent().clearBranchColor();
+                     // n.prune(frame.sampleMetadata.getValueAt(sampleRowIndex, colIndex).equals(value));
                      
                      if(frame.sampleMetadata.getValueAt(sampleRowIndex, colIndex).equals(value))                                                          
-                        {
-                            n.getParent().clearBranchColor();
-                            n.prune(true);
-                            break;
-                        }
+                     {
+                         n.getParent().clearBranchColor();
+                         n.prune(true, value, value);
+                         // break;
+                     }
+                     else
+                     {
+                         n.prune(false, frame.sampleMetadata.getValueAt(sampleRowIndex, colIndex), value);
+                     }
                  }
         }
         tree.getTree().prune();
-        // setTreeVals(tree.getTree());
-        // tree.setTree(tree.getTree());
-        // tree.getTree().updateBranchColorFromChildren();
-        // frame.repaint();
-        // treeEditToolbar.setStatus("Done pruning tree.");
         tree.redraw();
 	}
 	
