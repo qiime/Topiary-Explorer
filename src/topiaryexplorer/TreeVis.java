@@ -1578,7 +1578,8 @@ public class TreeVis extends PApplet {
 /*        drawExternalNodeLabels = true;*/
 /*        drawInternalNodeLabels = true;*/
 /*        drawNodeLabels = true;*/
-
+          xstart = 0;
+          ystart = 0;
           width = (int)dims[0];
           height = (int)dims[1];
           String st = "";
