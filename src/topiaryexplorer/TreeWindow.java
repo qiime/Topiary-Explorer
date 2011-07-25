@@ -1235,15 +1235,16 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
               ArrayList<Object> uniqueVals = new ArrayList<Object>(column);
               //set up the branchColorPanel.getColorMap()
               frame.branchColorPanel.setColorMap(new HashMap());
-/*              float[] hsbvals = new float[3];
+              float[] hsbvals = new float[3];
               hsbvals[0] = 0;
               hsbvals[1] = 1;
               hsbvals[2] = 1;
-              Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));*/
+              Color color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
               for (Object val : uniqueVals) {
-                  frame.branchColorPanel.getColorMap().put(val, new Color(200,200,200));//color);
-/*                  hsbvals[0] += (1.0/uniqueVals.size());
-                  color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));*/
+                  frame.branchColorPanel.getColorMap().put(val, color);
+                  // frame.branchColorPanel.getColorMap().put(val, new Color(200,200,200));//color);
+                  hsbvals[0] += (1.0/uniqueVals.size());
+                  color = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]));
               }
              
              frame.branchColorPanel.syncColorKeyTable();

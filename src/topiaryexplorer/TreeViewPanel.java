@@ -278,9 +278,12 @@ public final class TreeViewPanel extends JPanel {
 	}
 	
 	public void layoutChanged() {
-	    frame.treeToolbar.setScale();
-	    frame.verticalTreeToolbar.setScale();
-	    frame.recenter();
+        // if(changeCoords)
+        // {
+    	    frame.treeToolbar.setScale();
+    	    frame.verticalTreeToolbar.setScale();
+    	    frame.recenter();
+        // }
 	    vis.checkBounds();
 	    validate();
 	}

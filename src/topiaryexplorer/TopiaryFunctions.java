@@ -17,6 +17,8 @@ public class TopiaryFunctions {
         goodTokens.add(")");
         goodTokens.add(",");
         goodTokens.add(";");
+        goodTokens.add("[");
+        goodTokens.add("]");
     
         ArrayList<String> result = new ArrayList<String>();
         String saved = "";
@@ -59,38 +61,40 @@ public class TopiaryFunctions {
         //remove comments
         //Algorithm is: if you hit a line starting with [, it's a comment, 
         //  and comment continues until you find a line ending with ] (possibly with trailing whitespace).
-        boolean incomment = false;
-        ArrayList<String> goodlines = new ArrayList<String>();
-        String[] lines = data.split("\n");
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
-            //remove whitespace
-            String line2 = line.replaceAll("[ ]", "");
-            if (incomment && line2.charAt(line2.length()-1)==']') {
-                //end of comment
-                incomment = false;
-            } else {
-                if (line2.charAt(0) == '['){
-                    incomment = true;
-                } else {
-                    goodlines.add(line);
-                }
-            }
-        }
-        data = "";
-        for (String line : goodlines) {
-            data = data+line+"\n";
-        }
+        // boolean incomment = false;
+        // ArrayList<String> goodlines = new ArrayList<String>();
+        
+        // for (int i = 0; i < lines.length; i++) {
+        //     String line = lines[i];
+        //     //remove whitespace
+        //     String line2 = line.replaceAll("[ ]", "");
+        //     if (incomment && line2.charAt(line2.length()-1)==']') {
+        //         //end of comment
+        //         incomment = false;
+        //     } else {
+        //         if (line2.charAt(0) == '['){
+        //             incomment = true;
+        //         } else {
+        //             goodlines.add(line);
+        //         }
+        //     }
+        // }
+        // String[] lines = data.split("\n");
+        // data = "";
+        // for (String line : lines) {
+            // data = data+line+"\n";
+        // }
         
         
         //remove whitespace
         // data = data.replaceAll("[ |\n|\r]", "");
-        data = data.replaceAll("[ \n\r]", "");
+        data = data.replaceAll(" \n\r", "");
         
         ArrayList<String> tokens = tokenizeTree(data);
         Node curr_node = null;
         String state = "PreColon";
         String state1 = "PreClosed";
+        boolean incomment = false;
         for (int i = 0; i < tokens.size(); i++) {
           String t = tokens.get(i);
           if (t.equals(":")) {  //expecting branch length
@@ -103,6 +107,20 @@ public class TopiaryFunctions {
               state1 = "PostClosed";
               continue;
           }
+          
+          if (t.equals("[")) {//open comment
+              incomment = true;
+              continue;
+          }
+          
+          if (t.equals("]")) {//open comment
+                incomment = false;
+                continue;
+            }
+        
+          if(incomment)
+            continue;
+          
           if (t.equals("(")) {    //opening a new node
               Node temp_node = new Node();
               if (curr_node != null) {
