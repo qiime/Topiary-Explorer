@@ -11,9 +11,12 @@ TopiaryExplorer UserGuide
    :maxdepth: 2
 	
    install
+   file_formats
    quickstart
    interface_guide
    database_connectivity
+   bigtree_tutorial
+   insertion_tutorial
 
 
 Introduction

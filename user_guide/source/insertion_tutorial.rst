@@ -1,0 +1,77 @@
+.. _insertion_tutorial:
+
+***************************
+Sequence insertion tutorial
+***************************
+This tutorial explains how to insert query sequences into a base tree and then color the tree so that the query sequences are easily visible.
+
+Assumptions made in this tutorial
+---------------------------------
+
+ * Prior to working through this tutorial we recommend running through the `TopiaryExplorer Overview Tutorial <./quickstart.html>`_ which will show you how to work with the basic features of TopiaryExplorer. This tutorial assumes that you already know how to load the TopiaryExplorer application and that you have some familiarity with the basic interface.
+
+Required Files
+--------------
+   * Aligned reference sequences
+   * Reference tree
+   * Query sequences
+
+Step 1. Insert query sequences
+------------------------------
+Go to the `RAxML EPA online service <http://i12k-exelixis3.informatik.tu-muenchen.de/raxml/submit_single_gene>`_, you should see a page that looks like this:
+
+.. figure::  _images/raxml_online.png
+   :align:   center
+
+Upload the correct files and enter an email address if desired.
+
+.. figure::  _images/raxml_online_upload.png
+   :align:   center
+
+The output from the RAxML online service will look like this:
+
+.. figure::  _images/raxml_output.png
+   :align:   center
+
+Save the file called `RAxML_labelledTree.########.########`
+
+Step 2. Modify output tree labels
+---------------------------------
+Do a find/replace on the tree and replace instances of ``QUERY___`` with ``Q_`` and instances of ``_GR_1___1`` with nothing in order to make the IDs more readable.
+
+.. figure::  _images/raxml_output_labledtree.png
+   :align:   center
+   
+   Unmodified newick string
+
+.. figure::  _images/raxml_output_editedtree.png
+   :align:   center
+
+   Modified newick string
+
+Step 3. Create tip data
+-----------------------
+Create a tip data file that contains both reference IDs and query IDs. 
+
+Step 4. Create a new project
+----------------------------
+Create a new project in TopiaryExplorer using your new tree and tip data file.
+
+.. figure::  _images/insertion_newproject.png
+   :align:   center
+
+Step 5. Color the tree
+----------------------
+Color by the column corresponding to whether or not an ID was a query ID or not that you created in step 3.
+
+.. figure::  _images/insertion_colored.png
+   :align:   center
+
+You can also highlight the query sequences using the search function. Type ``Q_`` into the search box, and you will see all of the inserted sequences highlighted.
+
+.. figure::  _images/insertion_search.png
+   :align:   center
+
+
+
+

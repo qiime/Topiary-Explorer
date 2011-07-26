@@ -1,0 +1,797 @@
+{
+'background_color':'black',
+
+'sample_coloring':
+	{
+		'SampleID':
+		{
+			'column':'SampleID',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'BarcodeSequence':
+		{
+			'column':'BarcodeSequence',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'LinkerPrimerSequence':
+		{
+			'column':'LinkerPrimerSequence',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'SAMP_COLLECT_DEVICE':
+		{
+			'column':'SAMP_COLLECT_DEVICE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'ASSIGNED_FROM_GEO':
+		{
+			'column':'ASSIGNED_FROM_GEO',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'SAMP_STORE_TEMP':
+		{
+			'column':'SAMP_STORE_TEMP',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'RUN_DATE':
+		{
+			'column':'RUN_DATE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'BIOLOGICAL_SPECIMEN':
+		{
+			'column':'BIOLOGICAL_SPECIMEN',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'TWIN_SIBLING':
+		{
+			'column':'TWIN_SIBLING',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'AGE':
+		{
+			'column':'AGE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'AMMONIUM':
+		{
+			'column':'AMMONIUM',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'CARB_DIOXIDE':
+		{
+			'column':'CARB_DIOXIDE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'BAROMETRIC_PRESS':
+		{
+			'column':'BAROMETRIC_PRESS',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'TOT_ORG_CARB':
+		{
+			'column':'TOT_ORG_CARB',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'HORIZON':
+		{
+			'column':'HORIZON',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'DOMINANT_HAND':
+		{
+			'column':'DOMINANT_HAND',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'PROJECT_ID':
+		{
+			'column':'PROJECT_ID',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'WATER_CONTENT_SOIL':
+		{
+			'column':'WATER_CONTENT_SOIL',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'BODY_SITE':
+		{
+			'column':'BODY_SITE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'IHMC_ETHNICITY':
+		{
+			'column':'IHMC_ETHNICITY',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'ELEVATION':
+		{
+			'column':'ELEVATION',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'COLLECTION_DATE':
+		{
+			'column':'COLLECTION_DATE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'ALTITUDE':
+		{
+			'column':'ALTITUDE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'TITLE':
+		{
+			'column':'TITLE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'NUCL_ACID_AMP':
+		{
+			'column':'NUCL_ACID_AMP',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'SEX':
+		{
+			'column':'SEX',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'TOT_NITRO':
+		{
+			'column':'TOT_NITRO',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'FAMILY_RELATIONSHIP':
+		{
+			'column':'FAMILY_RELATIONSHIP',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'CARB_NITRO_RATIO':
+		{
+			'column':'CARB_NITRO_RATIO',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'ANNUAL_SEASON_TEMP':
+		{
+			'column':'ANNUAL_SEASON_TEMP',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'STORE_COND':
+		{
+			'column':'STORE_COND',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'LIBRARY_SOURCE':
+		{
+			'column':'LIBRARY_SOURCE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'ANONYMIZED_NAME':
+		{
+			'column':'ANONYMIZED_NAME',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'POOL_PROPORTION':
+		{
+			'column':'POOL_PROPORTION',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'SAMP_SIZE':
+		{
+			'column':'SAMP_SIZE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'URL':
+		{
+			'column':'URL',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'STUDY_DESCRIPTION':
+		{
+			'column':'STUDY_DESCRIPTION',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'LONGITUDE':
+		{
+			'column':'LONGITUDE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'STUDY_CENTER':
+		{
+			'column':'STUDY_CENTER',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'NUCL_ACID_EXT':
+		{
+			'column':'NUCL_ACID_EXT',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'NITRATE':
+		{
+			'column':'NITRATE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'BODY_PRODUCT':
+		{
+			'column':'BODY_PRODUCT',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'STUDY_ABSTRACT':
+		{
+			'column':'STUDY_ABSTRACT',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'LIB_READS_SEQD':
+		{
+			'column':'LIB_READS_SEQD',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'ENV_FEATURE':
+		{
+			'column':'ENV_FEATURE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'KEY_SEQ':
+		{
+			'column':'KEY_SEQ',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'POOL_MEMBER_ACCESSION':
+		{
+			'column':'POOL_MEMBER_ACCESSION',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'BARCODE_READ_GROUP_TAG':
+		{
+			'column':'BARCODE_READ_GROUP_TAG',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'REGION':
+		{
+			'column':'REGION',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'PCR_PRIMERS':
+		{
+			'column':'PCR_PRIMERS',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'HEAVY_METALS':
+		{
+			'column':'HEAVY_METALS',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'PMID':
+		{
+			'column':'PMID',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'RUN_PREFIX':
+		{
+			'column':'RUN_PREFIX',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'TOT_CARB':
+		{
+			'column':'TOT_CARB',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'PCR_COND':
+		{
+			'column':'PCR_COND',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'HOST_GROWTH_COND':
+		{
+			'column':'HOST_GROWTH_COND',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'CENTER_PROJECT_NAME':
+		{
+			'column':'CENTER_PROJECT_NAME',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'EXPERIMENT_CENTER':
+		{
+			'column':'EXPERIMENT_CENTER',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'CENTER_NAME':
+		{
+			'column':'CENTER_NAME',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'COUNTRY':
+		{
+			'column':'COUNTRY',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'TEXTURE':
+		{
+			'column':'TEXTURE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'COMMON_NAME':
+		{
+			'column':'COMMON_NAME',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'DEPTH':
+		{
+			'column':'DEPTH',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'HOST_TAXID':
+		{
+			'column':'HOST_TAXID',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'SAMP_WEIGHT_DNA_EXT':
+		{
+			'column':'SAMP_WEIGHT_DNA_EXT',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'EXPERIMENT_ALIAS':
+		{
+			'column':'EXPERIMENT_ALIAS',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'EXPERIMENT_ACCESSION':
+		{
+			'column':'EXPERIMENT_ACCESSION',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'STUDY_TITLE':
+		{
+			'column':'STUDY_TITLE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'LIBRARY_STRATEGY':
+		{
+			'column':'LIBRARY_STRATEGY',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'SEQUENCING_METH':
+		{
+			'column':'SEQUENCING_METH',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'TEMP':
+		{
+			'column':'TEMP',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'STUDY_TYPE':
+		{
+			'column':'STUDY_TYPE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'ENV_BIOME':
+		{
+			'column':'ENV_BIOME',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'PLATFORM':
+		{
+			'column':'PLATFORM',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'RUN_ALIAS':
+		{
+			'column':'RUN_ALIAS',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'ANNUAL_SEASON_PRECPT':
+		{
+			'column':'ANNUAL_SEASON_PRECPT',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'PH':
+		{
+			'column':'PH',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'TIME_SINCE_LAST_WASH':
+		{
+			'column':'TIME_SINCE_LAST_WASH',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'STUDY_ALIAS':
+		{
+			'column':'STUDY_ALIAS',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'TAXON_ID':
+		{
+			'column':'TAXON_ID',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'SAMPLE_CENTER':
+		{
+			'column':'SAMPLE_CENTER',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'SOIL_TYPE':
+		{
+			'column':'SOIL_TYPE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'PROJECT_NAME':
+		{
+			'column':'PROJECT_NAME',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'AGE_UNIT':
+		{
+			'column':'AGE_UNIT',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'SEQ_QUALITY_CHECK':
+		{
+			'column':'SEQ_QUALITY_CHECK',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'BODY_HABITAT':
+		{
+			'column':'BODY_HABITAT',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'STUDY_ID':
+		{
+			'column':'STUDY_ID',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'LIBRARY_CONSTRUCTION_PROTOCOL':
+		{
+			'column':'LIBRARY_CONSTRUCTION_PROTOCOL',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'STUDY_REF':
+		{
+			'column':'STUDY_REF',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'DIET':
+		{
+			'column':'DIET',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'HOST_COMMON_NAME':
+		{
+			'column':'HOST_COMMON_NAME',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'POOL_MEMBER_NAME':
+		{
+			'column':'POOL_MEMBER_NAME',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'ENV_MATTER':
+		{
+			'column':'ENV_MATTER',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'TARGET_GENE':
+		{
+			'column':'TARGET_GENE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'EXPERIMENTAL_FACTOR':
+		{
+			'column':'EXPERIMENTAL_FACTOR',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'SAMP_MAT_PROCESS':
+		{
+			'column':'SAMP_MAT_PROCESS',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'SILICATE':
+		{
+			'column':'SILICATE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'OXYGEN':
+		{
+			'column':'OXYGEN',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'TARGET_SUBFRAGMENT':
+		{
+			'column':'TARGET_SUBFRAGMENT',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'RUN_CENTER':
+		{
+			'column':'RUN_CENTER',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'PRIMER_READ_GROUP_TAG':
+		{
+			'column':'PRIMER_READ_GROUP_TAG',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'MULTIPLEX_IDENT':
+		{
+			'column':'MULTIPLEX_IDENT',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'HEAVY_METALS_METH':
+		{
+			'column':'HEAVY_METALS_METH',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'INSTRUMENT_NAME':
+		{
+			'column':'INSTRUMENT_NAME',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'LATITUDE':
+		{
+			'column':'LATITUDE',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'EXPERIMENT_DESIGN_DESCRIPTION':
+		{
+			'column':'EXPERIMENT_DESIGN_DESCRIPTION',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'MICROBIAL_BIOMASS':
+		{
+			'column':'MICROBIAL_BIOMASS',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'MISC_PARAM':
+		{
+			'column':'MISC_PARAM',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'STUDY_ACCESSION':
+		{
+			'column':'STUDY_ACCESSION',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		},
+		'Description':
+		{
+			'column':'Description',
+			'colors':(('red',(0,100,100)),('blue',(240,100,100)))
+		}
+	},
+'MONTE_CARLO_GROUP_DISTANCES':
+	{
+		'SampleID': 10,
+		'BarcodeSequence': 10,
+		'LinkerPrimerSequence': 10,
+		'SAMP_COLLECT_DEVICE': 10,
+		'ASSIGNED_FROM_GEO': 10,
+		'SAMP_STORE_TEMP': 10,
+		'RUN_DATE': 10,
+		'BIOLOGICAL_SPECIMEN': 10,
+		'TWIN_SIBLING': 10,
+		'AGE': 10,
+		'AMMONIUM': 10,
+		'CARB_DIOXIDE': 10,
+		'BAROMETRIC_PRESS': 10,
+		'TOT_ORG_CARB': 10,
+		'HORIZON': 10,
+		'DOMINANT_HAND': 10,
+		'PROJECT_ID': 10,
+		'WATER_CONTENT_SOIL': 10,
+		'BODY_SITE': 10,
+		'IHMC_ETHNICITY': 10,
+		'ELEVATION': 10,
+		'COLLECTION_DATE': 10,
+		'ALTITUDE': 10,
+		'TITLE': 10,
+		'NUCL_ACID_AMP': 10,
+		'SEX': 10,
+		'TOT_NITRO': 10,
+		'FAMILY_RELATIONSHIP': 10,
+		'CARB_NITRO_RATIO': 10,
+		'ANNUAL_SEASON_TEMP': 10,
+		'STORE_COND': 10,
+		'LIBRARY_SOURCE': 10,
+		'ANONYMIZED_NAME': 10,
+		'POOL_PROPORTION': 10,
+		'SAMP_SIZE': 10,
+		'URL': 10,
+		'STUDY_DESCRIPTION': 10,
+		'LONGITUDE': 10,
+		'STUDY_CENTER': 10,
+		'NUCL_ACID_EXT': 10,
+		'NITRATE': 10,
+		'BODY_PRODUCT': 10,
+		'STUDY_ABSTRACT': 10,
+		'LIB_READS_SEQD': 10,
+		'ENV_FEATURE': 10,
+		'KEY_SEQ': 10,
+		'POOL_MEMBER_ACCESSION': 10,
+		'BARCODE_READ_GROUP_TAG': 10,
+		'REGION': 10,
+		'PCR_PRIMERS': 10,
+		'HEAVY_METALS': 10,
+		'PMID': 10,
+		'RUN_PREFIX': 10,
+		'TOT_CARB': 10,
+		'PCR_COND': 10,
+		'HOST_GROWTH_COND': 10,
+		'CENTER_PROJECT_NAME': 10,
+		'EXPERIMENT_CENTER': 10,
+		'CENTER_NAME': 10,
+		'COUNTRY': 10,
+		'TEXTURE': 10,
+		'COMMON_NAME': 10,
+		'DEPTH': 10,
+		'HOST_TAXID': 10,
+		'SAMP_WEIGHT_DNA_EXT': 10,
+		'EXPERIMENT_ALIAS': 10,
+		'EXPERIMENT_ACCESSION': 10,
+		'STUDY_TITLE': 10,
+		'LIBRARY_STRATEGY': 10,
+		'SEQUENCING_METH': 10,
+		'TEMP': 10,
+		'STUDY_TYPE': 10,
+		'ENV_BIOME': 10,
+		'PLATFORM': 10,
+		'RUN_ALIAS': 10,
+		'ANNUAL_SEASON_PRECPT': 10,
+		'PH': 10,
+		'TIME_SINCE_LAST_WASH': 10,
+		'STUDY_ALIAS': 10,
+		'TAXON_ID': 10,
+		'SAMPLE_CENTER': 10,
+		'SOIL_TYPE': 10,
+		'PROJECT_NAME': 10,
+		'AGE_UNIT': 10,
+		'SEQ_QUALITY_CHECK': 10,
+		'BODY_HABITAT': 10,
+		'STUDY_ID': 10,
+		'LIBRARY_CONSTRUCTION_PROTOCOL': 10,
+		'STUDY_REF': 10,
+		'DIET': 10,
+		'HOST_COMMON_NAME': 10,
+		'POOL_MEMBER_NAME': 10,
+		'ENV_MATTER': 10,
+		'TARGET_GENE': 10,
+		'EXPERIMENTAL_FACTOR': 10,
+		'SAMP_MAT_PROCESS': 10,
+		'SILICATE': 10,
+		'OXYGEN': 10,
+		'TARGET_SUBFRAGMENT': 10,
+		'RUN_CENTER': 10,
+		'PRIMER_READ_GROUP_TAG': 10,
+		'MULTIPLEX_IDENT': 10,
+		'HEAVY_METALS_METH': 10,
+		'INSTRUMENT_NAME': 10,
+		'LATITUDE': 10,
+		'EXPERIMENT_DESIGN_DESCRIPTION': 10,
+		'MICROBIAL_BIOMASS': 10,
+		'MISC_PARAM': 10,
+		'STUDY_ACCESSION': 10,
+		'Description': 10
+	},
+'FIELDS':
+	[
+		'ASSIGNED_FROM_GEO',
+		'RUN_DATE',
+		'TWIN_SIBLING',
+		'AGE',
+		'SampleID',
+		'AMMONIUM',
+		'CARB_DIOXIDE',
+		'PROJECT_ID',
+		'WATER_CONTENT_SOIL',
+		'BODY_SITE',
+		'ELEVATION',
+		'TITLE',
+		'NUCL_ACID_AMP',
+		'TOT_NITRO',
+		'CARB_NITRO_RATIO',
+		'ANNUAL_SEASON_TEMP',
+		'LIBRARY_SOURCE',
+		'POOL_PROPORTION',
+		'URL',
+		'STUDY_DESCRIPTION',
+		'LONGITUDE',
+		'LinkerPrimerSequence',
+		'NITRATE',
+		'BODY_PRODUCT',
+		'STUDY_ABSTRACT',
+		'KEY_SEQ',
+		'TIME_SINCE_LAST_WASH',
+		'BARCODE_READ_GROUP_TAG',
+		'REGION',
+		'PCR_PRIMERS',
+		'CENTER_PROJECT_NAME',
+		'CENTER_NAME',
+		'COUNTRY',
+		'SAMP_WEIGHT_DNA_EXT',
+		'COMMON_NAME',
+		'EXPERIMENT_ACCESSION',
+		'LIBRARY_STRATEGY',
+		'SEQUENCING_METH',
+		'TEMP',
+		'STUDY_TYPE',
+		'ENV_BIOME',
+		'RUN_ALIAS',
+		'PH',
+		'POOL_MEMBER_ACCESSION',
+		'STUDY_ALIAS',
+		'SAMPLE_CENTER',
+		'AGE_UNIT',
+		'LIBRARY_CONSTRUCTION_PROTOCOL',
+		'STUDY_REF',
+		'HOST_COMMON_NAME',
+		'POOL_MEMBER_NAME',
+		'ENV_MATTER',
+		'TARGET_GENE',
+		'SILICATE',
+		'PRIMER_READ_GROUP_TAG',
+		'ANNUAL_SEASON_PRECPT',
+		'STUDY_ACCESSION',
+		'SAMP_COLLECT_DEVICE',
+		'SAMP_STORE_TEMP',
+		'BIOLOGICAL_SPECIMEN',
+		'LIB_READS_SEQD',
+		'BAROMETRIC_PRESS',
+		'TOT_ORG_CARB',
+		'HORIZON',
+		'COLLECTION_DATE',
+		'ALTITUDE',
+		'SEX',
+		'FAMILY_RELATIONSHIP',
+		'STORE_COND',
+		'ANONYMIZED_NAME',
+		'SAMP_SIZE',
+		'DIET',
+		'STUDY_CENTER',
+		'NUCL_ACID_EXT',
+		'BODY_HABITAT',
+		'DOMINANT_HAND',
+		'IHMC_ETHNICITY',
+		'ENV_FEATURE',
+		'PCR_COND',
+		'HEAVY_METALS',
+		'PMID',
+		'RUN_PREFIX',
+		'TOT_CARB',
+		'HOST_GROWTH_COND',
+		'EXPERIMENT_CENTER',
+		'TEXTURE',
+		'EXPERIMENT_ALIAS',
+		'DEPTH',
+		'HOST_TAXID',
+		'TAXON_ID',
+		'PROJECT_NAME',
+		'Description',
+		'BarcodeSequence',
+		'PLATFORM',
+		'INSTRUMENT_NAME',
+		'STUDY_TITLE',
+		'SOIL_TYPE',
+		'SEQ_QUALITY_CHECK',
+		'STUDY_ID',
+		'EXPERIMENT_DESIGN_DESCRIPTION',
+		'EXPERIMENTAL_FACTOR',
+		'SAMP_MAT_PROCESS',
+		'OXYGEN',
+		'TARGET_SUBFRAGMENT',
+		'RUN_CENTER',
+		'MULTIPLEX_IDENT',
+		'HEAVY_METALS_METH',
+		'LATITUDE',
+		'MICROBIAL_BIOMASS',
+		'MISC_PARAM'
+	],
+'taxonomy_coloring':
+	{
+		'Level_1':
+		{
+			'column':'1',
+			'colors':
+			{
+				'Root;Bacteria':('red0',(0,100,100))
+			}
+		}
+	},
+'ball_scale':'1.000000',
+'arrow_line_color':'white',
+'arrow_head_color':'red'
+}

@@ -58,6 +58,7 @@ Show hidden nodes
 -----------------
 Nodes can be hidden using the context menu shown when right clicking on a node. The show hidden nodes button in the tree toolbar will reveal all hidden nodes.
 
+.. _consensus_lineage:
 Set consensus lineage
 ---------------------
 In order to set the consensus lineage for a tree, you must supply an OTU mapping table with a column titled 'Consensus Lineage', case sensitive.
@@ -84,6 +85,8 @@ There are four tree layouts currently available, listed in order of their appear
 
 .. figure::  _images/layout.png
    :align:   center
+
+.. note:: In the triangular view you may notice crossed lines. This is an unavoidable issue with this view as noted by Joe Felsenstein in Inferring Phylogenies: "crossed lines [are] an unfortunate effect that cannot always be avoided." (page 576 with illustration of the exact issue on page 577)
 
 .. note:: Rotation is only available in radial and polar views.
 
