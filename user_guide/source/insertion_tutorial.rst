@@ -39,6 +39,11 @@ Step 2. Modify output tree labels
 ---------------------------------
 Do a find/replace on the tree and replace instances of ``QUERY___`` with ``Q_`` and instances of ``_GR_1___1`` with nothing in order to make the IDs more readable.
 
+This can be done in a text editor or on the command line with the following command, replacing ``old.tre`` and ``new.tre`` with the file names of the tree downloaded in Step 1, and desired name of the output tree, respectively::
+
+	sed -e 's/QUERY___/Q_/g' -e 's/_GR_1___1//g' old.tre > new.tre
+
+
 .. figure::  _images/raxml_output_labledtree.png
    :align:   center
    
@@ -51,7 +56,11 @@ Do a find/replace on the tree and replace instances of ``QUERY___`` with ``Q_`` 
 
 Step 3. Create tip data
 -----------------------
-Create a tip data file that contains both reference IDs and query IDs. 
+Create a tip data file that contains both reference IDs and query IDs. This can be done with the following commands, replacing ``query.fna`` and ``refseqs.fna`` with the names of the inserted sequences fasta file and the reference sequences (or sequences in original tree), respectively::
+
+	echo "#OTU ID\tQuery" >> otu_metadata.txt
+	grep -Eo '^>\w+' query.fna | grep -Eo '\w+' | sed -e 's/.*/Q_&\\t1/'
+	grep -Eo '^>\w+' refseqs.fna | grep -Eo '\w+' | sed -e 's/.*/&\\t0/'
 
 Step 4. Create a new project
 ----------------------------
