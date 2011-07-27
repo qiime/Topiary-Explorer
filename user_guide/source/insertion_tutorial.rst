@@ -23,7 +23,7 @@ Go to the `RAxML EPA online service <http://i12k-exelixis3.informatik.tu-muenche
 .. figure::  _images/raxml_online.png
    :align:   center
 
-Upload the correct files and enter an email address if desired.
+Upload the correct files and enter an email address if desired. In this example we're inserting sequences from the keyboard analysis into a Greengenes reference tree. You can find the reference tree and alignment `here <http://greengenes.lbl.gov/Download/Sequence_Data/Fasta_data_files/Caporaso_Reference_OTUs/gg_otus_4feb2011.tgz>`_. You can find the aligned sequences being inserted into this tree as ``keyboard_aligned_rep_seqs.fasta.zip`` in the TopiaryExplorer examples directory. (You'll need to unzip the aligned sequences before uploading to the RAxML web server.)
 
 .. figure::  _images/raxml_online_upload.png
    :align:   center
