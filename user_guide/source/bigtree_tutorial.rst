@@ -3,32 +3,66 @@
 *****************
 Big tree tutorial
 *****************
-This tutorial shows how to load data from a large tree on the order of 100k nodes. The tree used in this tutorial is the GreenGenes tree with OTUs picked at 99%.
+This tutorial discusses how to load data from a large tree (greater than about 100k tips) efficiently using TopiaryExplorer and `QIIME <http://www.qiime.org>`_. This process requires filtering the tree to include fewer tips that are representative of the full diversity of the tree. The figures used in this tutorial are derived from applying this process to the full Greengenes tree (408,135 tips) filtered to include only sequences less 99% identical to other sequences (84,413 tips).
 
 Assumptions made in this tutorial
 ---------------------------------
 
- * Prior to working through this tutorial we recommend running through the `TopiaryExplorer Overview Tutorial <./quickstart.html>`_ which will show you how to work with the basic features of TopiaryExplorer. This tutorial assumes that you already know how to load the TopiaryExplorer application and that you have some familiarity with the basic interface.
+* Prior to working through this tutorial we recommend running through the `TopiaryExplorer Overview Tutorial <./quickstart.html>`_ which will show you how to work with the basic features of TopiaryExplorer. This tutorial assumes that you already know how to load the TopiaryExplorer application and that you have some familiarity with the basic interface.
 
-Step 1. Create a new project
-----------------------------
-Create a new project using the new project dialog. Open the tree and related tip data.
+* Users must have a QIIME 1.3.0 install to complete the filtering steps.
+
+Step 0. Compile your tree and sequences and verify format
+---------------------------------------------------------
+
+To apply this process you'll need your tree of interest in newick format, as well as the unaligned sequences represented by the tips in the tree in fasta format. The full tip identifiers must be the first space-separated field of the sequence identifiers in the fasta file. For example, if a record in your fasta file looks like::
+
+	>sequence1 some comment about the sequence
+	AAACCCCCCCCCCCCCCCCCAAAAAAAAAAATTTTTTTTT
+
+The tip representing this sequence in the tree must be ``sequence1``.
+
+Step 1. Filter input tree to 99% identity
+-----------------------------------------
+
+Assuming your input sequence collection is called ``inseqs_full.fna``, run the following command to cluster into 99% OTUs::
+
+	pick_otus.py -m uclust -D -i inseqs_full.fna -s 0.99 -o otus
+
+Step 2. Obtain the sequence identifier of each OTU centroid
+-----------------------------------------------------------
+
+Next we want to select the centroid of each OTU cluster as the tip we want to keep in the tree to represent the corresponding cluster of 99% identical sequences::
+
+	awk 'BEGIN {FS="\t"};{print $2}' otus/inseqs_full_otus.txt > tips_to_keep.txt
+
+Step 3. Filter the phylogenetic tree
+------------------------------------
+
+Finally we'll filter the full tree to contain only the representative tips for each of the 99% OTUs::
+
+	filter_tree.py -i full.tre -o filtered_99.tre -t tips_to_keep.txt
+
+
+Step 4. Create a new project in TopiaryExplorer
+-----------------------------------------------
+Open TopiaryExplorer and create a new project using the new project dialog. Open the tree and any metadata you have about the tips.
 
 .. figure::  _images/open_gg.png
    :align:   center
 
-Step 2. Color the tree
+Step 5. Color the tree
 ----------------------
-Uncollapse the tree and then color the branches by kingdom_phylum.
+Uncollapse the tree and then color the branches by a metadata field of interest. In this example we're coloring by ``kingdom_phylum``.
 
 .. figure::  _images/colored_gg.png
    :align:   center
 
-.. note:: Using the interpolate colors function with a tree of this size can take a very long time.
+.. note:: Using the interpolate colors function with large trees can take a long time.
 
-Step 3. Open a subtree and set tip labels
+Step 6. Open a subtree and set tip labels
 -----------------------------------------
-Open a subtree (This is the archaea subtree with ~2000 nodes) in a new window and zoom in so that there is enough space for labels to show. Set tip labels as kingdom_phylum.
+Open a subtree (this is the archaea subtree with ~2000 nodes) in a new window and zoom in so that there is enough space for labels to show. In this example we're setting tip labels as ``kingdom_phylum``.
 
 .. figure::  _images/subtree_gg.png
    :align:   center
