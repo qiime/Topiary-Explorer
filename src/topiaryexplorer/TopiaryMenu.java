@@ -514,7 +514,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     }
                 }
                 catch(MalformedURLException e){
-                    System.out.println(e.getMessage());
+                    // System.out.println("Trying to open project...["+e.getMessage()+"]");
                     try {
                         FileReader inFile = new FileReader(projectPath);
                         if(inFile != null)
@@ -525,19 +525,19 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                              if(data.containsKey("otm")){
                                  frame.setOtuMetadata(((ArrayList<String>)data.get("otm")));
                              }
-                             else
+                             // else
                                 // frame.resetTipMetadataTable();
                              // load otu sample map
                              if(data.containsKey("osm")){
                                  frame.setOtuSampleMap(((ArrayList<String>)data.get("osm")));
                              }
-                             else
+                             // else
                                 // frame.resetOtuTable();
                              // load sample metadata
                              if(data.containsKey("sam")){
                                  frame.setSampleMetadata(((ArrayList<String>)data.get("sam")));
                              }
-                             else
+                             // else
                                 // frame.resetSampleMetadataTable();
                              // load tree
                              if(data.containsKey("tre")){
@@ -548,7 +548,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                         }
                     }
                     catch(FileNotFoundException ex){
-
+                        System.out.println("Could not open project.");
                     }
                 } 
             }

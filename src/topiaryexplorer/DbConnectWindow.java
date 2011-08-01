@@ -79,6 +79,10 @@ public class DbConnectWindow extends JPanel {
                  
                  c.getAvailableTables();
                  frame.resetDatabaseTable();
+                 frame.databaseTabPane.setEnabledAt(0, true);
+                 frame.databaseTabPane.setSelectedIndex(1);
+                 frame.databaseTabPane.setEnabledAt(1, true);
+                 frame.databaseTabPane.setEnabledAt(2, true);
              }
              else
              {
@@ -100,6 +104,7 @@ public class DbConnectWindow extends JPanel {
              connect_button.setText("Connect");
              frame.databaseStatus.setText("No database connected.");
              frame.databaseTabPane.setEnabledAt(1, false);
+             frame.databaseTabPane.setEnabledAt(2, false);
          }
      }
      

@@ -88,7 +88,12 @@ public class DbSearchWindow extends JPanel {
     }                       
 
     public void searchButtonPressed() {
-         if(query.getText().length() > 0)
+        if(query.getText().length() < 6)
+        {
+            JOptionPane.showMessageDialog(null, "Only SELECT statements are allowed.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+         if(query.getText().substring(0,5).toUpperCase() == "SELECT")
          {
              updateQuery();
              if(frame.db_conn.c.searchCurrentTable(query.getText()))
@@ -97,6 +102,9 @@ public class DbSearchWindow extends JPanel {
                  frame.back.setEnabled(true);
              }
          }
+         else
+             JOptionPane.showMessageDialog(null, "Only SELECT statements are allowed.", "Error", JOptionPane.ERROR_MESSAGE);
+            
       }
 
       public void updateQuery() {

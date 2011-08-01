@@ -1,10 +1,5 @@
 package topiaryexplorer;
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * databaseFilterPane.java
  *
  * Created on Jun 16, 2011, 12:30:52 PM
@@ -31,6 +26,7 @@ import java.text.*;
 
 public class DatabaseFilterPanel extends JPanel {
     MainFrame frame = null;
+    String tableName = "";
     JPanel selectTablePanel = new JPanel();
     JTable tableNamesTable = new JTable(new SparseTableModel());
     JScrollPane tableNamesScrollPane = new JScrollPane();
@@ -47,7 +43,9 @@ public class DatabaseFilterPanel extends JPanel {
     JButton resetColumnFilterButton = new JButton("Reset");
     JPanel columnFiltersPanel = new JPanel();
     JTabbedPane columnFiltersTabPane = new JTabbedPane();
+    ArrayList<ColumnFilterTab> filterTabs = new ArrayList<ColumnFilterTab>();
     JButton filterTableButton = new JButton("Filter Table");
+    HashSet filters = new HashSet();
 
     /** Creates new form databaseFilterPane */
     public DatabaseFilterPanel(MainFrame _frame) {
@@ -86,7 +84,31 @@ public class DatabaseFilterPanel extends JPanel {
             }
         });
         
+        tableNamesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
+        tableNamesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent evt) {
+                if(tableNamesTable.getSelectedRow() == -1)
+                  return;
+                    
+                tableName = (String)tableNamesTable.getValueAt(tableNamesTable.getSelectedRow(), 0);
+                if(frame.db_conn.c.getTableHeaders(tableName))
+                {
+                    ArrayList<String> result = frame.db_conn.c.getResultLines();
+                    DefaultListModel model = new DefaultListModel();
+                    for(String s : result)
+                        model.addElement(s);
+                    columnNamesList.setModel(model);
+                }
+            }
+        });
+        
+        filterTableButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                filterButtonActionPerformed(evt);
+            }
+        });
+        filterTableButton.setEnabled(false);
         
         // obnoxious layout stuff
         GroupLayout selectTablePanelLayout = new GroupLayout(selectTablePanel);
@@ -100,9 +122,9 @@ public class DatabaseFilterPanel extends JPanel {
                         .addComponent(tableNamesScrollPane, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(selectTablePanelLayout.createSequentialGroup()
-                        .addComponent(searchLabel)
+                        // .addComponent(searchLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchField, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
+                        // .addComponent(searchField, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(71, Short.MAX_VALUE))
                     .addGroup(selectTablePanelLayout.createSequentialGroup()
                         .addComponent(selectTableLabel)
@@ -116,8 +138,9 @@ public class DatabaseFilterPanel extends JPanel {
                 .addComponent(tableNamesScrollPane, GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(selectTablePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchLabel)
-                    .addComponent(searchField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                    // .addComponent(searchLabel)
+                    // .addComponent(searchField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    ))
         );
 
         GroupLayout columnNamesPanelLayout = new GroupLayout(columnNamesPanel);
@@ -170,8 +193,6 @@ public class DatabaseFilterPanel extends JPanel {
 
         columnFiltersTabPane.getAccessibleContext().setAccessibleName("SampleID");
 
-        filterTableButton.setText("Filter Table");
-
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -203,27 +224,58 @@ public class DatabaseFilterPanel extends JPanel {
     }
 
     public void addColumnFilterButtonActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
+        for(Object o : columnNamesList.getSelectedValues())
+        {
+            if(filters.contains((String)o))
+                continue;
+                
+            if(frame.db_conn.c.getValuesByHeader(tableName, (String)o))
+            {
+                filters.add((String)o);
+                ArrayList<String> result = frame.db_conn.c.getResultLines();
+                ColumnFilterTab newTab = new ColumnFilterTab(frame, (String)o, result);
+                columnFiltersTabPane.add((String)o, newTab);
+                filterTabs.add(newTab);
+                filterTableButton.setEnabled(true);
+            }
+        }
     }
 
     public void resetColumnFilterButtonActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
+        columnFiltersTabPane.removeAll();
+        filters = new HashSet();
+        filterTabs.clear();
+        filterTableButton.setEnabled(false);
     }
     
-    // public void setDatabaseConnection1(dbConnect c) {
-    //     c.getAvailableTables();
-    //     tableNames = new JList();
-    //     
-    //     TableSorter sorter = new TableSorter(tableNames.getModel(), );
-    //          tableNamesTable.setModel(sorter);
-    // }
-
-    public void setDatabaseConnection(dbConnect c) {
-        c.getAvailableTables();
-        tableNames = new DataTable(c);
-        SparseTableModel model = new SparseTableModel(tableNames.getData(),
-   		 	tableNames.getColumnNames(), false);
-   		TableSorter sorter = new TableSorter(model, tableNamesTable.getTableHeader());
-   		tableNamesTable.setModel(sorter);
+    public void filterButtonActionPerformed(ActionEvent evt) {
+        String query = "select * from "+tableName+" where (";
+        
+        for(ColumnFilterTab ct : filterTabs)
+        {
+            for(Object o : ct.getSelectedValues())
+                query += ct.title + "=\"" + (String)o + "\" OR ";
+            // get rid of extra OR
+            query = query.substring(0, query.length()-4);
+            query += ") AND (";
+        }
+        // get rid of extra AND (
+        if(columnFiltersTabPane.getTabCount() != 1)
+            query = query.substring(0, query.length()-6);
+        
+        // System.out.println(query);
+        
+        frame.db_conn.c.searchCurrentTable(query);
+        // if(frame.db_conn.c.resultLines.size() > 10000)
+        // {
+        //     JOptionPane.showMessageDialog(null, "Only SELECT statements are allowed.", "Error", JOptionPane.ERROR_MESSAGE);
+        //     return;
+        // }
+        if (frame.db_conn.c.resultLines.size() == 0) {
+            JOptionPane.showMessageDialog(null, "No rows match your selections.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        DataTable table = new DataTable(frame.db_conn.c);
+        TableWindow tWindow = new TableWindow(frame, table);
     }
 }

@@ -158,11 +158,11 @@ public class MainFrame extends JFrame {
         });
         
         // databaseTopPanel.add(showData);
-        setAs.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setDatabaseResultsAs();
-            }
-        });
+        // setAs.addActionListener(new ActionListener() {
+        //     public void actionPerformed(ActionEvent e) {
+        //         setDatabaseResultsAs();
+        //     }
+        // });
         // setAs.setEnabled(false);
         // databaseTopPanel.add(setAs);
         // databasePanel.add(databaseTopPanel, BorderLayout.CENTER);
@@ -180,7 +180,13 @@ public class MainFrame extends JFrame {
         databaseTabPane.addTab("Explore", databaseTopPanel);
         databaseTabPane.addTab("Query", db_search);
         
-        databaseTabPane.setEnabledAt(0, false);
+        // databaseTabPane.addActionListener(new ActionListener() {
+        //     public void actionPerformed(ActionEvent e) {
+        //         JOptionPane.showMessageDialog(null, "This function allows arbitrary MySQL queries.\n" + ex.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+        //     }
+        // });
+        
+        // databaseTabPane.setEnabledAt(0, false);
         databaseTabPane.setEnabledAt(1, false);
         databaseTabPane.setEnabledAt(2, false);
         
@@ -192,7 +198,7 @@ public class MainFrame extends JFrame {
         //databasePane.addTab("Database", dataPanel);
         databasePanel.add(databaseTabPane, BorderLayout.CENTER);
         dataPane.addTab("Database", databasePanel);
-        dataPane.setEnabledAt(0, false);
+        // dataPane.setEnabledAt(0, false);
         
         otuMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         otuMetadataTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -485,84 +491,16 @@ public class MainFrame extends JFrame {
          SparseTableModel model = new SparseTableModel(database.getData(),
    		 	database.getColumnNames(), false);
    		 TableSorter sorter = new TableSorter(model, databaseTable.getTableHeader());
-   		 databaseTable.setModel(sorter);
+   		 databaseTopPanel.tableNamesTable.setModel(sorter);
+   		 
      }
      
      public void showAllTables() {
          db_conn.c.getAvailableTables();
          resetDatabaseTable();
-  		 back.setEnabled(false);
+         // back.setEnabled(false);
          // setAs.setEnabled(false);
-  		 showData.setEnabled(true);
-     }
-     
-     public void setDatabaseResultsAs() {
-         Object[] possibilities = {"Tip Data", "OTU Table", "Sample Data"};
-         String tableName = (String)JOptionPane.showInputDialog(
-                             this,
-                             "Use database results in which table?",
-                             "Set results as",
-                             JOptionPane.PLAIN_MESSAGE,
-                             null,
-                             possibilities,
-                             possibilities[0]);
-
-         //If a string was returned, say so.
-         if (tableName != null) {
-             SparseTableModel model = null;
-             TableSorter sorter = null;
-             switch(tableName.charAt(0))
-             {
-                 case 'O':
-                    setOtuSampleMap(database.toStrings());
-                    // try{
-                    //                      otuSampleMap = new DataTable(database.toStrings());
-                    //                      } catch (Exception ex) {
-                    //                          JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    //                          ex.printStackTrace();
-                    //                          return;
-                    //                      }
-                    //                      model = new SparseTableModel(otuSampleMap.getData(),
-                    //                   otuSampleMap.getColumnNames());
-                    //                   sorter = new TableSorter(model, otuSampleMapTable.getTableHeader());
-                    //                   otuSampleMapTable.setModel(sorter);
-                    //                   otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
-                    //                   dataPane.setSelectedIndex(2);
-                     break;
-                 case 'T':
-                    setOtuMetadata(database.toStrings());
-                    // try {
-                    //                      otuMetadata = new DataTable(database.toStrings());
-                    //                      } catch (Exception ex) {
-                    //                          JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    //                          ex.printStackTrace();
-                    //                          return;
-                    //                      }
-                    //                   model = new SparseTableModel(otuMetadata.getData(),
-                    //                   otuMetadata.getColumnNames());
-                    //                   sorter = new TableSorter(model, otuMetadataTable.getTableHeader());
-                    //                   otuMetadataTable.setModel(sorter);
-                    // /*                   resetColorByOtuMenus();*/
-                    //                      resetOtuMenus();
-                    //                      otuMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuMetadata, otuMetadataTable));
-                    //                      dataPane.setSelectedIndex(1);
-                     break;
-                 case 'S':
-                    setSampleMetadata(database.toStrings());
-                     // sampleMetadata = new DataTable(database.toStrings());
-                     //                      model = new SparseTableModel(sampleMetadata.getData(),
-                     //                      sampleMetadata.getColumnNames());
-                     //                      sorter = new TableSorter(model, sampleMetadataTable.getTableHeader());
-                     //                      sampleMetadataTable.setModel(sorter);
-                     //                      resetSampleMenus();
-                     //                      sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));
-                     //                      dataPane.setSelectedIndex(3);
-                     break;
-                 default:
-             }
-             back.setEnabled(true);
-             showData.setEnabled(false);
-         }
+         // showData.setEnabled(true);
      }
      
      public void showSelectedTable() {

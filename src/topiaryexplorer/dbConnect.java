@@ -72,6 +72,80 @@ public class dbConnect
           }
     }
     
+    public boolean getValuesByHeader(String tableName, String header){
+        reset();
+        currentTable = tableName;
+        boolean success = false;
+
+          try {
+              stmt = conn.createStatement();
+              this.res = stmt.executeQuery("select "+header+" from "+ tableName);
+              parseResultSet();
+              success = true;
+              }
+              // Now do something with the ResultSet ....
+          catch (SQLException ex){
+              // handle any errors
+              System.out.println("getdatafromtable");
+              System.out.println("SQLException: " + ex.getMessage());
+              System.out.println("SQLState: " + ex.getSQLState());
+              System.out.println("VendorError: " + ex.getErrorCode());
+          }
+
+          // close SQL connections
+          if (this.res != null) {
+              try {
+                  this.res.close();
+              } catch (SQLException sqlEx) { } // ignore
+              this.res = null;
+          }
+
+          if (stmt != null) {
+              try {
+                  stmt.close();
+              } catch (SQLException sqlEx) { } // ignore
+              stmt = null;
+          }
+          return success;
+    }
+    
+    public boolean getTableHeaders(String tableName) {
+        reset();
+        currentTable = tableName;
+        boolean success = false;
+
+          try {
+              stmt = conn.createStatement();
+              this.res = stmt.executeQuery("select column_name from information_schema.columns where table_name =\""+ tableName+"\"");
+              parseResultSet();
+              success = true;
+              }
+              // Now do something with the ResultSet ....
+          catch (SQLException ex){
+              // handle any errors
+              System.out.println("getdatafromtable");
+              System.out.println("SQLException: " + ex.getMessage());
+              System.out.println("SQLState: " + ex.getSQLState());
+              System.out.println("VendorError: " + ex.getErrorCode());
+          }
+
+          // close SQL connections
+          if (this.res != null) {
+              try {
+                  this.res.close();
+              } catch (SQLException sqlEx) { } // ignore
+              this.res = null;
+          }
+
+          if (stmt != null) {
+              try {
+                  stmt.close();
+              } catch (SQLException sqlEx) { } // ignore
+              stmt = null;
+          }
+          return success;
+    }
+    
     public boolean getDataFromTable(String tableName) {
         reset();
         currentTable = tableName;
