@@ -16,7 +16,7 @@
 		  description="Construct a jar ">
 		<mkdir dir="build" />
 
-		<jar jarfile="topiaryexplorer.jar">
+		<jar jarfile="topiaryexplorer0.9.2.jar">
 			<fileset dir="build/classes" />
 			<fileset dir="src/images/">
 	            <include name="**/*.gif" />

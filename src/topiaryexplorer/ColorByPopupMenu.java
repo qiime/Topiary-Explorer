@@ -68,7 +68,9 @@ class ColorByPopupMenu extends JPopupMenu{
                       }
                       else if(elementType == 1)
                           ((TreeWindow)parent).colorLabelsByValue(value);
-
+                      
+                      frame.schemeList.setSelectedIndex(0);
+                      colorPanel.setCurrentValue(value);
                       TableColumn column = colorPanel.getColorKeyTable().getColumnModel().getColumn(0);
                       column.setHeaderValue(value);
                   }
@@ -107,7 +109,9 @@ class ColorByPopupMenu extends JPopupMenu{
                          }
                        else if(elementType == 1)
                            ((TreeWindow)parent).colorLabelsByValue(value);
-
+                      
+                      frame.schemeList.setSelectedIndex(0);
+                      colorPanel.setCurrentValue(value);
                       TableColumn column = colorPanel.getColorKeyTable().getColumnModel().getColumn(0);
                       column.setHeaderValue(value);
                   }

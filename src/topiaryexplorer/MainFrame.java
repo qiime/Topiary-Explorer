@@ -63,6 +63,8 @@ public class MainFrame extends JFrame {
     JButton back = new JButton("<<");
     JButton showData = new JButton("Show Table");
     JButton setAs = new JButton("Set As...");
+    HashMap schemes = new HashMap();
+    JComboBox schemeList = new JComboBox();
     JButton interpolateButton = new JButton("Interpolate Colors");
     NewProjectDialog newProjectChooser = null;
     JLabel databaseStatus = new JLabel("Database not connected.");
@@ -135,7 +137,20 @@ public class MainFrame extends JFrame {
         colorPane.add("Branches", branchColorPanel);
         colorPane.add("Labels", labelColorPanel);
         colorBar.setMinimumSize(new Dimension(200,600));
-        colorBar.add(new JLabel("Color Key"));
+        // colorBar.add(new JLabel("Color Key"));
+        schemeList.addItem("No scheme selected");
+        schemeList.addItem("Save new scheme...");
+        schemeList.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(schemeList.getSelectedIndex() == 0)
+                    return;
+                if(schemeList.getSelectedIndex() == 1)
+                    saveCurrentScheme();
+                else
+                    changeScheme((String)schemeList.getSelectedItem());
+            }
+        });
+        colorBar.add(schemeList);
         colorBar.add(colorPane);
         colorBar.add(interpolateButton);
         
@@ -269,6 +284,60 @@ public class MainFrame extends JFrame {
     	} catch (UnavailableServiceException e) { ps=null; }
     	
       setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+     }
+     
+     public void addSchemes(HashMap prefsSchemes) {
+         for(Object o : prefsSchemes.keySet())
+         {
+             schemes.put((String)o, (Object[])prefsSchemes.get(o));
+             schemeList.addItem((String)o);
+         }
+     }
+     
+     public void changeScheme(String name) {
+         // System.out.println("changing to scheme "+name);
+         ColorPanel tmp = ((ColorPanel)colorPane.getSelectedComponent());
+         tmp.setColorMap((HashMap)((Object[])schemes.get(name))[1]);
+         tmp.syncColorKeyTable();
+         String columnHeader = (String)((Object[])schemes.get(name))[0];
+         TableColumn column = tmp.getColorKeyTable().getColumnModel().getColumn(0);
+           column.setHeaderValue(columnHeader);
+         tmp.setCurrentValue(columnHeader);
+         
+         currTable = sampleMetadata;
+         tmp.setColorColumnIndex(currTable.getColumnIndex(columnHeader));
+                  
+         if(colorPane.getSelectedIndex() == 0)
+            recolorBranches();
+         else if(colorPane.getSelectedIndex() == 1)
+            recolorLabels();
+         
+         resetOtuMenus();
+         resetSampleMenus();
+         
+         for(TreeWindow t : treeWindows)
+         {
+             t.treeEditToolbar.branchEditPanel.coloringMenuItem.setSelected(false);
+             t.tree.redraw();
+         }
+     }
+     
+     public void saveCurrentScheme() {
+        Object o = JOptionPane.showInputDialog(null, "Save current scheme as", 
+                "Save scheme", 
+                JOptionPane.PLAIN_MESSAGE,null,null,"untitledScheme"+schemes.size());
+        if(o != null)
+        {
+            ColorPanel tmp = ((ColorPanel)colorPane.getSelectedComponent());
+            addScheme((String)o, tmp.getCurrentValue(), tmp.getColorMap());
+        }
+     }
+     
+     public void addScheme(String name, String columnName, HashMap colorMap) {
+         schemes.put(name, new Object[]{columnName, colorMap});
+         schemeList.addItem(name);
+         // to account for 'no scheme selected' and 'save new scheme'
+         schemeList.setSelectedIndex(schemes.size()+1);
      }
      
      public void newTreeWindow() {
@@ -558,13 +627,13 @@ public class MainFrame extends JFrame {
          if (currTable != null && currTable == otuMetadata) {
              for(TreeWindow t : treeWindows)
              {
-/*                 if(!t.treeEditToolbar.branchEditPanel.coloringMenuItem.isSelected())*/
+                 // System.out.println("hurf");
                   t.recolorBranchesByOtu();
               }
          } else if (currTable != null && currTable == sampleMetadata) {
              for(TreeWindow t : treeWindows)
              {
-/*                 if(!t.treeEditToolbar.branchEditPanel.coloringMenuItem.isSelected())*/
+                 // System.out.println("durf");
                   t.recolorBranchesBySample();
               }
          } else {

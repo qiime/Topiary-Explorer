@@ -758,6 +758,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
        treeEditToolbar.setStatus("Done coloring tree.");
        tree.redraw();
        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+       // System.out.println("=========================");
     }
     
     /**
@@ -810,6 +811,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
           frame.repaint();
          tree.redraw();
          treeEditToolbar.setStatus("Done coloring tree.");
+         // System.out.println("************************");
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
@@ -1232,7 +1234,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                column = frame.currTable.getColumn(colIndex);
              
              while (column.contains(null)) column.remove(null);
-              ArrayList<Object> uniqueVals = new ArrayList<Object>(column);
+              HashSet<Object> uniqueVals = new HashSet<Object>(column);
               //set up the branchColorPanel.getColorMap()
               frame.branchColorPanel.setColorMap(new HashMap());
               float[] hsbvals = new float[3];

@@ -466,6 +466,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                          for(String s : (ArrayList<String>)data.get("tre"))
                              frame.newTreeWindow(s, true);
                      }
+                     if(data.containsKey("pre")){
+                          frame.addSchemes(TopiaryFunctions.parsePrefsFile((ArrayList<String>)data.get("pre"), frame.sampleMetadata));
+                      }
                     frame.repaint();
                 }
             }
@@ -510,6 +513,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                              for(String s : (ArrayList<String>)data.get("tre"))
                                  frame.newTreeWindow(s, true);
                          }
+                         if(data.containsKey("pre")){
+                              frame.addSchemes(TopiaryFunctions.parsePrefsFile((ArrayList<String>)data.get("pre"), frame.sampleMetadata));
+                          }
                         frame.repaint();
                     }
                 }
@@ -543,6 +549,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                              if(data.containsKey("tre")){
                                  for(String s : (ArrayList<String>)data.get("tre"))
                                      frame.newTreeWindow(s, true);
+                              }       
+                             if(data.containsKey("pre")){
+                                 frame.addSchemes(TopiaryFunctions.parsePrefsFile((ArrayList<String>)data.get("pre"), frame.sampleMetadata));
                              }
                             frame.repaint();
                         }
@@ -587,6 +596,21 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 			{
 			    lines.add(">>sam\n");
 			    lines.addAll(frame.sampleMetadata.toStrings());
+		    }
+		    if(frame.schemes.size() > 0)
+		    {
+		        lines.add(">>pre\n");
+                for(Object name : frame.schemes.keySet())
+                {
+                    Object[] o = (Object[])frame.schemes.get(name);
+                    HashMap h = (HashMap)o[1];
+                    for(Object v : h.keySet())
+                    {
+                        Color c = (Color)h.get(v);
+                        lines.add((String)v+":"+c.getRed()+","+c.getGreen()+","+c.getBlue()+",\n");
+                    }
+                    lines.add(">"+(String)name+":"+(String)o[0]+"\n");
+                }
 		    }
 		    
 		    ByteArrayOutputStream b = new ByteArrayOutputStream();

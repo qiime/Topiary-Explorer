@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.text.*;
 import javax.jnlp.*;
 import java.net.*;
+import java.awt.*;
 
 public class TopiaryFunctions {
 
@@ -373,9 +374,82 @@ public class TopiaryFunctions {
           else
             return null;
 	}
-    // 
-    // public static HashMap parsePrefsFile(){
-    //     
-    // }
+	
+	public static ArrayList<Color> makeGradient(int length, Color firstColor, Color secondColor) {
+	    ArrayList<Color> gradient = new ArrayList<Color>();
+	    gradient.add(firstColor);
+	    int first = 0;
+	    int second = length;
+	    if(firstColor == secondColor)
+		{
+		    for (int i = first+1; i < length; i++) 
+		        gradient.add(firstColor);
+	        
+		}else
+		{
+ 			for (int i = first+1; i < length; i++) {
+ 				//here's the interpolation
+ 				float frac = (i-first)*(1.0f/(second-first));
+ 				Color c = new Color((1-frac)*firstColor.getRed()/255.0f + frac*secondColor.getRed()/255.0f,
+ 					(1-frac)*firstColor.getGreen()/255.0f + frac*secondColor.getGreen()/255.0f,
+ 					(1-frac)*firstColor.getBlue()/255.0f + frac*secondColor.getBlue()/255.0f);
+                 gradient.add(c);
+ 			}
+	    }
+	    gradient.add(secondColor);
+	    return gradient;
+	}
     
+    public static HashMap parsePrefsFile(ArrayList<String> lines, DataTable mapping){
+        HashMap prefsMap = new HashMap();
+        HashMap curr_colormap = new HashMap();
+        ArrayList<Color> color_list = new ArrayList<Color>();
+        Color curr_color = null;
+        String name = "";
+        String category = "";
+        String columnName = "";
+        String[] rgb = new String[4];
+        boolean needs_mapping = false;
+        for(String line : lines)
+        {
+            if(line.startsWith(">"))
+            {
+                name = line.substring(1,line.length()).split(":")[0];
+                columnName = line.substring(1,line.length()).split(":")[1];
+                if(needs_mapping)
+                    {
+                        if(!mapping.getColumnNames().contains(columnName))
+                        {
+                            JOptionPane.showMessageDialog(null, "Unable to load prefs for column ["+columnName+"], it was not included in the sample mapping file.", "Warning", JOptionPane.WARNING_MESSAGE);
+                            continue;
+                        }
+                        HashSet vals = new HashSet(mapping.getColumn(mapping.getColumnIndex(columnName)));
+                        Object[] uniqueVals = vals.toArray();
+                        Arrays.sort(uniqueVals);
+                        ArrayList<Color> gradient = makeGradient(uniqueVals.length, color_list.get(0), color_list.get(1));
+                          for (int i = 0; i < uniqueVals.length; i++) 
+                              curr_colormap.put(uniqueVals[i], gradient.get(i));
+                    }
+                prefsMap.put(name, new Object[]{columnName, curr_colormap});
+                curr_colormap = new HashMap();
+                continue;
+            }
+            
+            if(line.indexOf(':') == -1)
+            {
+                needs_mapping = true;
+                rgb = line.split(",");
+                curr_color = new Color(Integer.parseInt(rgb[0]),Integer.parseInt(rgb[1]),Integer.parseInt(rgb[2]));
+                color_list.add(curr_color);
+            }
+            else
+                {
+                    category = line.split(":")[0];
+                    rgb = line.split(":")[1].split(",");
+                    curr_color = new Color(Integer.parseInt(rgb[0]),Integer.parseInt(rgb[1]),Integer.parseInt(rgb[2]));
+                    curr_colormap.put(category,curr_color);
+                }        
+        }
+        return prefsMap;
+    }
 }

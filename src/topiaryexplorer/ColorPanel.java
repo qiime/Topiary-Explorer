@@ -27,6 +27,7 @@ public class ColorPanel extends JPanel{
     //Holds the current coloring information
     private HashMap colorMap = new HashMap();
     private int colorColumnIndex = -1;
+    private String currentValue = "";
     
 	// {{{ ColorPanel constructor
     /**
@@ -75,6 +76,10 @@ public class ColorPanel extends JPanel{
 	**/
 	void setColorColumnIndex(int i) { colorColumnIndex = i; }
 	
+	String getCurrentValue() { return currentValue; }
+	
+	void setCurrentValue(String s) { currentValue = s; }
+	
     /**
     * Syncs the colorKeyTable with ColorMap
     **/
@@ -91,7 +96,8 @@ public class ColorPanel extends JPanel{
          }
 
          ArrayList<String> colNames = new ArrayList<String>();
-         colNames.add("Category");
+         colNames.add(currentValue);
+         // currentValue = "Category";
          colNames.add("Color");
          colNames.add("");
 
