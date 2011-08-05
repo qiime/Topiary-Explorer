@@ -58,9 +58,11 @@ Step 3. Create tip data
 -----------------------
 Create a tip data file that contains both reference IDs and query IDs. This can be done with the following commands, replacing ``query.fna`` and ``refseqs.fna`` with the names of the inserted sequences fasta file and the reference sequences (or sequences in original tree), respectively::
 
-	echo "#OTU ID\tQuery" >> otu_metadata.txt
-	grep -Eo '^>\w+' query.fna | grep -Eo '\w+' | sed -e 's/.*/Q_&\\t1/' >> otu_metadata.txt
-	grep -Eo '^>\w+' refseqs.fna | grep -Eo '\w+' | sed -e 's/.*/&\\t0/' >> otu_metadata.txt
+	echo "#OTU ID<tab>Query" >> otu_metadata.txt
+	grep -Eo '^>\w+' query.fna | grep -Eo '\w+' | sed -e 's/.*/Q_&<tab>1/' >> otu_metadata.txt
+	grep -Eo '^>\w+' refseqs.fna | grep -Eo '\w+' | sed -e 's/.*/&<tab>0/' >> otu_metadata.txt
+
+.. warning:: Do not type ``<tab>`` in the above commands, but replace these with a literal tab. To do this enter type Control-v followed by the tab key. This will show up as one or more spaces.
 
 Step 4. Create a new project
 ----------------------------
