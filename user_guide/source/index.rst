@@ -8,7 +8,7 @@ TopiaryExplorer UserGuide
 #########################
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 	
    install
    file_formats
