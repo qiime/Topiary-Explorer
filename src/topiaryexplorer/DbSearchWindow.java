@@ -93,13 +93,16 @@ public class DbSearchWindow extends JPanel {
             JOptionPane.showMessageDialog(null, "Only SELECT statements are allowed.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-         if(query.getText().substring(0,5).toUpperCase() == "SELECT")
+        
+        // System.out.println(query.getText().substring(0,6));
+        
+         if(query.getText().substring(0,6).toUpperCase().equals("SELECT"))
          {
              updateQuery();
              if(frame.db_conn.c.searchCurrentTable(query.getText()))
              {
-                 frame.resetDatabaseTable();
-                 frame.back.setEnabled(true);
+                 DataTable table = new DataTable(frame.db_conn.c);
+                 TableWindow tWindow = new TableWindow(frame, table);
              }
          }
          else

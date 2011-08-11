@@ -292,6 +292,7 @@ public class TopiaryFunctions {
         }
         catch(IOException e)
         {
+            System.out.println("Error opening URL");
             return null;
         }
 	}

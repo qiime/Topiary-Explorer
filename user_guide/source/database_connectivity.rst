@@ -32,59 +32,73 @@ By default, the MySQL username will be root and the password will be whatever yo
 
 Step 2. Load the tree
 ---------------------
-Next, open TopiaryExplorer and load the tree file ``topiaryexplorer/examples/keyboard.tre``. 
-
-.. figure::  _images/load_tree.png
-   :align:   center
-
-This will open a new Tree Window. Switch back to the TopiaryExplorer Window.
+Next, open TopiaryExplorer and load the tree file ``topiaryexplorer/examples/keyboard.tre``. This will open a new Tree Window. Switch back to the TopiaryExplorer Window.
 
 Step 3. Connect to the local database
 --------------------------------------
-Fill in database connection information in the Connect dialog at the bottom of the Database Pane. The relevant information is: Server: ``localhost``, Database: ``forensic_keyboard``, Username: ``root``, and your password will be system specific. 
+Fill in database connection information in the Connect dialog in the Database Pane. The relevant information is: Server: ``localhost``, Database: ``forensic_keyboard``, Username: ``root``, and your password will be system specific. 
 
 .. figure::  _images/connect_to_database.png
    :align:   center
 
-Once you've filled in the details, click the ``Connect`` button on the bottom right. This will auto-populate the top window.
+Once you've filled in the details, click the ``Connect`` button on the bottom right. This will take you to the database explore tab.
 
 .. figure::  _images/all_tables_view.png
    :align:   center
 
 Step 4. Select the the data that you'd like to use
 --------------------------------------------------
-You'll next select the type of data that you'd like to load from the database. The ``Tables_in_forensic_keyboard`` column lists the tables that are available in the database. Select the ``keyboard_otu_metadata`` option and click the ``Show Table`` button on the top right (be sure to click ``Show Table`` here, not ``Set As...``). 
-
-Note: To view the full text in the ``Tables_in_forensic_keyboard`` column, you can expand the column by dragging the vertical bar just to the right of ``Tables_in...`` to the right.
-
+You'll next select the type of data that you'd like to load from the database. The ``Tables_in_forensic_keyboard`` column lists the tables that are available in the database. Select the ``keyboard_mapping`` option.
 
 .. figure::  _images/show_table.png
    :align:   center
 
-Step 5. Set the selected database table as the Tip Data
--------------------------------------------------------
-Next click the ``Set As...`` button. A new window will open. Select ``Tip Data`` from the dropdown box and click ``OK``. This will set the ``keyboard_otu_metadata`` table as the ``Tip Data`` in the TopiaryExplorer window, and will open the ``Tip Data`` tab. 
+Once you click a table, the column on the right will auto-populate with headers from the selected table. You can use the values in these headers to filter the table and get only relevant metadata. Click the Individual header item and then add it to the filters panel by clicking the "v" button.
 
-.. figure:: _images/set_results_as_otu_tip_data.png
+.. figure:: _images/filter_individual.png
    :align:  center
 
-Step 6. Set the OTU Table data
+Then click the filter table button and a table containing only relevant rows from the metadata will be displayed.
+
+.. figure:: _images/filtered_table.png
+   :align:  center
+
+Step 5. Set the selected database table as the Sample Data
+----------------------------------------------------------
+Next click the ``Set As...`` button. A new window will open. Select ``Sample Data`` from the dropdown box and click ``OK``. This will set the ``keyboard_mapping`` table as the ``Sample Data`` in the TopiaryExplorer window, and will open the ``Sample Data`` tab. 
+
+.. figure:: _images/set_results_as_sample_data.png
+   :align:  center
+
+Step 6. Set the Tip data table
 ------------------------------
-To set the OTU table data, click on the ``Database`` tab in the top of the TopiaryExplorer window. Click the ``<<`` button to return to the list of available tables. Select the ``keyboard_otu_table`` option. Click ``Show Table``, then click ``Set As..``, and choose ``OTU Table`` from the drop down box. Click ``OK``. This will open the ``OTU Table`` tab.
+To set the Tip data, click on the ``Query`` tab at the top of the database tab pane. Type the query ``select * from keyboard_otu_metadata``, then click the search button.
 
-.. figure:: _images/set_results_as_otu_sample_data.png
+.. figure:: _images/database_query.png
    :align:  center
 
-Step 7. Set the Sample Data
------------------------------
-To set the Sample Data, click on the ``Database`` tab in the top of the window. Click the ``<<`` button to return to the list of available tables. Select the ``keyboard_mapping`` option and click ``Show Table``. Then set this as ``Sample Data`` by clicking ``Set As...``, choosing ``Sample Data``, and then ``OK``. This will open the ``Sample Data`` tab.
+Set the resulting table as the Tip data using the ``Set As...`` button.
+
+.. figure:: _images/set_results_as_tip_metadata.png
+   :align:  center
+
+Step 7. Set the OTU Table data
+------------------------------
+To set the OTU table data, click on the ``Query`` tab at the top of the database tab pane. Type the query ``select * from keyboard_otu_table``.
+Set the resulting table as the OTU Table using the ``Set As...`` button.
+
+.. figure:: _images/set_results_as_otu_table.png
+   :align:  center
 
 Step 8. Color tree using Tip Data
 ---------------------------------
 
 Next switch to the Tree Window. Uncollapse the tree by dragging the slider on top to the right. Color the branches in the tree by expanding the branch panel on the left, clicking ``Color by`` and then ``Sample Metadata`` and ``Individual``. Then switch to the TopiaryExplorer window and select colors for the different individuals. Switch back to the TreeWindow and your tree will now be colored by individual. 
 
-.. figure::  _images/db_tree_colored_by_individual.png
+.. figure::  _images/db_colored_by_individual.png
    :align:   center
+
+.. note::
+   You'll notice that the only individual that shows up is ``M9`` since we filtered the sample metadata table in step 4.
 
 This last step was covered very quickly here: if you got lost you should refer to the `TopiaryExplorer Overview Tutorial <./quickstart.html>`_ which goes through the steps for coloring a tree in a lot more detail.

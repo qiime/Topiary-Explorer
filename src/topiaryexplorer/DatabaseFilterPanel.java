@@ -260,7 +260,7 @@ public class DatabaseFilterPanel extends JPanel {
             query += ") AND (";
         }
         // get rid of extra AND (
-        if(columnFiltersTabPane.getTabCount() != 1)
+        if(columnFiltersTabPane.getTabCount() > 0)
             query = query.substring(0, query.length()-6);
         
         // System.out.println(query);

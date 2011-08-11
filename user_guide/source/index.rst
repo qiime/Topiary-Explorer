@@ -17,6 +17,7 @@ TopiaryExplorer UserGuide
    database_connectivity
    bigtree_tutorial
    insertion_tutorial
+   scheme_tutorial
 
 
 Introduction

@@ -584,17 +584,17 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		    }
 			if(frame.otuMetadata.getColumnCount() > 0)
 			    {
-			        lines.add("\n>>otm\n");
+			        lines.add("\n>>otm\n#");
 			        lines.addAll(frame.otuMetadata.toStrings());
 		        }
 			if(frame.otuSampleMap.getColumnCount() > 0) 
 			    {
-			        lines.add(">>osm\n"); 
+			        lines.add(">>osm\n#"); 
 			        lines.addAll(frame.otuSampleMap.toStrings());
 		        }
 			if(frame.sampleMetadata.getColumnCount() > 0)
 			{
-			    lines.add(">>sam\n");
+			    lines.add(">>sam\n#");
 			    lines.addAll(frame.sampleMetadata.toStrings());
 		    }
 		    if(frame.schemes.size() > 0)

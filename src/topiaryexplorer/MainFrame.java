@@ -243,6 +243,13 @@ public class MainFrame extends JFrame {
         dataPane.addTab("Sample Data", sampleMetadataScrollPane);
         dataPane.setSelectedIndex(1);
         
+        dataPane.addChangeListener(new ChangeListener(){
+            public void stateChanged(ChangeEvent e){
+                tableChanged();
+            }
+        }
+        );
+        
         dataPanel.setLayout(new BorderLayout());
 /*        dataPanel.setPreferredSize(400,700);*/
         dataPanel.add(dataPane, BorderLayout.CENTER);
@@ -286,6 +293,17 @@ public class MainFrame extends JFrame {
       setDefaultCloseOperation(DISPOSE_ON_CLOSE);
      }
      
+     public void tableChanged() {
+         if(dataPane.getSelectedIndex() == 0)
+            currTable = database;
+         else if(dataPane.getSelectedIndex() == 1)
+            currTable = otuMetadata;
+         else if(dataPane.getSelectedIndex() == 2)
+            currTable = otuSampleMap;
+         else if(dataPane.getSelectedIndex() == 3)
+            currTable = sampleMetadata;
+     }
+     
      public void addSchemes(HashMap prefsSchemes) {
          for(Object o : prefsSchemes.keySet())
          {
@@ -295,6 +313,11 @@ public class MainFrame extends JFrame {
      }
      
      public void changeScheme(String name) {
+         if(currTable == null || currTable == database || currTable == otuSampleMap)
+         {
+             JOptionPane.showMessageDialog(null, "Please select a valid metadata table to change schemes.", "Error", JOptionPane.ERROR_MESSAGE);
+             return;
+         }
          // System.out.println("changing to scheme "+name);
          ColorPanel tmp = ((ColorPanel)colorPane.getSelectedComponent());
          tmp.setColorMap((HashMap)((Object[])schemes.get(name))[1]);
@@ -304,7 +327,6 @@ public class MainFrame extends JFrame {
            column.setHeaderValue(columnHeader);
          tmp.setCurrentValue(columnHeader);
          
-         currTable = sampleMetadata;
          tmp.setColorColumnIndex(currTable.getColumnIndex(columnHeader));
                   
          if(colorPane.getSelectedIndex() == 0)
@@ -428,6 +450,7 @@ public class MainFrame extends JFrame {
          resetOtuMenus();
          otuMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuMetadata, otuMetadataTable));
          dataPane.setSelectedIndex(1);
+         currTable = otuMetadata;
     }
     
     public void setOtuMetadata(InputStream data) {
@@ -448,6 +471,7 @@ public class MainFrame extends JFrame {
          resetOtuMenus();
          otuMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuMetadata, otuMetadataTable));
          dataPane.setSelectedIndex(1);
+         currTable = otuMetadata;
     }
     
     public void setOtuSampleMap(ArrayList<String> data) {
@@ -466,6 +490,7 @@ public class MainFrame extends JFrame {
 /*         consoleWindow.update("Loaded OTU to sample map");*/
          otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
          dataPane.setSelectedIndex(2);
+         currTable = otuSampleMap;
     }
     
     public void setOtuSampleMap(InputStream data) {
@@ -485,6 +510,7 @@ public class MainFrame extends JFrame {
 /*         consoleWindow.update("Loaded OTU to sample map");*/
          otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
          dataPane.setSelectedIndex(2);
+         currTable = otuSampleMap;
     }
     
     public void setSampleMetadata(ArrayList<String> data) {
@@ -504,6 +530,7 @@ public class MainFrame extends JFrame {
          resetSampleMenus();
          sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));
          dataPane.setSelectedIndex(3);
+         currTable = sampleMetadata;
     }
     
     public void setSampleMetadata(InputStream data) {
@@ -524,6 +551,7 @@ public class MainFrame extends JFrame {
          resetSampleMenus();
          sampleMetadataScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, sampleMetadata, sampleMetadataTable));
          dataPane.setSelectedIndex(3);
+         currTable = sampleMetadata;
     }
      
      public void resetOtuMenus() {
