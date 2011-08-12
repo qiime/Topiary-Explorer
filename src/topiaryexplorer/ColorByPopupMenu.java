@@ -87,9 +87,8 @@ class ColorByPopupMenu extends JPopupMenu{
          colorBySampleMetadataMenu.removeAll();
          // colorBySampleMetadataMenu.add(new JRadioButtonMenuItem("hurf"));
          ArrayList<String> data = frame.sampleMetadata.getColumnNames();
-         //start at 1 to skip ID column
          // System.out.println(frame.sampleMetadata.getColumnNames().size());
-         for (int i = 1; i < data.size(); i++) {
+         for (int i = 0; i < data.size(); i++) {
               String value = data.get(i);
               JRadioButtonMenuItem item = new JRadioButtonMenuItem(value);
               // System.out.println("["+value+"]");
