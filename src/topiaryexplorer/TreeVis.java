@@ -1138,7 +1138,7 @@ public class TreeVis extends PApplet {
                           String n = node.nodes.get(i).getName();
                            if(node.nodes.get(i).getLabel().length() > 0)
                                n = node.nodes.get(i).getLabel();
-                          canvas.text(n, (float)(xp + 1), (float)(yp+1));
+                          canvas.text(n, (float)(xp - textWidth(n)), (float)(yp));
                       }
                 }
           }

@@ -273,8 +273,8 @@ public class TopiaryFunctions {
             String dataType = "";
             HashMap data = new HashMap();
             // ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
-            String line = br.readLine();
-            while(line != null)
+            String line = "";
+            while((line = br.readLine()) != null)
             {
                 line = line.trim();
                 if(line.startsWith(">>"))
@@ -285,7 +285,6 @@ public class TopiaryFunctions {
                 }
                 else
                     ((ArrayList<String>)data.get(dataType)).add(line);
-                line = br.readLine();
             }
             br.close();
             return data;
