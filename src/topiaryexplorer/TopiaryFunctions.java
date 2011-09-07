@@ -246,6 +246,11 @@ public class TopiaryFunctions {
             while(line != null)
             {
                 line = line.trim();
+                if(line.length() == 0)
+                {
+                    line = br.readLine();
+                    continue;
+                }
                 if(line.startsWith(">>"))
                 {
                     dataType = line.substring(2,5);
@@ -277,6 +282,11 @@ public class TopiaryFunctions {
             while((line = br.readLine()) != null)
             {
                 line = line.trim();
+                if(line.length() == 0)
+                {
+                    line = br.readLine();
+                    continue;
+                }
                 if(line.startsWith(">>"))
                 {
                     dataType = line.substring(2,5);
@@ -306,6 +316,11 @@ public class TopiaryFunctions {
             while(line != null)
             {
                 line = line.trim();
+                if(line.length() == 0)
+                {
+                    line = br.readLine();
+                    continue;
+                }
                 if(line.startsWith(">>"))
                 {
                     dataType = line.substring(2,5);

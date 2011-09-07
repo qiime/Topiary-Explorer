@@ -26,6 +26,10 @@ class SparseTable {
         maxcol = Math.max(col, maxcol);
     }
     
+    public int size() {
+        return data.size();
+    }
+    
     public void set(Object value, int row, int col) {
         data.get(row).put(col, value);
     }

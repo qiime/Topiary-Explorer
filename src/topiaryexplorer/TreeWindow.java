@@ -83,10 +83,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     treeEditPane.add(treeEditToolbar);
 	     
 	     try{
-         lockButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("lock.gif"))), false);
+         lockButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("unlock.gif"))), false);
+         lockButton.setSelectedIcon(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("lock.gif"))));
          }
          catch(IOException e)
          {}
+         
 	     
 	     Container pane = getContentPane();
          pane.setLayout(new BorderLayout());

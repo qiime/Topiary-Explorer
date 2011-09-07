@@ -55,8 +55,14 @@ public class DataTable {
         
         for(String line:lines)
         {
+            try {
             if(line.charAt(0)=='#')
                 commentedLines.add(line);
+            }
+            catch(StringIndexOutOfBoundsException e)
+            {
+                commentedLines.add(line);
+            }
         }
         
         for(String line:commentedLines)
@@ -73,9 +79,9 @@ public class DataTable {
 		    curr_c = 0;
 		    for (String obj : vals) {
 		        val = TopiaryFunctions.objectify(obj);
-		        if (val != null) {
+                if (val != null) {
 		            data.add(r, curr_c, val);
-		        }
+                }
 		        curr_c = curr_c + 1;
 		    }
 		    if(r == 0)
@@ -127,9 +133,9 @@ public class DataTable {
 		    for (String obj : vals) {
 /*              val = obj;*/
 		        val = TopiaryFunctions.objectify(obj);
-		        if (val != null) {
+                if (val != null) {
 		            data.add(r, curr_c, val);
-		        }
+                }
 		        curr_c = curr_c + 1;
 		    }
 		    
@@ -176,10 +182,14 @@ public class DataTable {
 	}
 
     public void addColumn(ArrayList<Object> newColumn) {
-        columnNames.add((String)newColumn.get(0));
+        columnNames.add(""+newColumn.get(0));
         newColumn.remove(0);
         for(int i = 0; i < newColumn.size(); i++)
+        {
             data.add(i, columnNames.size()-1, newColumn.get(i));
+            if(columnNames.size() == 1) // adding the first column
+                rowNames.add(newColumn.get(i)+"");
+        }   
     }
 
     public ArrayList<Object> getColumn(int index) {
@@ -288,13 +298,14 @@ public class DataTable {
 	    
 	    for(String h : getColumnNames())
 	        s += h + '\t';
+	    s = s.substring(0,s.length()-2);
 	    s += "\n";
 	    lines.add(s);
 	    
-	    for(int i = 0; i < data.maxRow(); i++)
+	    for(int i = 0; i < getRowCount(); i++)
 	    {
 	        s = "";
-	        for(int j = 0; j < data.maxCol(); j++)
+	        for(int j = 0; j < getColumnCount(); j++)
 	        {
 	            try {
 	            s += getValueAt(i,j).toString();
@@ -305,7 +316,7 @@ public class DataTable {
 	            }
 	            s += '\t';
 	        }
-	        s = s.trim();
+	        s = s.substring(0,s.length()-2);
 	        s += '\n';
 	        lines.add(s);
 	    }

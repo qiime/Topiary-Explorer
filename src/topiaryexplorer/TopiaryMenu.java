@@ -100,6 +100,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         item = new JMenuItem("Load Sample Data...");
         item.addActionListener(this);
         fileMenu.add(item);
+        item = new JMenuItem("Load Data Table...");
+        item.addActionListener(this);
+        fileMenu.add(item);
         fileMenu.add(new JSeparator());
         item = new JMenuItem("Quit");
         item.addActionListener(this);
@@ -422,7 +425,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
            loadSampleMetadata(null);
          } else if (e.getActionCommand().equals("Load OTU Table...")) {
              loadOtuSampleMap(null);
-         }  else if (e.getActionCommand().equals("PCoA Window")) {
+         } else if (e.getActionCommand().equals("Load Data Table...")) {
+             loadDataTable(null);
+         }
+           else if (e.getActionCommand().equals("PCoA Window")) {
                   // frame.pcoaWindow.setVisible(!frame.pcoaWindow.isVisible());
         }else if (e.getActionCommand().equals("PCoA Window")) {
                 // frame.consoleWindow.setVisible(!frame.consoleWindow.isVisible());
@@ -723,6 +729,28 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
        for(TreeWindow t : frame.treeWindows)
               t.tree.redraw();
        frame.repaint();
+   }
+
+   public void loadDataTable(FileContents inFile){
+       frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+   	   if (inFile==null) {
+   	       try {
+   	           inFile = frame.fos.openFileDialog(null,null);
+   	       } catch (java.io.IOException e) {}
+   	   }   
+       if (inFile != null) {
+           
+            try{
+            InputStream is = inFile.getInputStream();
+            DataTable table = new DataTable(is);
+            TableWindow tWindow = new TableWindow(frame, table);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Unable to load " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+       }
+       frame.repaint();
+       frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
    }
 
    /**
