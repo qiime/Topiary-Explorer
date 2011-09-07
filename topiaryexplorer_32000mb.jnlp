@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp codebase="file:." >
+    
+    <information>
+    <title>TopiaryExplorer</title>
+    <vendor>University of Colorado</vendor>
+    <description>TopiaryExplorer</description>
+    <!--<icon href="icon.png"/>-->
+    <!--<icon kind="splash" href="images/splash.gif"/>-->
+    
+    <offline-allowed/>
+     
+
+  </information>
+  
+  <security>
+      <all-permissions/>
+  </security>
+  
+  <resources>
+    <j2se version="1.6+" initial-heap-size="500M" max-heap-size="32000m" />
+	<extension name="jogl" href="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp" />
+	
+	<jar href="topiaryexplorer0.9.4.jar" />
+	<jar href="lib/core.jar" />
+	<jar href="lib/itext.jar" />
+	<jar href="lib/pdf.jar" />
+	<jar href="lib/ojdbc14.jar" />
+	<jar href="lib/opengl.jar" />
+	<jar href="lib/mysql-connector-java-5.1.10-bin.jar" />
+	<jar href="lib/javaws.jar" />
+	<jar href="lib/classes12.jar" />
+  </resources>
+  
+  <application-desc main-class="topiaryexplorer.TopiaryExplorer" />
+</jnlp>
