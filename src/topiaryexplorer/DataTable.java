@@ -331,6 +331,7 @@ public class DataTable {
 	}
 	
     private ArrayList<String> parseLine(String line) {
+	    line = line.replace("\n","").replace("#","");
 		Splitter splitter = Splitter.on('\t');
 		return Lists.newArrayList(splitter.split(line));
 	}
