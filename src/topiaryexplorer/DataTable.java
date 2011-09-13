@@ -3,6 +3,8 @@ package topiaryexplorer;
 import java.util.*;
 import java.io.*;
 import java.text.*;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 
 /**
 * 
@@ -34,7 +36,9 @@ public class DataTable {
         data = new SparseTable();
         int c = 0;
         for(int r = 0; r < conn.resultLines.size(); r++) {
-		    String vals[] = conn.resultLines.get(r).split("\t");
+			Splitter splitter = Splitter.on('\t');
+        	ArrayList<String> vals = Lists.newArrayList(splitter.split(conn.resultLines.get(r)));
+		    // String vals[] = conn.resultLines.get(r).split("\t");
             c = 0;
 		    for (String obj : vals) {
 		        Object val = TopiaryFunctions.objectify(obj);
@@ -68,14 +72,20 @@ public class DataTable {
         for(String line:commentedLines)
             lines.remove(line);
         
+		for(String line: lines)
+			line.replace("\n","");
         
         int curr_c = 0;
         int old_c = 0;
-        String vals[];
+        ArrayList<String> vals = new ArrayList<String>();
         Object val;
+		Splitter splitter = Splitter.on('\t');
+		
+		int numCols = Lists.newArrayList(splitter.split(lines.get(0))).size();
+		
 		for(int r = 0; r < lines.size(); r++) {
-		    vals = lines.get(r).split("\t");
-		    rowNames.add(vals[0]);
+        	vals = Lists.newArrayList(splitter.split(lines.get(r)));
+		    rowNames.add(vals.get(0));
 		    curr_c = 0;
 		    for (String obj : vals) {
 		        val = TopiaryFunctions.objectify(obj);
@@ -84,14 +94,12 @@ public class DataTable {
                 }
 		        curr_c = curr_c + 1;
 		    }
-		    if(r == 0)
-		        old_c = curr_c;
-		    
-		    if(old_c != curr_c)
-		        throw new ParseException("Number of columns in table are not consistant across rows.",curr_c);
+		
+		    if(numCols != vals.size())
+		        throw new ParseException("Number of columns in table are not consistant across rows. ", curr_c);
 
         }
-        int numCols = curr_c;
+        
         //parse each commented line until we get one that has the same number of
         //rows as the data
         for (String currline : commentedLines) {
@@ -123,15 +131,16 @@ public class DataTable {
         data = new SparseTable();
         int r = 0;
         int curr_c = 0;
-        int old_c = 0;
-        String vals[];
+		Splitter splitter = Splitter.on('\t');
+        ArrayList<String> vals = Lists.newArrayList(splitter.split(line));
         Object val;
+		int numCols = vals.size();
+		
 		while ((line) != null) {
-		    vals = line.split("\t");
-		    rowNames.add(vals[0]);
+		    vals = Lists.newArrayList(splitter.split(line));
+		    rowNames.add(vals.get(0));
 		    curr_c = 0;
 		    for (String obj : vals) {
-/*              val = obj;*/
 		        val = TopiaryFunctions.objectify(obj);
                 if (val != null) {
 		            data.add(r, curr_c, val);
@@ -139,17 +148,14 @@ public class DataTable {
 		        curr_c = curr_c + 1;
 		    }
 		    
-		    if(r == 0)
-		        old_c = curr_c;
-		    
-		    if(old_c != curr_c)
+		    if(numCols != vals.size())
+			{
 		        throw new ParseException("Number of columns in table are not consistant across rows.",curr_c);
+			}
 
 	        r = r + 1;
 		    line = br.readLine();
         }
-
-        int numCols = curr_c;
     
 
         //parse each commented line until we get one that has the same number of
@@ -271,6 +277,7 @@ public class DataTable {
 	    for(String h : getColumnNames())
 	        s += h + '\t';
 	    
+		s = s.substring(0,s.length()-1);
 	    s += '\n';
 	    
 	    for(int i = 0; i < data.maxRow(); i++)
@@ -282,14 +289,14 @@ public class DataTable {
 	            }
 	            catch(Exception e)
 	            {
-	                s += '0';
+	                // s += '0';
 	            }
 	            s += '\t';
 	        }
-	        s = s.trim();
+	        s = s.substring(0,s.length()-1);
 	        s += "\n";
 	    }
-	    return s.trim();
+	    return s;
 	}
 	
 	public ArrayList<String> toStrings() {
@@ -298,7 +305,7 @@ public class DataTable {
 	    
 	    for(String h : getColumnNames())
 	        s += h + '\t';
-	    s = s.substring(0,s.length()-2);
+	    s = s.substring(0,s.length()-1);
 	    s += "\n";
 	    lines.add(s);
 	    
@@ -316,7 +323,7 @@ public class DataTable {
 	            }
 	            s += '\t';
 	        }
-	        s = s.substring(0,s.length()-2);
+	        s = s.substring(0,s.length()-1);
 	        s += '\n';
 	        lines.add(s);
 	    }
@@ -324,7 +331,8 @@ public class DataTable {
 	}
 	
     private ArrayList<String> parseLine(String line) {
-		return new ArrayList<String>(Arrays.asList(line.split("\t")));
+		Splitter splitter = Splitter.on('\t');
+		return Lists.newArrayList(splitter.split(line));
 	}
 
     /** 

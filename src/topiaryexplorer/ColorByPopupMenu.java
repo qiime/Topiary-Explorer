@@ -35,6 +35,8 @@ class ColorByPopupMenu extends JPopupMenu{
          parent = _parent;
          colorPanel = _colorPanel;
          elementType = _elementType;
+		 MenuScroller.setScrollerFor(colorByOtuMetadataMenu);
+		 MenuScroller.setScrollerFor(colorBySampleMetadataMenu);
          //set up the "color by" submenus
          add((JMenuItem)colorByOtuMetadataMenu);
          add((JMenuItem)colorBySampleMetadataMenu);

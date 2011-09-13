@@ -245,7 +245,7 @@ public class TopiaryFunctions {
             String line = br.readLine();
             while(line != null)
             {
-                line = line.trim();
+				line = line.replace("\n","");
                 if(line.length() == 0)
                 {
                     line = br.readLine();
@@ -278,10 +278,10 @@ public class TopiaryFunctions {
             String dataType = "";
             HashMap data = new HashMap();
             // ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
-            String line = "";
-            while((line = br.readLine()) != null)
+            String line = br.readLine();
+            while(line != null)
             {
-                line = line.trim();
+				line = line.replace("\n","");
                 if(line.length() == 0)
                 {
                     line = br.readLine();
@@ -295,6 +295,7 @@ public class TopiaryFunctions {
                 }
                 else
                     ((ArrayList<String>)data.get(dataType)).add(line);
+				line = br.readLine();
             }
             br.close();
             return data;
@@ -315,7 +316,7 @@ public class TopiaryFunctions {
             String line = br.readLine();
             while(line != null)
             {
-                line = line.trim();
+				line = line.replace("\n","");
                 if(line.length() == 0)
                 {
                     line = br.readLine();

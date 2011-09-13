@@ -23,7 +23,7 @@
 	        </fileset>
 			<manifest>
 				<attribute name="Main-Class" value="topiaryexplorer.TopiaryExplorer" />
-                <attribute name="Class-Path" value="lib/core.jar lib/gluegen-rt-natives-linux-amd64.jar lib/gluegen-rt-natives-linux-i586.jar lib/gluegen-rt-natives-macosx-ppc.jar lib/gluegen-rt-natives-macosx-universal.jar lib/gluegen-rt-natives-windows-amd64.jar lib/gluegen-rt-natives-windows-i586.jar lib/gluegen-rt.jar lib/itext.jar lib/jogl.jar lib/opengl.jar lib/pdf.jar lib/mysql-connector-java-5.1.10-bin.jar lib/javaws.jar lib/ojdbc14.jar lib/classes12.jar" />
+                <attribute name="Class-Path" value="lib/guava-r09.jar lib/core.jar lib/gluegen-rt-natives-linux-amd64.jar lib/gluegen-rt-natives-linux-i586.jar lib/gluegen-rt-natives-macosx-ppc.jar lib/gluegen-rt-natives-macosx-universal.jar lib/gluegen-rt-natives-windows-amd64.jar lib/gluegen-rt-natives-windows-i586.jar lib/gluegen-rt.jar lib/itext.jar lib/jogl.jar lib/opengl.jar lib/pdf.jar lib/mysql-connector-java-5.1.10-bin.jar lib/javaws.jar lib/ojdbc14.jar lib/classes12.jar lib/jsoup-1.6.1.jar" />
 			</manifest>
 		</jar>
 		
@@ -37,6 +37,6 @@
 	
 	<target name="clean">
 		<delete dir="build" />
-        <delete file="topiaryexplorer.jar" />
+        <delete file="topiaryexplorer0.9.4.jar" />
 	</target>
 </project>

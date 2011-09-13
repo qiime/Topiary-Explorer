@@ -21,6 +21,7 @@
 	<extension name="jogl" href="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp" />
 	
 	<jar href="topiaryexplorer0.9.4.jar" />
+	<jar href="lib/guava-r09.jar" />
 	<jar href="lib/core.jar" />
 	<jar href="lib/itext.jar" />
 	<jar href="lib/pdf.jar" />

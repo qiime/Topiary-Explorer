@@ -40,6 +40,8 @@ public class TableWindow extends JFrame {
         scrollPane.setWheelScrollingEnabled(true);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollPane, BorderLayout.CENTER);
+
+		scrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(frame, dataTable, table));
         
         setAsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
