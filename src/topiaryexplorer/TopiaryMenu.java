@@ -415,6 +415,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
            newProject();
          } else if (e.getActionCommand().equals("Open Project...")) {
                 frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				  frame.resetOtuMenus();
+         		  frame.resetSampleMenus();
                   openProject();
                   frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         } else if (e.getActionCommand().equals("Save Project...")) {
