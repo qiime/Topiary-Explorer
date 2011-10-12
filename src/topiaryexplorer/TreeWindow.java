@@ -576,6 +576,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         tree.exportScreenCapture(frame.dir_path+"/tree_screencaps/"+dateFormat.format(date)+".png");
     }
     
+    public void changeMode(boolean selectMode) {
+        tree.setSelectMode(selectMode);
+    }
+    
     /**
     * Recenters the tree in the treeview window
     */
@@ -1019,36 +1023,18 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
      
      public void resetConsensusLineage() {
          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-         JLabel colLabel = new JLabel("Taxonomy Column: \n");
-          JComboBox columns = new JComboBox(frame.otuMetadata.getColumnNames().toArray());
-          Integer[] ops = {10,20,30,40,50,60,70,80,90,95,96,97,98,
-              99,100};
-
-           JComboBox options = new JComboBox(ops);
-           JPanel panel = new JPanel();  
-           JLabel perLabel = new JLabel("%");
-           options.setSelectedIndex(12);
-           panel.add(options);
-           panel.add(perLabel);
-           String message = "Choose options for assigning consensus lineage.";  
-           Object[] params = {colLabel, columns, message, panel};  
-           JOptionPane.showMessageDialog(null, params, 
-               "Choose Threshold", 
-               JOptionPane.QUESTION_MESSAGE);  
-           double f = ((Integer)options.getSelectedItem())/100.0;
          
-         int col = columns.getSelectedIndex();
-         for (Node n : tree.getTree().getLeaves()) {
-            String nodeName = n.getName();
-            int id = frame.otuMetadata.getRowNames().indexOf(nodeName);
-            n.setLineage(""+frame.otuMetadata.getValueAt(id, col));
-         }
-         for(Node n : tree.getTree().getNodes())
-         {
-             n.setConsensusLineage(n.getConsensusLineageF(f));
-         }
-         tree.redraw();
+         if(frame.otuMetadata != null) {
+                    ConsensusLineageDialog cld = new ConsensusLineageDialog(frame, this);
+                    treePopupMenu.getComponent(6).setEnabled(true);
+                    treeEditToolbar.treeViewPanel.collapseByMenu.getComponent(3).setEnabled(true);
+                }
+                else
+                JOptionPane.showMessageDialog(this,
+                                     "Consensus lineage cannot be set without Tip metadata.",
+                                     "Error",
+                                     JOptionPane.ERROR_MESSAGE); 
+         
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
@@ -1101,12 +1087,46 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
           collapseTreeToolbar.setValue(0);
       }
 
-      public void collapseTreeByInternalNodeLabels() {
-          for (Node n : tree.getTree().getNodes()){
-              if (!n.isLeaf() && n.getName().length() > 0) {
-                  n.setCollapsed(true);
-              }
-          }
+      public void collapseTreeByNodeLabels(double level) {
+          for (Node node : tree.getTree().getNodes()) {
+      	 	//if it's a leaf, set metadata
+      	 	if (node.isLeaf()) {
+      	 		//set the node's field
+      	 		node.userString = node.getLabel();
+      	 	}
+      	 	else {
+                ArrayList<String> consensus = new ArrayList<String>();
+                ArrayList<Node> tips = node.getLeaves();
+      	 		for (int i = 0; i < tips.size(); i++) {
+      	 		    consensus.add(tips.get(i).userString);
+      	 		}
+      	 		
+      	 		node.userString = TopiaryFunctions.getConsensus(consensus, level);
+      	 		if(node.userString != null)
+                    node.setCollapsed(true);
+      	 	}
+      	 }
+      }
+      
+      public void collapseTreeByConsensusLineage(double level) {
+          for (Node node : tree.getTree().getNodes()) {
+      	 	//if it's a leaf, set metadata
+      	 	if (node.isLeaf()) {
+      	 		//set the node's field
+      	 		node.userString = node.getConsensusLineage();
+      	 	}
+      	 	else {
+                ArrayList<String> consensus = new ArrayList<String>();
+                ArrayList<Node> tips = node.getLeaves();
+      	 		for (int i = 0; i < tips.size(); i++) {
+      	 		    consensus.add(tips.get(i).userString);
+      	 		}
+      	 		
+      	 		node.userString = TopiaryFunctions.getConsensus(consensus, level);
+      	 		if(node.userString != null)
+                    node.setCollapsed(true);
+      	 	}
+      	 }
       }
 
       public void collapseByValue(String name, double level) {

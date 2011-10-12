@@ -45,12 +45,18 @@ Features
  * Database connectivity
  * Project management using .tep files
 
+Support
+=======
+
+For application support, please visit the `Forums <https://sourceforge.net/projects/topiaryexplorer/forums>`_.
+
+To report a bug or add a feature request, visit the `Trac <https://sourceforge.net/apps/trac/topiaryexplorer/>`_ page.
+
+If your questions are not answered there, contact topiaryexplorer@gmail.com.
+
 Citing TopiaryExplorer
 ======================
 
-TopiaryExplorer is currently under review. In the meantime please cite TopiaryExplorer with the following reference:
+Cite TopiaryExplorer with the following reference:
 
-TopiaryExplorer: An application for connecting large phylogenetic trees to environmental metadata; Meg Pirrung, Ryan Kennedy, J. Gregory Caporaso and Rob Knight; Under review (2011).
-
-Contact gregcaporaso@gmail.com with questions about citing TopiaryExplorer.
-
+TopiaryExplorer: An application for connecting large phylogenetic trees to environmental metadata; Meg Pirrung, Ryan Kennedy, J. Gregory Caporaso, Jesse Stombaugh, Doug Wendel, and Rob Knight (Bioinformatics 2011).

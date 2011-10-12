@@ -307,6 +307,40 @@ public class Node implements Comparable{
       return consensusLineage;
   }
   
+  // recursive method to return consensus lineage for a 
+  // specific taxonomic level
+  public String getConsensusLineageF(double perc, int level) {
+      // If the node is a leaf return lineage
+      if(isLeaf())
+      {
+          String lineageAtLevel = "";
+          if(lineage.split(";").length-1 >= level)
+              lineageAtLevel = lineage.split(";")[level].trim().replace("\"", "");
+              
+          if(!lineageAtLevel.equals("Unclassified-Screened"))
+            return lineageAtLevel;
+          return null;
+      }
+      
+      ArrayList<Node> tips = getLeaves();
+      
+      // Collect lineage of tips
+      ArrayList<String> currLabels = new ArrayList<String>();
+      for(Node n: tips)
+      {
+          String[] classifications = n.getLineage().split(";");
+          if(classifications.length-1 >= level)
+              currLabels.add(classifications[level].trim().replace("\"", ""));
+      }
+      
+      if(currLabels.size() == 0)
+        return null;
+      
+      String consensusLineage = TopiaryFunctions.getConsensus(currLabels,perc);
+      
+      return consensusLineage;
+  }
+  
   public int getNumberOfLeavesF() {
       int total = 0;
       if (isLeaf()) {

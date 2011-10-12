@@ -23,6 +23,7 @@ public final class TreeViewPanel extends JPanel {
     TreeEditToolbar parent = null;
     TreeVis vis = null;
     
+    JToggleButton selectButton = new JToggleButton("Select Mode");
     JButton recenterButton = new JButton("Recenter");
     JButton ladderizeButton = new JButton("Ladderize");
     JButton pruneButton = new JButton("Prune Tree");
@@ -70,6 +71,13 @@ public final class TreeViewPanel extends JPanel {
         
         buttonPanel.setLayout(new GridLayout(6,1));
         
+        selectButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                 frame.changeMode(selectButton.isSelected());
+            }
+        });
+        // buttonPanel.add(selectButton);
+        
         recenterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                  frame.recenter();
@@ -102,9 +110,7 @@ public final class TreeViewPanel extends JPanel {
         
         setLineageButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
                 frame.resetConsensusLineage();
-                frame.treePopupMenu.getComponent(6).setEnabled(true);
             }
         });
         buttonPanel.add(setLineageButton);
@@ -316,16 +322,72 @@ public final class TreeViewPanel extends JPanel {
               }
          });
          collapseByMenu.add(item);
-         item = new JMenuItem("Internal Node Labels");
+         item = new JMenuItem("Node Labels");
          item.addActionListener(new ActionListener() {
               public void actionPerformed(ActionEvent e) {
-                  frame.collapseTreeByInternalNodeLabels();
+                  String value = e.getActionCommand();
+                  double level = Double.parseDouble(((String)JOptionPane.showInputDialog(
+                             frame,
+                             "Enter percent threshold to collapse by:\n"+
+                             "Use 100(%) for completely homogeneous\n"+
+                             "collapsing",
+                             "Collapse by "+value,
+                             JOptionPane.PLAIN_MESSAGE,
+                             null,
+                             null,
+                             "90")))/100;
+         if(level > 0 && level <= 1)
+         {
+             frame.collapseTreeByNodeLabels(level);
+         }
+         else
+             JOptionPane.showMessageDialog(frame,
+                 "Invalid threshold percentage.",
+                 "Error",
+                 JOptionPane.ERROR_MESSAGE);
+                  
               }
          });
          collapseByMenu.add(item);
+         item = new JMenuItem("Consensus Lineage");
+         item.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent e) {
+                  String value = e.getActionCommand();
+                  double level = Double.parseDouble(((String)JOptionPane.showInputDialog(
+                             frame,
+                             "Enter percent threshold to collapse by:\n"+
+                             "Use 100(%) for completely homogeneous\n"+
+                             "collapsing",
+                             "Collapse by "+value,
+                             JOptionPane.PLAIN_MESSAGE,
+                             null,
+                             null,
+                             "90")))/100;
+         if(level > 0 && level <= 1)
+         {
+            frame.collapseTreeByConsensusLineage(level);
+         }
+         else
+             JOptionPane.showMessageDialog(frame,
+                 "Invalid threshold percentage.",
+                 "Error",
+                 JOptionPane.ERROR_MESSAGE);
+                  
+              }
+         });
+         item.setEnabled(false);
+         collapseByMenu.add(item);
          collapseByMenu.add(new JSeparator());
+         // 
+         // item = new JMenuItem("External Node Labels");
+         //     item.addActionListener(new ActionListener() {
+         //         public void actionPerformed(ActionEvent e) {
+         //             collapseItemClicked(e);
+         //         }
+         //     });
+         //     collapseByMenu.add(item);
 
-         if (frame.frame.otuMetadata != null) {
+         if (frame.frame.otuMetadata != null) {             
                 ArrayList<String> data = frame.frame.otuMetadata.getColumnNames();
                 //start at 1 to skip ID column
                 for (int i = 1; i < data.size(); i++) {
@@ -333,32 +395,35 @@ public final class TreeViewPanel extends JPanel {
                      item = new JMenuItem(value);
                      item.addActionListener(new ActionListener() {
                          public void actionPerformed(ActionEvent e) {
-                             //get the category to color by
-                             String value = e.getActionCommand();
-                             double level = Double.parseDouble(((String)JOptionPane.showInputDialog(
-                                                 frame,
-                                                 "Enter percent threshold to collapse by:\n"+
-                                                 "Use 100(%) for completely homogeneous\n"+
-                                                 "collapsing",
-                                                 "Collapse by "+value,
-                                                 JOptionPane.PLAIN_MESSAGE,
-                                                 null,
-                                                 null,
-                                                 "90")))/100;
-                             if(level > 0 && level <= 1)
-                             {
-                                 frame.collapseByValue(value,level);
-                             }
-                             else
-                                 JOptionPane.showMessageDialog(frame,
-                                     "Invalid threshold percentage.",
-                                     "Error",
-                                     JOptionPane.ERROR_MESSAGE);
-                             
+                             collapseItemClicked(e);
                          }
                      });
                      collapseByMenu.add(item);
                 }
             }
+     }
+     
+     public void collapseItemClicked(ActionEvent e) {
+         //get the category to color by
+         String value = e.getActionCommand();
+         double level = Double.parseDouble(((String)JOptionPane.showInputDialog(
+                             frame,
+                             "Enter percent threshold to collapse by:\n"+
+                             "Use 100(%) for completely homogeneous\n"+
+                             "collapsing",
+                             "Collapse by "+value,
+                             JOptionPane.PLAIN_MESSAGE,
+                             null,
+                             null,
+                             "90")))/100;
+         if(level > 0 && level <= 1)
+         {
+             frame.collapseByValue(value,level);
+         }
+         else
+             JOptionPane.showMessageDialog(frame,
+                 "Invalid threshold percentage.",
+                 "Error",
+                 JOptionPane.ERROR_MESSAGE);
      }
 }

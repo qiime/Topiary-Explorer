@@ -1,9 +1,12 @@
 package topiaryexplorer;
 
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
 import processing.core.*;
 import processing.pdf.*;
 import javax.swing.event.*;
 import java.util.*;
+// import java.awt.event.KeyEvent.*;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -39,6 +42,10 @@ public class TreeVis extends PApplet {
 
     private double xstart = MARGIN;
     private double ystart = MARGIN;
+    private double selectXStart = 0;
+    private double selectYStart = 0;
+    private double selectXEnd = 0;
+    private double selectYEnd = 0;
 
     private double oldwidth =  0;
     private double oldheight = 0;
@@ -59,6 +66,10 @@ public class TreeVis extends PApplet {
     private boolean majorityColoring = true;
     private boolean mirrored = false;
     private boolean colorBranches = false;
+    private boolean selectMode = false;
+    private boolean selectingMode = false;
+    
+    private Polygon selectPoly = new Polygon();
 
     private Node selectedNode;
     private Node mouseOverNode;
@@ -187,6 +198,8 @@ public class TreeVis extends PApplet {
     public void setColorBranches(boolean b) { colorBranches = b; }
     public boolean getColorBranches() { return colorBranches; }
     public boolean getZoomDrawNodeLabels() { return zoomDrawNodeLabels; }
+    public boolean getSelectMode() { return selectMode; }
+    public void setSelectMode(boolean b) { selectMode = b; }
 
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
@@ -266,6 +279,9 @@ public class TreeVis extends PApplet {
                 cursor(ARROW);
             }
         }
+        if (mouseOverNode == null) {
+                cursor(ARROW);
+            }
     }
     
     public void keyPressed() {
@@ -279,6 +295,11 @@ public class TreeVis extends PApplet {
                 n.setLabel(n.getLabel().substring(0,n.getLabel().length()-1));
                 redraw();
             }
+        }
+        else if (key == 's') {
+            selectingMode = !selectingMode;
+            // if(selectingMode)
+            //     cursor(CROSS);
         }
     }
 
@@ -319,7 +340,19 @@ public class TreeVis extends PApplet {
      * mouseDragged() is called whenever the user drags the mouse
      */
     public void mouseDragged() {
-      if (this.mouseOverNode == null) {
+        // if(selectingMode) {
+        //       cursor(CROSS);
+        //       double bxdiff = mouseX-pmouseX;
+        //       double bydiff = mouseY-pmouseY;
+        //       selectXEnd = selectXEnd + bxdiff;
+        //       selectYEnd = selectYEnd + bydiff;
+        //       // fireStateChanged();
+        //       redraw();
+        //       drawSelectBox();
+        //     }
+            
+      if (this.mouseOverNode == null && keyPressed == false && !selectingMode)      
+      {
           //change the cursor to show that dragging is taking place
           cursor(MOVE);
           //difference in mouse position since mousePressed:
@@ -332,8 +365,6 @@ public class TreeVis extends PApplet {
           checkBounds();
           //notify listeners
           fireStateChanged();
-          //re-draw the tree
-          redraw();
       } else {
           //is the SHIFT key down?
           //also, CAN ONLY DRAG INTERNAL NODES
@@ -349,19 +380,22 @@ public class TreeVis extends PApplet {
                       this.mouseOverNodeToReplace = n;
                   }
               }
-              redraw();
-          } else {
+              
+          }
+          else {
               this.mouseOverNode = null;
             this.mouseOverNodeToReplace = null;
           }
       }
+      redraw();
     }
 
     public void mouseReleased() {
 /*      Node node = findNode(mouseX, mouseY);*/
       mouseOverNodeToReplace = findNode(mouseX, mouseY);
 /*      mouseOverNode = node;*/
-      cursor(ARROW);
+        if(selectingMode)
+            selectNodes();
       if (draggingLabel && mouseOverNodeToReplace != null) {
           //replace node label
           String s = mouseOverNode.getLabel();
@@ -373,6 +407,8 @@ public class TreeVis extends PApplet {
           selectedNode = mouseOverNodeToReplace;
       }
       draggingLabel = false;
+      // selectingMode = false;
+      // resetSelection();
       mouseOverNode = findNode(mouseX, mouseY);
       mouseOverNodeToReplace = null;
       redraw();
@@ -383,25 +419,28 @@ public class TreeVis extends PApplet {
      */
     public void mouseMoved() {
         if(!frame.isActive())
-                   return;
-             //is the mouse over a node?
-             Node node = findNode(mouseX, mouseY);
-             if (node != null) {
-               //if so, chance the cursor's hand
-               cursor(HAND);
-               //outline the node
-               if ((node.isLeaf() && this.drawExternalNodeLabels) ||(!node.isLeaf() && this.drawInternalNodeLabels && this.zoomDrawNodeLabels)) {
-                   mouseOverNode = node;
-               }
-             }
-             else {
-               //cursor is normal
+            return;
+        //is the mouse over a node?
+        Node node = findNode(mouseX, mouseY);
+        if (node != null) {
+           //if so, chance the cursor's hand
+           cursor(HAND);
+           //outline the node
+           // if ((node.isLeaf() && this.drawExternalNodeLabels) ||(!node.isLeaf() && this.drawInternalNodeLabels && this.zoomDrawNodeLabels)) {
+               mouseOverNode = node;
+           // }
+         }
+         else{
+           //cursor is normal
+           // if(!selectingMode)
                cursor(ARROW);
-               //set outlined node to nothing
-               mouseOverNode = null;
-             }
-             mouseOverNodeToReplace = null;
-             redraw();
+           // else
+            // cursor(CROSS);
+           //set outlined node to nothing
+           mouseOverNode = null;
+         }
+         mouseOverNodeToReplace = null;
+         redraw();
     }
 
     /**
@@ -421,13 +460,33 @@ public class TreeVis extends PApplet {
           }
         }
 
-      } else {
-        //they clicked, but not on a node
-        if (mouseEvent.getClickCount() == 1) {
+      } else //they clicked, but not on a node
+      {
+          if(selectingMode)
+          {
+              resetSelection();
+              // System.out.println("mouse clicked in select mode");
+              // selectingMode = true;
+              selectXStart = mouseX;
+              selectYStart = mouseY;
+          }
+        
+        else if (mouseEvent.getClickCount() == 1) {
           selectedNode = null;
+          resetSelection();
         }
       }
       redraw();
+    }
+
+    public void resetSelection() {
+        // selectingMode = false;
+        selectXStart = 0;
+        selectYStart = 0;
+        selectXEnd = 0;
+        selectYEnd = 0;
+        hilightedNodes = new java.util.HashSet();
+        selectPoly = null;
     }
 
     /**
@@ -627,6 +686,111 @@ public class TreeVis extends PApplet {
       redraw();
     }
 
+    public void selectNodes() {
+        int sxstart = (int)Math.min(selectXStart,selectXEnd);
+          int sxend = (int)Math.max(selectXStart,selectXEnd);
+          int systart = (int)Math.min(selectYStart,selectYEnd);
+          int syend = (int)Math.max(selectYStart,selectYEnd);
+          int[] xs = new int[]{sxstart,sxstart,sxend,sxend};
+          int[] ys = new int[]{systart,systart,syend,syend};
+          selectPoly = new Polygon(xs,ys,4);
+        selectNodes(root);
+    }
+    
+    public void selectNodes(Node tree) {    
+      if (tree==null) return;
+      if (tree.isHidden()) return;
+
+      double row = 0;
+      double col = 0;    
+      
+        if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+          //get the y-offset of the root of the tree
+          row = tree.getYOffset();
+          col = tree.getXOffset();
+      } else if (treeLayout.equals("Radial")) {
+          row = tree.getRYOffset();
+          col = tree.getRXOffset();
+      } else if (treeLayout.equals("Polar")) {
+          row = tree.getROffset() * Math.sin(tree.getTOffset());
+          col = tree.getROffset() * Math.cos(tree.getTOffset());
+      }
+      //get the x and y coordinates of the current node
+      double nodeX = toScreenX(col);
+      double nodeY = toScreenY(row);
+
+      //if node is collapsed, whole wedge is viable
+      // if(tree.isCollapsed())
+      //       {
+      //           double shortest = toScreenX(tree.shortestRootToTipDistance() - tree.getBranchLength());
+      //           double longest = toScreenX(tree.longestRootToTipDistance() - tree.getBranchLength());
+      //             
+      //           if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+      //               
+      //              double top = toScreenY(tree.getMaximumYOffset())-nodeY;
+      //               top = (top/2)*wedgeHeightScale;
+      //               double bottom = nodeY-toScreenY(tree.getMinimumYOffset());
+      //               bottom = (bottom/2)*wedgeHeightScale;
+      //              maxY = nodeY + top;
+      //               minY = nodeY - bottom;
+      //           
+      //               int[] xs = new int[]{(int)Math.floor(nodeX), (int)Math.floor(nodeX), (int)Math.ceil(nodeX+shortest), (int)Math.ceil(nodeX+longest)};
+      //               int[] ys = new int[]{(int)Math.floor(minY), (int)Math.ceil(maxY), (int)Math.ceil(maxY), (int)Math.floor(minY)};
+      //           
+      //               Polygon poly = new Polygon(xs,ys,4);
+      //           
+      //               if(poly.contains(x,y))
+      //                 {
+      //                     return tree;
+      //                 }
+      //                 else
+      //                     return null;
+      //             }
+      //             else if (treeLayout.equals("Radial") || treeLayout.equals("Polar"))
+      //             {
+      //                 double maxt = tree.getMaximumTOffset();
+      //                 double mint = tree.getMinimumTOffset();
+      // 
+      //                 if(wedgeHeightScale < 1)
+      //                 {
+      //                     double theta = Math.abs(maxt-mint);
+      //                     double f = (theta*(1-wedgeHeightScale))/2;
+      //                     mint = mint + f;
+      //                     maxt = maxt - f;
+      //                 }
+      // 
+      //                 double x1 = tree.getParent().getRXOffset() + shortest * Math.cos(mint);
+      //                 double y1 = tree.getParent().getRYOffset() + shortest * Math.sin(mint);
+      //                 double x2 = tree.getParent().getRXOffset() + longest * Math.cos(maxt);
+      //                 double y2 = tree.getParent().getRYOffset() + longest * Math.sin(maxt);
+      // 
+      //                   int[] xs = new int[]{(int)nodeX, (int)toScreenX(x1), (int)toScreenX(x2)};
+      //                   int[] ys = new int[]{(int)nodeY, (int)toScreenY(y1), (int)toScreenY(y2)};
+      //                   Polygon poly = new Polygon(xs,ys,3);
+      // 
+      //                   if(poly.contains(x,y))
+      //                       {
+      //                           return tree;
+      //                       }
+      //                       else
+      //                           return null;
+      //             }
+      //       }
+      
+      if(selectPoly.contains(nodeX,nodeY))
+            hilightedNodes.add(tree);
+        // else
+        //     hilightedNodes.remove(tree);
+/*      //if the tree is collapsed, don't search it
+      if (tree.isCollapsed()) return null;*/
+
+      //select the root's children
+      for (int i = 0; i < tree.nodes.size(); i++) {
+        Node child = tree.nodes.get(i);
+        selectNodes(child);
+      }
+    }
+
     /**
      * Calls findNode(Node,double,double) on the root of the tree
      *
@@ -764,6 +928,20 @@ public class TreeVis extends PApplet {
       //didn't find any nodes
       return null;
     }
+    
+    private void drawSelectBox() {
+    // if(selectingMode && selectPoly != null) {
+        float[] dashes = { 4.0f, 4.0f, 4.0f, 4.0f };
+        BasicStroke bs = new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER,
+	4.0f, dashes, 0.0f);
+          Graphics2D g2 = ((PGraphicsJava2D) g).g2;
+          g2.setStroke(bs);
+          // g.stroke(bs);
+          // g.noStroke();
+          g.noFill();
+          g.rect((float)selectXStart, (float)selectYStart, (float)selectXEnd, (float)selectYEnd);
+      // }     
+    }
 
 
     /**
@@ -775,9 +953,10 @@ public class TreeVis extends PApplet {
     private void drawTree(Node node) {
       g.textFont(nodeFont);
       checkBounds();
-      drawTree(node, g);
-    }
-    
+      drawTree(node, g); 
+      g.noFill();
+      // drawSelectBox();
+    }    
    
     /**
      * Draw the entire sub-tree rooted at _node_, with _node_ positioned at the given (absolute, unscaled) coords.
@@ -1043,9 +1222,9 @@ public class TreeVis extends PApplet {
         canvas.rect((float)(drawX+offsetbias), (float)minY-5, (float)(maxX-drawX), (float)(maxY-minY)-5);
       }
       
-      //reset drawing color to default black
-      canvas.fill(0);
-      canvas.stroke(0);
+      // //reset drawing color to default black
+      // canvas.fill(0);
+      // canvas.stroke(0);
       
       if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
         canvas.popMatrix();
