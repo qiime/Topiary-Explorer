@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jnlp codebase="file:." >
+<jnlp codebase="http://topiaryexplorer.sourceforge.net/app/" >
     
     <information>
     <title>TopiaryExplorer</title>
     <vendor>University of Colorado</vendor>
     <description>TopiaryExplorer</description>
-    <!--<icon href="icon.png"/>-->
-    <!--<icon kind="splash" href="images/splash.gif"/>-->
-    
+
     <offline-allowed/>
      
-
   </information>
   
   <security>
@@ -19,7 +16,6 @@
   
   <resources>
     <j2se version="1.6+" initial-heap-size="500M" max-heap-size="4000m" />
-
 	
 	<jar href="topiaryexplorer0.9.4.jar" />
 	<jar href="lib/jogl.jar" />
@@ -32,6 +28,7 @@
 	<jar href="lib/mysql-connector-java-5.1.10-bin.jar" />
 	<jar href="lib/javaws.jar" />
 	<jar href="lib/classes12.jar" />
+	
   </resources>
   
   <application-desc main-class="topiaryexplorer.TopiaryExplorer" />
