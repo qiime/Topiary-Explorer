@@ -2,6 +2,7 @@ package topiaryexplorer;
 
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
+import javax.swing.*;
 import processing.core.*;
 import processing.pdf.*;
 import javax.swing.event.*;
@@ -93,6 +94,7 @@ public class TreeVis extends PApplet {
     private int nodeFontColor = 0;
     private String nFont = "SansSerif";
     private PFont nodeFont = createFont(nFont, (int)nodeFontSize);
+    private int pieChartRadius = 15;
 
     /**
      * setup() is called once to initialize the applet
@@ -200,6 +202,7 @@ public class TreeVis extends PApplet {
     public boolean getZoomDrawNodeLabels() { return zoomDrawNodeLabels; }
     public boolean getSelectMode() { return selectMode; }
     public void setSelectMode(boolean b) { selectMode = b; }
+    public void setPieChartRadius(int i) { pieChartRadius = i; }
 
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
@@ -1019,14 +1022,14 @@ public class TreeVis extends PApplet {
             }
         PieChart pie = new PieChart((int)Math.round(toScreenX(x)), //draw at the same x-value as the node
           (int)Math.round(toScreenY(y)), //draw at the y-value of the node
-          75, //diameter of the pie chart
+          pieChartRadius, //diameter of the pie chart
           node.getGroupBranchFraction(), //the weighting of the node's colors
           node.getGroupBranchColor()); //the colors for the node
-        drawPieChart(pie);
+        drawPieChart(pie, canvas);
       }
     }
 
-   private void drawPieChart(PieChart pie) {
+   private void drawPieChart(PieChart pie, PGraphics canvas) {
     //get the total count
     double total = 0;
     for (int i = 0; i < pie.data.size(); i++) {
@@ -1045,11 +1048,11 @@ public class TreeVis extends PApplet {
 
     //draw it!
     double lastAng = 0;
-    stroke(0);
-    strokeWeight(1);
+    canvas.stroke(0);
+    canvas.strokeWeight(1);
     for (int i = 0; i < angles.length; i++) {
-      fill(pie.colors.get(i).getRGB(), 175);
-      arc(pie.x, pie.y,(float) pie.diameter, (float)pie.diameter, (float)lastAng, (float)(lastAng+radians((float)angles[i])));
+      canvas.fill(pie.colors.get(i).getRGB(), 175);
+      canvas.arc(pie.x, pie.y,(float) pie.diameter, (float)pie.diameter, (float)lastAng, (float)(lastAng+radians((float)angles[i])));
       double midangle = lastAng + radians((float)angles[i])/2.0;
       //fill(0,255,0);
       //text(str(percents[i]), x+(cos(midangle)*diameter*0.25), y+(sin(midangle)*diameter*0.25));
@@ -1729,28 +1732,23 @@ public class TreeVis extends PApplet {
      * @param  dims The dimentions of the output image file
      */
     public void exportTreeImage(String path, double dims[]) {
-	  try {
-		  //save the current variables
-		  float oldLineWidth = getLineWidthScale();
+        float oldLineWidth = getLineWidthScale();
 		  int oldWidth = getWidth();
 		  int oldHeight = getHeight();
 		  double oldXScale = xscale;
 		  double oldYScale = yscale;
 		  double oldXStart = xstart;
 		  double oldYStart = ystart;
-/*        boolean oldDrawExternalNodeLabels = drawExternalNodeLabels;*/
-/*        boolean oldDrawInternalNodeLabels = drawInternalNodeLabels;*/
-/*        boolean oldDrawNodeLabels = drawNodeLabels;*/
 	
 		  //reset the sizing and zooming so that the tree can be drawn visibly
 		  double longest = textWidth(root.getLongestLabel());
 		  double l = root.longestRootToTipDistance();
 		  double s = root.shortestRootToTipDistance();
+	  try {
+		  //save the current variables
+		  
           setLineWidthScale(oldLineWidth*(float).2);
-          
-/*        drawExternalNodeLabels = true;*/
-/*        drawInternalNodeLabels = true;*/
-/*        drawNodeLabels = true;*/
+
           xstart = 0;
           ystart = 0;
           width = (int)dims[0];
@@ -1797,18 +1795,6 @@ public class TreeVis extends PApplet {
           canvas.popMatrix();
           canvas.dispose();
 		  canvas.endDraw();
-
-	
-		  //go back to how it was
-          setLineWidthScale(oldLineWidth);
-		  xscale = oldXScale;
-		  yscale = oldYScale;
-		  xstart = oldXStart;
-		  ystart = oldYStart;
-/*        drawExternalNodeLabels = oldDrawExternalNodeLabels;*/
-/*        drawInternalNodeLabels = oldDrawInternalNodeLabels;*/
-/*        drawNodeLabels = oldDrawNodeLabels;*/
-		  redraw();
 		  
 		  if (Desktop.isDesktopSupported()) {
               try {
@@ -1818,9 +1804,16 @@ public class TreeVis extends PApplet {
                   // no application registered for PDFs
               }
           }
-	} catch (Exception ex) {
-	    System.out.println(ex);
-	    }
+        	} catch (Exception e) {
+        	    JOptionPane.showMessageDialog(null, "Unable to export pdf.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        	    }
+	    		  //go back to how it was
+          setLineWidthScale(oldLineWidth);
+		  xscale = oldXScale;
+		  yscale = oldYScale;
+		  xstart = oldXStart;
+		  ystart = oldYStart;
+		  redraw();
 
     }
 }

@@ -3,6 +3,41 @@
 body {
 }
 
+ul.menu {
+	background: #333;
+	float: left;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+ul.menu li {
+	float: left;
+	font: 67.5% Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+ul.menu a {
+	background: #333 url("../images/seperator.gif") bottom right no-repeat;
+	color: #eee;
+	display: block;
+	float: left;
+	margin: 0;
+	padding: 8px 12px;
+	text-decoration: none;
+	font-weight:normal;
+}
+ul.menu a:hover {
+	background: #b9e86f url("../images/hover.gif") bottom center no-repeat;
+	color: black;
+	padding-bottom: 8px;
+	}
+
+ul.features {
+    list-style-type: none;
+}
+
 a {
     text-decoration: none;
 }
@@ -16,19 +51,39 @@ div {
     font-family: sans-serif;
 }
 
+div.content {
+    float: left;
+    margin-top: 10px;
+}
+
+div.topwrapper {
+    float:left;
+    margin-left: 10px;
+/*    text-align: center;*/
+}
+
+div.menudiv {
+    margin-top: 10px;
+    float: left;
+    width: 100%;
+}
+
 div.rightjust {
     float: right;
 }
 
 div.wrapper {
-    width: 80%;
+    border-left: 1px dashed #ddd;
+    border-right: 1px dashed #ddd;
+    margin-left: 20%;
+    margin-right: 20%;
+    width: 58%;
 }
 
 div.bodywrapper {
     width: 100%;
-    background-color: #ddd;
     float:left;
-    padding: 5px;
+/*    padding: 5px;*/
 }
 
 div.col {
@@ -49,6 +104,10 @@ div.footerwrapper {
     text-align: center;
 }
 
+div.hidden {
+    display: none;
+}
+
 h2 {
     margin: 0px;
 }
@@ -59,7 +118,7 @@ p {
 }
 
 p.blurb {
-    border-right: 1px solid black;
+/*    border-right: 1px solid black;*/
     padding-left: auto;
 }
 

@@ -59,7 +59,6 @@ public class MainFrame extends JFrame {
     JTable otuMetadataTable = new JTable(new SparseTableModel());
     JTable otuSampleMapTable = new JTable(new SparseTableModel());
     JTable sampleMetadataTable = new JTable(new SparseTableModel());
-/*    JTable branchColorKeyTable = new JTable();*/
     JButton back = new JButton("<<");
     JButton showData = new JButton("Show Table");
     JButton setAs = new JButton("Set As...");
@@ -74,8 +73,6 @@ public class MainFrame extends JFrame {
     WindowViewToolbar windowToolbar = new WindowViewToolbar(this);
     
     ArrayList<TreeWindow> treeWindows = new ArrayList<TreeWindow>();
-/*    TreeWindow treeWindow = null;*/
-    // PcoaWindow pcoaWindow = new PcoaWindow(this);
     ConsoleWindow consoleWindow = new ConsoleWindow(this);
     
     DbConnectWindow db_conn = new DbConnectWindow(this);
@@ -89,9 +86,6 @@ public class MainFrame extends JFrame {
 
     ColorPanel branchColorPanel;// = null;//new ColorPanel(this);
     ColorPanel labelColorPanel;// = null;
-    /*//Holds the current coloring information
-        TreeMap<Object, Color> branchColorMap = new TreeMap<Object, Color>();
-        TreeMap<Object, Color> nodebranchColorMap = new TreeMap<Object, Color>();*/
     DataTable currTable = null;
     int lineWidthColumnIndex = -1;
 
@@ -162,29 +156,13 @@ public class MainFrame extends JFrame {
                 showAllTables();
             }
         });
-        // databaseTopPanel.add(back);
-        // databaseTopPanel.add(new JLabel(""));
-        // databaseTopPanel.add(new JLabel(""));
+
         showData.setEnabled(false);
         showData.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 showSelectedTable();
             }
         });
-        
-        // databaseTopPanel.add(showData);
-        // setAs.addActionListener(new ActionListener() {
-        //     public void actionPerformed(ActionEvent e) {
-        //         setDatabaseResultsAs();
-        //     }
-        // });
-        // setAs.setEnabled(false);
-        // databaseTopPanel.add(setAs);
-        // databasePanel.add(databaseTopPanel, BorderLayout.CENTER);
-        
-        // databaseScrollPane = new JScrollPane(databaseTable);
-        // databaseScrollPane.setWheelScrollingEnabled(true);
-        // databasePanel.add(databaseScrollPane, BorderLayout.CENTER);
         
         databaseTopPanel = new DatabaseFilterPanel(this);
         databaseBottomPanel.setLayout(new BorderLayout());
@@ -195,13 +173,6 @@ public class MainFrame extends JFrame {
         databaseTabPane.addTab("Explore", databaseTopPanel);
         databaseTabPane.addTab("Query", db_search);
         
-        // databaseTabPane.addActionListener(new ActionListener() {
-        //     public void actionPerformed(ActionEvent e) {
-        //         JOptionPane.showMessageDialog(null, "This function allows arbitrary MySQL queries.\n" + ex.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
-        //     }
-        // });
-        
-        // databaseTabPane.setEnabledAt(0, false);
         databaseTabPane.setEnabledAt(1, false);
         databaseTabPane.setEnabledAt(2, false);
         
@@ -439,6 +410,7 @@ public class MainFrame extends JFrame {
          } catch (Exception ex) {
              JOptionPane.showMessageDialog(null, "Unable to load [Tip metadata file].\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
              ex.printStackTrace();
+             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
              return;
          }
 	     SparseTableModel model = new SparseTableModel(otuMetadata.getData(),
@@ -460,6 +432,7 @@ public class MainFrame extends JFrame {
          } catch (Exception ex) {
              JOptionPane.showMessageDialog(null, "Unable to load [Tip metadata file].\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
              ex.printStackTrace();
+             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
              return;
          }
 	     SparseTableModel model = new SparseTableModel(otuMetadata.getData(),
@@ -480,6 +453,7 @@ public class MainFrame extends JFrame {
          } catch (Exception ex) {
              JOptionPane.showMessageDialog(null, "Unable to load [OTU table file].\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
              ex.printStackTrace();
+             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
              return;
          }
          SparseTableModel model = new SparseTableModel(otuSampleMap.getData(),
@@ -500,6 +474,7 @@ public class MainFrame extends JFrame {
          } catch (Exception ex) {
              JOptionPane.showMessageDialog(null, "Unable to load [OTU table file].\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
              ex.printStackTrace();
+             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
              return;
          }
          SparseTableModel model = new SparseTableModel(otuSampleMap.getData(),
@@ -519,6 +494,7 @@ public class MainFrame extends JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Unable to load [Sample metadata file].\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             return;
         }
          SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),
@@ -540,6 +516,7 @@ public class MainFrame extends JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Unable to load [Sample metadata file].\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             return;
         }
          SparseTableModel model = new SparseTableModel(sampleMetadata.getData(),

@@ -266,6 +266,7 @@ public class TopiaryFunctions {
         }
         catch(IOException e)
         {
+            JOptionPane.showMessageDialog(null, "Unable to parse project file.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             System.out.println(e.getMessage());
             return null;
         }
@@ -302,6 +303,7 @@ public class TopiaryFunctions {
         }
         catch(IOException e)
         {
+            JOptionPane.showMessageDialog(null, "Error opening URL.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             System.out.println("Error opening URL");
             return null;
         }

@@ -21,9 +21,9 @@ TopiaryExplorer additionally requires that you have at least 2GB of RAM.
 Installing the release version of TopiaryExplorer
 -------------------------------------------------
 
-To install the release version of TopiaryExplorer `download the release version here <http://sourceforge.net/projects/topiaryexplorer/files/releases/te0.9.4.tgz/download>`_. After downloading, change to the directory where you've downloaded the file and from the command line unzip with the command::
+To install the release version of TopiaryExplorer `download the release version here <https://sourceforge.net/projects/topiaryexplorer/files/releases/topiaryexplorer0.9.5.tgz/download>`_. After downloading, change to the directory where you've downloaded the file and from the command line unzip with the command::
 
-	tar -xzf te0.9.4.tgz
+	tar -xzf topiaryexplorer0.9.5.tgz
 	cd te_current
 	
 Then to run TopiaryExplorer, run the command::

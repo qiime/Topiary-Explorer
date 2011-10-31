@@ -565,12 +565,14 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                         }
                     }
                     catch(FileNotFoundException ex){
+                        JOptionPane.showMessageDialog(null, "Unable to open project file.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                         System.out.println("Could not open project.");
                     }
                 } 
             }
             catch(Exception e)
             {
+                JOptionPane.showMessageDialog(null, "Error opening project file.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 System.out.println("Error opening project."+e);
             }
 
@@ -631,8 +633,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		}
 		catch(IOException e)
 			{
-/*              System.out.println("Error saving project.");*/
-			    frame.consoleWindow.update("Error saving project.");
+			    JOptionPane.showMessageDialog(null, "Unable to save project file.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+              System.out.println("Error saving project.");
+                // frame.consoleWindow.update("Error saving project.");
 			}
 			frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }

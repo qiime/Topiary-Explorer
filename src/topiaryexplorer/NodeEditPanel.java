@@ -26,6 +26,8 @@ public final class NodeEditPanel extends JPanel{
     JLabel wedgeLabel = new JLabel("Customize Nodes:");
     
     JCheckBox pieChartCheckBox = new JCheckBox("Pie Chart");
+    JLabel pieChartLabel = new JLabel("Pie chart radius:");
+    JSlider pieChartRadius = new JSlider(1,100,15);
     JCheckBox nodeLabelCheckBox = new JCheckBox("Tip Labels");
     JCheckBox internalLabelCheckBox = new JCheckBox("Internal Node Labels");
     JPanel labelPanel = new JPanel();
@@ -53,6 +55,8 @@ public final class NodeEditPanel extends JPanel{
     JPanel holder = new JPanel();
     JPanel holder1 = new JPanel();
     JPanel holder2 = new JPanel();
+    JPanel pieChartHolder = new JPanel();
+    JPanel holder3 = new JPanel();
     
     JLabel colorByLabel = new JLabel("Color By:");
     JButton colorByButton = new JButton("Color By...");
@@ -70,6 +74,26 @@ public final class NodeEditPanel extends JPanel{
             frame.frame.labelColorPanel,1);
         this.setToolTipText("Customize Nodes");
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        
+        pieChartHolder.setLayout(new GridLayout(2,1));
+        pieChartRadius.addChangeListener(new ChangeListener() {
+            public synchronized void stateChanged(ChangeEvent e) {
+                if (pieChartRadius.getValueIsAdjusting()){
+                    frame.tree.setPieChartRadius(pieChartRadius.getValue());
+                }
+                frame.tree.redraw();
+            }
+        });
+        
+        // pieChartRadius.setPreferredSize(new Dimension(100, 20));
+        
+        pieChartRadius.setMajorTickSpacing(10);
+        pieChartRadius.setMinorTickSpacing(5);
+        pieChartRadius.setSnapToTicks(true);
+        holder3.add(pieChartLabel);
+        pieChartHolder.add(holder3);
+        pieChartHolder.add(pieChartRadius);
+        add(pieChartHolder);
         
         internalLabelCheckBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
