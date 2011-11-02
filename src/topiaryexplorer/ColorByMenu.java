@@ -98,7 +98,7 @@ public class ColorByMenu extends JMenu{
         colorBySampleMetadataMenu.removeAll();
         ArrayList<String> data = frame.sampleMetadata.getColumnNames();
         //start at 1 to skip ID column
-        for (int i = 1; i < data.size(); i++) {
+        for (int i = 0; i < data.size(); i++) {
              String value = data.get(i);
              JRadioButtonMenuItem item = new JRadioButtonMenuItem(value);
              item.addActionListener(new ActionListener() {
