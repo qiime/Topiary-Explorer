@@ -80,7 +80,7 @@ public class TreeToolbar extends JToolBar {
         statusLine2.setFont(new Font("Courier",Font.PLAIN,10));
         statusPanel.add(status);
         statusPanel.add(statusLine2);
-        add(statusPanel);
+        // add(statusPanel);
         spacer1.setPreferredSize(new Dimension(100,10));
         add(spacer1);
         add(new JLabel("Search:"));

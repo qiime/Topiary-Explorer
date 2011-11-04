@@ -25,6 +25,7 @@ public class TreeVis extends PApplet {
 
     private final int SELECTED_COLOR = 0xff66CCFF;
     private final int HIGHLIGHTED_COLOR = 0xffFF66FF;
+    private final int HOVER_COLOR = 0xffFFFF00;
     
     private Color backgroundColor = new Color(255,255,255);
 
@@ -82,6 +83,12 @@ public class TreeVis extends PApplet {
     private int wedgeFontColor = 255;
     private String wFont = "SansSerif";
     private PFont wedgeFont = createFont(wFont, (int)wedgeFontSize);
+    
+    private float nodeFontSize = 10;
+    private int nodeFontColor = 0;
+    private String nFont = "SansSerif";
+    
+    private PFont tipFont = createFont("SansSerif", 8);
 
     private TreeWindow frame = null;
 
@@ -90,9 +97,7 @@ public class TreeVis extends PApplet {
     private double wedgeHeightScale = 1;
     private boolean drawWedgeLabels = true;
     private boolean drawNodeLabels = false;
-    private float nodeFontSize = 10;
-    private int nodeFontColor = 0;
-    private String nFont = "SansSerif";
+    
     private PFont nodeFont = createFont(nFont, (int)nodeFontSize);
     private int pieChartRadius = 15;
 
@@ -836,7 +841,7 @@ public class TreeVis extends PApplet {
 
       double minX = nodeX;
       double maxX = minX+5;
-      double minY = nodeY;
+      double minY = nodeY-2;
       double maxY = minY+5;
       //if node is collapsed, whole wedge is viable
       if(tree.isCollapsed())
@@ -1059,6 +1064,28 @@ public class TreeVis extends PApplet {
       lastAng  = lastAng + radians((float)angles[i]);
     }
   }
+  
+  // public void drawToolTip(String tip, Node node) {
+  //     double x = node.getXOffset();
+  //     double y = node.getYOffset();
+  //     if (treeLayout.equals("Radial")) {
+  //           x = node.getRXOffset();
+  //           y = node.getRYOffset();
+  //       } else if (treeLayout.equals("Polar")) {
+  //           x = node.getROffset() * Math.cos(node.getTOffset());
+  //           y = node.getROffset() * Math.sin(node.getTOffset());
+  //       }
+  //       // canvas.
+  //     g.fill(0xFFFF00cc);
+  //       // stroke(255);
+  //       double drawX = toScreenX(x);
+  //       double drawY = toScreenY(y);
+  //       double maxX =  drawX + (width*nodeFont.size);
+  //       double minY = drawY;// - (nodeFont.descent()*nodeFont.size);
+  //       double maxY = drawY + ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
+  //       g.rect((float)(drawX), (float)minY-5, (float)(maxX-drawX), (float)(maxY-minY)-5);
+  //       g.text(tip, (float)drawX, (float)drawY);
+  // }
 
     /**
      * Draw the actual node, not including branch lines and child nodes.
@@ -1089,6 +1116,7 @@ public class TreeVis extends PApplet {
       //is this node selected or hilighted?
       boolean selected = (node == selectedNode);
       boolean hilighted = hilightedNodes.contains(node);
+      // boolean hover = (this.mouseOverNode == node);
 
       float drawX = (float)xs;
       float drawY = (float)ys;
@@ -1113,7 +1141,6 @@ public class TreeVis extends PApplet {
           // change drawing coords to be wherever the mouse is
           drawX = mouseX;
           drawY = mouseY;
-          
           canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
       }
 
@@ -1197,8 +1224,7 @@ public class TreeVis extends PApplet {
         canvas.stroke(sc);
         canvas.rect((float)(drawX+offsetbias), (float)minY-5, (float)(maxX-drawX), (float)(maxY-minY)-5);
         canvas.noTint();
-      }
-     
+      }     
      
      //node.isLeaf() &&
      if(((!node.isLeaf() && drawInternalNodeLabels && !node.isCollapsed())||(node.isLeaf() && drawExternalNodeLabels)) && node.getDrawLabel() && zoomDrawNodeLabels)
@@ -1216,13 +1242,53 @@ public class TreeVis extends PApplet {
            }
                canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
      }
+     else
+     {
+     }
       
       if (mouseOverNode == node || mouseOverNodeToReplace == node) {
         //outline the node
         canvas.noFill();
         canvas.strokeWeight(1);
         canvas.stroke(255,0,0);
+        maxX =  drawX + (width*nodeFont.size);
+        minY = drawY;// - (nodeFont.descent()*nodeFont.size);
+        maxY = drawY + ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
         canvas.rect((float)(drawX+offsetbias), (float)minY-5, (float)(maxX-drawX), (float)(maxY-minY)-5);
+
+        String status = "";
+           // String prefix = "";
+            if (node.isLocked())
+              status += "(L)";
+            if(node.isLeaf())
+            {
+                status += node.getLabel()+";";
+            }
+            else
+                status += String.format("Sub-tree: %d leaves;", node.getNumberOfLeaves());
+            String label = node.getConsensusLineage();
+            if (label == null)
+                label = "";
+            status += label;
+            
+            for (int i = 0; i < status.length(); i++) {
+                width += tipFont.width(status.charAt(i));
+            }
+            maxX = (width*tipFont.size);
+            drawX =  getWidth() - (float)(width*tipFont.size);
+            drawY = getHeight();// - ((tipFont.ascent()+tipFont.descent())*tipFont.size);
+            // minY = drawY;// - (nodeFont.descent()*nodeFont.size);
+            maxY = ((tipFont.ascent()+tipFont.descent())*tipFont.size);
+            canvas.fill(HOVER_COLOR, 150);
+            canvas.noStroke();
+            // canvas.stroke(HOVER_COLOR, 150);
+            canvas.rect((float)(drawX), (float)drawY-8, (float)(maxX), (float)(maxY));
+            canvas.fill(0);
+            canvas.stroke(0);
+            canvas.textFont(tipFont);
+            canvas.text(status, (float)(drawX), (float)(drawY));
+            canvas.textFont(nodeFont);
+            canvas.noTint();
       }
       
       // //reset drawing color to default black

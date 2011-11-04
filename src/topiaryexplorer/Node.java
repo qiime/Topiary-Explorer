@@ -61,6 +61,8 @@ public class Node implements Comparable{
   private boolean sliderCollapsed = true;
   private boolean hidden = false;
   
+  private boolean hover = false;
+  
   private boolean toPrune = false;
 
   Object userObject = null;
@@ -166,6 +168,8 @@ public class Node implements Comparable{
   public double depth() { return depth; }
   public void setNumberOfLeaves(int val) { numberOfLeaves = val;}
   public int getNumberOfLeaves() { return numberOfLeaves; }
+  public void setHover(boolean b) { hover = b; }
+  public boolean getHover() { return hover; }
   
   public int compareTo(Object otherNode) throws ClassCastException {
       if (!(otherNode instanceof Node))

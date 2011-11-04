@@ -108,26 +108,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                  if(!isActive()) return;
                  Node node = tree.findNode(evt.getX(), evt.getY());
                  if (node != null) {
-                  setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                   String status = "";
-                   String prefix = "";
-                    if (node.isLocked())
-                      prefix += "(L)";
-                    String label = node.getConsensusLineage();
-                    if (label == null)
-                        label = "";
-                    if(node.isLeaf())
-                    {
-                        status += node.getName();
-                    }
-                    else
-                        status += String.format("Sub-tree: %d leaves", node.getNumberOfLeaves());
-                   treeToolbar.setStatus(prefix, status, label);
+                     // tree.mouseOverNode = node;
+                  setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));  
                  }
                  else
                  {
-                     setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                      treeToolbar.setStatus("","","");
+                    // tree.mouseOverNode = null;
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                   }
              }
          });
