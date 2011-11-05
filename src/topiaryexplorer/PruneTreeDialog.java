@@ -1,18 +1,18 @@
 package topiaryexplorer;
 
+import javax.swing.*;
+import javax.swing.text.*;
+import javax.swing.event.*;
+import javax.media.opengl.*;
+import javax.swing.table.*;
+import javax.jnlp.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.media.opengl.*;
 import java.sql.*;
-import javax.swing.table.*;
-import java.io.*;
-import javax.swing.table.*;
-import javax.jnlp.*;
-import javax.swing.text.*;
 import java.text.*;
+import java.io.*;
+
 
 /**
  * <<Class summary>>

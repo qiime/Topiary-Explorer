@@ -621,8 +621,7 @@ public class TreeVis extends PApplet {
      *
      * @param  newRoot  the Node object that is the root of the new tree
      */
-    public void setTree(Node newRoot) {      
-      
+    public void setTree(Node newRoot) {
       //add to the margin the longest node labels
       float width = 0;
       String s = newRoot.getLongestLabel();
@@ -644,6 +643,8 @@ public class TreeVis extends PApplet {
       fireStateChanged();
       //redraw the tree
       redraw();          
+      //reset summary
+      // frame.treeEditToolbar.summaryPanelCP
     }
 
     public void setVerticalScaleFactor(double yvalue) {

@@ -13,6 +13,9 @@ public class TreeEditToolbar extends JToolBar {
     TreeWindow frame = null;
     MainFrame mainframe = null;
     
+    SummaryPanel summaryPanel;
+    CollapsablePanel summaryPanelCP;
+    
     TreeViewPanel treeViewPanel;
     CollapsablePanel treeViewPanelCP;
     
@@ -40,6 +43,7 @@ public class TreeEditToolbar extends JToolBar {
         {
             System.out.println(e.getMessage());
         }
+        
         treeViewPanelCP = new CollapsablePanel("Tree", treeViewPanel, true, false);
         
         nodeEditPanel = new NodeEditPanel(frame);
@@ -47,6 +51,9 @@ public class TreeEditToolbar extends JToolBar {
         
         branchEditPanel = new BranchEditPanel(frame);
         branchEditPanelCP = new CollapsablePanel("Branch", branchEditPanel);
+        
+        summaryPanel = new SummaryPanel(frame);
+        summaryPanelCP = new CollapsablePanel("Summary", summaryPanel, true,  false);
         
         wedgeEditPanel = new WedgeEditPanel(frame);
         wedgeEditPanelCP = new CollapsablePanel("Wedge",wedgeEditPanel);
@@ -60,6 +67,7 @@ public class TreeEditToolbar extends JToolBar {
         
         gLayout.setHorizontalGroup(gLayout.createSequentialGroup()
             .addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                .addComponent(summaryPanelCP)
                 .addComponent(treeViewPanelCP)
                 .addComponent(nodeEditPanelCP)
                 .addComponent(branchEditPanelCP)
@@ -70,6 +78,7 @@ public class TreeEditToolbar extends JToolBar {
         
         gLayout.setVerticalGroup(gLayout.createSequentialGroup()
 /*            .addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.BASELINE, false))*/
+                .addComponent(summaryPanelCP, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(treeViewPanelCP, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(nodeEditPanelCP, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(branchEditPanelCP, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

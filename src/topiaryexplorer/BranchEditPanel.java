@@ -72,8 +72,8 @@ class BranchEditPanel extends JPanel{
         
         // coloringMenuItem.setEnabled(false);
         coloringMenuItem.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                majorityColoringMenuItem.setEnabled(!coloringMenuItem.isSelected());
+            public void stateChanged(ChangeEvent e) {                frame.treeEditToolbar.summaryPanel.showPanel(!coloringMenuItem.isSelected());  
+                                      majorityColoringMenuItem.setEnabled(!coloringMenuItem.isSelected());
                 vis.setColorBranches(!coloringMenuItem.isSelected());
                 vis.redraw();
                 frame.treePopupMenu.getComponent(4).setEnabled(!coloringMenuItem.isSelected());

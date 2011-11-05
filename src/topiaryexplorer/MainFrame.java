@@ -359,6 +359,7 @@ public class MainFrame extends JFrame {
           if(branchValue != "")
             recolorBranches();
           
+          tempTreeWindow.treeEditToolbar.summaryPanel.showPanel(false);
           setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       }
       
@@ -634,12 +635,14 @@ public class MainFrame extends JFrame {
              {
                  // System.out.println("hurf");
                   t.recolorBranchesByOtu();
+                  t.treeEditToolbar.summaryPanel.treeColored();
               }
          } else if (currTable != null && currTable == sampleMetadata) {
              for(TreeWindow t : treeWindows)
              {
                  // System.out.println("durf");
                   t.recolorBranchesBySample();
+                  t.treeEditToolbar.summaryPanel.treeColored();
               }
          } else {
              //it's null; don't do anything

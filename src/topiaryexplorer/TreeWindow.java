@@ -430,6 +430,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             n.setDepth(n.depthF());
             n.setNumberOfLeaves(n.getNumberOfLeavesF());
         }
+        treeEditToolbar.summaryPanel.setTree(root);
     }
 	
 	public void ladderize() {
@@ -745,6 +746,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                //set the node to this color
                n.clearBranchColor();
                n.addBranchColor(c, 1.0);
+               n.addBranchValue(category);
        }
        tree.getTree().updateBranchColorFromChildren();
        frame.repaint();
@@ -773,15 +775,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                         continue;
                      }
                      //get the row
-/*                     ArrayList<Object> row = frame.otuSampleMap.getRow(rowIndex);*/
                      HashMap row = frame.otuSampleMap.getRow(rowIndex);
                      n.clearBranchColor();
-                    //for each non-zero column value (starting after the ID column)
+                    //for each non-zero column value in the mapping(starting after the ID column)
                      for (Object i : row.keySet()) {
-                         Object value = row.get(i);
+                         Object w = row.get(i);
                          //if it's not an Integer, skip it
-                         if (!(value instanceof Integer)) continue;
-                         Integer weight = (Integer)value;
+                         if (!(w instanceof Integer)) continue;
+                         Integer weight = (Integer)w;
                          if (weight == 0) continue;
                          
                          String sampleID = frame.otuSampleMap.getColumnName(((Number)i).intValue());
@@ -793,10 +794,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                             continue;
                          }
                          
-                         Object color = null;
-                         color = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.branchColorPanel.getColorColumnIndex());                                                          
-                         if (color == null) continue;
-                         n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(color), weight);
+                         Object value = null;
+                         value = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.branchColorPanel.getColorColumnIndex());                                                          
+                         if (value == null) continue;
+                         n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), weight);
+                         n.addBranchValue(value);
                      }
              }
 
@@ -1207,7 +1209,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                 n.noBranchColor();
             }
             tree.getTree().updateBranchColorFromChildren();
-            frame.recolorBranches();
+            // frame.recolorBranches();
             this.repaint();
 
             //reset the pcoa vertex colors
