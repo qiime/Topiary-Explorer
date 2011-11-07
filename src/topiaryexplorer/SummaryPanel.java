@@ -22,8 +22,8 @@ public class SummaryPanel extends JPanel{
      JLabel numTipsLabel = new JLabel();
      JPanel pieChartPanel = new JPanel();
      private ArrayList<Double> data = new ArrayList<Double>();
-     private ArrayList<Object> colors = new ArrayList<Object>();
-     private ArrayList<Object> values = new ArrayList<Object>();
+     private ArrayList<Color> colors = new ArrayList<Color>();
+     private ArrayList<String> values = new ArrayList<String>();
      private PieChartVis pVis = new PieChartVis();
      
     SummaryPanel(TreeWindow _frame) {
@@ -79,10 +79,8 @@ public class SummaryPanel extends JPanel{
         pieChartPanel.setVisible(true);
         summaryScrollPane.setVisible(true);
         data = root.getGroupBranchFraction();
-        colors = new ArrayList<Object>();
-        values = new ArrayList<Object>();
-        colors.addAll(root.getGroupBranchColor());
-        values.addAll(root.getGroupBranchValue());
+        colors = root.getGroupBranchColor();
+        values = root.getGroupBranchValue();
         buildTable();
     }
     
@@ -101,23 +99,20 @@ public class SummaryPanel extends JPanel{
         headers.add("");
         headers.add("Value");
         dataList = new ArrayList<ArrayList<Object>>();
+        int numLeaves = root.getLeaves().size();
         double total = 0;
         for (int i = 0; i < data.size(); i++) 
-          total += data.get(i);        
+          total += data.get(i);
         
         for (int i = 0; i < data.size(); i++) {
           ArrayList<Object> row = new ArrayList<Object>();
-          row.add(String.format("%.2f",100*(data.get(i)/total)));
+          row.add(Double.parseDouble(String.format("%.2f",100*(data.get(i)/total))));
           row.add(colors.get(i));
           row.add(values.get(i));
           dataList.add(row);
         }
          ColorTableModel model = new ColorTableModel(dataList, headers);
  		 TableSorter sorter = new TableSorter(model, summaryTable.getTableHeader());
-
-         //set color blocks
- 		 for(int i = 0; i < data.size(); i++)
- 		    sorter.setValueAt((Color)colors.get(i),i,1);
  		 
          summaryTable.setModel(sorter);
  		 summaryTable.setDefaultRenderer(Color.class, new ColorRenderer(true));

@@ -22,6 +22,7 @@ public class Node implements Comparable{
   
   private double depth = 0;
   private int numberOfLeaves = 0;
+  // private int numOtusCovered = 0;
   
   private double yoffset = 0;
   private double xoffset = 0;
@@ -422,8 +423,7 @@ public class Node implements Comparable{
   }
   
   public void addBranchValue(Object v) {
-      if(!groupBranchValue.contains(v.toString()))
-          groupBranchValue.add(v.toString());
+      groupBranchValue.add(v.toString());
   }
   
   public Color getLabelColor(boolean majority) {        
@@ -683,6 +683,12 @@ public class Node implements Comparable{
    * this recursively works over the entire tree.
    */
   public void updateBranchColorFromChildren() {
+    if(groupBranchColor.size() == 0) { 
+        groupBranchColor.add(new Color(0,0,0));
+        groupBranchWeight.add(1.0);
+        groupBranchValue.add("Uncolored");
+        return;
+        }
     if (isLeaf()) { aggregateBranchData(); return; }
 
     //make the lists empty
@@ -698,10 +704,9 @@ public class Node implements Comparable{
       for (int j = 0; j < nodes.get(i).groupBranchColor.size(); j++) {
         groupBranchColor.add(nodes.get(i).groupBranchColor.get(j));
         groupBranchWeight.add(nodes.get(i).groupBranchWeight.get(j));
+        groupBranchValue.add(nodes.get(i).groupBranchValue.get(j));
       }
-      
-      for(int k = 0; k < nodes.get(i).groupBranchValue.size(); k++)
-        groupBranchValue.add(nodes.get(i).groupBranchValue.get(k));
+        
     }
     aggregateBranchData();
   }
@@ -764,6 +769,8 @@ public class Node implements Comparable{
     ArrayList<Color> newgroupBranchColor = new ArrayList<Color>();
     ArrayList<Double> newgroupBranchWeight = new ArrayList<Double>();
     ArrayList<String> newgroupBranchValue = new ArrayList<String>();
+
+    // numOtusCovered = groupBranchWeight.size();
 
     for (int i = 0; i < groupBranchColor.size(); i++) {
       if (newgroupBranchColor.contains(groupBranchColor.get(i))) {
