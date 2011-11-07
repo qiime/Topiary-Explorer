@@ -428,7 +428,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         for(Node n : root.getNodes())
         {
             n.setDepth(n.depthF());
-            n.setNumberOfLeaves(n.getNumberOfLeavesF());
+            n.setNumberOfLeaves(n.getLeaves().size());
         }
         treeEditToolbar.summaryPanel.setTree(root);
     }
