@@ -698,8 +698,10 @@ public class Node implements Comparable{
       for (int j = 0; j < nodes.get(i).groupBranchColor.size(); j++) {
         groupBranchColor.add(nodes.get(i).groupBranchColor.get(j));
         groupBranchWeight.add(nodes.get(i).groupBranchWeight.get(j));
-        groupBranchValue.add(nodes.get(i).groupBranchValue.get(j));
       }
+      
+      for(int k = 0; k < nodes.get(i).groupBranchValue.size(); k++)
+        groupBranchValue.add(nodes.get(i).groupBranchValue.get(k));
     }
     aggregateBranchData();
   }
