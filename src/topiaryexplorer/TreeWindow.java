@@ -797,13 +797,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          Object value = null;
                          value = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.branchColorPanel.getColorColumnIndex());                                                          
                          if (value == null) continue;
-                         n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), weight);
+                         // n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), weight);
+                         n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), 1.0);
                          n.addBranchValue(value);
                      }
              }
 
-          tree.getTree().updateBranchColorFromChildren();
-          frame.repaint();
+         tree.getTree().updateBranchColorFromChildren();
+         frame.repaint();
          tree.redraw();
          treeEditToolbar.setStatus("Done coloring tree.");
          // System.out.println("************************");

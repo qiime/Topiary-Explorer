@@ -22,6 +22,7 @@ public class PieChartVis extends PApplet {
       //draw the chart
       try {
          background(0xffededed);
+         smooth();
          drawPieChart(pie, g);
       } catch (Exception e) {
           // System.out.println("cant draw pie chart yet");
