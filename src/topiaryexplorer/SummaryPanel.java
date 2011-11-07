@@ -74,8 +74,8 @@ public class SummaryPanel extends JPanel{
     }
     
     public void treeColored() {
-        pVis.init();
         pVis.setPieChartVis(root);
+        pVis.init();
         pieChartPanel.setVisible(true);
         summaryScrollPane.setVisible(true);
         data = root.getGroupBranchFraction();

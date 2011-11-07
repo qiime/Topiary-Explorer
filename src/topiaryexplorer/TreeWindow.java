@@ -1204,6 +1204,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             //reset the colorKeyTable
 /*            ((ColorTableModel)((TableSorter)frame.branchColorPanel.getColorKeyTable().getModel()).getTableModel()).clearTable();*/
 /*            frame.branchColorPanel.getColorKeyTable().repaint();*/
+            treeEditToolbar.summaryPanel.showPanel(false);
+
             //reset the node colors
             for (Node n : tree.getTree().getLeaves()) {
                 n.noBranchColor();
@@ -1272,6 +1274,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 /*             tree.loop();*/
              tree.redraw();
              treeEditToolbar.branchEditPanel.colorBy.setEnabled(true);
+             treeEditToolbar.summaryPanel.treeColored();
              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
           }
           

@@ -11,11 +11,11 @@ import java.util.*;
 public class PieChartVis extends PApplet {
     private int radius = 148;
     private PieChart pie;
-    // private PieChart chart;
     
     public void setup() {
         size(200, 150);
         smooth();
+        draw();
     }
     
     public void draw() {
@@ -24,17 +24,14 @@ public class PieChartVis extends PApplet {
          background(0xffededed);
          drawPieChart(pie, g);
       } catch (Exception e) {
-/*          frame.treeOpsToolbar.setStatus("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");*/
-/*          frame.consoleWindow.update("WARNING: Error drawing tree, probably due to concurrency issues. Normally, this warning can be ignored.");*/
-          e.printStackTrace();
+          // System.out.println("cant draw pie chart yet");
       }
     }
     
     public void setPieChartVis(Node root) {
         pie = new PieChart(100, 75, radius, root.getGroupBranchFraction(),
           root.getGroupBranchColor());
-          redraw();
-        // drawPieChart(pie, g);
+          // redraw();
     }
     
     public void drawPieChart(PieChart pie, PGraphics canvas) {
