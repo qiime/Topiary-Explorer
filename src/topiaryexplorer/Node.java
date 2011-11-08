@@ -683,12 +683,12 @@ public class Node implements Comparable{
    * this recursively works over the entire tree.
    */
   public void updateBranchColorFromChildren() {
-    if(groupBranchColor.size() == 0) { 
-        groupBranchColor.add(new Color(0,0,0));
-        groupBranchWeight.add(1.0);
-        groupBranchValue.add("Uncolored");
-        return;
-        }
+    // if(groupBranchColor.size() == 0) { 
+    //     groupBranchColor.add(new Color(0,0,0));
+    //     groupBranchWeight.add(1.0);
+    //     groupBranchValue.add("Uncolored");
+    //     return;
+    //     }
     if (isLeaf()) { aggregateBranchData(); return; }
 
     //make the lists empty

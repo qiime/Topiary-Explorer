@@ -33,8 +33,8 @@ public class SummaryPanel extends JPanel{
         summaryScrollPane = new JScrollPane(summaryTable);
         summaryScrollPane.setWheelScrollingEnabled(true);
         
-        pieChartPanel.setLayout(new BorderLayout());
-        pieChartPanel.add(pVis, BorderLayout.CENTER);
+        // pieChartPanel.setLayout(new BorderLayout());
+        // pieChartPanel.add(pVis, BorderLayout.CENTER);
         
         this.setLayout(new GridLayout(3,1));
 
@@ -46,7 +46,7 @@ public class SummaryPanel extends JPanel{
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(numTipsLabel))
-            .addComponent(pieChartPanel, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+            // .addComponent(pieChartPanel, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -54,13 +54,13 @@ public class SummaryPanel extends JPanel{
                 .addContainerGap()
                 .addComponent(numTipsLabel)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(pieChartPanel, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
+                // .addComponent(pieChartPanel, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(summaryScrollPane, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
         );
         
-        pieChartPanel.setVisible(false);
-        summaryScrollPane.setVisible(false);
+        // pieChartPanel.setVisible(false);
+        // summaryScrollPane.setVisible(false);
     }
     
     public void setTree(Node r) {
@@ -69,19 +69,20 @@ public class SummaryPanel extends JPanel{
     }
     
     public void showPanel(boolean b) {
-        pieChartPanel.setVisible(b);
-        summaryScrollPane.setVisible(b);
+        // pieChartPanel.setVisible(b);
+        // summaryScrollPane.setVisible(b);
     }
     
     public void treeColored() {
-        pVis.setPieChartVis(root);
-        pVis.init();
-        pieChartPanel.setVisible(true);
         summaryScrollPane.setVisible(true);
-        data = root.getGroupBranchFraction();
         colors = root.getGroupBranchColor();
         values = root.getGroupBranchValue();
         buildTable();
+        // pVis.setPieChartVis(root, p);
+        // pVis.init();
+        // pieChartPanel.setVisible(true);
+        
+        // data = root.getGroupBranchFraction();   
     }
     
     // public void setTable(DataTable d) {
@@ -92,6 +93,7 @@ public class SummaryPanel extends JPanel{
         // summaryScrollPane = new JScrollPane(summaryTable);
     // }
     
+    // public ArrayList<Double> buildTable() {
     public void buildTable() {
         // DataTable dt = new DataTable();
         ArrayList<String> headers = new ArrayList<String>();
@@ -100,13 +102,26 @@ public class SummaryPanel extends JPanel{
         headers.add("Value");
         dataList = new ArrayList<ArrayList<Object>>();
         int numLeaves = root.getLeaves().size();
-        double total = 0;
-        for (int i = 0; i < data.size(); i++) 
-          total += data.get(i);
         
-        for (int i = 0; i < data.size(); i++) {
+        HashMap<Color,Double> counts = new HashMap();
+        
+        for(Color c: colors)
+            counts.put(c,0.0);
+        
+        for(Node n: root.getLeaves())
+        {
+            for(Color c: colors)
+            {
+                if(n.getGroupBranchColor().contains(c))
+                    counts.put(c, counts.get(c)+1);
+            }
+        }
+        
+        ArrayList<Double> percents = new ArrayList<Double>(counts.values());
+        
+        for (int i = 0; i < colors.size(); i++) {
           ArrayList<Object> row = new ArrayList<Object>();
-          row.add(Double.parseDouble(String.format("%.2f",100*(data.get(i)/total))));
+          row.add(Double.parseDouble(String.format("%.2f",100*(percents.get(i)/numLeaves))));
           row.add(colors.get(i));
           row.add(values.get(i));
           dataList.add(row);
@@ -120,6 +135,5 @@ public class SummaryPanel extends JPanel{
  		 summaryTable.setSelectionForeground(new Color(0,0,0));      summaryTable.getColumnModel().getColumn(0).setPreferredWidth(40);
          summaryTable.getColumnModel().getColumn(1).setPreferredWidth(20);
          summaryTable.getColumnModel().getColumn(2).setPreferredWidth(120);
-        // summaryTable.setModel(sorter);
     }
 }

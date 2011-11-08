@@ -11,6 +11,7 @@ import java.util.*;
 public class PieChartVis extends PApplet {
     private int radius = 148;
     private PieChart pie;
+    private Node root;
     
     public void setup() {
         size(200, 150);
@@ -29,8 +30,9 @@ public class PieChartVis extends PApplet {
       }
     }
     
-    public void setPieChartVis(Node root) {
-        pie = new PieChart(100, 75, radius, root.getGroupBranchFraction(),
+    public void setPieChartVis(Node _root, ArrayList<Double> p) {
+        root = _root;
+        pie = new PieChart(100, 75, radius, p,
           root.getGroupBranchColor());
           // redraw();
     }
@@ -38,10 +40,10 @@ public class PieChartVis extends PApplet {
     public void drawPieChart(PieChart pie, PGraphics canvas) {
     // canvas.text("hurf",0,0);
     //get the total count
-    double total = 0;
-    for (int i = 0; i < pie.data.size(); i++) {
-      total += pie.data.get(i);
-    }
+    double total = root.getNumberOfLeaves();
+    // for (int i = 0; i < pie.data.size(); i++) {
+    //   total += pie.data.get(i);
+    // }
     //generate percentages
     double[] percents = new double[pie.data.size()];
     for (int i = 0; i < percents.length; i++) {
