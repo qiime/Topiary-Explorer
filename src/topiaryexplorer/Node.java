@@ -55,6 +55,7 @@ public class Node implements Comparable{
   private Color labelColor = null;
   private ArrayList<Color> groupLabelColor = new ArrayList<Color>();
   private ArrayList<Double> groupLabelWeight = new ArrayList<Double>();
+  private ArrayList<String> groupLabelValue = new ArrayList<String>();
   
   private double lineWidth = 1;
 
@@ -111,6 +112,7 @@ public class Node implements Comparable{
   public ArrayList<String> getGroupBranchValue() { return groupBranchValue; }
   public ArrayList<Color> getGroupBranchColor() { return groupBranchColor; }
   public ArrayList<Double> getGroupBranchFraction() { return groupBranchWeight; }
+  public ArrayList<String> getGroupLabelValue() { return groupLabelValue; }
   public ArrayList<Color> getGroupLabelColor() { return groupLabelColor; }
   public ArrayList<Double> getGroupLabelFraction() { return groupLabelWeight; }
   public boolean isCollapsed() { return collapsed || sliderCollapsed; }
@@ -476,6 +478,7 @@ public class Node implements Comparable{
       labelColor = new Color(0,0,0);
       groupLabelWeight = new ArrayList<Double>();
       groupLabelColor = new ArrayList<Color>();
+      groupLabelValue = new ArrayList<String>();
     }
 
     public void addLabelColor(Color c, double w) {
@@ -483,6 +486,10 @@ public class Node implements Comparable{
         labelColorMap.put(c,w);
         groupLabelWeight.add(new Double(w));
         groupLabelColor.add(c);
+    }
+  
+    public void addLabelValue(Object v) {
+        groupLabelValue.add(v.toString());
     }
   
   /**
@@ -704,10 +711,11 @@ public class Node implements Comparable{
       for (int j = 0; j < nodes.get(i).groupBranchColor.size(); j++) {
         groupBranchColor.add(nodes.get(i).groupBranchColor.get(j));
         groupBranchWeight.add(nodes.get(i).groupBranchWeight.get(j)); 
+        groupBranchValue.add(nodes.get(i).groupBranchValue.get(j));
       }
       
-      for(int k = 0; k < nodes.get(i).groupBranchValue.size(); k++)
-          groupBranchValue.add(nodes.get(i).groupBranchValue.get(k));
+      // for(int k = 0; k < nodes.get(i).groupBranchValue.size(); k++)
+      //     groupBranchValue.add(nodes.get(i).groupBranchValue.get(k));
         
     }
     aggregateBranchData();
@@ -720,6 +728,8 @@ public class Node implements Comparable{
     labelColor = null;
     groupLabelColor = new ArrayList<Color>();
     groupLabelWeight = new ArrayList<Double>();
+    groupLabelValue = new ArrayList<String>();
+    
     for (int i=0; i < nodes.size(); i++) {
       //recursion
       nodes.get(i).updateLabelColorFromChildren();
@@ -728,6 +738,7 @@ public class Node implements Comparable{
       for (int j = 0; j < nodes.get(i).groupLabelColor.size(); j++) {
         groupLabelColor.add(nodes.get(i).groupLabelColor.get(j));
         groupLabelWeight.add(nodes.get(i).groupLabelWeight.get(j));
+        groupLabelValue.add(nodes.get(i).groupLabelValue.get(j));
       }
     }
     aggregateLabelData();
@@ -772,24 +783,23 @@ public class Node implements Comparable{
     ArrayList<Double> newgroupBranchWeight = new ArrayList<Double>();
     ArrayList<String> newgroupBranchValue = new ArrayList<String>();
 
-    // numOtusCovered = groupBranchWeight.size();
-
-    for (int i = 0; i < groupBranchColor.size(); i++) {
-      if (newgroupBranchColor.contains(groupBranchColor.get(i))) {
-          int index = newgroupBranchColor.indexOf(groupBranchColor.get(i));
-          newgroupBranchWeight.set(index, newgroupBranchWeight.get(index) + groupBranchWeight.get(i));
-      } else {
+    for(int i = 0; i < groupBranchValue.size(); i++) {
+        if(newgroupBranchValue.contains(groupBranchValue.get(i))) {
+            int index = newgroupBranchValue.indexOf(groupBranchValue.get(i));
+            newgroupBranchWeight.set(index, newgroupBranchWeight.get(index) + groupBranchWeight.get(i));
+        } else {
+        newgroupBranchValue.add(groupBranchValue.get(i));
         newgroupBranchColor.add(groupBranchColor.get(i));
         newgroupBranchWeight.add(groupBranchWeight.get(i));
       }
     }
     
-    for(String v: groupBranchValue)
-    {
-        if(!newgroupBranchValue.contains(v))
-            newgroupBranchValue.add(v);
-    }
-    
+    // for(String v: groupBranchValue)
+    // {
+    //     if(!newgroupBranchValue.contains(v))
+    //         newgroupBranchValue.add(v);
+    // }
+    // 
     groupBranchWeight = newgroupBranchWeight;
     groupBranchColor = newgroupBranchColor;
     groupBranchValue = newgroupBranchValue;
@@ -798,17 +808,19 @@ public class Node implements Comparable{
   public void aggregateLabelData() {
         ArrayList<Color> newgroupLabelColor = new ArrayList<Color>();
         ArrayList<Double> newgroupLabelWeight = new ArrayList<Double>();
+        ArrayList<String> newgroupLabelValue = new ArrayList<String>();
 
-        for (int i = 0; i < groupLabelColor.size(); i++) {
-          if (newgroupLabelColor.contains(groupLabelColor.get(i))) {
-              int index = newgroupLabelColor.indexOf(groupLabelColor.get(i));
-              newgroupLabelWeight.set(index, newgroupLabelWeight.get(index) + groupLabelWeight.get(i));
-          } else {
-            newgroupLabelColor.add(groupLabelColor.get(i));
-            newgroupLabelWeight.add(groupLabelWeight.get(i));
-          }
-        }
-
+        for(int i = 0; i < groupLabelValue.size(); i++) {
+        if(newgroupLabelValue.contains(groupLabelValue.get(i))) {
+            int index = newgroupLabelValue.indexOf(groupLabelValue.get(i));
+            newgroupLabelWeight.set(index, newgroupLabelWeight.get(index) + groupLabelWeight.get(i));
+        } else {
+        newgroupLabelValue.add(groupLabelValue.get(i));
+        newgroupLabelColor.add(groupLabelColor.get(i));
+        newgroupLabelWeight.add(groupLabelWeight.get(i));
+      }
+    }
+        groupLabelValue = newgroupLabelValue;
         groupLabelWeight = newgroupLabelWeight;
         groupLabelColor = newgroupLabelColor;
      }

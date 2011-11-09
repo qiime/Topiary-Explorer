@@ -92,18 +92,20 @@ public class SummaryPanel extends JPanel{
         headers.add("Value");
         dataList = new ArrayList<ArrayList<Object>>();
         int numLeaves = root.getLeaves().size();
-        
+        // double total = 0;
         HashMap<String,Double> counts = new HashMap();
         
         for(String s: values)
             counts.put(s,0.0);
         
-        for(Node n: root.getLeaves())
-        {
-            for(String s: values)
+        // figure out the counts for each coloring value to determine % coverage
+        for(Node n: root.getLeaves()) // for each tip
+        {                
+            for(String s: values) // for each possible coloring value
             {
+                // if that tip contains that coloring value, increment it
                 if(n.getGroupBranchValue().contains(s))
-                    counts.put(s, counts.get(s)+1);
+                    counts.put(s, counts.get(s) +1);
             }
         }
         
