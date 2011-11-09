@@ -2,6 +2,8 @@ package topiaryexplorer;
 
 import java.util.ArrayList;
 import javax.swing.table.*;
+import javax.swing.*;
+import java.awt.*;
 
 
 class ColorTableModel extends AbstractTableModel {
@@ -68,7 +70,7 @@ class ColorTableModel extends AbstractTableModel {
     }
 
     public boolean isCellEditable(int row, int col) {
-		if (col == 0) {
+		if (!(getValueAt(0, col) instanceof Color) && !(getValueAt(0, col) instanceof JCheckBox)) {
 			return false;
 		} else {
 			return true;

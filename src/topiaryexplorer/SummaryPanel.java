@@ -16,6 +16,7 @@ import java.io.*;
 public class SummaryPanel extends JPanel{
      TreeWindow frame = null;
      Node root = null;
+     // JPanel tablePanel = new JPanel();
      JScrollPane summaryScrollPane = new JScrollPane();
      JTable summaryTable = new JTable(new ColorTableModel());
      ArrayList<ArrayList<Object>> dataList = new ArrayList<ArrayList<Object>>();
@@ -31,8 +32,11 @@ public class SummaryPanel extends JPanel{
         
          // summaryTable.setDragEnabled(true);
         summaryScrollPane = new JScrollPane(summaryTable);
+        summaryTable.setToolTipText("% Branch coverage");
+        // summaryTable.
+        // summaryScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         summaryScrollPane.setWheelScrollingEnabled(true);
-        
+        // tablePanel.add(summaryScrollPane);
         // pieChartPanel.setLayout(new BorderLayout());
         // pieChartPanel.add(pVis, BorderLayout.CENTER);
         
@@ -74,26 +78,12 @@ public class SummaryPanel extends JPanel{
     }
     
     public void treeColored() {
-        summaryScrollPane.setVisible(true);
         colors = root.getGroupBranchColor();
         values = root.getGroupBranchValue();
         buildTable();
-        // pVis.setPieChartVis(root, p);
-        // pVis.init();
-        // pieChartPanel.setVisible(true);
-        
-        // data = root.getGroupBranchFraction();   
+        // summaryScrollPane.setVisible(!frame.treeEditToolbar.branchEditPanel.coloringMenuItem.isSelected()); 
     }
     
-    // public void setTable(DataTable d) {
-        // SparseTableModel model = new SparseTableModel(d.getData(),
-         // d.getColumnNames());
-        // TableSorter sorter = new TableSorter(model, summaryTable.getTableHeader());
-        // summaryTable.setModel(sorter);
-        // summaryScrollPane = new JScrollPane(summaryTable);
-    // }
-    
-    // public ArrayList<Double> buildTable() {
     public void buildTable() {
         // DataTable dt = new DataTable();
         ArrayList<String> headers = new ArrayList<String>();
@@ -103,25 +93,23 @@ public class SummaryPanel extends JPanel{
         dataList = new ArrayList<ArrayList<Object>>();
         int numLeaves = root.getLeaves().size();
         
-        HashMap<Color,Double> counts = new HashMap();
+        HashMap<String,Double> counts = new HashMap();
         
-        for(Color c: colors)
-            counts.put(c,0.0);
+        for(String s: values)
+            counts.put(s,0.0);
         
         for(Node n: root.getLeaves())
         {
-            for(Color c: colors)
+            for(String s: values)
             {
-                if(n.getGroupBranchColor().contains(c))
-                    counts.put(c, counts.get(c)+1);
+                if(n.getGroupBranchValue().contains(s))
+                    counts.put(s, counts.get(s)+1);
             }
         }
         
-        ArrayList<Double> percents = new ArrayList<Double>(counts.values());
-        
-        for (int i = 0; i < colors.size(); i++) {
+        for (int i = 0; i < values.size(); i++) {
           ArrayList<Object> row = new ArrayList<Object>();
-          row.add(Double.parseDouble(String.format("%.2f",100*(percents.get(i)/numLeaves))));
+          row.add(Double.parseDouble(String.format("%.2f",100*(counts.get(values.get(i))/numLeaves))));
           row.add(colors.get(i));
           row.add(values.get(i));
           dataList.add(row);
@@ -130,10 +118,12 @@ public class SummaryPanel extends JPanel{
  		 TableSorter sorter = new TableSorter(model, summaryTable.getTableHeader());
  		 
          summaryTable.setModel(sorter);
- 		 summaryTable.setDefaultRenderer(Color.class, new ColorRenderer(true));
+ 		 summaryTable.getColumnModel().getColumn(1).setCellRenderer(new ColorRenderer(true));
+ 		 summaryTable.getColumnModel().getColumn(2).setCellRenderer(new TooltipCellRenderer(true));
  		 summaryTable.setSelectionBackground(new Color(255,255,255));
- 		 summaryTable.setSelectionForeground(new Color(0,0,0));      summaryTable.getColumnModel().getColumn(0).setPreferredWidth(40);
-         summaryTable.getColumnModel().getColumn(1).setPreferredWidth(20);
-         summaryTable.getColumnModel().getColumn(2).setPreferredWidth(120);
+ 		 summaryTable.setSelectionForeground(new Color(0,0,0));
+ 		 summaryTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+         summaryTable.getColumnModel().getColumn(1).setPreferredWidth(15);
+         // summaryTable.getColumnModel().getColumn(2).setPreferredWidth(500);
     }
 }

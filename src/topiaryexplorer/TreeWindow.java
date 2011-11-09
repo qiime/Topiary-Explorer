@@ -445,8 +445,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	/**
     * Loads a new tree from the selected file
     */
-	public void loadTree(FileContents inFile) {
-	    this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+	public boolean loadTree(FileContents inFile) {
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	    treeEditToolbar.setStatus("Loading tree...");
 	     if (inFile == null) {
 	     	 try {
@@ -471,12 +471,18 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              frame.treeFile = inFile;
              
              treeHolder.syncScrollbarsWithTree();
+             treeEditToolbar.setStatus("Done loading tree.");
+             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+             return true;
          }
-         treeEditToolbar.setStatus("Done loading tree.");
-         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+         else
+         {
+             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+             return false;
+         }
     }
     
-    public void loadTree() {
+    public boolean loadTree() {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         treeEditToolbar.setStatus("Loading tree...");
         FileContents inFile = null;
@@ -500,9 +506,15 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
               frame.treeFile = inFile;
               
               treeHolder.syncScrollbarsWithTree();
+              treeEditToolbar.setStatus("Done drawing tree.");
+              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+              return true;
           }
-          treeEditToolbar.setStatus("Done drawing tree.");
-          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+          else
+          {
+              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+              return false;
+          }
     }
     
     public void loadTree(String treeString) {
@@ -778,19 +790,26 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      HashMap row = frame.otuSampleMap.getRow(rowIndex);
                      n.clearBranchColor();
                     //for each non-zero column value in the mapping(starting after the ID column)
-                     for (Object i : row.keySet()) {
-                         Object w = row.get(i);
+                     for (Object i : row.keySet()) //for all samples
+                     {
+                         Object w = row.get(i); // get the OTU count
                          //if it's not an Integer, skip it
                          if (!(w instanceof Integer)) continue;
                          Integer weight = (Integer)w;
-                         if (weight == 0) continue;
+                         if (weight == 0) continue; // this sample doesn't contain this OTU
                          
                          String sampleID = frame.otuSampleMap.getColumnName(((Number)i).intValue());
+                         if(sampleID.equals("OTU ID"))
+                            continue;
                          
                          //find the row that has this sampleID                         
                          int sampleRowIndex = frame.sampleMetadata.getRowNames().indexOf(sampleID);
                          
+                         // this sample is not in the metadata but contains the current OTU, it will not be colored
                          if (sampleRowIndex == -1) {
+                             // System.out.println(sampleID);
+                             n.addBranchColor(new Color(0),  n.getBranchLength());
+                             n.addBranchValue("Samples without metadata");
                             continue;
                          }
                          
@@ -798,8 +817,15 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          value = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.branchColorPanel.getColorColumnIndex());                                                          
                          if (value == null) continue;
                          // n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), weight);
-                         n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), 1.0);
+                         n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), n.getBranchLength());
+                         // n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), 1.0);
                          n.addBranchValue(value);
+                     }
+                     // no samples contain this OTU
+                     if(n.getGroupBranchColor().size() == 0)
+                     {
+                         n.addBranchColor(new Color(0),  n.getBranchLength());
+                         n.addBranchValue("Uncolored");
                      }
              }
 
@@ -1205,7 +1231,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             //reset the colorKeyTable
 /*            ((ColorTableModel)((TableSorter)frame.branchColorPanel.getColorKeyTable().getModel()).getTableModel()).clearTable();*/
 /*            frame.branchColorPanel.getColorKeyTable().repaint();*/
-            treeEditToolbar.summaryPanel.showPanel(false);
+            // treeEditToolbar.summaryPanel.showPanel(false);
 
             //reset the node colors
             for (Node n : tree.getTree().getLeaves()) {

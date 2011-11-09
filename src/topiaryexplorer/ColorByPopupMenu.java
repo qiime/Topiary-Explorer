@@ -65,7 +65,7 @@ class ColorByPopupMenu extends JPopupMenu{
                       {
                           ((TreeWindow)parent).colorBranchesByValue(value);
                           ((TreeWindow)parent).treeEditToolbar.branchEditPanel.coloringMenuItem.setSelected(false);
-                          ((TreeWindow)parent).treeEditToolbar.summaryPanel.showPanel(true);
+                          // ((TreeWindow)parent).treeEditToolbar.summaryPanel.showPanel(true);
                           ((TreeWindow)parent).tree.setColorBranches(true);
                           ((TreeWindow)parent).treeEditToolbar.branchEditPanel.majorityColoringMenuItem.setEnabled(true);
                       }
@@ -107,7 +107,7 @@ class ColorByPopupMenu extends JPopupMenu{
                              ((TreeWindow)parent).treeEditToolbar.branchEditPanel.coloringMenuItem.setSelected(false);
                              ((TreeWindow)parent).tree.setColorBranches(true);
                              ((TreeWindow)parent).treeEditToolbar.branchEditPanel.coloringMenuItem.setEnabled(true);
-                             ((TreeWindow)parent).treeEditToolbar.summaryPanel.showPanel(true);
+                             // ((TreeWindow)parent).treeEditToolbar.summaryPanel.showPanel(true);
                              ((TreeWindow)parent).treeEditToolbar.branchEditPanel.majorityColoringMenuItem.setEnabled(true);
                          }
                        else if(elementType == 1)

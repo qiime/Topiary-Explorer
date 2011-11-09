@@ -336,11 +336,14 @@ public class MainFrame extends JFrame {
      public void newTreeWindow() {
          setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
          TreeWindow tempTreeWindow = new TreeWindow(this);
-         tempTreeWindow.loadTree();
-         treeWindows.add(tempTreeWindow);
-         tempTreeWindow.setTitle("Tree "+treeWindows.size());
-         resetOtuMenus();
-         resetSampleMenus();
+         boolean success = tempTreeWindow.loadTree();
+         if(success)
+         {
+             treeWindows.add(tempTreeWindow);
+             tempTreeWindow.setTitle("Tree "+treeWindows.size());
+             resetOtuMenus();
+             resetSampleMenus();
+         }
          setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
@@ -385,11 +388,14 @@ public class MainFrame extends JFrame {
       public void newTreeWindow(FileContents treeFile) {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             TreeWindow tempTreeWindow = new TreeWindow(this);
-            tempTreeWindow.loadTree(treeFile);
-            treeWindows.add(tempTreeWindow);
-            tempTreeWindow.setTitle("Tree "+treeWindows.size());
-            resetOtuMenus();
-            resetSampleMenus();
+            boolean success = tempTreeWindow.loadTree(treeFile);
+            if(success)
+            {
+                treeWindows.add(tempTreeWindow);
+                tempTreeWindow.setTitle("Tree "+treeWindows.size());
+                resetOtuMenus();
+                resetSampleMenus();
+            }
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
         
@@ -466,6 +472,8 @@ public class MainFrame extends JFrame {
          otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
          dataPane.setSelectedIndex(2);
          currTable = otuSampleMap;
+         // recolorBranches();
+         // recolorLabels();
     }
     
     public void setOtuSampleMap(InputStream data) {

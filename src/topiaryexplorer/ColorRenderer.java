@@ -78,8 +78,17 @@ public class ColorRenderer extends JLabel
         }
 
         setToolTipText("RGB value: " + newColor.getRed() + ", "
-                                     + newColor.getGreen() + ", "
-                                     + newColor.getBlue());
+                                        + newColor.getGreen() + ", "
+                                        + newColor.getBlue());
+        // setToolTipText(color.toString());
         return this;
     }
+    
+    // public Component getTableCellRendererComponent(
+    //                         JTable table, String s,
+    //                         boolean isSelected, boolean hasFocus,
+    //                         int row, int column) {
+    //     setToolTipText(s);
+    //     return this;
+    // }
 }
