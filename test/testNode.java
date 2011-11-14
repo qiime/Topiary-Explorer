@@ -25,20 +25,26 @@ public class testNode extends TestCase {
     "Bacteria; Proteobacteria; Gammaproteobacteria; Moraxellaceae",
     "Bacteria; Firmicutes; Alicyclobacillaceae; Alicyclobacillus; Bacillales",
     "Bacteria; Actinobacteria; Actinobacteridae"));
-    private String consensusLineage = "Bacteria;Actinobacteria;Actinobacteridae;";
+    private String consensusLineage100 = "Actinobacteria[100%];Actinobacteridae[100%];";
    
    public testNode(String name) {
        super(name);
    }
  
-   public void testGetConsensusLineage() {
+   public void testGetConsensusLineage100() {
        for(Node n: tree.nodes)
             n.setLineage(lineages.remove(0));
+        for(Node n: tree.nodes)
+            n.setConsensusLineage(n.getConsensusLineageF(1));
+        tree.setConsensusLineage(tree.getConsensusLineageF(1));
        String test = tree.getConsensusLineage();
-       assertEquals(consensusLineage,test);
+       assertEquals(consensusLineage100,test);
    }
    
    public void testGetNumberOfLeaves() {
+       for(Node n: tree.getNodes())
+            n.setNumberOfLeaves(n.getNumberOfLeavesF());
+       tree.setNumberOfLeaves(tree.getNumberOfLeavesF());
        int test = tree.getNumberOfLeaves();
        assertEquals(leaves.size(), test);
    }
@@ -60,6 +66,9 @@ public class testNode extends TestCase {
    }
    
    public void testDepth() {
+       for(Node n: tree.getNodes())
+            n.setDepth(n.depthF());
+        tree.setDepth(tree.depthF());
        double test = tree.depth();
        assertEquals(2.2999999821186066, test);
    }
@@ -76,6 +85,6 @@ public class testNode extends TestCase {
    
    public void testGetLongestLabel() {
        String test = tree.getLongestLabel();
-       assertEquals("",test);
+       assertEquals("a",test);
    }
 }

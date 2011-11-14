@@ -100,8 +100,6 @@ public class testTopiaryFunctions extends TestCase {
    		assertTrue(TopiaryFunctions.objectify("5") instanceof Integer);
    		// Test floating point number
    		assertTrue(TopiaryFunctions.objectify("5.5") instanceof Double);
-   		// Test null
-   		assertNull(TopiaryFunctions.objectify("NA"));
    		// Test other thing
    		assertTrue(TopiaryFunctions.objectify("qwq23zxadzf.asx") instanceof String);
    		

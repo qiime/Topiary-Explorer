@@ -311,6 +311,7 @@ public class PruneTreeDialog extends JFrame{
 	        
 	    }
 	    treeWindow.tree.redraw();
+	    treeWindow.treeEditToolbar.summaryPanel.updateTable();
 	    this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	    this.dispose();
 	}

@@ -84,6 +84,10 @@ public class SummaryPanel extends JPanel{
         // summaryScrollPane.setVisible(!frame.treeEditToolbar.branchEditPanel.coloringMenuItem.isSelected()); 
     }
     
+    public void updateTable() {
+        treeColored();
+    }
+    
     public void buildTable() {
         // DataTable dt = new DataTable();
         ArrayList<String> headers = new ArrayList<String>();

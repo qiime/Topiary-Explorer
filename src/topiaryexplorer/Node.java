@@ -201,29 +201,36 @@ public class Node implements Comparable{
   }
   
   public void prune(double total, double perc) {
+      // if branch length is larger than val to prune by, return
       if(getBranchLength()/total > perc)
         return;
       
       if(parent == null)
         return;
-        
+      
+      // otherwise prune it
       parent.setName(parent.getName() +","+ this.name);
       parent.nodes.remove(this);
   }
   
-  public void prune() {          
+  public void prune() {       
+      // more than one value in prune vals, then it must also
+      // contain values that didn't match, so it should not be
+      // pruned
       if(pruneVals.size() > 1)
       {
         toPrune = false;
         pruneVals = new HashSet();
       }
-          
+        
+        // otherwise, prune this node
         if(toPrune)
         {
             parent.setName(parent.getName() +","+ this.name);
             parent.nodes.remove(this);
         }
-    
+        
+        // also prune all of this nodes' children recursively
         ArrayList<Node> children = new ArrayList<Node>(nodes);
         for(Node c : children)
           c.prune();
@@ -233,28 +240,35 @@ public class Node implements Comparable{
       if(parent == null)
         return;
         
+      // set this node to be pruned
       toPrune = p;
+      // check all siblings
       for(Node s : parent.nodes)
       {
           if(!s.toPrune)
             return;
       }
+      // if all siblings were pruned, prune parent
       parent.prune(p);
   }
   
   public void prune(boolean p, Object k, Object v) {
         if(parent == null)
           return;
-        
+        // if this node contains values that were not set to prune
+        // then pruneVals will contain different values
         pruneVals.add(v.toString());
         pruneVals.add(k.toString());
         
+        // set this node to be pruned
         toPrune = p;
+        // check siblings
         for(Node s : parent.nodes)
         {
             if(!s.toPrune)
               return;
         }
+        // if all siblings were pruned, prune parent
         parent.prune(p);
     }
   
