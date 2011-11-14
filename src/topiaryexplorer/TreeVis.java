@@ -24,7 +24,7 @@ public class TreeVis extends PApplet {
     private double TREEMARGIN = 5;
 
     private final int SELECTED_COLOR = 0xff66CCFF;
-    private final int HIGHLIGHTED_COLOR = 0xffFF66FF;
+    private final int HIGHLIGHTED_COLOR = 0xffFF0000;
     private final int HOVER_COLOR = 0xffFFFF00;
     
     private Color backgroundColor = new Color(255,255,255);
@@ -493,7 +493,7 @@ public class TreeVis extends PApplet {
         selectYStart = 0;
         selectXEnd = 0;
         selectYEnd = 0;
-        hilightedNodes = new java.util.HashSet();
+        // hilightedNodes = new java.util.HashSet();
         selectPoly = null;
     }
 
@@ -842,7 +842,7 @@ public class TreeVis extends PApplet {
 
       double minX = nodeX;
       double maxX = minX+5;
-      double minY = nodeY-2;
+      double minY = nodeY-5;
       double maxY = minY+5;
       //if node is collapsed, whole wedge is viable
       if(tree.isCollapsed())
@@ -1213,18 +1213,25 @@ public class TreeVis extends PApplet {
       }
      
      double maxX =  drawX + (width*nodeFont.size);
-     double minY = drawY;// - (nodeFont.descent()*nodeFont.size);
-     double maxY = drawY + ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
-     
-     
+     double maxY = ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
+     double minY = drawY - maxY;// - (nodeFont.descent()*nodeFont.size);
       
       if (selected || hilighted) {
         int sc;
-        if (selected) { sc = SELECTED_COLOR; } else { sc = HIGHLIGHTED_COLOR;}
-        canvas.fill(sc, 64);
-        canvas.stroke(sc);
-        canvas.rect((float)(drawX+offsetbias), (float)minY-5, (float)(maxX-drawX), (float)(maxY-minY)-5);
-        canvas.noTint();
+        if (selected) { sc = SELECTED_COLOR; 
+            canvas.fill(sc, 64);
+            canvas.stroke(sc);
+            // canvas.rect((float)(drawX+offsetbias), (float)minY-5, (float)(maxX-drawX), (float)(maxY-minY)-3);
+            canvas.rect((float)(drawX+offsetbias), (float)minY, (float)(maxX-drawX), (float)maxY);
+            canvas.noTint();
+            }
+            if(hilighted){ 
+            sc = HIGHLIGHTED_COLOR;
+            canvas.stroke(sc);
+            canvas.strokeWeight((int)yscale);
+            canvas.line(getWidth()-10,drawY,getWidth(),drawY);
+            }
+        
       }     
      
      //node.isLeaf() &&
@@ -1253,9 +1260,10 @@ public class TreeVis extends PApplet {
         canvas.strokeWeight(1);
         canvas.stroke(255,0,0);
         maxX =  drawX + (width*nodeFont.size);
-        minY = drawY;// - (nodeFont.descent()*nodeFont.size);
-        maxY = drawY + ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
-        canvas.rect((float)(drawX+offsetbias), (float)minY-5, (float)(maxX-drawX), (float)(maxY-minY)-5);
+        maxY = ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
+        minY = drawY - maxY;// - (nodeFont.descent()*nodeFont.size);
+        // maxY = ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
+        canvas.rect((float)(drawX+offsetbias), (float)minY, (float)(maxX-drawX), (float)maxY);
 
         String status = "";
            // String prefix = "";
@@ -1275,6 +1283,7 @@ public class TreeVis extends PApplet {
             for (int i = 0; i < status.length(); i++) {
                 width += tipFont.width(status.charAt(i));
             }
+            
             maxX = (width*tipFont.size);
             drawX =  getWidth() - (float)(width*tipFont.size);
             drawY = getHeight();// - ((tipFont.ascent()+tipFont.descent())*tipFont.size);

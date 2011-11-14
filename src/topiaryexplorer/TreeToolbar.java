@@ -103,12 +103,12 @@ public class TreeToolbar extends JToolBar {
 			private void doSearch() {
 				String str = search.getText().trim().toUpperCase();
 				ArrayList<Node> nodes = frame.tree.getTree().getNodes();
-				boolean first = true;
+                // boolean first = true;
 				for (Node n : nodes) {
-					if (str.length() > 0 && n.getLabel().toUpperCase().indexOf(str) != -1) {
-						if (first) {
-							frame.tree.setSelectedNode(n);
-							first = false;
+					if (str.length() > 0 && (n.getLabel().toUpperCase().indexOf(str) != -1 || n.getLabel().toUpperCase() == str)) {
+						if (n.getLabel().toUpperCase() == str) {
+                            frame.tree.setSelectedNode(n);
+                            // first = false;
 						}
 						frame.tree.getHilightedNodes().add(n);
 					} else {
