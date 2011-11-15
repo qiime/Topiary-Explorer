@@ -209,7 +209,7 @@ public class Node implements Comparable{
         return;
       
       // otherwise prune it
-      parent.setName(parent.getName() +","+ this.name);
+      parent.setName(parent.getName() +"_"+ this.name);
       parent.nodes.remove(this);
   }
   
@@ -226,7 +226,7 @@ public class Node implements Comparable{
         // otherwise, prune this node
         if(toPrune)
         {
-            parent.setName(parent.getName() +","+ this.name);
+            parent.setName(parent.getName() +"_"+ this.name);
             parent.nodes.remove(this);
         }
         
