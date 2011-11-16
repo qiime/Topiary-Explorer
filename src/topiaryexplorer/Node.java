@@ -12,6 +12,7 @@ public class Node implements Comparable{
   public ArrayList<Node> nodes = new ArrayList(); //children
   private ArrayList<Node> anscestors = new ArrayList();
   private HashSet pruneVals = new HashSet();
+  public ArrayList<Boolean> pruneStates = new ArrayList<Boolean>();
 
   private String label = "";
   private String name = "";
@@ -209,67 +210,161 @@ public class Node implements Comparable{
         return;
       
       // otherwise prune it
-      parent.setName(parent.getName() +"_"+ this.name);
+      // parent.setName(parent.getName() +"_"+ this.name);
+      toPrune = true;
       parent.nodes.remove(this);
   }
   
-  public void prune() {       
-      // more than one value in prune vals, then it must also
-      // contain values that didn't match, so it should not be
-      // pruned
-      if(pruneVals.size() > 1)
+  public void prune() {
+      ArrayList<Node> nodes_to_remove = new ArrayList<Node>();
+      
+      for(Node node : getNodes())
       {
-        toPrune = false;
-        pruneVals = new HashSet();
+          boolean prune = node.toPrune;
+          if(node.pruneStates.size() > 0)
+          {
+              // System.out.println("name-"+node.getName());
+          // prune = true;
+            for(boolean p : node.pruneStates)
+                {
+                    // System.out.println("state-"+p);
+                    prune = prune && p;
+                }
+              // System.out.println("final state-"+prune);
+          }
+          if(prune)
+            node.parent.nodes.remove(node);
+          
+          node.toPrune = prune;
+          node.pruneStates = new ArrayList<Boolean>();
       }
-        
+      
+      for(Node node : getNodes())
+      {
+        // if(node.pruneVals.size() > 1)
+          // continue;
+        // else if(node.pruneVals.size() == 1)
+            
+        if(node.parent == null)
+          continue;
+        // if(node.nodes.size() == 1)
+            // node.toPrune = true;
+        if(node.toPrune && node.nodes.size() == 1)
+          nodes_to_remove.add(node);
+      }
+      
+      for(Node node : nodes_to_remove)
+      {
+          Node curr_parent = node.parent;
+          Node child = node.nodes.get(0);
+          curr_parent.nodes.remove(node);
+          node.parent = null;
+          curr_parent.nodes = new ArrayList<Node>();
+          curr_parent.nodes.add(child);
+          child.parent = curr_parent;
+          child.setBranchLength(child.getBranchLength()+node.getBranchLength());
+      }
+      
+      for(Node node : getNodes())
+      {
+          if(node.nodes.size() == 1)
+          {
+              node.setBranchLength(node.getBranchLength()+node.nodes.get(0).getBranchLength());
+              node.setName(node.nodes.get(0).getName());
+              node.setLabel(node.nodes.get(0).getLabel());
+              node.nodes = node.nodes.get(0).nodes;
+          }
+      }
         // otherwise, prune this node
-        if(toPrune)
-        {
-            parent.setName(parent.getName() +"_"+ this.name);
-            parent.nodes.remove(this);
-        }
-        
-        // also prune all of this nodes' children recursively
-        ArrayList<Node> children = new ArrayList<Node>(nodes);
-        for(Node c : children)
-          c.prune();
+        // if(toPrune)
+        // {
+        //     parent.setName(parent.getName() +"_"+ this.name);
+        //     parent.nodes.remove(this);
+        //     return;
+        // }
+        // 
+        // if(parent.nodes.size() == 1)
+        // {
+        //     parent.setBranchLength(parent.getBranchLength()+nodes.get(0).getBranchLength());
+        //     parent.setName(nodes.get(0).getName());
+        //     parent.setLabel(nodes.get(0).getLabel());
+        //     parent.nodes = new ArrayList<Node>();
+        //     return;
+        // }
+        // 
+        // // also prune all of this nodes' children recursively
+        // ArrayList<Node> children = new ArrayList<Node>(nodes);
+        // for(Node c : children)
+        //   c.prune();
     }
   
-  public void prune(boolean p) {
-      if(parent == null)
-        return;
-        
-      // set this node to be pruned
-      toPrune = p;
+  public boolean remove(Node n) {
+      String target = "";
+      if(n instanceof Node)
+        target = n.getName();
+      for(int i = 0; i < nodes.size(); i++)
+        if(nodes.get(i).getName() == target)
+        {
+            removeNode(nodes.get(i));
+            return true;
+        }
+      return false;
+  }
+  
+  public boolean removeNode(Node n) {
+      int to_delete = -1;
+     for(int i = 0; i < nodes.size(); i++)
+        if(nodes.get(i) == n)
+        {
+            to_delete = i;
+            break;
+        }
+    if(to_delete == -1)
+        return false;
+    else
+    {
+        nodes.remove(to_delete);
+        return true;
+    }
+  }
+  
+  public void prune(boolean b) {        
+      // prune this node
+      toPrune = b;
+      pruneStates.add(b);
+      // parent.nodes.remove(this);
+      // parent.setName(parent.getName()+"_"+this.getName());
+      // parent = null;
+      
       // check all siblings
-      for(Node s : parent.nodes)
-      {
-          if(!s.toPrune)
-            return;
-      }
-      // if all siblings were pruned, prune parent
-      parent.prune(p);
+      // for(Node s : parent.nodes)
+      //       {
+      //           if(!s.toPrune)
+      //             return;
+      //       }
+      //       // if all siblings were pruned, prune parent
+      //       parent.prune(p);
   }
   
   public void prune(boolean p, Object k, Object v) {
-        if(parent == null)
-          return;
+        // if(parent == null)
+          // return;
         // if this node contains values that were not set to prune
         // then pruneVals will contain different values
-        pruneVals.add(v.toString());
-        pruneVals.add(k.toString());
-        
-        // set this node to be pruned
+        // pruneVals.add(v.toString());
+        // pruneVals.add(k.toString());
         toPrune = p;
+        pruneStates.add(p);
+        // set this node to be pruned
+        // toPrune = p;
         // check siblings
-        for(Node s : parent.nodes)
-        {
-            if(!s.toPrune)
-              return;
-        }
+        // for(Node s : parent.nodes)
+        // {
+            // if(!s.toPrune)
+              // return;
+        // }
         // if all siblings were pruned, prune parent
-        parent.prune(p);
+        // parent.prune(p);
     }
   
   public void setLocked(boolean l) { 

@@ -188,9 +188,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                           JOptionPane.YES_NO_OPTION);
                           if(del == JOptionPane.YES_OPTION)
                           {
-                            clickedNode.getParent().nodes.remove(clickedNode);
+                            clickedNode.prune(true);
+                            tree.getTree().prune();
                           }
                         tree.setTree(tree.getTree());
+                        setTreeVals(tree.getTree());
                         tree.redraw();
                   }
               });
@@ -401,6 +403,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             n.setNumberOfLeaves(n.getLeaves().size());
         }
         treeEditToolbar.summaryPanel.setTree(root);
+        treeEditToolbar.summaryPanel.updateTable();
     }
 	
 	public void ladderize() {
@@ -574,9 +577,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          // send cutoff percentage of branch length to prune method
          for(Node n: tree.getTree().getLeaves())
              n.prune(total, cutoff);
-         
-         setTreeVals(tree.getTree());
+         tree.getTree().prune();
          tree.setTree(tree.getTree());
+         setTreeVals(tree.getTree());
      }
      
      public void pruneTreeByNumNodes(int cutoff) {
@@ -591,8 +594,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                  n.prune(total, perc);
 
                perc += .01;
-               setTreeVals(tree.getTree());
+               tree.getTree().prune();
                tree.setTree(tree.getTree());
+               setTreeVals(tree.getTree());
          }
      }
 	
@@ -617,6 +621,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                }
        }
        tree.getTree().prune();
+       setTreeVals(tree.getTree());
        tree.redraw();
 	}
 	
@@ -639,7 +644,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                 //for each non-zero column value (starting after the ID column)
                  for (Object i : row.keySet()) {
                      Object v = row.get(i);
-                     //if it's not an Integer, skip it
+                     // if it's not an Integer, skip it
                      if (!(v instanceof Integer)) continue;
                      Integer weight = (Integer)v;
                      if (weight == 0) continue;
@@ -662,12 +667,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      {
                          // add it to prune vals
                          n.getParent().clearBranchColor();
-                         n.prune(true, value, value);
+                         n.prune(true);
                      }
                      else
                      {
                          // else add that this val shouldnt be pruned
-                         n.prune(false, frame.sampleMetadata.getValueAt(sampleRowIndex, colIndex), value);
+                         n.prune(false);
                      }
                  }
         }
