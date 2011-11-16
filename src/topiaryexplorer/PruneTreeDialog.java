@@ -38,6 +38,7 @@ public class PruneTreeDialog extends JFrame{
     DataTable data = null;
     JComboBox categoryComboBox = new JComboBox();
     JList valuesList = new JList();
+    DefaultListModel valuesListModel = new DefaultListModel();
     JScrollPane valuesPane = new JScrollPane();
     
     NumberFormat lformat;// = new IntegerFormat();
@@ -51,6 +52,9 @@ public class PruneTreeDialog extends JFrame{
     JLabel nodeNumLabel = new JLabel("nodes");
     
     JButton okButton = new JButton("Prune");
+    
+    JLabel searchLabel = new JLabel("Filter:");
+    JTextField searchField = new JTextField();
     
     boolean sampleMeta = false;
     boolean otuMeta = false;
@@ -67,7 +71,7 @@ public class PruneTreeDialog extends JFrame{
         treeWindow = _treeWindow;
         otuMeta = _otuMeta;
         sampleMeta = _sampleMeta;
-        this.setSize(new Dimension(310,300));
+        this.setSize(new Dimension(310,400));
         
         GroupLayout layout = new GroupLayout(getContentPane());
         this.setLayout(layout);
@@ -136,6 +140,36 @@ public class PruneTreeDialog extends JFrame{
         nodeNumField.setColumns(5);
         nodeNumField.setValue(new Integer(30000));
         
+        searchField.setColumns(15);
+        
+        searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+			public void changedUpdate(javax.swing.event.DocumentEvent evt) {
+				doSearch();
+			}
+
+			public void insertUpdate(javax.swing.event.DocumentEvent evt) {
+				doSearch();
+			}
+
+			public void removeUpdate(javax.swing.event.DocumentEvent evt) {
+				doSearch();
+			}
+
+			private void doSearch() {
+				String str = searchField.getText().trim().toUpperCase();
+				DefaultListModel model = new DefaultListModel();
+                // ArrayList<String> values = valuesList;
+                // boolean first = true;
+				for (int i = 0; i < valuesListModel.size(); i++) {
+				    Object o = valuesListModel.get(i);
+				    	
+					if (str.length() == 0 || o.toString().toUpperCase().indexOf(str) != -1 || o.toString().toUpperCase() == str) 
+						model.addElement(o);
+				}
+				valuesList.setModel(model);
+			}
+		});
+        
         togglePanes();
         
         okButton.addActionListener(new ActionListener() {
@@ -168,6 +202,11 @@ public class PruneTreeDialog extends JFrame{
                     .addGroup(layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addComponent(searchLabel)
+                                // .addGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(searchField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                             .addComponent(valuesPane, GroupLayout.Alignment.LEADING)
                             .addComponent(categoryComboBox, GroupLayout.Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -193,6 +232,9 @@ public class PruneTreeDialog extends JFrame{
                 .addComponent(categoryComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 // .addGap(LayoutStyle.UNRELATED)
                 .addComponent(valuesPane, GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(searchField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(searchLabel))
                 // .addGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -243,11 +285,11 @@ public class PruneTreeDialog extends JFrame{
     
     public void categorySelected() {
         String category = (String)categoryComboBox.getSelectedItem();
-        DefaultListModel model = new DefaultListModel();
+        valuesListModel = new DefaultListModel();
         HashSet set = new HashSet(data.getColumn(data.getColumnIndex(category)));
         for(Object o : set)
-            model.addElement(o);
-        valuesList.setModel(model);
+            valuesListModel.addElement(o);
+        valuesList.setModel(valuesListModel);
     }
 	
 	public void pruneTree() {
@@ -277,6 +319,7 @@ public class PruneTreeDialog extends JFrame{
                     (String)categoryComboBox.getSelectedItem(), o);
             }
             
+            treeWindow.tree.getTree().prune();
             treeWindow.setTreeVals(treeWindow.tree.getTree());
             treeWindow.tree.setTree(treeWindow.tree.getTree());
             treeWindow.tree.getTree().updateBranchColorFromChildren();
