@@ -26,10 +26,11 @@ public final class TreeViewPanel extends JPanel {
     JToggleButton selectButton = new JToggleButton("Select Mode");
     JButton recenterButton = new JButton("Recenter");
     JButton ladderizeButton = new JButton("Ladderize");
+    JButton subtreeButton = new JButton("View subtree...");
     JButton pruneButton = new JButton("Prune Tree");
     JButton showHiddenButton = new JButton("Show Hidden Nodes");
-    JButton setLineageButton = new JButton("Set Consensus Lineage");
-    JButton collapseByButton = new JButton("Collapse By...");
+    JButton setLineageButton = new JButton("Set Consensus Lineage...");
+    JButton collapseByButton = new JButton("Collapse By");
     JPopupMenu collapseByMenu = new JPopupMenu();
     JPanel buttonPanel = new JPanel();
     
@@ -69,7 +70,7 @@ public final class TreeViewPanel extends JPanel {
         
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
-        buttonPanel.setLayout(new GridLayout(6,1));
+        buttonPanel.setLayout(new GridLayout(7,1));
         
         selectButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -91,6 +92,18 @@ public final class TreeViewPanel extends JPanel {
             }
         });
         buttonPanel.add(ladderizeButton);
+        
+        subtreeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                 viewSubtree();
+                }
+                catch(IOException ex) {
+                    System.out.println("Could not open icons");
+                }
+            }
+        });
+        buttonPanel.add(subtreeButton);
         
         pruneButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -275,6 +288,10 @@ public final class TreeViewPanel extends JPanel {
         add(mirrorCP);
     }
 	// }}}
+	
+	public void viewSubtree() throws IOException{
+	    ViewSubtreeDialog v = new ViewSubtreeDialog(frame);
+	}
 	
 	public void pruneTree() {
 	    PruneTreeDialog d = new PruneTreeDialog(frame.frame, frame, 

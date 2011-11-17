@@ -20,6 +20,7 @@
 			<fileset dir="build/classes" />
 			<fileset dir="src/images/">
 	            <include name="**/*.gif" />
+				<include name="**/*.png" />
 	        </fileset>
 			<manifest>
 				<attribute name="Main-Class" value="topiaryexplorer.TopiaryExplorer" />
