@@ -158,7 +158,7 @@ public class ViewSubtreeDialog extends JDialog {
                 break;
         }
         
-        frame.newTreeWindow(TopiaryFunctions.createNewickStringFromTree(root));
+        frame.newTreeWindow(TopiaryFunctions.createNewickStringFromTree(root), "Subtree-"+matchedNode.getLabel());
         this.dispose();
     }
     

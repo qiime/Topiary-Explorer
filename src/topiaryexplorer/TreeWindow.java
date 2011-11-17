@@ -174,7 +174,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             item = new JMenuItem("View Subtree in new Window");
               item.addActionListener(new ActionListener() {
                   public void actionPerformed(ActionEvent arg0) {
-                      frame.newTreeWindow(TopiaryFunctions.createNewickStringFromTree(clickedNode));
+                      frame.newTreeWindow(TopiaryFunctions.createNewickStringFromTree(clickedNode),"Subtree-"+clickedNode.getLabel());
                   }
               });
               treePopupMenu.add(item);
@@ -420,7 +420,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     if (inFile == null) {
 	     	 try {
 	             inFile = frame.fos.openFileDialog(null,null);
-	         } catch (java.io.IOException e) {}
+	         } catch (IOException e) {
+	             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+	         }
 	     }
          if (inFile != null) {
              Node root = TopiaryFunctions.createTreeFromNewickFile(inFile);
@@ -445,12 +447,15 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          }
     }
     
-    public boolean loadTree() {
+    public String loadTree() {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         FileContents inFile = null;
         try {
              inFile = frame.fos.openFileDialog(null,null);
-         } catch (java.io.IOException e) {}
+         } catch (IOException e) {
+             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+         }
+         
          if (inFile != null) {
               Node root = TopiaryFunctions.createTreeFromNewickFile(inFile);
                setTreeVals(root);
@@ -465,12 +470,18 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
               frame.treeFile = inFile;
               
               treeHolder.syncScrollbarsWithTree();
-              return true;
+              String treeName = "";
+              try {
+                  treeName = inFile.getName();
+              }
+              catch(IOException e) {
+              }
+              return treeName;
           }
           else
           {
               this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-              return false;
+              return null;
           }
     }
     

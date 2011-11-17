@@ -336,23 +336,27 @@ public class MainFrame extends JFrame {
      public void newTreeWindow() {
          setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
          TreeWindow tempTreeWindow = new TreeWindow(this);
-         boolean success = tempTreeWindow.loadTree();
-         if(success)
+         String treeName = tempTreeWindow.loadTree();
+         if(treeName != null)
          {
              treeWindows.add(tempTreeWindow);
-             tempTreeWindow.setTitle("Tree "+treeWindows.size());
+             tempTreeWindow.setTitle(treeName);
              resetOtuMenus();
              resetSampleMenus();
          }
          setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
-     public void newTreeWindow(String treeString) {
+     public void newTreeWindow(String treeString, String name) {
           setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
           TreeWindow tempTreeWindow = new TreeWindow(this);
           tempTreeWindow.loadTree(treeString);
           treeWindows.add(tempTreeWindow);
-          tempTreeWindow.setTitle("Tree "+treeWindows.size());
+          if(name != null)
+                tempTreeWindow.setTitle(name);
+          else
+                tempTreeWindow.setTitle("Tree "+treeWindows.size());
+                
           resetOtuMenus();
           resetSampleMenus();
           
@@ -366,13 +370,16 @@ public class MainFrame extends JFrame {
           setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       }
       
-      public void newTreeWindow(String treeString, Boolean t) {
+      public void newTreeWindow(String treeString, Boolean t, String name) {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             TreeWindow tempTreeWindow = new TreeWindow(this);
             tempTreeWindow.loadTree(treeString);
             treeWindows.add(tempTreeWindow);
             tempTreeWindow.removeColor();
-            tempTreeWindow.setTitle("Tree "+treeWindows.size());
+            if(name != null)
+                tempTreeWindow.setTitle(name);
+            else
+                tempTreeWindow.setTitle("Tree "+treeWindows.size());
             resetOtuMenus();
             resetSampleMenus();
 
@@ -392,7 +399,12 @@ public class MainFrame extends JFrame {
             if(success)
             {
                 treeWindows.add(tempTreeWindow);
-                tempTreeWindow.setTitle("Tree "+treeWindows.size());
+                try{
+                tempTreeWindow.setTitle(treeFile.getName());
+                }
+                catch(IOException e) {
+                    tempTreeWindow.setTitle("Tree "+treeWindows.size());
+                }
                 resetOtuMenus();
                 resetSampleMenus();
             }
@@ -405,7 +417,12 @@ public class MainFrame extends JFrame {
                 tempTreeWindow.loadTree(treeFile);
                 tempTreeWindow.removeColor();
                 treeWindows.add(tempTreeWindow);
-                tempTreeWindow.setTitle("Tree "+treeWindows.size());
+                try{
+                tempTreeWindow.setTitle(treeFile.getName());
+                }
+                catch(IOException e) {
+                    tempTreeWindow.setTitle("Tree "+treeWindows.size());
+                }
                 resetOtuMenus();
                 resetSampleMenus();
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

@@ -472,7 +472,14 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                      // load tree
                      if(data.containsKey("tre")){
                          for(String s : (ArrayList<String>)data.get("tre"))
-                             frame.newTreeWindow(s, true);
+                         {
+                             String name = "";
+                             try {
+                                 name = inFile.getName();
+                             }
+                             catch(IOException e){}
+                             frame.newTreeWindow(s, true, name);
+                         }
                      }
                      if(data.containsKey("pre")){
                           frame.addSchemes(TopiaryFunctions.parsePrefsFile((ArrayList<String>)data.get("pre"), frame.sampleMetadata));
@@ -519,7 +526,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                          // load tree
                          if(data.containsKey("tre")){
                              for(String s : (ArrayList<String>)data.get("tre"))
-                                 frame.newTreeWindow(s, true);
+                                 frame.newTreeWindow(s, true, projectPath);
                          }
                          if(data.containsKey("pre")){
                               frame.addSchemes(TopiaryFunctions.parsePrefsFile((ArrayList<String>)data.get("pre"), frame.sampleMetadata));
@@ -556,7 +563,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                              // load tree
                              if(data.containsKey("tre")){
                                  for(String s : (ArrayList<String>)data.get("tre"))
-                                     frame.newTreeWindow(s, true);
+                                     frame.newTreeWindow(s, true, projectPath);
                               }       
                              if(data.containsKey("pre")){
                                  frame.addSchemes(TopiaryFunctions.parsePrefsFile((ArrayList<String>)data.get("pre"), frame.sampleMetadata));
