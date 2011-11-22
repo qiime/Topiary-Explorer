@@ -414,11 +414,11 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
          } else if (e.getActionCommand().equals("New Project...")) {
            newProject();
          } else if (e.getActionCommand().equals("Open Project...")) {
-                frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                // frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				  frame.resetOtuMenus();
          		  frame.resetSampleMenus();
                   openProject();
-                  frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                  // frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         } else if (e.getActionCommand().equals("Save Project...")) {
                     saveProject();
         } else if (e.getActionCommand().equals("Load Tip Data...")) {

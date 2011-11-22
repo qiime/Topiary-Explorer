@@ -210,6 +210,7 @@ public class ColorPanel extends JPanel{
                      colorKeyTable.repaint();
      			}
 		    }
+ 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
  		}
       }
 

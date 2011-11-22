@@ -337,6 +337,7 @@ public class MainFrame extends JFrame {
          setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
          TreeWindow tempTreeWindow = new TreeWindow(this);
          String treeName = tempTreeWindow.loadTree();
+         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
          if(treeName != null)
          {
              treeWindows.add(tempTreeWindow);
@@ -344,7 +345,6 @@ public class MainFrame extends JFrame {
              resetOtuMenus();
              resetSampleMenus();
          }
-         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
      public void newTreeWindow(String treeString, String name) {

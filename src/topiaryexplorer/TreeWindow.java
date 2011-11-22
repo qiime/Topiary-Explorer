@@ -416,12 +416,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     * Loads a new tree from the selected file
     */
 	public boolean loadTree(FileContents inFile) {
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        // frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	     if (inFile == null) {
 	     	 try {
 	             inFile = frame.fos.openFileDialog(null,null);
 	         } catch (IOException e) {
-	             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                 // frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	         }
 	     }
          if (inFile != null) {
@@ -433,7 +433,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              tree.redraw();
              
              collapseTree();
-             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+             // frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
              this.setVisible(true);
              frame.treeFile = inFile;
              treeHolder.syncScrollbarsWithTree();
@@ -442,18 +442,18 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          }
          else
          {
-             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+             // frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
              return false;
          }
     }
     
     public String loadTree() {
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        // frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         FileContents inFile = null;
         try {
              inFile = frame.fos.openFileDialog(null,null);
          } catch (IOException e) {
-             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+             // frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
          }
          
          if (inFile != null) {
@@ -465,7 +465,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
               tree.redraw();
               collapseTree();
 
-              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+              // frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
               this.setVisible(true);
               frame.treeFile = inFile;
               
@@ -480,13 +480,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
           }
           else
           {
-              this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+              // frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
               return null;
           }
     }
     
     public void loadTree(String treeString) {
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        // frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         tree.noLoop();
         Node root = TopiaryFunctions.createTreeFromNewickString(treeString);
         setTreeVals(root);
@@ -498,7 +498,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         
         this.setVisible(true);
         treeHolder.syncScrollbarsWithTree();
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        // frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
     /**
