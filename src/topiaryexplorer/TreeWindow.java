@@ -691,6 +691,18 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         tree.redraw();
 	}
 	
+	public void recolorBranches() {
+	    if (frame.currTable != null && frame.currTable == frame.otuMetadata) {
+                recolorBranchesByOtu();
+                treeEditToolbar.summaryPanel.treeColored();
+         } else if (frame.currTable != null && frame.currTable == frame.sampleMetadata) {
+                recolorBranchesBySample();
+                treeEditToolbar.summaryPanel.treeColored();
+         } else {
+             //it's null; don't do anything
+         }
+	}
+	
 	 /**
      * Recolors the tree based on selected OTU metadata field
      */
@@ -731,6 +743,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     * Recolors tree by selected sample metadata
     */
     public void recolorBranchesBySample() {
+        boolean weighted = treeEditToolbar.branchEditPanel.weightedColoringMenuItem.isSelected();
         ArrayList<Node> ns = tree.getTree().getLeaves();
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));        
             //loop over each node
@@ -761,6 +774,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          Integer weight = (Integer)w;
                          if (weight == 0) continue; // this sample doesn't contain this OTU
                          
+                         if(!weighted)
+                            weight = 1;
+                         
                          String sampleID = frame.otuSampleMap.getColumnName(((Number)i).intValue());
                          //The sampleID is taken from the columnames of the
                          //sample-tip map and one of the headers is otu id
@@ -786,7 +802,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      // no samples contain this OTU
                      if(n.getGroupBranchColor().size() == 0)
                      {
-                         n.addBranchColor(new Color(0),  n.getBranchLength());
+                         n.addBranchColor(new Color(0),  1);
                          n.addBranchValue("Nodes not found in any sample");
                      }
              }

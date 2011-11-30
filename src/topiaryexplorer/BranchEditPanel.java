@@ -37,6 +37,12 @@ class BranchEditPanel extends JPanel{
     JCheckBox majorityColoringMenuItem = new JCheckBox("Majority coloring",true);
     
     /**
+    * A checkbox indicating whether or not the coloring is weighted by OTU count
+    **/
+    JCheckBox weightedColoringMenuItem = new JCheckBox("Weighted",true);
+    
+    
+    /**
     * A button that triggers menus containing fields that the branches can be colored by.
     **/
     JButton colorBy = new JButton("Color by...");
@@ -68,12 +74,12 @@ class BranchEditPanel extends JPanel{
         colorByMenu = new ColorByPopupMenu(frame.frame, frame, frame.frame.branchColorPanel,0);
         this.setToolTipText("Customize Branches");
 /*        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));*/
-        setLayout(new GridLayout(3,1));
+        setLayout(new GridLayout(4,1));
         
         // coloringMenuItem.setEnabled(false);
         coloringMenuItem.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {                frame.treeEditToolbar.summaryPanel.summaryScrollPane.setVisible(!coloringMenuItem.isSelected());  
-                                      majorityColoringMenuItem.setEnabled(!coloringMenuItem.isSelected());
+                weightedColoringMenuItem.setEnabled(!coloringMenuItem.isSelected()); majorityColoringMenuItem.setEnabled(!coloringMenuItem.isSelected());
                 vis.setColorBranches(!coloringMenuItem.isSelected());
                 vis.redraw();
                 frame.treePopupMenu.getComponent(4).setEnabled(!coloringMenuItem.isSelected());
@@ -81,14 +87,25 @@ class BranchEditPanel extends JPanel{
         });
         add(coloringMenuItem);
         majorityColoringMenuItem.setEnabled(false);
+        majorityColoringMenuItem.setToolTipText("Toggle branch color mode between majority and mixed coloring.");
         majorityColoringMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                    vis.setMajorityColoring(majorityColoringMenuItem.isSelected());
                    vis.getTree().updateBranchColorFromChildren();
-                   frame.frame.recolorBranches();
+                   frame.recolorBranches();
             }
         });
         add(majorityColoringMenuItem);
+        
+        weightedColoringMenuItem.setEnabled(false);
+        weightedColoringMenuItem.setToolTipText("Toggle branch color weighting by OTU count.");
+        weightedColoringMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.recolorBranches();
+                vis.redraw();
+            }
+        });
+        add(weightedColoringMenuItem);
         
         colorBy.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
