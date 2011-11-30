@@ -5,8 +5,10 @@
     <title>TopiaryExplorer</title>
     <vendor>University of Colorado</vendor>
     <description>TopiaryExplorer</description>
-
-    <offline-allowed/>     
+    <homepage href="http://topiaryexplorer.sourceforge.net/"/>
+    <description kind="short">Phylogenetic tree viewing program</description>
+    <icon href="TEIcon.gif"/>    
+    <offline-allowed/> 
 
   </information>
   
