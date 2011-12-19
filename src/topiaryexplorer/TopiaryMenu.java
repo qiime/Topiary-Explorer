@@ -29,7 +29,9 @@ import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.jnlp.*;
 import java.net.*;
-
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.io.FileOutputStream;
 
 /**
  * TopiaryMenu is the main menu bar for TopiaryTool
@@ -587,8 +589,14 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 
     public void saveProject(){
         frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
 		try
 		{
+		    FileContents fc = frame.fss.saveFileDialog(dir_path, new String[]{"tep"}, 
+				new ByteArrayInputStream(b.toByteArray()),null);
+			
+			fc.setMaxLength(1000000000000L);
+			
 		    String s = "";
 			ArrayList<String> lines = new ArrayList<String>();
 			if(frame.treeWindows.size() != 0)
@@ -628,15 +636,14 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     }
                     lines.add(">"+(String)name+":"+(String)o[0]+"\n");
                 }
-		    }
-		    
-		    ByteArrayOutputStream b = new ByteArrayOutputStream();
+		    }		    
 		    
 		    for(int i = 0; i < lines.size(); i++)
-		        b.write(lines.get(i).getBytes());
-			    
-			FileContents fc = frame.fss.saveFileDialog(dir_path, new String[]{"tep"}, 
-				new ByteArrayInputStream(b.toByteArray()),null);
+                // b.write(lines.get(i).getBytes());
+                fc.getOutputStream(false).write(lines.get(i).getBytes());
+                
+                
+
 		}
 		catch(IOException e)
 			{

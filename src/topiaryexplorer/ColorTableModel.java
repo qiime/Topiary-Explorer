@@ -70,10 +70,12 @@ class ColorTableModel extends AbstractTableModel {
     }
 
     public boolean isCellEditable(int row, int col) {
-		if (!(getValueAt(0, col) instanceof Color) && !(getValueAt(0, col) instanceof JCheckBox)) {
-			return false;
-		} else {
+		if (getValueAt(1, col) instanceof Color)  {
 			return true;
+		} else if(getValueAt(1, col) instanceof Boolean){
+			return true;
+		} else {
+		    return false;
 		}
 	}
 

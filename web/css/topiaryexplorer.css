@@ -59,6 +59,7 @@ div.content {
 div.topwrapper {
     float:left;
     margin-left: 10px;
+    width: 98%;
 /*    text-align: center;*/
 }
 
@@ -81,6 +82,7 @@ div.wrapper {
 }
 
 div.bodywrapper {
+/*    background-image: url('../images/tree_bg.png');*/
     width: 100%;
     float:left;
 /*    padding: 5px;*/

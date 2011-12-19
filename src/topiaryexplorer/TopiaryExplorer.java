@@ -45,7 +45,7 @@ public class TopiaryExplorer {
         ((MainFrame)frame).mainMenu.openProject(project);
      }
      
-     public static void main(String[] args) {
+     public static void main(String[] args) {         
          if(args.length > 0)
             createAndShowGUI(args[0]);
          else
