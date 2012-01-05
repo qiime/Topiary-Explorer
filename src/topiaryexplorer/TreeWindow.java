@@ -739,6 +739,39 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
+	public void recolorLabelsByOtu() {
+ 	    this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+ 	    ArrayList<Node> ns = tree.getTree().getLeaves();
+        //loop over each node
+        for (Node n : ns){
+                //get the node's name
+                String nodeName = n.getName();
+                //get the row of the OTU metadata table with this name
+                int rowIndex = frame.otuMetadata.getRowNames().indexOf(nodeName);
+                //node not found in otu metadata
+                if (rowIndex == -1) {
+                    continue;
+                }
+                Object category = frame.otuMetadata.getValueAt(rowIndex, frame.labelColorPanel.getColorColumnIndex());
+                if (category == null) continue;
+                //get the color for this category
+                Color c = (Color)frame.labelColorPanel.getColorMap().get(category);
+                if (c == null) {
+                    JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+                    continue;
+                }
+                //set the node to this color
+                n.clearLabelColor();
+                n.addLabelColor(c, 1.0);
+                n.addLabelValue(category);
+        }
+        tree.getTree().updateLabelColorFromChildren();
+        frame.repaint();
+        tree.redraw();
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+     }
+
+    
     /**
     * Recolors tree by selected sample metadata
     */
@@ -813,38 +846,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
-     	public void recolorLabelsByOtu() {
-     	    this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-     	    ArrayList<Node> ns = tree.getTree().getLeaves();
-            //loop over each node
-            for (Node n : ns){
-                    //get the node's name
-                    String nodeName = n.getName();
-                    //get the row of the OTU metadata table with this name
-                    int rowIndex = frame.otuMetadata.getRowNames().indexOf(nodeName);
-                    //node not found in otu metadata
-                    if (rowIndex == -1) {
-                        continue;
-                    }
-                    Object category = frame.otuMetadata.getValueAt(rowIndex, frame.labelColorPanel.getColorColumnIndex());
-                    if (category == null) continue;
-                    //get the color for this category
-                    Color c = (Color)frame.labelColorPanel.getColorMap().get(category);
-                    if (c == null) {
-                        JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
-                        continue;
-                    }
-                    //set the node to this color
-                    n.clearLabelColor();
-                    n.addLabelColor(c, 1.0);
-                    n.addLabelValue(category);
-            }
-            tree.getTree().updateLabelColorFromChildren();
-            frame.repaint();
-            tree.redraw();
-            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-         }
-
+     
          /**
          * Recolors tree by selected sample metadata
          */
@@ -860,7 +862,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                           int rowIndex = frame.otuSampleMap.getRowNames().indexOf(nodeName);
 
                           if (rowIndex == -1) {
-                              n.addLabelColor(new Color(0),  1);
+                             n.addLabelColor(new Color(0),  1);
                              n.addLabelValue("Nodes not found in mapping");
                              continue;
                           }
@@ -868,37 +870,38 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                           HashMap row = frame.otuSampleMap.getRow(rowIndex);
                           n.clearLabelColor();
                          //for each non-zero column value (starting after the ID column)
-                          for (Object i : row.keySet()) {
-                              Object value = row.get(i);
-                              //if it's not an Integer, skip it
-                              if (!(value instanceof Integer)) continue;
-                              Integer weight = (Integer)value;
-                              if (weight == 0) continue;
-
-                              String sampleID = frame.otuSampleMap.getColumnName(((Number)i).intValue());
-
-                              //find the row that has this sampleID                         
-                              int sampleRowIndex = frame.sampleMetadata.getRowNames().indexOf(sampleID);
-                              
-                              //The sampleID is taken from the columnames of the
-                              //sample-tip map and one of the headers is otu id
-                              if(sampleID.equals("OTU ID"))
-                                  continue;
-
-                              if (sampleRowIndex == -1) {
-                                  n.addLabelColor(new Color(0),  weight);
-                             // n.addBranchColor(new Color(0),  1.0);
+                     for (Object i : row.keySet()) //for all samples
+                     {
+                         Object w = row.get(i); // get the OTU count
+                         //if it's not an Integer, skip it
+                         if (!(w instanceof Integer)) continue;
+                         Integer weight = (Integer)w;
+                         if (weight == 0) continue; // this sample doesn't contain this OTU
+                         
+                         String sampleID = frame.otuSampleMap.getColumnName(((Number)i).intValue());
+                         //The sampleID is taken from the columnames of the
+                         //sample-tip map and one of the headers is otu id
+                         if(sampleID.equals("OTU ID"))
+                            continue;
+                         
+                         //find the row that has this sampleID                         
+                         int sampleRowIndex = frame.sampleMetadata.getRowNames().indexOf(sampleID);
+                         
+                         // this sample is not in the metadata but contains the current OTU, it will not be colored
+                         if (sampleRowIndex == -1) {
+                             n.addLabelColor(new Color(0),  weight);
                              n.addLabelValue("Nodes in samples without metadata");
-                                 continue;
-                              }
-
-                              Object color = null;
-                              color = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.labelColorPanel.getColorColumnIndex());                                                          
-                              if (color == null) continue;
-                              n.addLabelColor((Color)frame.labelColorPanel.getColorMap().get(color), weight);
-                          }
-                          // no samples contain this OTU
-                     if(n.getGroupBranchColor().size() == 0)
+                            continue;
+                         }
+                         
+                         Object value = null;
+                         value = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.labelColorPanel.getColorColumnIndex());                                                          
+                         if (value == null) continue;
+                         n.addLabelColor((Color)frame.labelColorPanel.getColorMap().get(value), weight);
+                         n.addLabelValue(value);
+                     }
+                     // no samples contain this OTU
+                     if(n.getGroupLabelColor().size() == 0)
                      {
                          n.addLabelColor(new Color(0),  n.getBranchLength());
                          n.addLabelValue("Nodes not found in any sample");

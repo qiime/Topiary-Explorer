@@ -851,7 +851,7 @@ public class Node implements Comparable{
       }
     }
     aggregateLabelData();
-    labelColored = true;
+    // labelColored = true;
   }
   
   public double getLineWidthF() {
