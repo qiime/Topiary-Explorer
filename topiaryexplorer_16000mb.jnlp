@@ -19,7 +19,7 @@
   <resources>
     <j2se version="1.6+" initial-heap-size="500M" max-heap-size="16000m" />
 
-	<jar href="topiaryexplorer0.9.5.jar" />
+	<jar href="topiaryexplorer0.9.6.jar" />
 	<jar href="lib/jogl.jar" />
 	<jar href="lib/guava-r09.jar" />
 	<jar href="lib/core.jar" />

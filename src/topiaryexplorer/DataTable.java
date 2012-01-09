@@ -40,6 +40,7 @@ public class DataTable {
         	ArrayList<String> vals = Lists.newArrayList(splitter.split(conn.resultLines.get(r)));
 		    // String vals[] = conn.resultLines.get(r).split("\t");
             c = 0;
+            rowNames.add(vals.get(0));
 		    for (String obj : vals) {
 		        Object val = TopiaryFunctions.objectify(obj);
 		        if (val != null) {

@@ -29,7 +29,7 @@ Step 3. Load a saved color scheme
 Once you have changed the current colors or even colored by a different category, you can return to a previous color scheme using the color scheme dropdown menu. 
 
 .. note:: 
-   Since some trees have tips that are OTU ids and other trees have tips that are Sample IDs, you have to have the correct table selected in the mainframe when loading a scheme.
+   **IMPORTANT**  Since some trees have tips that are OTU ids and other trees have tips that are Sample IDs, you have to have the correct table selected in the mainframe when loading a scheme.
 
 .. figure::  _images/scheme_load_wrong.png
    :align:   center

@@ -88,14 +88,14 @@ Next we'll use this new metadata field to color the tree's branches. Move back t
 
    Dialog to color by metadata.
 
-By default each option for the category will be colored gray. To change this, switch to the Topiary Explorer window. The Color Key toolbar on the left is used to choose colors on a per-category basis. To change the color for a given value click the small grey box, which will open a the "Pick a Color" window. Choose blue for the RightM3, LeftM3, and AmbiguousM3 values.
+By default each option for the category will be colored randomly. To change this, switch to the Topiary Explorer window. The Color Key toolbar on the left is used to choose colors on a per-category basis. To change the color for a given value click the small colored box, which will open a the "Pick a Color" window. To sort the values, click on the header of the color key toolbar with the name of your new column. Choose blue for the RightM3, LeftM3, and AmbiguousM3 values.
 
 .. figure::  _images/choose_colors.png
    :align:   center
 
    Dialog to choose colors for metadata.
 
-Switch back to the Topiary Explorer window and uncheck the "Majority coloring" checkbox. Your tree should look like the one pictured here.
+Your tree should look like the one pictured here.
 
 .. figure::  _images/M3_keyhand_colored.png
    :align:   center
@@ -104,14 +104,14 @@ Switch back to the Topiary Explorer window and uncheck the "Majority coloring" c
 
 Step 6. Set consensus lineages and collapse branches in the tree.
 -----------------------------------------------------------------
-Now we'll add consensus lineages to the tree and collapse some of the branches into wedges. In the Tree window, click the "Set Consensus Lineage" button. In the "Choose Threshold" window, select "Greengenes Taxonomy" in the "Taxonomy Column" dropdown box and "70%" in the "Choose options..." dropdown box. This indicates that you want to use the Greengenes taxonomy to label taxonomy to the tips in the tree, and that you want to label wedges only when the taxonomy string represents at least 70% of the tips descending from that node. 
+Now we'll add consensus lineages to the tree and collapse some of the branches into wedges. In the Tree window, click the "Set Consensus Lineage" button. In the Consensus Lineage dialog, select "Greengenes Taxonomy" in the "Taxonomy Column" dropdown box, check the box for Taxonomic Level and select 3, and choose "80%" in the "Threshold" dropdown box. This indicates that you want to use the Greengenes taxonomy to label taxonomy to the tips in the tree, use only taxonomic classifications from level 3(class), and that you want to label wedges only when the taxonomy string represents at least 80% of the tips descending from that node. 
 
 .. figure::  _images/set_consensus_lineage.png
    :align:   center
 
    Set the consensus lineage for nodes on the tree.
 
-Next click the "Collapse tree" slider bar and slide to the left. You'll notice that branches collapse into wedges when the slider passes the root of their clade. The coloring of the wedge will be determined by the percentage of the tips represented by that wedge which are blue (i.e., associated with M3 in this example).
+Next uncheck the majority coloring checkbox in the Tree Edit Toolbar. Then click the "Collapse tree" slider bar and slide to the left. You'll notice that branches collapse into wedges when the slider passes the root of their clade. The coloring of the wedge will be determined by the percentage of the tips represented by that wedge which are blue (i.e., associated with M3 in this example).
 
 .. figure::  _images/M3_keyhand_colored_w_lineage.png
    :align:   center
@@ -144,7 +144,7 @@ Step 9. Prune the tree.
 -------------------------
 To remove unwanted branches, use the prune tree button at the top of the Tree Toolbar.
 
-In the subtree window, we are going to remove branches based on sample metadata. Click the "Prune tree" button, then select the "Metadata" button, followed by the "Sample Metadata" button. In the dropdown box select the "IndividualKeyHand" value, and then select the three categories associated beginning with "NA" as shown in the image below. 
+In the subtree window, we are going to remove branches based on sample metadata. Click the "Prune tree" button, then select the "Metadata" button, followed by the "Sample Metadata" button. In the dropdown box select the "IndividualKeyHand" value, and then select the three categories associated beginning with "NA" as shown in the image below. Use the filter text box to filter the options down to only NA.
 
 .. figure::  _images/prune_dialog.png
    :align:   left

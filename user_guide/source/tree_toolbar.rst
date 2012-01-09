@@ -8,9 +8,18 @@ This guide explains all of the functions that a user can perform on a tree using
 .. figure::  _images/tree_toolbar.png
    :align:   center
 
+Summary Panel
+=============
+The summary panel gives you an overview of the tree. It shows the number of leaves in the current tree as well as the percent of branches covered by different categories when the tree is colored. In this example, 54% of the lineages in the tree were found in individual M2, 43% in M3, 22% in M9 and 18% of the lineages were found in individuals not included in the metadata.
+
+.. figure::  _images/summary_panel.png
+   :align:   center 
+
+.. note:: Lineages are likely found in more than one sample, so the percentages in the table will not add up to 100%.
+
 Tree Panel
 ==========
-The tree panel is the first panel on the tree toolbar. 
+The tree panel controls functions and layout related to whole tree. 
 
 This panel is used to:
   
@@ -39,6 +48,8 @@ The prune button opens a dialog which offers a few different options for pruning
 
 Pruning the tree based on metadata can be done using either OTU or sample metadata. If you choose to prune based on OTU metadata, each OTU which matches the values that you have selected will be pruned. If you choose to prune based on sample metadata, each OTU found in a sample that matches at least one of the values selected will be pruned. Clades that contain only pruned tips after the initial pruning step are also pruned.
 
+You can filter the available fields using a string.
+
 .. figure::  _images/prune_metadata.png
    :align:   center 
 
@@ -58,12 +69,11 @@ Show hidden nodes
 -----------------
 Nodes can be hidden using the context menu shown when right clicking on a node. The show hidden nodes button in the tree toolbar will reveal all hidden nodes.
 
-.. _consensus_lineage:
+.. _Consensus Lineage:
+
 Set consensus lineage
 ---------------------
-In order to set the consensus lineage for a tree, you must supply an OTU mapping table with a column titled 'Consensus Lineage', case sensitive.
-
-The user will be prompted to choose a threshold level for consensus lineage cutoff. In order for a lineage to be assigned to a wedge, at least the threshold percentage of tips in that wedge must have that lineage.
+The user will be prompted to choose a column from the OTU metadata table that contains full lineages, an optional level-wise consensus and a threshold level for cutoff. In order for a lineage to be assigned to a wedge, at least the threshold percentage of tips in that wedge must have that lineage.
 
 .. figure::  _images/consensus_lineage.png
    :align:   center
@@ -72,7 +82,7 @@ The user will be prompted to choose a threshold level for consensus lineage cuto
 
 Collapse by
 -----------
-Nodes can be collapsed by some OTU metadata value, with some supplied threshold.
+Nodes can be collapsed by some OTU metadata value, with some supplied threshold. Once `Consensus Lineage`_ has been set, you can also collapse by those values. 
 
 Layout
 ------

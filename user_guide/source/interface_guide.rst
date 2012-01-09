@@ -10,3 +10,4 @@ Interface Guide
    topiaryexplorer_window
    tree_window
    tree_toolbar
+   data_table

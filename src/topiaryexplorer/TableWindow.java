@@ -184,7 +184,6 @@ public class TableWindow extends JFrame {
                      break;
                  default:
              }
-             
              this.dispose();
          }
      }

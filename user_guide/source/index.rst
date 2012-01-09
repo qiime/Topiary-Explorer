@@ -48,9 +48,7 @@ Features
 Support
 =======
 
-For application support, please visit the `Forums <https://sourceforge.net/projects/topiaryexplorer/forums>`_.
-
-To report a bug or add a feature request, visit the `Trac <https://sourceforge.net/apps/trac/topiaryexplorer/>`_ page.
+For application support, to report a bug or add a feature request, visit the `Forums <https://sourceforge.net/projects/topiaryexplorer/forums/forum/956344>`_.
 
 If your questions are not answered there, contact topiaryexplorer@gmail.com.
 

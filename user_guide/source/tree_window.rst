@@ -26,7 +26,7 @@ The collapse tree toolbar is a slider corresponding to the collapse level of the
 
 Tree view
 =========
-The tree view holds the tree, and when focused, hovering over nodes will give more information about each node.
+The tree view holds the tree, and when focused, hovering over nodes will give more information about each node. You can also search for nodes matching a string; their location in the tree will be indicated by a red dash on the right side of the view.
 
 .. figure::  _images/tree_info.png
    :align:   center
@@ -63,7 +63,7 @@ Node collapse states can be locked/unlocked. When a node is locked, it will not 
 
 Toggle pie chart
 ----------------
-Pie charts are a convenient way of displaying the percentage of branches of an internal node painted by different metadata values.
+Pie charts are a convenient way of displaying the percentage of branches of an internal node painted by different metadata values. The radius of each pie chart can be controlled using the slider in the node menu.
 
 .. figure::  _images/pie_chart.png
    :align:   center
@@ -77,9 +77,6 @@ Labels can be set visible or hidden on a per-node basis using this function.
 Consensus lineage
 -----------------
 Once the consensus lineage is set using the button in the `Tree toolbar <./tree_toolbar.html>`_, a full string can be viewed using this function.
-
-.. figure::  _images/consensus_popup.png
-   :align:   center
 
 View subtree in new window
 --------------------------
@@ -102,10 +99,3 @@ The zoom lock button will lock the sliders together so that sliding one of them 
 .. note:: Radial and polar views are only available in zoom lock mode. Switching to either of these views will set zoom lock for you.
 
 A user can also zoom in using the = and - keys on the keyboard, to zoom in and out, respectively.
-
-Node search
-===========
-A user can search for nodes with labels matching a given string using the node search box located at the bottom right corner of the tree window. 
-
-.. figure::  _images/node_search.png
-   :align:   center

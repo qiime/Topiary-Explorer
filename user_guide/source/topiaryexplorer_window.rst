@@ -46,6 +46,10 @@ Load OTU metadata/ Load OTU Abundance Table/ Load Sample Metadata Mapping
 -------------------------------------------------------------------------
 These menu items allow you do individually load the different tables, or to replace a table that has already been loaded.
 
+Load Data Table
+---------------
+This menu item allows you to open an arbitrary tab-delimited text file. You can learn more about the `Datatable Window <./data_table.html>`_ in the `Interface Guide <./interface_guide.html>`_.
+
 The color key toolbar
 =====================
 The color key toolbar is used to define the colors of fields by which branches or node labels are to be colored by.
@@ -85,12 +89,7 @@ These panes are:
 
 Database pane
 -------------
-The database pane is used to connect to external databases and pull down information to be used in the data tables. 
-
-.. figure::  _images/database_tab.png
-   :align:   center
-
-To connect to a database, enter the database information into the dialog at the bottom of the database tab.
+The database pane is used to connect to external databases and pull down information to be used in the data tables. To connect to a database, enter the database information into the dialog.
 
 .. figure:: _images/connect_to_database.png
    :align:	center
