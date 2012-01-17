@@ -27,7 +27,7 @@ public class TableFilterDialog extends JDialog {
     ButtonGroup toggleButtons = new ButtonGroup();
     JToggleButton lastToggleButton = new JToggleButton("Last",true);
     JToggleButton anyToggleButton = new JToggleButton("Any");
-    JToggleButton allToggleButton = new JToggleButton("All");
+    JToggleButton allToggleButton = new JToggleButton("Exact");
     JLabel delimiterLabel = new JLabel("Delimiter");
     JButton filterButton = new JButton("Filter");
     JButton cancelButton = new JButton("Cancel");
@@ -51,9 +51,9 @@ public class TableFilterDialog extends JDialog {
         });
         
         toggleButtons.add(lastToggleButton);
-        anyToggleButton.setEnabled(false);
+        // anyToggleButton.setEnabled(false);
         toggleButtons.add(anyToggleButton);
-        allToggleButton.setEnabled(false);
+        // allToggleButton.setEnabled(false);
         toggleButtons.add(allToggleButton);
         
         tableComboBox.addItemListener(new ItemListener() {
@@ -145,25 +145,48 @@ public class TableFilterDialog extends JDialog {
         filteredTable.add(temp);
         
         String search_term = "";
+        ArrayList<String> search_terms = new ArrayList<String>();
         int found_index = 0;
         // loop through each search term in the reference table
         for(int i = 0; i < ref_table.getRowCount(); i++)
         {
             // need to keep track of the id for merging later
             temp = ref_table.getValueAt(i,0)+"\t"; // get the ID
-            // currently just find the last value in the string using the
-            // delimiter, later on will need a loop to check on values other 
-            // than the last value
-            search_term = ""+ref_table.getValueAt(i, ref_col);
-            search_term = search_term.split(delimiterTextField.getText())[search_term.split(delimiterTextField.getText()).length-1];
-            if(search_term.indexOf("_") != -1)
-                search_term = search_term.substring(search_term.lastIndexOf("_"),search_term.length());
+            
+            if(lastToggleButton.isSelected())
+            {
+                search_term = ""+ref_table.getValueAt(i, ref_col);
+                String delimiter = delimiterTextField.getText();
+                search_term = search_term.split(delimiter)[search_term.split(delimiter).length-1];
+            }
+            
+            if(anyToggleButton.isSelected())
+            {
+                search_term = ""+ref_table.getValueAt(i, ref_col);
+                Collections.addAll(search_terms, search_term.split(delimiterTextField.getText()));
+            }
+            
+            if(allToggleButton.isSelected())
+            {
+                search_term = ""+ref_table.getValueAt(i, ref_col);
+            }
+            
             search_term = search_term.toLowerCase();
-            // System.out.println(search_term);
+
             // have to turn the objects into strings for proper matching
             ArrayList<String> searches = new ArrayList<String>();
             for(Object o : search_table.getColumn(search_col))
                 searches.add(o.toString().toLowerCase());
+            
+            
+            // going through the array backwards because usually the most
+            // specific term is the rightmost
+            for(int j = search_terms.size()-1; j >= 0; j--)
+            {
+                search_term = search_terms.get(j).toLowerCase();
+                if(searches.indexOf(search_term) != -1)
+                    break;
+            }
             
             found_index = searches.indexOf(search_term);
             
