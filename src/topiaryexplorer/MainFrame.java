@@ -559,6 +559,36 @@ public class MainFrame extends JFrame {
          dataPane.setSelectedIndex(3);
          currTable = sampleMetadata;
     }
+    
+    public void cleanupMetadata() {
+        // clean up nodes in otu metadata that are no longer in the tree
+        HashSet<String> nodeNames = new HashSet<String>();
+        for(TreeWindow w : treeWindows)
+        {
+            for(String s : w.tree.getTree().getLeafNames())
+                nodeNames.add(s);
+        }
+        ArrayList<String> ids = new ArrayList<String>();
+        ids.addAll(otuMetadata.getRowNames());
+        
+        for(String id : ids)
+        {
+            if(nodeNames.contains(id))
+                continue;
+                
+            otuMetadata.removeRow(id);
+        }
+        
+        ids = new ArrayList<String>();
+        ids.addAll(otuSampleMap.getRowNames());
+        for(String id : ids)
+        {
+            if(nodeNames.contains(id))
+                continue;
+                
+            otuSampleMap.removeRow(id);
+        }
+    }
      
      public void resetOtuMenus() {
          for(TreeWindow w : treeWindows)

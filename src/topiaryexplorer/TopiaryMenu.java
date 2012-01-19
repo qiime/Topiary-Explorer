@@ -599,6 +599,9 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 			
 		    String s = "";
 			ArrayList<String> lines = new ArrayList<String>();
+			
+			frame.cleanupMetadata();
+			
 			if(frame.treeWindows.size() != 0)
             {
                 for(TreeWindow w : frame.treeWindows)
@@ -641,8 +644,6 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		    for(int i = 0; i < lines.size(); i++)
                 // b.write(lines.get(i).getBytes());
                 fc.getOutputStream(false).write(lines.get(i).getBytes());
-                
-                
 
 		}
 		catch(IOException e)

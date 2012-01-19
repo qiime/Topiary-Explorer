@@ -618,6 +618,23 @@ public class Node implements Comparable{
       return result;
   }
   
+    /**
+   * Returns a list of all the names of leaves of the tree
+   */
+  public ArrayList<String> getLeafNames() {
+      ArrayList<String> result = new ArrayList<String>();
+
+      if (isLeaf()) {
+          result.add(this.name);
+          return result;
+      }
+      
+      for (Node n : nodes) {
+          result.addAll(n.getLeafNames());
+      }
+      return result;
+  }
+  
 
   /**
    * Returns all of the nodes of the tree.

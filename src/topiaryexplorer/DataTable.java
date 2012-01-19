@@ -216,6 +216,16 @@ public class DataTable {
         return result;
     }
     
+    public void removeRow(String id) {
+        data.removeRow(rowNames.indexOf(id));
+        rowNames.remove(id);
+    }
+    
+    public void removeRow(int id) {
+        data.removeRow(id);
+        rowNames.remove(id);
+    }
+    
     public HashMap getRow(int index) {
         return data.getRow(index);
     }

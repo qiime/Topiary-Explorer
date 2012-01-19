@@ -34,6 +34,10 @@ class SparseTable {
         data.get(row).put(col, value);
     }
     
+    public void removeRow(int row) {
+        data.remove(row);
+    }
+    
     public HashMap getRow(int row) {
         try {
         return data.get(row);
