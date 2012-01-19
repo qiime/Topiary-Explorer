@@ -80,7 +80,7 @@ public class DatabaseFilterPanel extends JPanel {
 
         resetColumnFilterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                resetColumnFilterButtonActionPerformed(evt);
+                resetButtonPressed();
             }
         });
         
@@ -100,6 +100,7 @@ public class DatabaseFilterPanel extends JPanel {
                         model.addElement(s);
                     columnNamesList.setModel(model);
                 }
+                resetButtonPressed();
             }
         });
         
@@ -241,7 +242,7 @@ public class DatabaseFilterPanel extends JPanel {
         }
     }
 
-    public void resetColumnFilterButtonActionPerformed(ActionEvent evt) {
+    public void resetButtonPressed() {
         columnFiltersTabPane.removeAll();
         filters = new HashSet();
         filterTabs.clear();

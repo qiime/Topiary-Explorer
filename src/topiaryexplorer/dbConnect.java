@@ -79,14 +79,14 @@ public class dbConnect
 
           try {
               stmt = conn.createStatement();
-              this.res = stmt.executeQuery("select "+header+" from "+ tableName);
+              this.res = stmt.executeQuery("select `"+header+"` from "+ tableName);
               parseResultSet();
               success = true;
               }
               // Now do something with the ResultSet ....
           catch (SQLException ex){
               // handle any errors
-              System.out.println("getdatafromtable");
+              // System.out.println("getdatafromtable");
               System.out.println("SQLException: " + ex.getMessage());
               System.out.println("SQLState: " + ex.getSQLState());
               System.out.println("VendorError: " + ex.getErrorCode());
