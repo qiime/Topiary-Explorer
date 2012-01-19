@@ -189,6 +189,7 @@ public class MainFrame extends JFrame {
         otuMetadataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         otuMetadataTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         otuMetadataTable.setCellSelectionEnabled(true);
+        
         otuMetadataScrollPane = new JScrollPane(otuMetadataTable);
         otuMetadataScrollPane.setWheelScrollingEnabled(true);
         otuMetadataScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -206,6 +207,8 @@ public class MainFrame extends JFrame {
         //sampleMetadataTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         sampleMetadataTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         sampleMetadataTable.setCellSelectionEnabled(true);
+        sampleMetadataTable.setDefaultEditor(Object.class, new TextCellEditor());
+        
         //sampleMetadataTable.setAutoCreateRowSorter(true);
         sampleMetadataScrollPane = new JScrollPane(sampleMetadataTable);
         sampleMetadataScrollPane.setWheelScrollingEnabled(true);

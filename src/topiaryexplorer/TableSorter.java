@@ -96,6 +96,9 @@ import javax.swing.table.*;
 public class TableSorter extends AbstractTableModel {
     protected TableModel tableModel;
 
+    int columnValue = -1; 
+    int columnNewValue = -1; 
+
     public static final int DESCENDING = -1;
     public static final int NOT_SORTED = 0;
     public static final int ASCENDING = 1;
@@ -177,12 +180,14 @@ public class TableSorter extends AbstractTableModel {
             if (defaultRenderer instanceof SortableHeaderRenderer) {
                 this.tableHeader.setDefaultRenderer(((SortableHeaderRenderer) defaultRenderer).tableCellRenderer);
             }
+            this.tableHeader.setReorderingAllowed(false);
         }
         this.tableHeader = tableHeader;
         if (this.tableHeader != null) {
             this.tableHeader.addMouseListener(mouseListener);
             this.tableHeader.setDefaultRenderer(
                     new SortableHeaderRenderer(this.tableHeader.getDefaultRenderer()));
+            this.tableHeader.setReorderingAllowed(false);
         }
     }
 
@@ -432,9 +437,7 @@ public class TableSorter extends AbstractTableModel {
                 status = (status + 4) % 3 - 1; // signed mod, returning {-1, 0, 1}
                 setSortingStatus(column, status);
             }
-        }
-        
-        
+        }        
     }
 
     private static class Arrow implements Icon {
