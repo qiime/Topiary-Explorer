@@ -202,7 +202,7 @@ public class TopiaryFunctions {
         String tree = "";
 
         if (root.isLeaf()) {
-            return root.getLabel()+":"+root.getBranchLength();
+            return root.getName()+":"+root.getBranchLength();
         } else {
             tree = "(";
             for (Node n : root.nodes) {
@@ -210,7 +210,7 @@ public class TopiaryFunctions {
             }
             //remove last comma
             tree = tree.substring(0,tree.length()-1);
-            tree += ")" + root.getLabel() + ":" + root.getBranchLength();
+            tree += ")" + root.getName() + ":" + root.getBranchLength();
         }
 
         return tree;

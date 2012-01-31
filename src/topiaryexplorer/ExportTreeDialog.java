@@ -36,7 +36,7 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
     JButton okButton = new JButton("Export");
     JButton cancelButton = new JButton("Cancel");
     
-    public double dims[] = {0, 0};
+    public int dims[] = {0, 0};
     private DecimalFormat df = new DecimalFormat("#.####");
     
     public ExportTreeDialog(TreeWindow _frame) {
@@ -50,10 +50,10 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
         String treeLayout = tree.getTreeLayout();
         
        if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-          dims[0] = (tree.getXScale() * tree.getTree().depth()) + tree.getMargin() + tree.getTreeMargin();
-          dims[1] = (tree.getYScale() * tree.getTree().getNumberOfLeaves()) + 2*tree.getMargin();
+          dims[0] = (int)((tree.getXScale() * tree.getTree().depth()) + tree.getMargin() + tree.getTreeMargin());
+          dims[1] = (int)((tree.getYScale() * tree.getTree().getNumberOfLeaves()) + 2*tree.getMargin());
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-          dims[0] = ((tree.getXScale() * tree.getTree().depth()) + tree.getMargin())*2;
+          dims[0] = (int)((tree.getXScale() * tree.getTree().depth() + tree.getTreeMargin() + tree.getMargin() + 10)*2);
           dims[1] = dims[0];
       }
       
@@ -126,16 +126,16 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
 	public void change(DocumentEvent e) {
         String name = (String)e.getDocument().getProperty("name");
         if (name.equals("xdim")) {
-            double newval = 0;
+            int newval = 0;
             try {
-                newval = Double.parseDouble(xdim.getText());
+                newval = Integer.parseInt(xdim.getText());
                 dims[0] = newval;
             } catch (NumberFormatException ex) {
             }
         } else if (name.equals("ydim")) {
-            double newval = 0;
+            int newval = 0;
             try {
-                newval = Double.parseDouble(ydim.getText());
+                newval = Integer.parseInt(ydim.getText());
                 dims[1] = newval;
             } catch (NumberFormatException ex) {
             }

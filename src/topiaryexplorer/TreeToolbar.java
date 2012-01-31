@@ -123,6 +123,8 @@ public class TreeToolbar extends JToolBar {
     
     public void sliderEnabled(boolean b) {
         zoomSlider.setEnabled(b);
+        zoomInButton.setEnabled(b);
+        zoomOutButton.setEnabled(b);
     }
     
     public void setValue(int i) {
@@ -134,13 +136,7 @@ public class TreeToolbar extends JToolBar {
         if (frame.tree.getTree() == null) return;      
         frame.tree.setHorizontalScaleFactor(frame.tree.getXScale()+minXScale); 
         zoomSlider.setValue((int)(frame.tree.getXScale()/minXScale));
-/*        double newScale = minXScale*zoomSlider.getValue();*/
-/*        frame.tree.setHorizontalScaleFactor(newScale);*/
         frame.tree.redraw();
-/*        System.out.println(zoomSlider.getValue());*/
-/*        zoomSlider.setValue(zoomSlider.getValue()+1);*/
-/*        System.out.println(zoomSlider.getValue());*/
-/*        syncTreeWithZoomSlider();*/
     }
     
     public void zoomOut() {
@@ -151,13 +147,7 @@ public class TreeToolbar extends JToolBar {
             frame.tree.setHorizontalScaleFactor(minXScale);
 
         zoomSlider.setValue((int)(frame.tree.getXScale()/minXScale));
-/*        double newScale = minXScale*zoomSlider.getValue();*/
-/*        frame.tree.setHorizontalScaleFactor(newScale);*/
         frame.tree.redraw();
-/*        System.out.println(zoomSlider.getValue());*/
-/*        zoomSlider.setValue(zoomSlider.getValue()+1);*/
-/*        System.out.println(zoomSlider.getValue());*/
-/*        syncTreeWithZoomSlider();*/
     }
     
     public void setStatus(String p, String s, String s2) {

@@ -635,6 +635,23 @@ public class Node implements Comparable{
       return result;
   }
   
+  
+  public Node longestBranch() {
+      if(isLeaf())
+        return null;
+        
+      Node longest = null;
+      double length = 0;
+      for(Node n : nodes)
+      {
+          if(n.getBranchLength() > length)
+            {
+                longest = n;
+                length = n.getBranchLength();
+            }
+      }
+      return longest;
+  }
 
   /**
    * Returns all of the nodes of the tree.

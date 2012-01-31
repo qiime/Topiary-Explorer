@@ -101,22 +101,19 @@ public class TreeAppletHolder extends JComponent {
 
 	public void syncScrollbarsWithTree() {
 		int newValue = tree.getCurrentVerticalScrollPosition();
-		
 		verticalScroll.setMaximum(tree.getMaxVerticalScrollPosition());
 		verticalScroll.setValue(newValue);
 		verticalScroll.setVisibleAmount(tree.getHeight());
 		verticalScroll.setBlockIncrement(tree.getHeight()*9/10);
 		verticalScroll.setUnitIncrement(tree.getHeight()/10);
 		
-/*        System.out.println("value:"+verticalScroll.getValue() + "; visible amount" + verticalScroll.getVisibleAmount());*/
-
 		newValue = tree.getCurrentHorizontalScrollPosition();
 		horizontalScroll.setMaximum(tree.getMaxHorizontalScrollPosition());
 		horizontalScroll.setValue(newValue);
 		horizontalScroll.setVisibleAmount(tree.getWidth());
 		horizontalScroll.setBlockIncrement(tree.getWidth()*9/10);
 		horizontalScroll.setUnitIncrement(tree.getWidth()/10);
-		//System.out.println(horizontalScroll.getValue() + "; " + horizontalScroll.getMaximum());
+		
 		frame.collapseTreeToolbar.resetLayout();
 	}
 }

@@ -72,7 +72,7 @@ public class VerticalTreeToolbar extends JToolBar {
         setFloatable(false);
     }
     
-    public void sliderEnabled(boolean b) {
+        public void sliderEnabled(boolean b) {
         zoomSlider.setEnabled(b);
     }
 
@@ -85,13 +85,7 @@ public class VerticalTreeToolbar extends JToolBar {
         if (frame.tree.getTree() == null) return;      
         frame.tree.setVerticalScaleFactor(frame.tree.getYScale()+minYScale); 
         zoomSlider.setValue((int)(frame.tree.getYScale()/minYScale));
-/*        double newScale = minXScale*zoomSlider.getValue();*/
-/*        frame.tree.setHorizontalScaleFactor(newScale);*/
         frame.tree.redraw();
-/*        System.out.println(zoomSlider.getValue());*/
-/*        zoomSlider.setValue(zoomSlider.getValue()+1);*/
-/*        System.out.println(zoomSlider.getValue());*/
-/*        syncTreeWithZoomSlider();*/
     }
     
     public void zoomOut() {
@@ -102,20 +96,14 @@ public class VerticalTreeToolbar extends JToolBar {
             frame.tree.setVerticalScaleFactor(minYScale); 
         
         zoomSlider.setValue((int)(frame.tree.getYScale()/minYScale));
-/*        double newScale = minXScale*zoomSlider.getValue();*/
-/*        frame.tree.setHorizontalScaleFactor(newScale);*/
         frame.tree.redraw();
-/*        System.out.println(zoomSlider.getValue());*/
-/*        zoomSlider.setValue(zoomSlider.getValue()+1);*/
-/*        System.out.println(zoomSlider.getValue());*/
-/*        syncTreeWithZoomSlider();*/
     }
 
     public void setScale() {
         if (frame.tree.getTreeLayout().equals("Rectangular") || frame.tree.getTreeLayout().equals("Triangular")) {
             minYScale = (frame.tree.getHeight() - 2*frame.tree.getMargin())/frame.tree.getTree().getNumberOfLeaves();
         } else {
-		    minYScale = (Math.min(frame.tree.getWidth(), frame.tree.getHeight())*0.5-frame.tree.getMargin())/frame.tree.getTree().depth();
+		    minYScale = (Math.min(frame.tree.getWidth(), frame.tree.getHeight())*0.5-frame.tree.getTreeMargin())/frame.tree.getTree().depth();
         }
     }
     

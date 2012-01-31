@@ -128,7 +128,7 @@ public final class NodeEditPanel extends JPanel{
                     vis.redraw();
                     labelPanelCP.setVisible(nodeLabelCheckBox.isSelected() || internalLabelCheckBox.isSelected());
                     frame.treePopupMenu.getComponent(5).setEnabled(
-                    nodeLabelCheckBox.isSelected() || internalLabelCheckBox.isSelected());;
+                    nodeLabelCheckBox.isSelected() || internalLabelCheckBox.isSelected());
             }
         });
         holder.add(nodeLabelCheckBox);

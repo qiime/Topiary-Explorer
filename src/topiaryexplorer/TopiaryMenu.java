@@ -437,7 +437,8 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
         }else if (e.getActionCommand().equals("PCoA Window")) {
                 // frame.consoleWindow.setVisible(!frame.consoleWindow.isVisible());
         } else if (e.getActionCommand().equals("Quit")) {
-             frame.db_conn.c.close_connection();
+            if(frame.db_conn.c != null)
+                frame.db_conn.c.close_connection();
              System.exit(0);
          } else if(e.getActionCommand().equals("Run PCoA Analysis...")) {
              // frame.pcoaWindow.runPcoaAnalysis();

@@ -5,6 +5,7 @@ import java.awt.BasicStroke;
 import javax.swing.*;
 import processing.core.*;
 import processing.pdf.*;
+import processing.opengl.*;
 import javax.swing.event.*;
 import java.util.*;
 // import java.awt.event.KeyEvent.*;
@@ -21,7 +22,7 @@ public class TreeVis extends PApplet {
 
     //the amount of space around the tree, for viewing purposes
     private double MARGIN = 5;
-    private double TREEMARGIN = 5;
+    private float TREEMARGIN = 5;
 
     private final int SELECTED_COLOR = 0xff66CCFF;
     private final int HIGHLIGHTED_COLOR = 0xffFF0000;
@@ -88,7 +89,7 @@ public class TreeVis extends PApplet {
     private int nodeFontColor = 0;
     private String nFont = "SansSerif";
     
-    private PFont tipFont = createFont("SansSerif", 8);
+    private PFont tipFont = createFont("SansSerif", 10);
 
     private TreeWindow frame = null;
 
@@ -213,14 +214,14 @@ public class TreeVis extends PApplet {
     public int getCurrentVerticalScrollPosition() {
       if (root==null) return 0;
       if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-      	return (int) (root.depth()*yscale - ystart);
+      	return (int) (root.depth()*yscale+TREEMARGIN - ystart);
       }
-      return (int) -(ystart-MARGIN);
+      return (int) -(ystart);
     }
     public void setVerticalScrollPosition(int value) {
-      ystart = -value + MARGIN;
+      ystart = -value;
       if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-      	ystart =  root.depth()*yscale - value;
+      	ystart =  root.depth()*yscale+TREEMARGIN - value;
       }
       fireStateChanged();
       redraw();
@@ -228,14 +229,14 @@ public class TreeVis extends PApplet {
     public int getCurrentHorizontalScrollPosition() {
       if (root==null) return 0;
       if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-      	return (int) (root.depth()*xscale - xstart);
+      	return (int) (root.depth()*xscale+TREEMARGIN - xstart);
       }
-      return (int) -(xstart-MARGIN);
+      return (int) -(xstart);
     }
     public void setHorizontalScrollPosition(int value) {
-      xstart = -value + MARGIN;
+      xstart = -value;
       if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-      	xstart =  root.depth()*xscale - value;
+      	xstart =  root.depth()*xscale+TREEMARGIN - value;
       }
       fireStateChanged();
       redraw();
@@ -245,7 +246,8 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
         return (int) (root.getNumberOfLeaves()*yscale + 2*MARGIN);
       } else {
-        return (int) (2*root.depth()*yscale+1);
+        // return (int) (2*root.depth()*yscale+TREEMARGIN);
+        return (int) (2*(root.depth()*yscale+TREEMARGIN));
       }
     }
     public int getMaxHorizontalScrollPosition() {
@@ -253,7 +255,8 @@ public class TreeVis extends PApplet {
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
         return (int) (root.depth()*xscale + MARGIN + TREEMARGIN);
       } else {
-        return (int) (2*root.depth()*xscale+1);
+        // return (int) (2*root.depth()*xscale+TREEMARGIN);
+        return (int) (2*(root.depth()*xscale+TREEMARGIN));
       }      
     }
     
@@ -317,8 +320,8 @@ public class TreeVis extends PApplet {
     /**
      * Convert from branch-length/row to screen coords based on scaling and translation
      */
-    private double toScreenX(double l) {
-        return xstart + xscale*l;
+    private double toScreenX(double col) {
+        return xstart + xscale*col;
     }
     private double toScreenY(double row) {
         return ystart + yscale*row;
@@ -348,18 +351,8 @@ public class TreeVis extends PApplet {
      * mouseDragged() is called whenever the user drags the mouse
      */
     public void mouseDragged() {
-        // if(selectingMode) {
-        //       cursor(CROSS);
-        //       double bxdiff = mouseX-pmouseX;
-        //       double bydiff = mouseY-pmouseY;
-        //       selectXEnd = selectXEnd + bxdiff;
-        //       selectYEnd = selectYEnd + bydiff;
-        //       // fireStateChanged();
-        //       redraw();
-        //       drawSelectBox();
-        //     }
             
-      if (this.mouseOverNode == null && keyPressed == false && !selectingMode)      
+      if (this.mouseOverNode == null && keyPressed == false)      
       {
           //change the cursor to show that dragging is taking place
           cursor(MOVE);
@@ -512,28 +505,34 @@ public class TreeVis extends PApplet {
       else
         zoomDrawNodeLabels = false;
       
-      float width = 0;
+      float textwidth = 0;
       String s = "";
       
+      // if(treeLayout.equals("Radial") || treeLayout.equals("Polar"))
+          // s = root.getLongestLabel();
+          
       if(drawExternalNodeLabels && zoomDrawNodeLabels)
         s = root.getLongestLabel();
         
       for (int i = 0; i < s.length(); i++) {
-          width += nodeFont.width(s.charAt(i));
+          textwidth += nodeFont.width(s.charAt(i));
       }
       
-      TREEMARGIN = MARGIN + width*nodeFont.size + 5;
+      TREEMARGIN = textwidth*nodeFont.size;
+      
+      float usableWidth = getWidth() - TREEMARGIN - (float)MARGIN - 5;
+      float usableHeight = getHeight() - TREEMARGIN - (float)MARGIN*2 - 5;
 
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
           //check horizontal tree scaling
-          if (xscale < (getWidth()-MARGIN-TREEMARGIN)/root.depth()) {
+          if (xscale < usableWidth/root.depth()) {
             //need to rescale tree
             resetTreeX();
           }
           //check horizontal tree position
           if (xstart > MARGIN) {
             xstart = MARGIN;
-          } else if (xstart + xscale*root.depth() < getWidth()-TREEMARGIN) {
+          } else if (xstart + xscale*root.depth() < usableWidth) {
             xstart = getWidth()-MARGIN - xscale*root.depth();
           }
     
@@ -550,17 +549,15 @@ public class TreeVis extends PApplet {
           }
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
           //check horizontal tree scaling
-          if (xscale < (Math.min(getWidth(), getHeight())*0.5-2*TREEMARGIN)/root.depth()) {
+          if (xscale < (Math.min(usableWidth, usableHeight)*.5)/root.depth()) {
             //need to rescale tree
             resetTreeX();
           }
-
           //check vertical tree scaling
-          if (yscale < (Math.min(getWidth(), getHeight())*0.5-2*TREEMARGIN)/root.depth()) {
+          if (yscale < (Math.min(usableWidth, usableHeight)*.5)/root.depth()) {
             //need to rescale tree
             resetTreeY();
-          }
-   
+          }   
       }
 
       //notify listeners
@@ -570,29 +567,19 @@ public class TreeVis extends PApplet {
     }
 
     /**
-     * Sets the tree layout
-     */
-     public void setTreeLayout(String layout) {
-        treeLayout = layout;
-        resetTreeX();
-        resetTreeY();
-        // checkBounds();
-        fireStateChanged();
-        redraw();
-     }
-
-    /**
      * Resets the scale and position of the tree horizontally
      */
-    public void resetTreeX() {
+    public void resetTreeX() {      
+      float usableWidth = getWidth() - TREEMARGIN - 5;
+      float usableHeight = getHeight() - TREEMARGIN - 5;
+      
       if (root==null) return;
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-          xscale = (getWidth()-MARGIN-TREEMARGIN)/root.depth();
-/*            xscale = (Math.min(getWidth(), getHeight())*0.5-MARGIN)/root.depth();*/
+          xscale = usableWidth/root.depth();
           xstart = MARGIN;
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-          xscale = (Math.min(getWidth(), getHeight())*0.5-TREEMARGIN)/root.depth();
-          xstart = getWidth()*0.5;
+          xscale = (Math.min(usableWidth, usableHeight)*0.5)/root.depth();
+          xstart = getWidth()*0.5;//+TREEMARGIN+5;
       }
      }
 
@@ -600,17 +587,27 @@ public class TreeVis extends PApplet {
      * Resets the scale and position of the tree vertically
      */
     public void resetTreeY() {
+      float usableWidth = getWidth() - TREEMARGIN - 5;
+      float usableHeight = getHeight() - TREEMARGIN - 5;
       if (root==null) return;
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
           yscale = (getHeight()-2*MARGIN)/root.getNumberOfLeaves();
-/*          ystart = getHeight()*0.5;*/
           ystart = MARGIN;
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-          // yscale = (getHeight()-TREEMARGIN)/root.depth();
-          yscale = (Math.min(getWidth(), getHeight())*0.5-TREEMARGIN)/root.depth();
-          ystart = getHeight()*0.5-TREEMARGIN;
+          yscale = (Math.min(usableWidth,usableHeight)*0.5)/root.depth();
+          ystart = getHeight()*0.5;//+TREEMARGIN+5;
       }
     }
+    
+    /**
+     * Sets the tree layout
+     */
+     public void setTreeLayout(String layout) {
+        treeLayout = layout;
+        checkBounds();      
+        fireStateChanged();
+        redraw();
+     }
     
     public void resetTree() {
         setTree(root);
@@ -623,12 +620,15 @@ public class TreeVis extends PApplet {
      */
     public void setTree(Node newRoot) {
       //add to the margin the longest node labels
-      float width = 0;
+      float textwidth = 0;
+      
       String s = newRoot.getLongestLabel();
       for (int i = 0; i < s.length(); i++) {
-        width += nodeFont.width(s.charAt(i));
+        textwidth += nodeFont.width(s.charAt(i));
       }
-      TREEMARGIN = MARGIN + width*nodeFont.size + 10;
+      
+      TREEMARGIN = textwidth*nodeFont.size + 5;
+      
       //set the tree
       root = newRoot;
       //recalculate the x- and y-offsets of the nodes in the tree
@@ -636,8 +636,7 @@ public class TreeVis extends PApplet {
       setXOffsets(newRoot, 0);
       rootdepth = root.depth();
 
-      resetTreeX();
-      resetTreeY();
+      checkBounds();
       
       //notify listeners
       fireStateChanged();
@@ -649,21 +648,13 @@ public class TreeVis extends PApplet {
 
     public void setVerticalScaleFactor(double yvalue) {
         yscale = yvalue;
-/*        double oldYstart = ystart;*/
-/*        setVerticalScrollPosition(getMaxVerticalScrollPosition()/2);*/
-/*        checkBounds();*/
         fireStateChanged();
-/*        double r = toRow(y);*/
-/*        ystart = -(yscale*MARGIN);*/
         redraw();
     }
     
     public void setHorizontalScaleFactor(double xvalue) {
         xscale = xvalue;
-/*        setHorizontalScrollPosition(getMaxHorizontalScrollPosition()/2);*/
-/*        checkBounds();*/
         fireStateChanged();
-/*        xstart = -(xscale*MARGIN);*/
         redraw();
     }
 
@@ -685,9 +676,6 @@ public class TreeVis extends PApplet {
       xscale = xvalue;
 
       //set to new values based on new scaling
-
-/*      xstart = xstart - (toScreenX(l) - x);*/
-/*      ystart = ystart - (toScreenY(r) - y);*/
       setVerticalScrollPosition(getMaxVerticalScrollPosition()/2);
       setHorizontalScrollPosition(getMaxHorizontalScrollPosition()/2);
       checkBounds();
@@ -833,8 +821,8 @@ public class TreeVis extends PApplet {
           row = tree.getRYOffset();
           col = tree.getRXOffset();
       } else if (treeLayout.equals("Polar")) {
-          row = tree.getROffset() * Math.sin(tree.getTOffset());
-          col = tree.getROffset() * Math.cos(tree.getTOffset());
+          row = tree.getROffset() * Math.sin(tree.getTOffset()+treerotation*Math.PI/180.0);
+          col = tree.getROffset() * Math.cos(tree.getTOffset()+treerotation*Math.PI/180.0);
       }
       //get the x and y coordinates of the current node
       double nodeX = toScreenX(col);
@@ -844,6 +832,7 @@ public class TreeVis extends PApplet {
       double maxX = minX+5;
       double minY = nodeY-5;
       double maxY = minY+5;
+      
       //if node is collapsed, whole wedge is viable
       if(tree.isCollapsed())
       {
@@ -894,30 +883,13 @@ public class TreeVis extends PApplet {
                   Polygon poly = new Polygon(xs,ys,3);
 
                   if(poly.contains(x,y))
-                      {
-                          return tree;
-                      }
-                      else
-                          return null;
+                  {
+                      return tree;
+                  }
+                  else
+                      return null;
             }
       }
-      
-      // double width = 0;
-      // String s = tree.getLabel();
-      // if(zoomDrawNodeLabels && drawExternalNodeLabels) {
-      //     for (int i = 0; i < s.length(); i++) {
-      //       width += nodeFont.width(s.charAt(i));
-      //     }
-      // }
-      // maxX =  nodeX + 5 + (width*nodeFont.size);
-      // minY = nodeY;// - (nodeFont.descent()*nodeFont.size);
-      // maxY = nodeY + (nodeFont.ascent()+nodeFont.descent())*nodeFont.size;
-      // if ((tree.isLeaf() && !this.drawExternalNodeLabels) || (!tree.isLeaf() && !this.drawInternalNodeLabels)) {
-      //     maxX = minX + 5;
-      //     maxY = minY + 5;
-      //     minX = minX - 5;
-      //     minY = minY - 5;
-      // }
       
       //if the current node is within TOLERANCE pixels, return this node
       if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
@@ -1065,28 +1037,6 @@ public class TreeVis extends PApplet {
       lastAng  = lastAng + radians((float)angles[i]);
     }
   }
-  
-  // public void drawToolTip(String tip, Node node) {
-  //     double x = node.getXOffset();
-  //     double y = node.getYOffset();
-  //     if (treeLayout.equals("Radial")) {
-  //           x = node.getRXOffset();
-  //           y = node.getRYOffset();
-  //       } else if (treeLayout.equals("Polar")) {
-  //           x = node.getROffset() * Math.cos(node.getTOffset());
-  //           y = node.getROffset() * Math.sin(node.getTOffset());
-  //       }
-  //       // canvas.
-  //     g.fill(0xFFFF00cc);
-  //       // stroke(255);
-  //       double drawX = toScreenX(x);
-  //       double drawY = toScreenY(y);
-  //       double maxX =  drawX + (width*nodeFont.size);
-  //       double minY = drawY;// - (nodeFont.descent()*nodeFont.size);
-  //       double maxY = drawY + ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
-  //       g.rect((float)(drawX), (float)minY-5, (float)(maxX-drawX), (float)(maxY-minY)-5);
-  //       g.text(tip, (float)drawX, (float)drawY);
-  // }
 
     /**
      * Draw the actual node, not including branch lines and child nodes.
@@ -1126,16 +1076,19 @@ public class TreeVis extends PApplet {
       if(s.length() == 0)
            s = node.getName();
       
-      double width = 0;
+      double textwidth = 0;
      
       if (node.getDrawLabel() && ((node.isLeaf() && drawExternalNodeLabels) || (!node.isLeaf() && drawInternalNodeLabels)) && zoomDrawNodeLabels)              
       {    
          for (int i = 0; i < s.length(); i++) {
-           width += nodeFont.width(s.charAt(i));
+           textwidth += nodeFont.width(s.charAt(i));
          }
       }
       else
-         width = 1;
+         textwidth = 1;
+      
+      if((treeLayout.equals("Polar") || treeLayout.equals("Radial")) && (node.getParent() != null) && (node.getParent().longestBranch() != node))
+        textwidth = 1;
       
       if (draggingLabel && this.mouseOverNode == node) {
           //this node's label is being dragged:
@@ -1161,8 +1114,9 @@ public class TreeVis extends PApplet {
           }
       
        double minX = drawX+offsetbias-1;   
-       
+       double fullrotation = 0;
        boolean textflip = false;
+       
       if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
         canvas.pushMatrix();
         double rotation = 0;
@@ -1180,7 +1134,7 @@ public class TreeVis extends PApplet {
         }
         
         //make sure rotation is positive
-        double fullrotation = rotation + treerotation*Math.PI/180.0;
+        fullrotation = rotation + treerotation*Math.PI/180.0;
         if (fullrotation < 0) {
             fullrotation = fullrotation + 2*Math.PI;
         }
@@ -1197,44 +1151,22 @@ public class TreeVis extends PApplet {
         drawY = (float)0;
         canvas.translate((float)xstart, (float)ystart);
         canvas.rotate((float)rotation);
+        textAlign(LEFT);
         
         //draw all text rightside-up
         if (fullrotation > Math.PI/2 && fullrotation < 3*Math.PI/2) {
             //add 180 degrees
+            drawX = -drawX - (float)offsetbias - (float)(textwidth*nodeFont.size);
+            // textAlign(RIGHT);
             canvas.rotate((float)Math.PI);
-            // canvas.scale(-1,-1);
-            // canvas.rotateY(radians(180));
-            //draw on other side
-            // textflip = true;
-            drawX = -drawX - (float)(width*nodeFont.size) - (float)offsetbias;
-            //subtract width of the text
-            // drawX = drawX - (float)width - 2*(float)offsetbias;
         }
       }
      
-     double maxX =  drawX + (width*nodeFont.size);
+     double maxX =  drawX + (textwidth*nodeFont.size);
      double maxY = ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
      double minY = drawY - maxY;// - (nodeFont.descent()*nodeFont.size);
-      
-      if (selected || hilighted) {
-        int sc;
-        if (selected) { sc = SELECTED_COLOR; 
-            canvas.fill(sc, 64);
-            canvas.stroke(sc);
-            // canvas.rect((float)(drawX+offsetbias), (float)minY-5, (float)(maxX-drawX), (float)(maxY-minY)-3);
-            canvas.rect((float)(drawX+offsetbias), (float)minY, (float)(maxX-drawX), (float)maxY);
-            canvas.noTint();
-            }
-            if(hilighted){ 
-            sc = HIGHLIGHTED_COLOR;
-            canvas.stroke(sc);
-            canvas.strokeWeight((int)yscale);
-            canvas.line(getWidth()-10,drawY,getWidth(),drawY);
-            }
-        
-      }     
      
-     //node.isLeaf() &&
+     //draw node label
      if(((!node.isLeaf() && drawInternalNodeLabels && !node.isCollapsed())||(node.isLeaf() && drawExternalNodeLabels)) && node.getDrawLabel() && zoomDrawNodeLabels)
      {           
          Color lc = node.getLabelColor(majorityColoring);
@@ -1248,25 +1180,47 @@ public class TreeVis extends PApplet {
                canvas.fill(lc.getRGB());
                canvas.stroke(lc.getRGB());
            }
+           
+           if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
+               if(node.getParent() != null) {
+                 if (node.getParent().longestBranch() == node)
+                    canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
+                }
+           }
+           else
                canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
      }
      else
      {
      }
+
+      
+     if (selected || hilighted) {
+        int sc;
+        if (selected) { sc = SELECTED_COLOR; 
+            canvas.fill(sc, 64);
+            canvas.stroke(sc);
+            // canvas.rect((float)(drawX+offsetbias), (float)minY-5, (float)(maxX-drawX), (float)(maxY-minY)-3);
+            canvas.rect((float)(drawX+offsetbias), (float)minY, (float)(maxX-drawX), (float)maxY);
+            canvas.noTint();
+            }
+            if(hilighted){ 
+            sc = HIGHLIGHTED_COLOR;
+            canvas.stroke(sc);
+            canvas.strokeWeight((int)yscale);
+            canvas.line(getWidth()-5,drawY,getWidth(),drawY);
+            }
+        
+      }     
       
       if (mouseOverNode == node || mouseOverNodeToReplace == node) {
         //outline the node
         canvas.noFill();
         canvas.strokeWeight(1);
         canvas.stroke(255,0,0);
-        maxX =  drawX + (width*nodeFont.size);
-        maxY = ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
-        minY = drawY - maxY;// - (nodeFont.descent()*nodeFont.size);
-        // maxY = ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
         canvas.rect((float)(drawX+offsetbias), (float)minY, (float)(maxX-drawX), (float)maxY);
 
         String status = "";
-           // String prefix = "";
             if (node.isLocked())
               status += "(L)";
             if(node.isLeaf())
@@ -1274,24 +1228,24 @@ public class TreeVis extends PApplet {
                 status += node.getLabel()+";";
             }
             else
+            {
                 status += String.format("Sub-tree: %d leaves;", node.getNumberOfLeaves());
-            String label = node.getConsensusLineage();
-            if (label == null)
-                label = "";
-            status += label;
-            
+                String label = node.getConsensusLineage();
+                if (label == null)
+                    label = "";
+                status += label;
+            }
+            textwidth = 0;
             for (int i = 0; i < status.length(); i++) {
-                width += tipFont.width(status.charAt(i));
+                textwidth += tipFont.width(status.charAt(i));
             }
             
-            maxX = (width*tipFont.size);
-            drawX =  getWidth() - (float)(width*tipFont.size);
-            drawY = getHeight();// - ((tipFont.ascent()+tipFont.descent())*tipFont.size);
-            // minY = drawY;// - (nodeFont.descent()*nodeFont.size);
+            maxX = (textwidth*tipFont.size);
+            drawX =  getWidth() - (float)(textwidth*tipFont.size);
+            drawY = getHeight();
             maxY = ((tipFont.ascent()+tipFont.descent())*tipFont.size);
             canvas.fill(HOVER_COLOR, 150);
             canvas.noStroke();
-            // canvas.stroke(HOVER_COLOR, 150);
             canvas.rect((float)(drawX), (float)drawY-8, (float)(maxX), (float)(maxY));
             canvas.fill(0);
             canvas.stroke(0);
@@ -1300,10 +1254,6 @@ public class TreeVis extends PApplet {
             canvas.textFont(nodeFont);
             canvas.noTint();
       }
-      
-      // //reset drawing color to default black
-      // canvas.fill(0);
-      // canvas.stroke(0);
       
       if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
         canvas.popMatrix();
@@ -1332,12 +1282,14 @@ public class TreeVis extends PApplet {
           y = node.getROffset() * Math.sin(node.getTOffset());
       }
       
-      String s = node.getName();
-         if(node.getLabel().length() > 0)
-             s = node.getLabel();
-         for (int i = 0; i < s.length(); i++) {
-           width += nodeFont.width(s.charAt(i));
-         }
+      // double textwidth = 0;
+      // 
+      // String s = node.getName();
+      //    if(node.getLabel().length() > 0)
+      //        s = node.getLabel();
+      //    for (int i = 0; i < s.length(); i++) {
+      //      textwidth += nodeFont.width(s.charAt(i));
+      //    }
       
       //get the actual screen coordinates
       double xs = toScreenX(x);
@@ -1363,7 +1315,7 @@ public class TreeVis extends PApplet {
             (float)xs, (float)toScreenY(node.nodes.get(node.nodes.size()-1).getYOffset()));
             
           //loop over all of the children
-          for (int i=0; i < node.nodes.size(); i++) {
+          for (Node k: node.nodes) {
               //draw horizontal line from the vertical line to the child node
                 if(!colorBranches)
                 {
@@ -1371,34 +1323,21 @@ public class TreeVis extends PApplet {
                 }
                 else
                 {
-                    c = node.nodes.get(i).getBranchColor(majorityColoring);
+                    c = k.getBranchColor(majorityColoring);
                     canvas.stroke(c.getRGB());
                 }
               
-              canvas.strokeWeight((float)node.nodes.get(i).getLineWidth()*getLineWidthScale());
-              double yp = toScreenY(node.nodes.get(i).getYOffset());
-              double xp = toScreenX(node.nodes.get(i).getXOffset());
+              canvas.strokeWeight((float)k.getLineWidth()*getLineWidthScale());
+              double yp = toScreenY(k.getYOffset());
+              double xp = toScreenX(k.getXOffset());
               canvas.line((float)xs, (float)yp,
                   (float)xp, (float)yp);
-                  
-              // if(this.drawInternalNodeLabels && !node.nodes.get(i).isLeaf() && !node.nodes.get(i).isCollapsed() ) {
-              //       int lc = node.getLabelColor(majorityColoring).getRGB();
-              //       canvas.fill(lc);
-              //       canvas.stroke(lc);
-              //         if (yscale > nodeFontSize) 
-              //         {
-              //             String n = node.nodes.get(i).getName();
-              //              if(node.nodes.get(i).getLabel().length() > 0)
-              //                  n = node.nodes.get(i).getLabel();
-              //             canvas.text(n, (float)(xp - textWidth(n)), (float)(yp));
-              //         }
-              //   }
           }
       
             
       } else if (treeLayout.equals("Triangular")) {
           //loop over all of the children
-          for (int i=0; i < node.nodes.size(); i++) {
+          for (Node k: node.nodes) {
               //draw line from parent to the child node
               if(!colorBranches)
               {
@@ -1406,37 +1345,19 @@ public class TreeVis extends PApplet {
               }
               else
               {
-                  c = node.nodes.get(i).getBranchColor(majorityColoring);
+                  c = k.getBranchColor(majorityColoring);
                   canvas.stroke(c.getRGB());
               }
               
-              canvas.strokeWeight((float)(node.nodes.get(i).getLineWidth()*getLineWidthScale()));
-              double yp = toScreenY(node.nodes.get(i).getYOffset());
-              double xp = toScreenX(node.nodes.get(i).getXOffset());
+              canvas.strokeWeight((float)(k.getLineWidth()*getLineWidthScale()));
+              double yp = toScreenY(k.getYOffset());
+              double xp = toScreenX(k.getXOffset());
               canvas.line((float)xs, (float)ys,
                   (float)xp, (float)yp);
-                  
-              // if(this.drawInternalNodeLabels && !node.nodes.get(i).isLeaf() && !node.nodes.get(i).isCollapsed() ) {
-              //         int lc = node.getLabelColor(majorityColoring).getRGB();
-              //         canvas.fill(lc);
-              //         canvas.stroke(lc);
-              //           if (yscale > nodeFontSize) 
-              //           {
-              //               String n = node.nodes.get(i).getName();
-              //                if(node.nodes.get(i).getLabel().length() > 0)
-              //                    n = node.nodes.get(i).getLabel();
-              //               canvas.text(n, (float)(xp + 1), (float)(yp+1));
-              //           }
-              //     }
           }
       } else if (treeLayout.equals("Radial")) {
           //loop over all of the children
-          for (int i=0; i < node.nodes.size(); i++) {
-              //draw line from parent to the child node
-              Node k = node.nodes.get(i);
-/*              Color col = k.getBranchColor(majorityColoring);
-              canvas.stroke(col.getRGB());*/
-              
+          for (Node k : node.nodes) {              
               if(!colorBranches)
                 {
                   canvas.stroke(0);
@@ -1454,26 +1375,7 @@ public class TreeVis extends PApplet {
               double yp = toScreenY(k.getRYOffset());
               canvas.line((float)xs, (float)ys,
                   (float)xp, (float)yp);
-              // if(this.drawInternalNodeLabels && !node.nodes.get(i).isLeaf() && !node.nodes.get(i).isCollapsed() ) {
-              //         int lc = node.getLabelColor(majorityColoring).getRGB();
-              //         canvas.fill(lc);
-              //         canvas.stroke(lc);
-              //           if (yscale > nodeFontSize) 
-              //           {
-              //               String n = node.nodes.get(i).getName();
-              //                if(node.nodes.get(i).getLabel().length() > 0)
-              //                    n = node.nodes.get(i).getLabel();
-              //               canvas.text(n, (float)(xp + 1), (float)(yp+1));
-              //           }
-              //     }
           }
-          /*if(this.drawInternalNodeLabels) {
-                        int lc = node.getLabelColor(majorityColoring).getRGB();
-                        canvas.fill(lc);
-                        canvas.stroke(lc);
-                          if (yscale > nodeFontSize) 
-                              canvas.text(s, (float)(toScreenX(node.getRXOffset) + 1), (float)(toScreenY(node.getRYOffset)));
-                    }*/
           
       } else if (treeLayout.equals("Polar")) {
           canvas.ellipseMode(CENTER);
@@ -1489,18 +1391,17 @@ public class TreeVis extends PApplet {
             (float)(maxradius));
           
           //loop over all of the children
-          for (int i=0; i < node.nodes.size(); i++) {
+          for (Node k : node.nodes) {
               //draw line from parent to the child node
-              Node k = node.nodes.get(i);
               if(!colorBranches)
-                  {
-                    canvas.stroke(0);
-                  }
-                  else
-                  {
-                      c = k.getBranchColor(majorityColoring);
-                      canvas.stroke(c.getRGB());
-                  }
+              {
+                canvas.stroke(0);
+              }
+              else
+              {
+                  c = k.getBranchColor(majorityColoring);
+                  canvas.stroke(c.getRGB());
+              }
               double d = k.getLineWidth();
               canvas.strokeWeight((float)d*getLineWidthScale());
               double xp = k.getROffset() * Math.cos(k.getTOffset());
@@ -1509,20 +1410,7 @@ public class TreeVis extends PApplet {
               double xin = radius * Math.cos(ctheta);
               double yin = radius * Math.sin(ctheta);
               canvas.line((float)toScreenX(xin), (float)toScreenY(yin),
-                  (float)toScreenX(xp), (float)toScreenY(yp));
-                  
-              // if(this.drawInternalNodeLabels && !node.nodes.get(i).isLeaf() && !node.nodes.get(i).isCollapsed() ) {
-              //           int lc = node.getLabelColor(majorityColoring).getRGB();
-              //           canvas.fill(lc);
-              //           canvas.stroke(lc);
-              //             if (yscale > nodeFontSize) 
-              //             {
-              //                 String n = k.getName();
-              //                  if(k.getLabel().length() > 0)
-              //                      n = k.getLabel();
-              //                 canvas.text(n, (float)(toScreenX(xp) + 1), (float)(toScreenY(yp)+1));
-              //             }
-              //       }   
+                  (float)toScreenX(xp), (float)toScreenY(yp));  
           }   
       }
     }
@@ -1682,10 +1570,10 @@ public class TreeVis extends PApplet {
       } else {
         //set the y-offset based the subtree's values
         double total = 0;
-        for (int i=0; i < node.nodes.size(); i++) {
-          setYOffsets(node.nodes.get(i), _prev);
-          _prev = _prev + node.nodes.get(i).getNumberOfLeaves();
-          total = total + node.nodes.get(i).getYOffset();
+        for (Node n : node.nodes) {
+          setYOffsets(n, _prev);
+          _prev = _prev + n.getNumberOfLeaves();
+          total = total + n.getYOffset();
         }
         //offset is average of children
         node.setYOffset(total/node.nodes.size());
@@ -1698,33 +1586,34 @@ public class TreeVis extends PApplet {
     //set the max and min y-offsets
       node.setMaximumYOffset(node.getYOffset());
       node.setMinimumYOffset(node.getYOffset());
-      for (int i=0; i < node.nodes.size(); i++) {
-        node.setMaximumYOffset(Math.max(node.getMaximumYOffset(), node.nodes.get(i).getMaximumYOffset()));
-        node.setMinimumYOffset(Math.min(node.getMinimumYOffset(), node.nodes.get(i).getMinimumYOffset()));
+      for (Node n : node.nodes) {
+        node.setMaximumYOffset(Math.max(node.getMaximumYOffset(), n.getMaximumYOffset()));
+        node.setMinimumYOffset(Math.min(node.getMinimumYOffset(), n.getMinimumYOffset()));
       }
     }
     
     
     public void setXOffsets(Node node, double _prev) {
         node.setXOffset(_prev+node.getBranchLength());
-        for (int i = 0; i < node.nodes.size(); i++) {
-            setXOffsets(node.nodes.get(i), _prev+node.getBranchLength());
+        for (Node n : node.nodes) {
+            setXOffsets(n, _prev+node.getBranchLength());
         }
     }
     
     //NOTE: the theta offsets must be set before the radius offsets
     public void setROffsets(Node node, double _prev) {
         node.setROffset(_prev+node.getBranchLength());
-        for (int i = 0; i < node.nodes.size(); i++) {
-            setROffsets(node.nodes.get(i), _prev+node.getBranchLength());
+        for (Node n : node.nodes) {
+            setROffsets(n, _prev+node.getBranchLength());
         }
         
       //set the max and min y-offsets
       node.setMaximumROffset(node.getROffset());
       node.setMinimumROffset(node.getROffset());
-      for (int i=0; i < node.nodes.size(); i++) {
-        node.setMaximumROffset(Math.max(node.getMaximumROffset(), node.nodes.get(i).getMaximumROffset()));
-        node.setMinimumROffset(Math.min(node.getMinimumROffset(), node.nodes.get(i).getMinimumROffset()));
+      // for (int i=0; i < node.nodes.size(); i++) {
+      for (Node n : node.nodes) {
+        node.setMaximumROffset(Math.max(node.getMaximumROffset(), n.getMaximumROffset()));
+        node.setMinimumROffset(Math.min(node.getMinimumROffset(), n.getMinimumROffset()));
       }
     }
     
@@ -1738,10 +1627,10 @@ public class TreeVis extends PApplet {
       } else {
         //set the y-offset based the subtree's values
         double total = 0;
-        for (int i=0; i < node.nodes.size(); i++) {
-          setTOffsets(node.nodes.get(i), _prev);
-          _prev = _prev + delta*node.nodes.get(i).getNumberOfLeaves();
-          total = total + node.nodes.get(i).getTOffset();
+        for (Node n : node.nodes) {
+          setTOffsets(n, _prev);
+          _prev = _prev + delta*n.getNumberOfLeaves();
+          total = total + n.getTOffset();
         }
         //offset is average of children
         node.setTOffset(total/node.nodes.size());
@@ -1750,9 +1639,9 @@ public class TreeVis extends PApplet {
       //set the max and min theta-offsets
       node.setMaximumTOffset(node.getTOffset());
       node.setMinimumTOffset(node.getTOffset());
-      for (int i=0; i < node.nodes.size(); i++) {
-        node.setMaximumTOffset(Math.max(node.getMaximumTOffset(), node.nodes.get(i).getMaximumTOffset()));
-        node.setMinimumTOffset(Math.min(node.getMinimumTOffset(), node.nodes.get(i).getMinimumTOffset()));
+      for (Node n : node.nodes) {
+        node.setMaximumTOffset(Math.max(node.getMaximumTOffset(), n.getMaximumTOffset()));
+        node.setMinimumTOffset(Math.min(node.getMinimumTOffset(), n.getMinimumTOffset()));
       }
 
     }
@@ -1766,16 +1655,16 @@ public class TreeVis extends PApplet {
             node.setRXOffset(p.getRXOffset() + node.getBranchLength() * Math.cos(node.getTOffset()));
             node.setRYOffset(p.getRYOffset() + node.getBranchLength() * Math.sin(node.getTOffset()));
         }
-        for (int i = 0; i < node.nodes.size(); i++) {
-            setRadialOffsets(node.nodes.get(i));
+        for (Node n : node.nodes) {
+            setRadialOffsets(n);
         }
         
        //set the max and min y-offsets
       node.setMaximumRXOffset(node.getRXOffset());
       node.setMinimumRXOffset(node.getRXOffset());
-      for (int i=0; i < node.nodes.size(); i++) {
-        node.setMaximumRXOffset(Math.max(node.getMaximumRXOffset(), node.nodes.get(i).getMaximumRXOffset()));
-        node.setMinimumRXOffset(Math.min(node.getMinimumRXOffset(), node.nodes.get(i).getMinimumRXOffset()));
+      for (Node n : node.nodes) {
+        node.setMaximumRXOffset(Math.max(node.getMaximumRXOffset(), n.getMaximumRXOffset()));
+        node.setMinimumRXOffset(Math.min(node.getMinimumRXOffset(), n.getMinimumRXOffset()));
       }
     }
     
@@ -1807,7 +1696,7 @@ public class TreeVis extends PApplet {
      * @param  path The path to write the image to
      * @param  dims The dimentions of the output image file
      */
-    public void exportTreeImage(String path, double dims[]) {
+    public void exportTreeImage(String path, int dims[]) {
         float oldLineWidth = getLineWidthScale();
 		  int oldWidth = getWidth();
 		  int oldHeight = getHeight();
@@ -1820,6 +1709,7 @@ public class TreeVis extends PApplet {
 		  double longest = textWidth(root.getLongestLabel());
 		  double l = root.longestRootToTipDistance();
 		  double s = root.shortestRootToTipDistance();
+		  
 	  try {
 		  //save the current variables
 		  
@@ -1827,33 +1717,33 @@ public class TreeVis extends PApplet {
 
           xstart = 0;
           ystart = 0;
-          width = (int)dims[0];
-          height = (int)dims[1];
+          
+          float textwidth = 0;
           String st = "";
-           if(drawExternalNodeLabels)
-               st = root.getLongestLabel();
+          if(drawExternalNodeLabels)
+            st = root.getLongestLabel();
 
-             for (int i = 0; i < st.length(); i++) {
-                 width += nodeFont.width(st.charAt(i));
-             }
+          for (int i = 0; i < st.length(); i++) {
+             textwidth += nodeFont.width(st.charAt(i));
+          }
 
-             TREEMARGIN = MARGIN + width*nodeFont.size + 10;
+          TREEMARGIN = textwidth*nodeFont.size + 5;
 
-         //  if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-         //               xscale = (dims[0]-MARGIN-TREEMARGIN)/root.depth();
-         //               xstart = MARGIN;
-         //  } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-         //               xscale = (Math.min(dims[0], dims[1])*0.5-2*TREEMARGIN)/root.depth();
-         //               xstart = dims[0]*0.5;
-         //  }
-         //  
-         // if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-         //               yscale = (dims[1]-2*MARGIN)/root.getNumberOfLeaves();
-         //               ystart = MARGIN;
-         //  } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-         //               yscale = (Math.min(dims[0], dims[1])*0.5-2*TREEMARGIN)/root.depth();
-         //               ystart = dims[1]*0.5;
-         //  }
+          if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+                       xscale = (dims[0]-MARGIN-TREEMARGIN)/root.depth();
+                       xstart = MARGIN;
+          } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
+                       xscale = (Math.min(dims[0], dims[1])*0.5)/root.depth();
+                       xstart = dims[0]*0.5;
+          }
+          
+         if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+                       yscale = (dims[1]-2*MARGIN)/root.getNumberOfLeaves();
+                       ystart = MARGIN;
+          } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
+                       yscale = (Math.min(dims[0], dims[1])*0.5)/root.depth();
+                       ystart = dims[1]*0.5;
+          }
 		  checkBounds();
 		  
 		  PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), PDF, path);
@@ -1862,6 +1752,7 @@ public class TreeVis extends PApplet {
 		  //draw the tree to the file
 		  canvas.beginDraw();
 		  canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
+		  
           canvas.pushMatrix();
           canvas.translate((float)xstart, (float)ystart);
           canvas.rotate((float)(treerotation*Math.PI/180.0));
@@ -1869,6 +1760,7 @@ public class TreeVis extends PApplet {
           canvas.textFont(nodeFont);
 		  drawTree(root, canvas);
           canvas.popMatrix();
+          
           canvas.dispose();
 		  canvas.endDraw();
 		  

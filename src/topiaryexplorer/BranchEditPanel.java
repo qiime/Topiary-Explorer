@@ -55,8 +55,9 @@ class BranchEditPanel extends JPanel{
     JMenu sortBy = new JMenu("Sort by");*/
     
     JMenu lineWidthMenu = new JMenu("Line Width");
-    JSlider lineWidthSlider = new JSlider(1, 20, 20);
-    ButtonGroup lineWidthGroup = new ButtonGroup();
+    JLabel lineWidthLabel = new JLabel("Line Width:");
+    JSlider lineWidthSlider = new JSlider(1, 75, 15);
+    // ButtonGroup lineWidthGroup = new ButtonGroup();
     
 /*    JRadioButtonMenuItem uniformLineWidthItem = new JRadioButtonMenuItem("Uniform");
     JMenu lineWidthSampleMetadataMenu = new JMenu("Sample Metadata");
@@ -74,7 +75,7 @@ class BranchEditPanel extends JPanel{
         colorByMenu = new ColorByPopupMenu(frame.frame, frame, frame.frame.branchColorPanel,0);
         this.setToolTipText("Customize Branches");
 /*        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));*/
-        setLayout(new GridLayout(4,1));
+        setLayout(new GridLayout(6,1));
         
         // coloringMenuItem.setEnabled(false);
         coloringMenuItem.addChangeListener(new ChangeListener() {
@@ -113,6 +114,18 @@ class BranchEditPanel extends JPanel{
            } 
         });
         add(colorBy);
+        add(lineWidthLabel);
+        lineWidthSlider.setMajorTickSpacing(15);
+        lineWidthSlider.setSnapToTicks(true);
+        lineWidthSlider.addChangeListener(new ChangeListener() {
+            public synchronized void stateChanged(ChangeEvent e) {
+                if (lineWidthSlider.getValueIsAdjusting()){
+                    frame.tree.setLineWidthScale(lineWidthSlider.getValue()/15.0F);
+                }
+                frame.tree.redraw();
+            }
+        });
+        add(lineWidthSlider);
     }
 	// }}}
 	

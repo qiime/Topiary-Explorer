@@ -301,13 +301,11 @@ public final class TreeViewPanel extends JPanel {
 	}
 	
 	public void layoutChanged() {
-        // if(changeCoords)
-        // {
-    	    frame.treeToolbar.setScale();
-    	    frame.verticalTreeToolbar.setScale();
-    	    frame.recenter();
-        // }
+	    frame.treeToolbar.setScale();
+	    frame.verticalTreeToolbar.setScale();
+        frame.recenter();
 	    vis.checkBounds();
+	    vis.redraw();
 	    validate();
 	}
 	

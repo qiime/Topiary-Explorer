@@ -271,6 +271,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          item.addActionListener(this);
          treeMenu.add(item);
          treeMenu.add(new JSeparator());
+         item = new JMenuItem("Close");
+         item.addActionListener(this);
+         treeMenu.add(item);
 	     
 	     //set up the "tree" submenus
 	     topMenu.add(treeMenu);
@@ -341,6 +344,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                   tree.noLoop();
      			  exportScreenCapture();
                   if(this.isActive()) tree.redraw();
+              } else if (e.getActionCommand().equals("Close"))  {
+                  windowClosed();
               }
     }
     
@@ -352,6 +357,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     }
     
     public void windowClosed(WindowEvent e) {
+        frame.treeWindows.remove(this);
+        dispose();
+    }
+    
+    public void windowClosed() {
         frame.treeWindows.remove(this);
         dispose();
     }
@@ -545,11 +555,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     public void recenter() {
         tree.resetTreeX();
         tree.resetTreeY();
-        treeToolbar.setScale();
-        verticalTreeToolbar.setScale();
-        treeToolbar.syncZoomSliderWithTree();
-        verticalTreeToolbar.syncZoomSliderWithTree();
-        tree.checkBounds();
+        // treeToolbar.setScale();
+        // verticalTreeToolbar.setScale();
+        // treeToolbar.syncZoomSliderWithTree();
+        // verticalTreeToolbar.syncZoomSliderWithTree();
+        // tree.checkBounds();
         tree.redraw();
     }
 	
