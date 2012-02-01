@@ -25,6 +25,9 @@ public class Node implements Comparable{
   private int numberOfLeaves = 0;
   // private int numOtusCovered = 0;
   
+  private double labelyoffset = 0;
+  private double labelxoffset = 0;
+  
   private double yoffset = 0;
   private double xoffset = 0;
   private double roffset = 0; //radius
@@ -176,6 +179,10 @@ public class Node implements Comparable{
   public int getNumberOfLeaves() { return numberOfLeaves; }
   public void setHover(boolean b) { hover = b; }
   public boolean getHover() { return hover; }
+  public void setLabelYOffset(double d) { labelyoffset = d; }
+  public double getLabelYOffset() { return labelyoffset; }
+  public void setLabelXOffset(double d) { labelxoffset = d; }
+  public double getLabelXOffset() { return labelxoffset; }
   
   public int compareTo(Object otherNode) throws ClassCastException {
       if (!(otherNode instanceof Node))

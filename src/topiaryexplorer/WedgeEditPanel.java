@@ -6,6 +6,8 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.basic.BasicArrowButton;
+
 /**
  * <<Class summary>>
  *
@@ -26,13 +28,18 @@ public class WedgeEditPanel extends JPanel{
     
     JButton consensusButton = new JButton("Consensus Lineages");
     
-    JLabel position = new JLabel("Position:  ");
-    JPanel positionPanel = new JPanel();
-    JButton upButton = new JButton("^");
-    JButton downButton = new JButton("v");
-    JButton rightButton = new JButton(">");
-    JButton leftButton = new JButton("<");
-    JButton resetPosition = new JButton(" ");
+    // JCheckBox labelDragging = new JCheckBox("Drag Mode", false);
+    // JLabel position = new JLabel("Position:  ");
+    // JPanel positionPanel = new JPanel();
+    // BasicArrowButton upButton = new BasicArrowButton(SwingConstants.NORTH);
+    // BasicArrowButton downButton = new BasicArrowButton(SwingConstants.SOUTH);
+    // BasicArrowButton rightButton = new BasicArrowButton(SwingConstants.EAST);
+    // BasicArrowButton leftButton = new BasicArrowButton(SwingConstants.WEST);
+    // JButton upButton = new JButton("^");
+    // JButton downButton = new JButton("v");
+    // JButton rightButton = new JButton(">");
+    // JButton leftButton = new JButton("<");
+    JButton resetPosition = new JButton("Reset Positions");
     JPanel pPanel = new JPanel();
     
     String[] fntFaces = {"SansSerif","Serif","Courier"};//PFont.list();
@@ -40,8 +47,10 @@ public class WedgeEditPanel extends JPanel{
     JLabel fontSizeLabel = new JLabel("Size: ");
     JTextField fntSize = new JTextField("",3);
     JLabel ptLabel = new JLabel("pt");
-    JButton fntIncButton = new JButton("^");
-    JButton fntDecButton = new JButton("v");
+    BasicArrowButton fntIncButton = new BasicArrowButton(SwingConstants.NORTH);
+    BasicArrowButton fntDecButton = new BasicArrowButton(SwingConstants.SOUTH);
+    // JButton fntIncButton = new JButton("^");
+    // JButton fntDecButton = new JButton("v");
     JPanel fntPanel = new JPanel();
     JPanel fontSizePanel = new JPanel();
     
@@ -91,48 +100,19 @@ public class WedgeEditPanel extends JPanel{
         add(holder);
         
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
-/*        labelPanel.setLayout(new FlowLayout());*/
         
-        pPanel.add(position);
-        positionPanel.setLayout(new GridLayout(3,3));
-        positionPanel.setMaximumSize(new Dimension(35,35));
-        positionPanel.add(new JLabel());
-        upButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                vis.setLabelYOffset(vis.getLabelYOffset()-1);
-            }
-        });
-        positionPanel.add(upButton);
-        positionPanel.add(new JLabel());
-        leftButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                vis.setLabelXOffset(vis.getLabelXOffset()-1);
-            }
-        });
-        positionPanel.add(leftButton);
         resetPosition.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                vis.setLabelYOffset(0);
-                vis.setLabelXOffset(0);
+                for(Node n : vis.getTree().getNodes()) {
+                    n.setLabelYOffset(0.0);
+                    n.setLabelXOffset(0.0);
+                }
+                vis.redraw();
             }
         });
-        positionPanel.add(resetPosition);
-        rightButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                vis.setLabelXOffset(vis.getLabelXOffset()+1);
-            }
-        });
-        positionPanel.add(rightButton);
-        positionPanel.add(new JLabel());
-        downButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                vis.setLabelYOffset(vis.getLabelYOffset()+1);
-            }
-        });
-        positionPanel.add(downButton);
-        positionPanel.add(new JLabel());
-        positionPanel.setToolTipText("Change the position of wedge labels.");
-        pPanel.add(positionPanel);
+
+        // resetPosition.setMinimumSize(new Dimension(188, 20));
+        pPanel.add(resetPosition);     
         labelPanel.add(pPanel);
         
         fntFace.addActionListener(new ActionListener() {

@@ -158,6 +158,15 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
           });
           item.setEnabled(false);
           treePopupMenu.add(item);
+          item = new JMenuItem("Reset Node Label Position");
+          item.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent arg0) {
+                  clickedNode.setLabelYOffset(0.0);
+                  clickedNode.setLabelXOffset(0.0);
+                  tree.redraw();
+              }
+          });
+          treePopupMenu.add(item);
           item = new JMenuItem("Consensus Lineage");
             item.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent arg0) {
@@ -203,7 +212,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  				    treePopupMenu.getComponent(2).setEnabled(!clickedNode.isLeaf());
  				    treePopupMenu.getComponent(3).setEnabled(!clickedNode.isLeaf());
  				    treePopupMenu.getComponent(4).setEnabled(!clickedNode.isLeaf());
- 				    treePopupMenu.getComponent(7).setEnabled(!clickedNode.isLeaf());
+ 				    treePopupMenu.getComponent(5).setEnabled(!clickedNode.isLeaf());
+ 				    treePopupMenu.getComponent(8).setEnabled(!clickedNode.isLeaf());
  					treePopupMenu.show(tree, evt.getX(), evt.getY());
  				}
  			}
@@ -214,7 +224,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  				    treePopupMenu.getComponent(2).setEnabled(!clickedNode.isLeaf());
  				    treePopupMenu.getComponent(3).setEnabled(!clickedNode.isLeaf());
  				    treePopupMenu.getComponent(4).setEnabled(!clickedNode.isLeaf());
- 				    treePopupMenu.getComponent(7).setEnabled(!clickedNode.isLeaf());
+ 				    treePopupMenu.getComponent(5).setEnabled(!clickedNode.isLeaf());
+ 				    treePopupMenu.getComponent(8).setEnabled(!clickedNode.isLeaf());
  					treePopupMenu.show(tree, evt.getX(), evt.getY());
  				}
  			}

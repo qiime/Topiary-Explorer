@@ -15,6 +15,7 @@ class CollapseTreeToolbar extends JToolBar {
     // that is collapsed, so the value of the slider divided
     // by 1000 gives you the percentage of the tree that
     // should be collapsed.
+    private JToggleButton collapseMode = new JToggleButton("Root");
     private JSlider collapseSlider = new JSlider(0, 1001, 10);
     private JPanel spacer = new JPanel();
     private JLabel collapseLabel = new JLabel("Collapse tree: ");
@@ -31,7 +32,7 @@ class CollapseTreeToolbar extends JToolBar {
 
         spacer.setMinimumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
         spacer.setMaximumSize(new Dimension(this.getWidth() - frame.treeHolder.getWidth(), 28));
-        collapseSlider.setSnapToTicks(true);
+        // collapseSlider.setSnapToTicks(true);
         collapseSlider.setToolTipText("Drag slider to collapse tree.");
         collapseSlider.setPreferredSize(new Dimension(this.getWidth(),28));
         collapseSlider.addChangeListener(new ChangeListener() {
@@ -41,9 +42,25 @@ class CollapseTreeToolbar extends JToolBar {
                 }
             }
         });
-
+        
+        collapseMode.setToolTipText("Collapse Mode");
+        collapseMode.setPreferredSize(new Dimension(50,28));
+        collapseMode.setMinimumSize(new Dimension(50,28));
+        collapseMode.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(collapseMode.isSelected())
+                    collapseMode.setText("Parent");
+                else
+                    collapseMode.setText("Root");
+                    
+                frame.tree.setCollapseMode(collapseMode.getText());
+                frame.tree.redraw();
+            }
+        });
+        
         add(spacer);
         add(collapseSlider);
+        add(collapseMode);
         setFloatable(false);
     }
     

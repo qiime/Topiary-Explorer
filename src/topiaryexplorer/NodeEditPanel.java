@@ -13,6 +13,7 @@ import java.sql.*;
 import javax.swing.table.*;
 import java.io.*;
 import javax.jnlp.*;
+import javax.swing.plaf.basic.BasicArrowButton;
 
 /**
  * <<Class summary>>
@@ -41,8 +42,10 @@ public final class NodeEditPanel extends JPanel{
     String[] fntFaces = {"SansSerif","Serif","Courier"};//PFont.list();
     JComboBox fntFace = new JComboBox(fntFaces);
     JLabel ptLabel = new JLabel("pt");
-    JButton fntIncButton = new JButton("^");
-    JButton fntDecButton = new JButton("v");
+    BasicArrowButton fntIncButton = new BasicArrowButton(SwingConstants.NORTH);
+    BasicArrowButton fntDecButton = new BasicArrowButton(SwingConstants.SOUTH);
+    // JButton fntIncButton = new JButton("^");
+    // JButton fntDecButton = new JButton("v");
     JPanel fntPanel = new JPanel();
     JPanel fntSizePanel = new JPanel();
     

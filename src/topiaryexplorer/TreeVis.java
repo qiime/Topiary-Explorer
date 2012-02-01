@@ -101,6 +101,7 @@ public class TreeVis extends PApplet {
     
     private PFont nodeFont = createFont(nFont, (int)nodeFontSize);
     private int pieChartRadius = 15;
+    private String collapseMode = "Root";
 
     /**
      * setup() is called once to initialize the applet
@@ -209,6 +210,7 @@ public class TreeVis extends PApplet {
     public boolean getSelectMode() { return selectMode; }
     public void setSelectMode(boolean b) { selectMode = b; }
     public void setPieChartRadius(int i) { pieChartRadius = i; }
+    public void setCollapseMode(String s) { collapseMode = s; }
 
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
@@ -366,10 +368,10 @@ public class TreeVis extends PApplet {
           checkBounds();
           //notify listeners
           fireStateChanged();
-      } else {
+      } else if(this.mouseOverNode != null){
           //is the SHIFT key down?
           //also, CAN ONLY DRAG INTERNAL NODES
-          if (keyPressed == true && keyCode == SHIFT && !mouseOverNode.isLeaf()) {
+          if (keyPressed == true && keyCode == SHIFT && !mouseOverNode.isLeaf() && !mouseOverNode.isCollapsed()) {
               draggingLabel = true;
               //find the node where the mouse is
               Node n = findNode(mouseX, mouseY);
@@ -383,9 +385,15 @@ public class TreeVis extends PApplet {
               }
               
           }
+          else if(keyPressed == true && keyCode == SHIFT && !mouseOverNode.isLeaf() && mouseOverNode.isCollapsed()) {
+              double bxdiff = mouseX-pmouseX;
+              double bydiff = mouseY-pmouseY;
+              mouseOverNode.setLabelYOffset(mouseOverNode.getLabelYOffset()+bydiff);
+              mouseOverNode.setLabelXOffset(mouseOverNode.getLabelXOffset()+bxdiff);
+          }
           else {
               this.mouseOverNode = null;
-            this.mouseOverNodeToReplace = null;
+              this.mouseOverNodeToReplace = null;
           }
       }
       redraw();
@@ -394,10 +402,8 @@ public class TreeVis extends PApplet {
     public void mouseReleased() {
 /*      Node node = findNode(mouseX, mouseY);*/
       mouseOverNodeToReplace = findNode(mouseX, mouseY);
-/*      mouseOverNode = node;*/
-        if(selectingMode)
-            selectNodes();
-      if (draggingLabel && mouseOverNodeToReplace != null) {
+
+      if (draggingLabel && mouseOverNodeToReplace != null && !mouseOverNode.isCollapsed()) {
           //replace node label
           String s = mouseOverNode.getLabel();
           if(s.length() == 0)
@@ -406,6 +412,12 @@ public class TreeVis extends PApplet {
           mouseOverNodeToReplace.setLabel(s);
           mouseOverNode.setLabel("");
           selectedNode = mouseOverNodeToReplace;
+      }
+      else if(draggingLabel && mouseOverNode.isCollapsed()) {
+          double bxdiff = mouseX-pmouseX;
+          double bydiff = mouseY-pmouseY;
+          // mouseOverNode.setLabelYOffset(bydiff);
+          // mouseOverNode.setLabelXOffset(bxdiff);
       }
       draggingLabel = false;
       // selectingMode = false;
@@ -424,12 +436,10 @@ public class TreeVis extends PApplet {
         //is the mouse over a node?
         Node node = findNode(mouseX, mouseY);
         if (node != null) {
-           //if so, chance the cursor's hand
+           //if so, change the cursor's hand
            cursor(HAND);
-           //outline the node
-           // if ((node.isLeaf() && this.drawExternalNodeLabels) ||(!node.isLeaf() && this.drawInternalNodeLabels && this.zoomDrawNodeLabels)) {
-               mouseOverNode = node;
-           // }
+           mouseOverNode = node;
+           
          }
          else{
            //cursor is normal
@@ -553,11 +563,21 @@ public class TreeVis extends PApplet {
             //need to rescale tree
             resetTreeX();
           }
+          if (xstart < getWidth()*.5 - (xscale*root.depth()+TREEMARGIN))
+            xstart = getWidth()*.5 - (xscale*root.depth()+TREEMARGIN);
+          if (xstart > getWidth()*.5 + (xscale*root.depth()+TREEMARGIN))
+            xstart = getWidth()*.5 + (xscale*root.depth()+TREEMARGIN);
+            
           //check vertical tree scaling
           if (yscale < (Math.min(usableWidth, usableHeight)*.5)/root.depth()) {
             //need to rescale tree
             resetTreeY();
           }   
+          
+          if (ystart < getHeight()*.5 - (yscale*root.depth()+TREEMARGIN))
+            ystart = getHeight()*.5 - (yscale*root.depth()+TREEMARGIN);
+          if (ystart > getHeight()*.5 + (yscale*root.depth()+TREEMARGIN))
+            ystart = getHeight()*.5 + (yscale*root.depth()+TREEMARGIN);
       }
 
       //notify listeners
@@ -716,70 +736,10 @@ public class TreeVis extends PApplet {
       double nodeX = toScreenX(col);
       double nodeY = toScreenY(row);
 
-      //if node is collapsed, whole wedge is viable
-      // if(tree.isCollapsed())
-      //       {
-      //           double shortest = toScreenX(tree.shortestRootToTipDistance() - tree.getBranchLength());
-      //           double longest = toScreenX(tree.longestRootToTipDistance() - tree.getBranchLength());
-      //             
-      //           if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-      //               
-      //              double top = toScreenY(tree.getMaximumYOffset())-nodeY;
-      //               top = (top/2)*wedgeHeightScale;
-      //               double bottom = nodeY-toScreenY(tree.getMinimumYOffset());
-      //               bottom = (bottom/2)*wedgeHeightScale;
-      //              maxY = nodeY + top;
-      //               minY = nodeY - bottom;
-      //           
-      //               int[] xs = new int[]{(int)Math.floor(nodeX), (int)Math.floor(nodeX), (int)Math.ceil(nodeX+shortest), (int)Math.ceil(nodeX+longest)};
-      //               int[] ys = new int[]{(int)Math.floor(minY), (int)Math.ceil(maxY), (int)Math.ceil(maxY), (int)Math.floor(minY)};
-      //           
-      //               Polygon poly = new Polygon(xs,ys,4);
-      //           
-      //               if(poly.contains(x,y))
-      //                 {
-      //                     return tree;
-      //                 }
-      //                 else
-      //                     return null;
-      //             }
-      //             else if (treeLayout.equals("Radial") || treeLayout.equals("Polar"))
-      //             {
-      //                 double maxt = tree.getMaximumTOffset();
-      //                 double mint = tree.getMinimumTOffset();
-      // 
-      //                 if(wedgeHeightScale < 1)
-      //                 {
-      //                     double theta = Math.abs(maxt-mint);
-      //                     double f = (theta*(1-wedgeHeightScale))/2;
-      //                     mint = mint + f;
-      //                     maxt = maxt - f;
-      //                 }
-      // 
-      //                 double x1 = tree.getParent().getRXOffset() + shortest * Math.cos(mint);
-      //                 double y1 = tree.getParent().getRYOffset() + shortest * Math.sin(mint);
-      //                 double x2 = tree.getParent().getRXOffset() + longest * Math.cos(maxt);
-      //                 double y2 = tree.getParent().getRYOffset() + longest * Math.sin(maxt);
-      // 
-      //                   int[] xs = new int[]{(int)nodeX, (int)toScreenX(x1), (int)toScreenX(x2)};
-      //                   int[] ys = new int[]{(int)nodeY, (int)toScreenY(y1), (int)toScreenY(y2)};
-      //                   Polygon poly = new Polygon(xs,ys,3);
-      // 
-      //                   if(poly.contains(x,y))
-      //                       {
-      //                           return tree;
-      //                       }
-      //                       else
-      //                           return null;
-      //             }
-      //       }
+      
       
       if(selectPoly.contains(nodeX,nodeY))
             hilightedNodes.add(tree);
-        // else
-        //     hilightedNodes.remove(tree);
-/*      //if the tree is collapsed, don't search it
-      if (tree.isCollapsed()) return null;*/
 
       //select the root's children
       for (int i = 0; i < tree.nodes.size(); i++) {
@@ -956,12 +916,25 @@ public class TreeVis extends PApplet {
       
       boolean isInternal = !node.isLeaf();
       
-      if(node.depth()/rootdepth <= collapsedLevel && node.getParent() != null)
+      if(node.getParent() == null){
+          node.setSliderCollapsed(false);
+      }else if(collapseMode.equals("Root")) {
+        if(node.depth()/rootdepth <= collapsedLevel)
         {
             node.setSliderCollapsed(true);
         }
         else
             node.setSliderCollapsed(false);
+      } else if(collapseMode.equals("Parent")) {
+        if(node.depth()/node.getParent().depth() <= collapsedLevel)
+        {
+            node.setSliderCollapsed(true);
+        }
+        else
+            node.setSliderCollapsed(false);
+      }
+      
+      
 
       // Draw the branches first, so they get over-written by the nodes later
       if (isInternal) {
@@ -1116,10 +1089,11 @@ public class TreeVis extends PApplet {
        double minX = drawX+offsetbias-1;   
        double fullrotation = 0;
        boolean textflip = false;
+       double rotation = 0;
        
       if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
         canvas.pushMatrix();
-        double rotation = 0;
+        rotation = 0;
         if (treeLayout.equals("Radial")) {
             rotation = Math.atan2(yscale*node.getRYOffset(), xscale*node.getRXOffset());
             double xt = node.getRXOffset();
@@ -1219,48 +1193,56 @@ public class TreeVis extends PApplet {
         canvas.stroke(255,0,0);
         canvas.rect((float)(drawX+offsetbias), (float)minY, (float)(maxX-drawX), (float)maxY);
         
-        //need to undo rotation so that tooltip shows up in the right place
-        if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
-        canvas.popMatrix();
+       
+       String status = "";
+        if (node.isLocked())
+          status += "(L)";
+        if(node.isLeaf())
+        {
+            status += node.getLabel()+";";
         }
-
-        String status = "";
-            if (node.isLocked())
-              status += "(L)";
-            if(node.isLeaf())
-            {
-                status += node.getLabel()+";";
-            }
-            else
-            {
-                status += String.format("Sub-tree: %d leaves;", node.getNumberOfLeaves());
-                String label = node.getConsensusLineage();
-                if (label == null)
-                    label = "";
-                status += label;
-            }
-            textwidth = 0;
-            for (int i = 0; i < status.length(); i++) {
-                textwidth += tipFont.width(status.charAt(i));
-            }
-            
-            maxX = (textwidth*tipFont.size);
-            drawX =  getWidth() - (float)(textwidth*tipFont.size);
-            drawY = getHeight();
-            maxY = ((tipFont.ascent()+tipFont.descent())*tipFont.size);
-            canvas.fill(HOVER_COLOR, 150);
-            canvas.noStroke();
-            canvas.rect((float)(drawX), (float)drawY-8, (float)(maxX), (float)(maxY));
-            canvas.fill(0);
-            canvas.stroke(0);
-            canvas.textFont(tipFont);
-            canvas.text(status, (float)(drawX), (float)(drawY));
-            canvas.textFont(nodeFont);
-            canvas.noTint();
+        else
+        {
+            status += String.format("Sub-tree: %d leaves;", node.getNumberOfLeaves());
+            String label = node.getConsensusLineage();
+            if (label == null)
+                label = "";
+            status += label;
+        }
+        textwidth = 0;
+        for (int i = 0; i < status.length(); i++) {
+            textwidth += tipFont.width(status.charAt(i));
+        }
+        
+        maxX = (textwidth*tipFont.size);
+        drawX =  getWidth() - (float)(textwidth*tipFont.size);
+        drawY = getHeight();
+        maxY = ((tipFont.ascent()+tipFont.descent())*tipFont.size);
+        
+        if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
+            canvas.popMatrix();
+            canvas.popMatrix();
+        }
+        canvas.fill(HOVER_COLOR, 150);
+        canvas.noStroke();
+        canvas.rect((float)(drawX), (float)drawY-8, (float)(maxX), (float)(maxY));
+        canvas.fill(0);
+        canvas.stroke(0);
+        canvas.textFont(tipFont);
+        canvas.text(status, (float)(drawX), (float)(drawY));
+        
+        if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
+         canvas.pushMatrix();
+         canvas.translate((float)xstart, (float)ystart);
+         canvas.rotate((float)(treerotation*Math.PI/180.0));
+         canvas.translate((float)-xstart, (float)-ystart);
+        }
+        
+        canvas.textFont(nodeFont);
+        canvas.noTint();
+        
       }
       else {
-          // in case we didn't make it into the if statement, still need to 
-          // un-rotate
           if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
         canvas.popMatrix();
         }
@@ -1530,7 +1512,7 @@ public class TreeVis extends PApplet {
       
       canvas.fill(wedgeFontColor);
       canvas.stroke(wedgeFontColor);
-      if(drawWedgeLabels){
+      if(drawWedgeLabels && node.getDrawLabel()){
           canvas.textFont(wedgeFont);
           String s = "";
             if(drawInternalNodeLabels)
@@ -1551,10 +1533,10 @@ public class TreeVis extends PApplet {
               canvas.textFont(wedgeFont);
               if(mirrored)
               {
-                  canvas.text(s, (float)(toScreenX(x-(shortest)/2)+labelXOffset), (float)(toScreenY(bottom+(top-bottom)/2)+5)+labelYOffset);
+                  canvas.text(s, (float)(toScreenX(x-(shortest)/2)+labelXOffset+node.getLabelXOffset()), (float)(toScreenY(bottom+(top-bottom)/2)+5+labelYOffset+node.getLabelYOffset()));
               }
               else
-                  canvas.text(s, (float)(toScreenX(x+(shortest)/2)+labelXOffset), (float)(toScreenY(bottom+(top-bottom)/2)+5)+labelYOffset);
+                  canvas.text(s, (float)(toScreenX(x+(shortest)/2)+labelXOffset+node.getLabelXOffset()), (float)(toScreenY(bottom+(top-bottom)/2)+5+labelYOffset+node.getLabelYOffset()));
           }
           canvas.textFont(nodeFont);
       }
