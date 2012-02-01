@@ -53,7 +53,7 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
           dims[0] = (int)((tree.getXScale() * tree.getTree().depth()) + tree.getMargin() + tree.getTreeMargin());
           dims[1] = (int)((tree.getYScale() * tree.getTree().getNumberOfLeaves()) + 2*tree.getMargin());
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-          dims[0] = (int)((tree.getXScale() * tree.getTree().depth() + tree.getTreeMargin() + tree.getMargin() + 10)*2);
+          dims[0] = (int)((Math.max(tree.getXScale(),tree.getYScale()) * tree.getTree().depth() + tree.getTreeMargin() + tree.getMargin() + 10)*2);
           dims[1] = dims[0];
       }
       

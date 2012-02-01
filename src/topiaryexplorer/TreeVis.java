@@ -579,7 +579,7 @@ public class TreeVis extends PApplet {
           xstart = MARGIN;
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
           xscale = (Math.min(usableWidth, usableHeight)*0.5)/root.depth();
-          xstart = getWidth()*0.5;//+TREEMARGIN+5;
+          xstart = getWidth()*0.5;
       }
      }
 
@@ -595,7 +595,7 @@ public class TreeVis extends PApplet {
           ystart = MARGIN;
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
           yscale = (Math.min(usableWidth,usableHeight)*0.5)/root.depth();
-          ystart = getHeight()*0.5;//+TREEMARGIN+5;
+          ystart = getHeight()*0.5;
       }
     }
     
@@ -1704,11 +1704,6 @@ public class TreeVis extends PApplet {
 		  double oldYScale = yscale;
 		  double oldXStart = xstart;
 		  double oldYStart = ystart;
-	
-		  //reset the sizing and zooming so that the tree can be drawn visibly
-		  double longest = textWidth(root.getLongestLabel());
-		  double l = root.longestRootToTipDistance();
-		  double s = root.shortestRootToTipDistance();
 		  
 	  try {
 		  //save the current variables
@@ -1718,33 +1713,46 @@ public class TreeVis extends PApplet {
           xstart = 0;
           ystart = 0;
           
-          float textwidth = 0;
-          String st = "";
-          if(drawExternalNodeLabels)
-            st = root.getLongestLabel();
-
-          for (int i = 0; i < st.length(); i++) {
-             textwidth += nodeFont.width(st.charAt(i));
-          }
-
-          TREEMARGIN = textwidth*nodeFont.size + 5;
-
-          if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-                       xscale = (dims[0]-MARGIN-TREEMARGIN)/root.depth();
-                       xstart = MARGIN;
-          } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-                       xscale = (Math.min(dims[0], dims[1])*0.5)/root.depth();
-                       xstart = dims[0]*0.5;
-          }
+          width = dims[0];
+          height = dims[1];
           
-         if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-                       yscale = (dims[1]-2*MARGIN)/root.getNumberOfLeaves();
-                       ystart = MARGIN;
+          // float textwidth = 0;
+          // String st = "";
+          // if(drawExternalNodeLabels)
+          //   st = root.getLongestLabel();
+          // 
+          // for (int i = 0; i < st.length(); i++) {
+          //    textwidth += nodeFont.width(st.charAt(i));
+          // }
+
+          TREEMARGIN = textWidth(root.getLongestLabel());          
+          
+          float usableWidth = 0;
+          float usableHeight = 0;
+          
+          System.out.println("usableW"+usableWidth);
+          System.out.println("usableH"+usableHeight);
+          
+          if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
+                usableWidth = dims[0] - TREEMARGIN - 5;
+                usableHeight = dims[1] - (float)MARGIN*2 - 5;
+                
+                xscale = usableWidth/root.depth();
+                xstart = MARGIN;
+                
+                yscale = usableHeight/root.getNumberOfLeaves();
+                ystart = MARGIN;
+                
           } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-                       yscale = (Math.min(dims[0], dims[1])*0.5)/root.depth();
-                       ystart = dims[1]*0.5;
+                usableWidth = dims[0] - 2*TREEMARGIN - 5;
+                usableHeight = dims[1] - 2*TREEMARGIN - 5;
+                
+                xscale = (Math.min(usableWidth,usableHeight)*0.5)/root.depth();
+                xstart = dims[0]*0.5;
+                
+                yscale = (Math.min(usableWidth,usableHeight)*0.5)/root.depth();
+                ystart = dims[1]*0.5;
           }
-		  checkBounds();
 		  
 		  PGraphics canvas = createGraphics((int) (dims[0]), (int) (dims[1]), PDF, path);
 	    
@@ -1781,7 +1789,8 @@ public class TreeVis extends PApplet {
 		  yscale = oldYScale;
 		  xstart = oldXStart;
 		  ystart = oldYStart;
+		  width = oldWidth;
+		  height = oldHeight;
 		  redraw();
-
     }
 }
