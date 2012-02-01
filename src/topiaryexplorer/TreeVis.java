@@ -1200,7 +1200,6 @@ public class TreeVis extends PApplet {
         if (selected) { sc = SELECTED_COLOR; 
             canvas.fill(sc, 64);
             canvas.stroke(sc);
-            // canvas.rect((float)(drawX+offsetbias), (float)minY-5, (float)(maxX-drawX), (float)(maxY-minY)-3);
             canvas.rect((float)(drawX+offsetbias), (float)minY, (float)(maxX-drawX), (float)maxY);
             canvas.noTint();
             }
@@ -1219,6 +1218,11 @@ public class TreeVis extends PApplet {
         canvas.strokeWeight(1);
         canvas.stroke(255,0,0);
         canvas.rect((float)(drawX+offsetbias), (float)minY, (float)(maxX-drawX), (float)maxY);
+        
+        //need to undo rotation so that tooltip shows up in the right place
+        if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
+        canvas.popMatrix();
+        }
 
         String status = "";
             if (node.isLocked())
@@ -1254,9 +1258,12 @@ public class TreeVis extends PApplet {
             canvas.textFont(nodeFont);
             canvas.noTint();
       }
-      
-      if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
+      else {
+          // in case we didn't make it into the if statement, still need to 
+          // un-rotate
+          if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
         canvas.popMatrix();
+        }
       }
     }
 

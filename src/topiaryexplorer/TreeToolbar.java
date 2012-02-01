@@ -12,7 +12,7 @@ public class TreeToolbar extends JToolBar {
 
     JButton zoomOutButton  = new JButton("-");
     JButton zoomInButton = new JButton("+");
-    JSlider zoomSlider = new JSlider(1, 500, 1);
+    JSlider zoomSlider = new JSlider(1, 5000, 1);
     JTextField search = new JTextField();
     JPanel spacer1 = new JPanel();    
     TreeWindow frame = null;
@@ -25,7 +25,6 @@ public class TreeToolbar extends JToolBar {
 
         // this.setPreferredSize(new Dimension(600,))
         frame = _frame;
-
         zoomOutButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
@@ -34,7 +33,7 @@ public class TreeToolbar extends JToolBar {
                     frame.zoomOut();
                     return;
                 }
-                zoomSlider.setValue(zoomSlider.getValue() - 10);
+                zoomSlider.setValue(zoomSlider.getValue() - 100);
                 syncTreeWithZoomSlider();
             }
 
@@ -46,16 +45,16 @@ public class TreeToolbar extends JToolBar {
                     frame.zoomIn();
                     return;
                 }
-                zoomSlider.setValue(zoomSlider.getValue() + 10);
+                zoomSlider.setValue(zoomSlider.getValue() + 100);
                 syncTreeWithZoomSlider();
             }
 
         });
         add(spacer1);
         add(zoomOutButton);
-        zoomSlider.setSnapToTicks(true);
-        zoomSlider.setPreferredSize(new Dimension(200,28));
-        zoomSlider.setMaximumSize(new Dimension(200,28));
+        // zoomSlider.setSnapToTicks(true);
+        zoomSlider.setPreferredSize(new Dimension(300,28));
+        zoomSlider.setMaximumSize(new Dimension(300,28));
         zoomSlider.addChangeListener(new ChangeListener() {
             public synchronized void stateChanged(ChangeEvent e) {
                 if (zoomSlider.getValueIsAdjusting()){
@@ -156,6 +155,7 @@ public class TreeToolbar extends JToolBar {
     }
 
     public void setScale() {
+        zoomSlider.setMaximum(frame.tree.getTree().getNumberOfLeaves());
         if (frame.tree.getTreeLayout().equals("Rectangular") || frame.tree.getTreeLayout().equals("Triangular")) {
 		    minXScale = (frame.tree.getWidth()-frame.tree.getMargin()-frame.tree.getTreeMargin())/frame.tree.getTree().depth();
 		} else {
@@ -165,7 +165,7 @@ public class TreeToolbar extends JToolBar {
     
     public void syncTreeWithZoomSlider() {
         if (frame.tree.getTree() == null) return;
-        double newScale = minXScale*zoomSlider.getValue();
+        double newScale = minXScale*(zoomSlider.getValue());
         frame.tree.setHorizontalScaleFactor(newScale);
         frame.tree.redraw();
     }

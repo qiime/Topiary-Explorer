@@ -103,12 +103,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                  if(!isActive()) return;
                  Node node = tree.findNode(evt.getX(), evt.getY());
                  if (node != null) {
-                     // tree.mouseOverNode = node;
                   setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));  
                  }
                  else
                  {
-                    // tree.mouseOverNode = null;
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                   }
              }
@@ -173,8 +171,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             treePopupMenu.add(item);
             item = new JMenuItem("View Subtree in new Window");
               item.addActionListener(new ActionListener() {
-                  public void actionPerformed(ActionEvent arg0) {
-                      frame.newTreeWindow(TopiaryFunctions.createNewickStringFromTree(clickedNode),"Subtree-"+clickedNode.getLabel());
+                  public void actionPerformed(ActionEvent arg0) { frame.newTreeWindow(TopiaryFunctions.createNewickStringFromTree(clickedNode), "Subtree-"+clickedNode.getLabel());
                   }
               });
               treePopupMenu.add(item);
@@ -202,28 +199,22 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  			public void mousePressed(java.awt.event.MouseEvent evt) {
  				clickedNode = tree.findNode(evt.getX(), evt.getY());
  				if (evt.isPopupTrigger() && clickedNode != null) {
- 				    if(clickedNode.isLeaf())
- 				    {
- 				        treePopupMenu.getComponent(0).setEnabled(true);
- 				    }
- 				    else
- 				    {
- 				        treePopupMenu.getComponent(0).setEnabled(false);
- 				    }
+ 				    treePopupMenu.getComponent(0).setEnabled(clickedNode.isLeaf());
+ 				    treePopupMenu.getComponent(2).setEnabled(!clickedNode.isLeaf());
+ 				    treePopupMenu.getComponent(3).setEnabled(!clickedNode.isLeaf());
+ 				    treePopupMenu.getComponent(4).setEnabled(!clickedNode.isLeaf());
+ 				    treePopupMenu.getComponent(7).setEnabled(!clickedNode.isLeaf());
  					treePopupMenu.show(tree, evt.getX(), evt.getY());
  				}
  			}
  			public void mouseReleased(java.awt.event.MouseEvent evt){
  				clickedNode = tree.findNode(evt.getX(), evt.getY());
  				if (evt.isPopupTrigger() && clickedNode != null) {
- 				    if(clickedNode.isLeaf())
- 				    {
- 				        treePopupMenu.getComponent(0).setEnabled(true);
- 				    }
- 				    else
- 				    {
- 				        treePopupMenu.getComponent(0).setEnabled(false);
- 				    }
+ 				    treePopupMenu.getComponent(0).setEnabled(clickedNode.isLeaf());
+ 				    treePopupMenu.getComponent(2).setEnabled(!clickedNode.isLeaf());
+ 				    treePopupMenu.getComponent(3).setEnabled(!clickedNode.isLeaf());
+ 				    treePopupMenu.getComponent(4).setEnabled(!clickedNode.isLeaf());
+ 				    treePopupMenu.getComponent(7).setEnabled(!clickedNode.isLeaf());
  					treePopupMenu.show(tree, evt.getX(), evt.getY());
  				}
  			}
@@ -260,7 +251,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	     
 	     
 	     //options menu
-	     item = new JMenuItem("Save Tree...");
+	     item = new JMenuItem("Save Newick String...");
          item.addActionListener(this);
          treeMenu.add(item);
          treeMenu.add(new JSeparator());
@@ -301,18 +292,20 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                   }
               }
             else if (e.getActionCommand().equals("Find Node in Metadata")) {
-/*                if(frame.otuMetadata != null)
-                {*/
-                   if (clickedNode != null && clickedNode.isLeaf()) {
-                        frame.otuMetadataTable.scrollRectToVisible(frame.otuMetadataTable.getCellRect(frame.otuMetadata.getRowNames().indexOf(clickedNode.getName()),0,true));
-                       frame.otuMetadataTable.changeSelection(frame.otuMetadata.getRowNames().indexOf(clickedNode.getName()),0,true,false);
-                        frame.dataPane.setSelectedIndex(1);
-                        frame.otuMetadataTable.requestFocus();
-                        frame.setVisible(true);
-                        frame.repaint();
-                   }
-              }
-               else if (e.getActionCommand().equals("Collapse/Expand All Children")) {
+                if(frame.otuMetadata == null)
+                {
+                    return;
+                }
+                if (clickedNode != null && clickedNode.isLeaf()) {
+                    frame.otuMetadataTable.scrollRectToVisible(frame.otuMetadataTable.getCellRect(frame.otuMetadata.getRowNames().indexOf(clickedNode.getName()),0,true));
+                   frame.otuMetadataTable.changeSelection(frame.otuMetadata.getRowNames().indexOf(clickedNode.getName()),0,true,false);
+                    frame.dataPane.setSelectedIndex(1);
+                    frame.otuMetadataTable.requestFocus();
+                    frame.setVisible(true);
+                    frame.repaint();
+               }
+              }else if (e.getActionCommand().equals("Collapse/Expand All Children"))    
+              {
                    if (frame.clickedNode != null) {
                       ArrayList<Node> children = frame.clickedNode.getNodes();
                       for(Node n: children)
@@ -324,17 +317,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      frame.clickedNode.rotate();
                      tree.setYOffsets(tree.getTree(), 0);
                   }
-              } else if (e.getActionCommand().equals("Pie Chart")) {
-                  if (frame.clickedNode != null) {
-                     frame.clickedNode.setDrawPie(!frame.clickedNode.getDrawPie());
-                     }
-             } else if (e.getActionCommand().equals("Node Label")) {
-                       if (frame.clickedNode != null) {
-                          frame.clickedNode.setDrawLabel(!frame.clickedNode.getDrawLabel());
-                       }
-              } /*else if (e.getActionCommand().equals("Recenter")) {
-                                recenter();
-                            }*/ else if (e.getActionCommand().equals("Mirror left/right")) {
+              } else if (e.getActionCommand().equals("Mirror left/right")) {
                  mirrorHorz();
               } else if (e.getActionCommand().equals("Mirror up/down")) {
                   mirrorVert();
@@ -555,11 +538,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     public void recenter() {
         tree.resetTreeX();
         tree.resetTreeY();
-        // treeToolbar.setScale();
-        // verticalTreeToolbar.setScale();
-        // treeToolbar.syncZoomSliderWithTree();
-        // verticalTreeToolbar.syncZoomSliderWithTree();
-        // tree.checkBounds();
         tree.redraw();
     }
 	
@@ -622,7 +600,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
      }
 	
 	public void pruneTreeByOtu(String category, Object value) {
-        // treeEditToolbar.setStatus("Pruning tree...");
 	    int colIndex = frame.otuMetadata.getColumnIndex(category);
 	    ArrayList<Node> ns = tree.getTree().getLeaves();
        //loop over each node

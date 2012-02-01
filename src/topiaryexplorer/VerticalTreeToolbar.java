@@ -12,7 +12,7 @@ public class VerticalTreeToolbar extends JToolBar {
 
     JButton zoomOutButton  = new JButton("-");
     JButton zoomInButton = new JButton("+");
-    JSlider zoomSlider = new JSlider(JSlider.VERTICAL, 1, 500, 1);
+    JSlider zoomSlider = new JSlider(JSlider.VERTICAL, 1, 5000, 1);
     JPanel holder = new JPanel();
     JPanel spacer1 = new JPanel();
     double minYScale = 0;
@@ -27,6 +27,7 @@ public class VerticalTreeToolbar extends JToolBar {
         holder.setLayout(new BorderLayout());
         
         frame = _frame;
+        
         zoomOutButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
@@ -35,7 +36,7 @@ public class VerticalTreeToolbar extends JToolBar {
                     frame.zoomOut();
                     return;
                 }
-                zoomSlider.setValue(zoomSlider.getValue() - 10);
+                zoomSlider.setValue(zoomSlider.getValue() - 100);
                 syncTreeWithZoomSlider();
             }
 
@@ -48,15 +49,15 @@ public class VerticalTreeToolbar extends JToolBar {
                     frame.zoomIn();
                     return;
                 }
-                zoomSlider.setValue(zoomSlider.getValue() + 10);
+                zoomSlider.setValue(zoomSlider.getValue() + 100);
                 syncTreeWithZoomSlider();
             }
 
         });
         holder.add(zoomInButton, BorderLayout.NORTH);
-        zoomSlider.setSnapToTicks(true);
-        zoomSlider.setPreferredSize(new Dimension(20,200));
-        zoomSlider.setMaximumSize(new Dimension(20,200));
+        // zoomSlider.setSnapToTicks(true);
+        zoomSlider.setPreferredSize(new Dimension(20,300));
+        zoomSlider.setMaximumSize(new Dimension(20,300));
         zoomSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 if (zoomSlider.getValueIsAdjusting()){
@@ -100,6 +101,7 @@ public class VerticalTreeToolbar extends JToolBar {
     }
 
     public void setScale() {
+        zoomSlider.setMaximum(frame.tree.getTree().getNumberOfLeaves());
         if (frame.tree.getTreeLayout().equals("Rectangular") || frame.tree.getTreeLayout().equals("Triangular")) {
             minYScale = (frame.tree.getHeight() - 2*frame.tree.getMargin())/frame.tree.getTree().getNumberOfLeaves();
         } else {
@@ -109,14 +111,14 @@ public class VerticalTreeToolbar extends JToolBar {
     
     public void syncTreeWithZoomSlider(JSlider slider) {
         if (frame.tree.getTree() == null) return;
-        double newScale = minYScale * slider.getValue();
+        double newScale = minYScale * (slider.getValue());
         frame.tree.setVerticalScaleFactor(newScale);
         frame.tree.redraw();
     }
     
     public void syncTreeWithZoomSlider() {
         if (frame.tree.getTree() == null) return;
-        double newScale = minYScale * zoomSlider.getValue();
+        double newScale = minYScale * (zoomSlider.getValue());
         frame.tree.setVerticalScaleFactor(newScale);
         frame.tree.redraw();
     }
