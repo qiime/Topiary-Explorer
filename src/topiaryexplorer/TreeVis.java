@@ -8,7 +8,6 @@ import processing.pdf.*;
 import processing.opengl.*;
 import javax.swing.event.*;
 import java.util.*;
-// import java.awt.event.KeyEvent.*;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -216,14 +215,14 @@ public class TreeVis extends PApplet {
     public int getCurrentVerticalScrollPosition() {
       if (root==null) return 0;
       if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-      	return (int) (root.depth()*yscale+TREEMARGIN - ystart);
+      	return (int) (root.depth()*yscale + TREEMARGIN - ystart);
       }
       return (int) -(ystart);
     }
     public void setVerticalScrollPosition(int value) {
       ystart = -value;
       if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-      	ystart =  root.depth()*yscale+TREEMARGIN - value;
+      	ystart =  root.depth()*yscale + TREEMARGIN - value;
       }
       fireStateChanged();
       redraw();
@@ -246,7 +245,7 @@ public class TreeVis extends PApplet {
     public int getMaxVerticalScrollPosition() {
       if (root==null) return 0;
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-        return (int) (root.getNumberOfLeaves()*yscale + 2*MARGIN);
+        return (int) (root.getNumberOfLeaves()*yscale + MARGIN);
       } else {
         // return (int) (2*root.depth()*yscale+TREEMARGIN);
         return (int) (2*(root.depth()*yscale+TREEMARGIN));
@@ -345,7 +344,6 @@ public class TreeVis extends PApplet {
       }    
       return (ys - ystart)/(yscale);
     }
-
 
     //MOUSE LISTENER METHODS
 
@@ -528,21 +526,19 @@ public class TreeVis extends PApplet {
           textwidth += nodeFont.width(s.charAt(i));
       }
       
+      //accounts for size of labels
       TREEMARGIN = textwidth*nodeFont.size + 3;
-      
-      float usableWidth = getWidth() - TREEMARGIN -  5;
-      float usableHeight = getHeight() - TREEMARGIN - 5;
 
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
           //check horizontal tree scaling
-          if (xscale < usableWidth/root.depth()) {
+          if (xscale < (getWidth() - TREEMARGIN -  5)/root.depth()) {
             //need to rescale tree
             resetTreeX();
           }
           //check horizontal tree position
           if (xstart > MARGIN) {
             xstart = MARGIN;
-          } else if (xstart + xscale*root.depth() < usableWidth) {
+          } else if (xstart + xscale*root.depth() < getWidth() - TREEMARGIN -  5) {
             xstart = getWidth()-MARGIN - xscale*root.depth();
           }
     
@@ -560,7 +556,6 @@ public class TreeVis extends PApplet {
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
           //check horizontal tree scaling
           if(xscale < (Math.min(getWidth(), getHeight())*0.5 -TREEMARGIN)/root.depth()) {
-          // if (xscale < (Math.min(usableWidth, usableHeight)*.5)/root.depth()) {
             //need to rescale tree
             resetTreeX();
           }
@@ -570,7 +565,6 @@ public class TreeVis extends PApplet {
             xstart =  (xscale*root.depth()+TREEMARGIN);
             
           //check vertical tree scaling
-          // (Math.min(getWidth(), getHeight())*0.5 -TREEMARGIN)/root.depth()
           if (yscale < (Math.min(getWidth(), getHeight())*0.5 -TREEMARGIN)/root.depth()) {
             //need to rescale tree
             resetTreeY();

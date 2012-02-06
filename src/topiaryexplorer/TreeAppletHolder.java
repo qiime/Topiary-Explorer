@@ -2,7 +2,8 @@ package topiaryexplorer;
 
 import java.awt.GridBagConstraints;
 import java.awt.event.ComponentEvent;
-
+import java.awt.event.*;
+import java.awt.event.MouseWheelEvent;
 import javax.swing.JComponent;
 import javax.swing.JScrollBar;
 import javax.swing.event.ChangeEvent;
@@ -83,7 +84,52 @@ public class TreeAppletHolder extends JComponent {
 				syncScrollbarsWithTree();
 			}
 		});
+		
+        addMouseWheelListener(new MouseWheelListener() {
+            public void mouseWheelMoved(MouseWheelEvent e) {
+               int notches = e.getWheelRotation();
+               int scrollchange = 0;
+               
+               if (e.isShiftDown()) {
+                    // horizontal scroll
+                    //this accounts for different scrolling on different systems
+                   if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+                      scrollchange = tree.getCurrentHorizontalScrollPosition()+notches*(tree.getWidth()/10);
+                   } else { //scroll type == MouseWheelEvent.WHEEL_BLOCK_SCROLL
+                       scrollchange = tree.getCurrentHorizontalScrollPosition()+notches*(tree.getWidth()*9/10);
+                   }
+               
+                 // can't scroll past the bottom
+                 if(scrollchange > tree.getMaxHorizontalScrollPosition()-tree.getWidth())
+                     tree.setHorizontalScrollPosition(tree.getMaxHorizontalScrollPosition()-tree.getWidth());
+                 // can't scroll past the top
+                 else if(scrollchange < 0)
+                     tree.setHorizontalScrollPosition(0);
+                 else
+                     tree.setHorizontalScrollPosition(scrollchange);   
+                } else {
+                    // vertical scroll
+                   //this accounts for different scrolling on different systems
+                   if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+                      scrollchange = tree.getCurrentVerticalScrollPosition()+notches*(tree.getHeight()/10);
+                   } else { //scroll type == MouseWheelEvent.WHEEL_BLOCK_SCROLL
+                       scrollchange = tree.getCurrentVerticalScrollPosition()+notches*(tree.getHeight()*9/10);
+                   }
+               
+                 // can't scroll past the bottom
+                 if(scrollchange > tree.getMaxVerticalScrollPosition()-tree.getHeight())
+                     tree.setVerticalScrollPosition(tree.getMaxVerticalScrollPosition()-tree.getHeight());
+                 // can't scroll past the top
+                 else if(scrollchange < 0)
+                     tree.setVerticalScrollPosition(0);
+                 else
+                     tree.setVerticalScrollPosition(scrollchange);               
+                }
+            syncScrollbarsWithTree();   
+            }
+        });
 	}
+	
 	
 	public void zoomScrollBars() {
 	    int oldRatio = verticalScroll.getValue()/verticalScroll.getVisibleAmount();
