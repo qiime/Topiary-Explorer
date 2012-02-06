@@ -528,10 +528,10 @@ public class TreeVis extends PApplet {
           textwidth += nodeFont.width(s.charAt(i));
       }
       
-      TREEMARGIN = textwidth*nodeFont.size;
+      TREEMARGIN = textwidth*nodeFont.size + 3;
       
-      float usableWidth = getWidth() - TREEMARGIN - (float)MARGIN - 5;
-      float usableHeight = getHeight() - TREEMARGIN - (float)MARGIN*2 - 5;
+      float usableWidth = getWidth() - TREEMARGIN -  5;
+      float usableHeight = getHeight() - TREEMARGIN - 5;
 
       if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
           //check horizontal tree scaling
@@ -559,25 +559,27 @@ public class TreeVis extends PApplet {
           }
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
           //check horizontal tree scaling
-          if (xscale < (Math.min(usableWidth, usableHeight)*.5)/root.depth()) {
+          if(xscale < (Math.min(getWidth(), getHeight())*0.5 -TREEMARGIN)/root.depth()) {
+          // if (xscale < (Math.min(usableWidth, usableHeight)*.5)/root.depth()) {
             //need to rescale tree
             resetTreeX();
           }
-          if (xstart < getWidth()*.5 - (xscale*root.depth()+TREEMARGIN))
-            xstart = getWidth()*.5 - (xscale*root.depth()+TREEMARGIN);
-          if (xstart > getWidth()*.5 + (xscale*root.depth()+TREEMARGIN))
-            xstart = getWidth()*.5 + (xscale*root.depth()+TREEMARGIN);
+          if (xstart < getWidth() - (xscale*root.depth()+TREEMARGIN))
+            xstart = getWidth() - (xscale*root.depth()+TREEMARGIN);
+          if (xstart > (xscale*root.depth()+TREEMARGIN))
+            xstart =  (xscale*root.depth()+TREEMARGIN);
             
           //check vertical tree scaling
-          if (yscale < (Math.min(usableWidth, usableHeight)*.5)/root.depth()) {
+          // (Math.min(getWidth(), getHeight())*0.5 -TREEMARGIN)/root.depth()
+          if (yscale < (Math.min(getWidth(), getHeight())*0.5 -TREEMARGIN)/root.depth()) {
             //need to rescale tree
             resetTreeY();
           }   
           
-          if (ystart < getHeight()*.5 - (yscale*root.depth()+TREEMARGIN))
-            ystart = getHeight()*.5 - (yscale*root.depth()+TREEMARGIN);
-          if (ystart > getHeight()*.5 + (yscale*root.depth()+TREEMARGIN))
-            ystart = getHeight()*.5 + (yscale*root.depth()+TREEMARGIN);
+          if (ystart < getHeight() - (yscale*root.depth()+TREEMARGIN))
+            ystart = getHeight() - (yscale*root.depth()+TREEMARGIN);
+          if (ystart >  (yscale*root.depth()+TREEMARGIN))
+            ystart = (yscale*root.depth()+TREEMARGIN);
       }
 
       //notify listeners
