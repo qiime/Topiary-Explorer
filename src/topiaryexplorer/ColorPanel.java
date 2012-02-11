@@ -198,14 +198,25 @@ public class ColorPanel extends JPanel{
 		        
  			}else
  			{
+ 			    float frac;
+ 			    float one_minus_frac;
+ 			    float inv_sec_first = 1.0f/(second - first);
+                float first_red_adj = firstColor.getRed() / 255.0f;
+                float first_green_adj = firstColor.getGreen() / 255.0f;
+                float first_blue_adj = firstColor.getBlue() / 255.0f;
+                float second_red_adj = secondColor.getRed() / 255.0f;
+                float second_green_adj = secondColor.getGreen() / 255.0f;
+                float second_blue_adj = secondColor.getBlue() / 255.0f;
     /*          Color firstColor = (Color) data.get(first).get(1);*/
     /*          Color secondColor = (Color) data.get(second).get(1);*/
      			for (int i = first+1; i < second; i++) {
      				//here's the interpolation
-     				float frac = (i-first)*(1.0f/(second-first));
-     				Color c = new Color((1-frac)*firstColor.getRed()/255.0f + frac*secondColor.getRed()/255.0f,
-     					(1-frac)*firstColor.getGreen()/255.0f + frac*secondColor.getGreen()/255.0f,
-     					(1-frac)*firstColor.getBlue()/255.0f + frac*secondColor.getBlue()/255.0f);
+     				frac = (i-first)*inv_sec_first;
+                    one_minus_frac = 1 - frac;
+                    Color c = new Color(one_minus_frac*first_red_adj+ frac*second_red_adj,
+one_minus_frac*first_green_adj +
+frac*second_green_adj,
+one_minus_frac*first_blue_adj + frac*second_blue_adj);
                      sorterModel.setValueAt(c, i, 1);
                      // colorKeyTable.repaint();
      			}
