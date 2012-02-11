@@ -430,6 +430,26 @@ public class MainFrame extends JFrame {
                 resetSampleMenus();
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
+            
+    public void closeTreeWindows() {
+        for(TreeWindow t : treeWindows)
+            t.dispose();
+        treeWindows = new ArrayList<TreeWindow>();
+    }
+        
+    public void resetOtuMetadata() {
+        try{
+         otuMetadata = new DataTable();
+         } catch (Exception ex) {
+             JOptionPane.showMessageDialog(null, "Unable to reset [Tip metadata table].\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+             ex.printStackTrace();
+             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+             return;
+         }
+	     
+         resetOtuMenus();
+         currTable = null;
+    }
         
     public void setOtuMetadata(ArrayList<String> data) {
         try{
@@ -474,6 +494,19 @@ public class MainFrame extends JFrame {
          currTable = otuMetadata;
     }
     
+    public void resetOtuSampleMap() {
+        try{
+         otuSampleMap = new DataTable();
+         } catch (Exception ex) {
+             JOptionPane.showMessageDialog(null, "Unable to reset [OTU table].\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+             ex.printStackTrace();
+             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+             return;
+         }
+         
+         currTable = null;
+    }
+    
     public void setOtuSampleMap(ArrayList<String> data) {
         try{
          otuSampleMap = new DataTable(data);
@@ -515,6 +548,20 @@ public class MainFrame extends JFrame {
          otuSampleMapScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new AddColumnButton(this, otuSampleMap, otuSampleMapTable));
          dataPane.setSelectedIndex(2);
          currTable = otuSampleMap;
+    }
+    
+    public void resetSampleMetadata() {
+        try{
+        sampleMetadata = new DataTable();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Unable to reset [Sample metadata table].\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            return;
+        }
+         
+         resetSampleMenus();
+         currTable = null;
     }
     
     public void setSampleMetadata(ArrayList<String> data) {

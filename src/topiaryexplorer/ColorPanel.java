@@ -151,7 +151,7 @@ public class ColorPanel extends JPanel{
      **/
      void interpolateColors() {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-/*      ArrayList<ArrayList<Object>> data = ((ColorTableModel)((TableSorter)colorKeyTable.getModel()).getTableModel()).getData();*/
+
         TableSorter sorterModel = (TableSorter)colorKeyTable.getModel();
  		int first = -1;
  		int second = -1;
@@ -194,7 +194,7 @@ public class ColorPanel extends JPanel{
  			{
  			    for (int i = first+1; i < second; i++) 
  			        sorterModel.setValueAt(firstColor, i, 1);
- 			        colorKeyTable.repaint();
+                // colorKeyTable.repaint();
 		        
  			}else
  			{
@@ -207,11 +207,11 @@ public class ColorPanel extends JPanel{
      					(1-frac)*firstColor.getGreen()/255.0f + frac*secondColor.getGreen()/255.0f,
      					(1-frac)*firstColor.getBlue()/255.0f + frac*secondColor.getBlue()/255.0f);
                      sorterModel.setValueAt(c, i, 1);
-                     colorKeyTable.repaint();
+                     // colorKeyTable.repaint();
      			}
 		    }
- 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
  		}
+      // setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       }
 
 }

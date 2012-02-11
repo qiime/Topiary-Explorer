@@ -81,6 +81,7 @@ public class NewProjectDialog extends JFrame{
                public void actionPerformed(ActionEvent e) {
                    if(okButtonPressed())
                    {
+                       
                        frame.resetSampleMenus();
                	       frame.resetOtuMenus();
                        dispose();
@@ -186,6 +187,7 @@ public class NewProjectDialog extends JFrame{
             
         if(treeFile!=null)
 	    {
+	        frame.closeTreeWindows();
             frame.newTreeWindow(treeFile, true);
 	    }
       this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

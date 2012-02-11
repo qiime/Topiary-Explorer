@@ -464,16 +464,23 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                      if(data.containsKey("otm")){
                          frame.setOtuMetadata(((ArrayList<String>)data.get("otm")));
                      }
+                     else
+                        frame.resetOtuMetadata();
                      // load otu sample map
                      if(data.containsKey("osm")){
                          frame.setOtuSampleMap(((ArrayList<String>)data.get("osm")));
                      }
+                     else
+                        frame.resetOtuSampleMap();
                      // load sample metadata
                      if(data.containsKey("sam")){
                          frame.setSampleMetadata(((ArrayList<String>)data.get("sam")));
                      }
+                     else
+                        frame.resetSampleMetadata();
                      // load tree
                      if(data.containsKey("tre")){
+                         frame.closeTreeWindows();
                          for(String s : (ArrayList<String>)data.get("tre"))
                          {
                              String name = "";
@@ -512,22 +519,24 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                          if(data.containsKey("otm")){
                              frame.setOtuMetadata(((ArrayList<String>)data.get("otm")));
                          }
-                         // else
-                            // frame.resetTipMetadataTable();
+                         else
+                            frame.resetOtuMetadata();
                          // load otu sample map
                          if(data.containsKey("osm")){
                              frame.setOtuSampleMap(((ArrayList<String>)data.get("osm")));
                          }
-                         // else
-                            // frame.resetOtuTable();
+                         else
+                            frame.resetOtuSampleMap();
                          // load sample metadata
                          if(data.containsKey("sam")){
                              frame.setSampleMetadata(((ArrayList<String>)data.get("sam")));
                          }
-                         // else
-                            // frame.resetSampleMetadataTable();
+                         else
+                            frame.resetSampleMetadata();
                          // load tree
                          if(data.containsKey("tre")){
+                             frame.closeTreeWindows();
+                             
                              for(String s : (ArrayList<String>)data.get("tre"))
                                  frame.newTreeWindow(s, true, projectPath);
                          }
@@ -549,22 +558,23 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                              if(data.containsKey("otm")){
                                  frame.setOtuMetadata(((ArrayList<String>)data.get("otm")));
                              }
-                             // else
-                                // frame.resetTipMetadataTable();
+                             else
+                                frame.resetOtuMetadata();
                              // load otu sample map
                              if(data.containsKey("osm")){
                                  frame.setOtuSampleMap(((ArrayList<String>)data.get("osm")));
                              }
-                             // else
-                                // frame.resetOtuTable();
+                             else
+                                frame.resetOtuSampleMap();
                              // load sample metadata
                              if(data.containsKey("sam")){
                                  frame.setSampleMetadata(((ArrayList<String>)data.get("sam")));
                              }
-                             // else
-                                // frame.resetSampleMetadataTable();
+                             else
+                                frame.resetSampleMetadata();
                              // load tree
                              if(data.containsKey("tre")){
+                                 frame.closeTreeWindows();
                                  for(String s : (ArrayList<String>)data.get("tre"))
                                      frame.newTreeWindow(s, true, projectPath);
                               }       

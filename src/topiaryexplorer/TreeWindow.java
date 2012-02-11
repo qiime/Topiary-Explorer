@@ -733,7 +733,6 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
        }
        tree.getTree().updateBranchColorFromChildren();
        frame.repaint();
-       tree.redraw();
        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
@@ -765,7 +764,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         }
         tree.getTree().updateLabelColorFromChildren();
         frame.repaint();
-        tree.redraw();
+        // tree.redraw();
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
 
@@ -840,7 +839,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
          tree.getTree().updateBranchColorFromChildren();
          frame.repaint();
-         tree.redraw();
+         // tree.redraw();
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
@@ -908,7 +907,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 
                tree.getTree().updateLabelColorFromChildren();
                frame.repaint();
-               tree.redraw();
+               // tree.redraw();
               this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
           }
      
