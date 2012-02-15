@@ -177,7 +177,10 @@ public class ColorPanel extends JPanel{
  			//have we reached the end?
  			if (second == -1) {
                  colorKeyTable.repaint();
-                 syncColorMap();
+                 syncColorKeyTable();
+                 TableSorter newSorterModel = (TableSorter)colorKeyTable.getModel();
+                 newSorterModel.setSortingStatus(0,sorterModel.getSortingStatus(0));
+                 // syncColorMap();
                  if(elementType == 0)
                       frame.recolorBranches();
                   else if(elementType == 1)
@@ -192,13 +195,15 @@ public class ColorPanel extends JPanel{
  			if(firstColor.equals(secondColor))
  			{
  			    for (int i = first+1; i < second; i++) 
- 			        sorterModel.setValueAt(firstColor, i, 1);
+ 			        colorMap.put(sorterModel.getValueAt(i,0),firstColor);
 		        
  			}else
  			{
  			    float frac;
  			    float one_minus_frac;
  			    float inv_sec_first = 1.0f/(second - first);
+ 			    
+ 			    int diff = second - first;
  			    
                 float first_red_adj = firstColor.getRed() / 255.0f;
                 float first_green_adj = firstColor.getGreen() / 255.0f;
@@ -216,7 +221,8 @@ public class ColorPanel extends JPanel{
 one_minus_frac*first_green_adj +
 frac*second_green_adj,
 one_minus_frac*first_blue_adj + frac*second_blue_adj);
-                     sorterModel.setValueAt(c, i, 1);
+                     colorMap.put(sorterModel.getValueAt(i,0),c);
+                     // sorterModel.setValueAt(c, i, 1);
                      // colorKeyTable.repaint();
      			}
 		    }
