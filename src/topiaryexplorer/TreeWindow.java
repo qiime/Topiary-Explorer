@@ -1223,7 +1223,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              while (column.contains(null)) column.remove(null);
               
              //get all unique values in this column
-             ArrayList<Object> newcol = new ArrayList<Object>();
+             ArrayList newcol = new ArrayList<Object>();
              for(Object o : column)
              {
                  if(newcol.contains(o))
@@ -1268,10 +1268,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                  
              }
              else {
+                 Collections.sort(newcol);
                   for (Object val : newcol) {
-                      frame.branchColorPanel.getColorMap().put(val, color);
                       hue += (1.0/newcol.size());
-                      color = new Color(Color.HSBtoRGB((float)hue*.66f, 1, 1));
+                      color = new Color(Color.HSBtoRGB((float)hue, 1, 1));
+                      frame.branchColorPanel.getColorMap().put(val, color);
                   }
               }
              
