@@ -15,7 +15,7 @@ import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javax.imageio.ImageIO;
-
+import java.lang.Number;
 /**
  * TreeWindow is the window that contains the tree visualization.
  */
@@ -1218,10 +1218,11 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                  return;
              }
              ArrayList<Object> column = new ArrayList<Object>();
-             //get all unique values in this column
-               column = frame.currTable.getColumn(colIndex);
-             
+             column = frame.currTable.getColumn(colIndex);
+             //remove nulls
              while (column.contains(null)) column.remove(null);
+              
+             //get all unique values in this column
              ArrayList<Object> newcol = new ArrayList<Object>();
              for(Object o : column)
              {
@@ -1229,15 +1230,49 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                     continue;
                 newcol.add(o);
              }
-              // HashSet<Object> uniqueVals = new HashSet<Object>(column);
               
-              frame.branchColorPanel.setColorMap(new HashMap());
-              float hue = 0;
-              Color color = new Color(Color.HSBtoRGB(hue, 1, 1));
-              for (Object val : newcol) {
-                  frame.branchColorPanel.getColorMap().put(val, color);
-                  hue += (1.0/newcol.size());
-                  color = new Color(Color.HSBtoRGB(hue, 1, 1));
+             frame.branchColorPanel.setColorMap(new HashMap());
+             double hue = 0;
+             Color color = new Color(0);
+              
+             //see if this column contains numeric values
+             Class c = TopiaryFunctions.getColumnClass(column);
+             
+             if(c.isInstance(Number.class))
+             {            
+                 ArrayList<Double> numerics = new ArrayList<Double>();
+                 for(Object o : newcol)
+                 {
+                     try {
+                      numerics.add((Double)o);
+                    }
+                    catch(ClassCastException e) {
+                        numerics.add(Double.parseDouble(o.toString()));
+                    }
+                  }
+                 Collections.sort(numerics);
+                 double min = numerics.get(0);
+                 double max = numerics.get(numerics.size()-1);
+                 double diff = max-min;
+                 for (Object val : newcol) {
+                     try {
+                         hue = ((Float)val-min)*(1.0f/diff);
+                    }
+                    catch(ClassCastException e) {
+                        hue = (Float.parseFloat(val.toString())-min)*(1.0f/diff);
+                        
+                    }
+                     color = new Color(Color.HSBtoRGB((float)hue*.66f, 1, 1));
+                     frame.branchColorPanel.getColorMap().put(val, color);                      
+                  }
+                 
+             }
+             else {
+                  for (Object val : newcol) {
+                      frame.branchColorPanel.getColorMap().put(val, color);
+                      hue += (1.0/newcol.size());
+                      color = new Color(Color.HSBtoRGB((float)hue*.66f, 1, 1));
+                  }
               }
              
              frame.branchColorPanel.syncColorKeyTable();

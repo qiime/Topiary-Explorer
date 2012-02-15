@@ -417,6 +417,22 @@ public class TopiaryFunctions {
 	    gradient.add(secondColor);
 	    return gradient;
 	}
+	
+	public static Class getColumnClass(ArrayList column) {
+        try {
+          Class cl = column.get(0).getClass();
+          for(int i = 0; i < column.size(); i++)
+          {
+              if(!cl.equals(column.get(i).getClass()))
+                return Object.class;
+          }
+          return cl;
+        }
+        catch(NullPointerException e)
+        {
+            return Object.class;
+        }
+    }
     
     public static HashMap parsePrefsFile(ArrayList<String> lines, DataTable mapping){
         HashMap prefsMap = new HashMap();

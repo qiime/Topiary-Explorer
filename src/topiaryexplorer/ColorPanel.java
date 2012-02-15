@@ -176,7 +176,6 @@ public class ColorPanel extends JPanel{
  			}
  			//have we reached the end?
  			if (second == -1) {
-/*              ((ColorTableModel)((TableSorter)colorKeyTable.getModel()).getTableModel()).setData(data);*/
                  colorKeyTable.repaint();
                  syncColorMap();
                  if(elementType == 0)
@@ -190,25 +189,25 @@ public class ColorPanel extends JPanel{
  			Color firstColor = (Color) sorterModel.getValueAt(first,1);
  			Color secondColor = (Color) sorterModel.getValueAt(second,1);
  			
- 			if(firstColor == secondColor)
+ 			if(firstColor.equals(secondColor))
  			{
  			    for (int i = first+1; i < second; i++) 
  			        sorterModel.setValueAt(firstColor, i, 1);
-                // colorKeyTable.repaint();
 		        
  			}else
  			{
  			    float frac;
  			    float one_minus_frac;
  			    float inv_sec_first = 1.0f/(second - first);
+ 			    
                 float first_red_adj = firstColor.getRed() / 255.0f;
                 float first_green_adj = firstColor.getGreen() / 255.0f;
                 float first_blue_adj = firstColor.getBlue() / 255.0f;
+                
                 float second_red_adj = secondColor.getRed() / 255.0f;
                 float second_green_adj = secondColor.getGreen() / 255.0f;
                 float second_blue_adj = secondColor.getBlue() / 255.0f;
-    /*          Color firstColor = (Color) data.get(first).get(1);*/
-    /*          Color secondColor = (Color) data.get(second).get(1);*/
+    
      			for (int i = first+1; i < second; i++) {
      				//here's the interpolation
      				frac = (i-first)*inv_sec_first;

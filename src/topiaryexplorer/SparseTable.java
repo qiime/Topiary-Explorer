@@ -70,7 +70,22 @@ class SparseTable {
     
     public void removeElements() {
         data = new ArrayList<HashMap>();
-/*        data.clear();*/
+    }
+    
+      public Class getColumnClass(int c) {
+      try {
+          Class cl = data.get(0).get(c).getClass();
+          for(int i = 0; i < size(); i++)
+          {
+              if(!cl.equals(data.get(i).get(c).getClass()))
+                return Object.class;
+          }
+          return cl;
+        }
+        catch(NullPointerException e)
+        {
+            return Object.class;
+        }
     }
     
     public int maxRow() { return maxrow+1; }
