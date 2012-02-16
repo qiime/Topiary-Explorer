@@ -1709,8 +1709,11 @@ public class TreeVis extends PApplet {
           // for (int i = 0; i < st.length(); i++) {
           //    textwidth += nodeFont.width(st.charAt(i));
           // }
-
-          TREEMARGIN = textWidth(root.getLongestLabel());          
+          
+          TREEMARGIN = 0;
+          
+          if(drawExternalNodeLabels && zoomDrawNodeLabels)
+              TREEMARGIN = textWidth(root.getLongestLabel());         
           
           float usableWidth = 0;
           float usableHeight = 0;
