@@ -804,16 +804,16 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          Object w = row.get(i); // get the OTU count
                          //if it's not a Number, skip it
                          if (!(w instanceof Number)) continue;
-                         Integer weight = 0;
+                         double weight = 0;
                          try {
-                             weight = (Integer)w;
-                         } catch ( ClassCastException e) {
-                             weight = ((Double)w).intValue();
+                             weight = (Double)w;
+                         } catch (ClassCastException e) {
+                             weight = ((Integer)w).doubleValue();
                          }
-                         if (weight == 0) continue; // this sample doesn't contain this OTU
+                         if (weight == 0.0) continue; // this sample doesn't contain this OTU
                          
                          if(!weighted)
-                            weight = 1;
+                            weight = 1.0;
                          
                          String sampleID = frame.otuSampleMap.getColumnName(((Number)i).intValue());
                          // System.out.println("sampleID:"+sampleID);
