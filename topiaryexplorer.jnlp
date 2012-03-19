@@ -20,6 +20,8 @@
     <j2se version="1.6+" initial-heap-size="500M" max-heap-size="2000m" />
 	
 	<jar href="topiaryexplorer0.9.6.jar" />
+	<jar href="lib/google-gson-stream-2.1.jar" />
+	<jar href="lib/gluegen-rt.jar" />
 	<jar href="lib/jogl.jar" />
 	<jar href="lib/guava-r09.jar" />
 	<jar href="lib/core.jar" />

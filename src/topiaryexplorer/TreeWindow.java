@@ -783,6 +783,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      String nodeName = n.getName();
                      //get the row of the OTU-Sample map with this name
                      int rowIndex = frame.otuSampleMap.getRowNames().indexOf(nodeName);
+                     // System.out.println("nodename:"+nodeName+", index:"+rowIndex);
                      
                      // node name does not exist in sample-tip map
                      if (rowIndex == -1) {
@@ -798,16 +799,24 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                     //for each non-zero column value in the mapping(starting after the ID column)
                      for (Object i : row.keySet()) //for all samples
                      {
+                         // if(i == 0) //skip otu id column
+                            // continue;
                          Object w = row.get(i); // get the OTU count
-                         //if it's not an Integer, skip it
-                         if (!(w instanceof Integer)) continue;
-                         Integer weight = (Integer)w;
+                         //if it's not a Number, skip it
+                         if (!(w instanceof Number)) continue;
+                         Integer weight = 0;
+                         try {
+                             weight = (Integer)w;
+                         } catch ( ClassCastException e) {
+                             weight = ((Double)w).intValue();
+                         }
                          if (weight == 0) continue; // this sample doesn't contain this OTU
                          
                          if(!weighted)
                             weight = 1;
                          
                          String sampleID = frame.otuSampleMap.getColumnName(((Number)i).intValue());
+                         // System.out.println("sampleID:"+sampleID);
                          //The sampleID is taken from the columnames of the
                          //sample-tip map and one of the headers is otu id
                          if(sampleID.equals("OTU ID"))
@@ -815,6 +824,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          
                          //find the row that has this sampleID                         
                          int sampleRowIndex = frame.sampleMetadata.getRowNames().indexOf(sampleID);
+                         // for(String s : frame.sampleMetadata.getRowNames())
+                            // System.out.println(s);
                          
                          // this sample is not in the metadata but contains the current OTU, it will not be colored
                          if (sampleRowIndex == -1) {
