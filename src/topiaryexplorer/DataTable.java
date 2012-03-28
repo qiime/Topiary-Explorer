@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 public class DataTable {
     private ArrayList<String> columnNames = new ArrayList<String>();
     private ArrayList<String> rowNames = new ArrayList<String>();
+    private ArrayList<Class> columnClasses = new ArrayList<Class>();
     private SparseTable data = new SparseTable();
 
     public DataTable() {
@@ -52,6 +53,7 @@ public class DataTable {
         // int numCols = conn.colNames.size();
         // System.out.println(conn.colNamesStr);
 		columnNames = conn.colNames;
+		setColumnClasses();
     }
     
     public void loadData(ArrayList<String> lines) throws ParseException{
@@ -108,6 +110,7 @@ public class DataTable {
 			columnNames = parseLine(currline.substring(1));
 			if (columnNames.size() == numCols) break;
 		}
+		setColumnClasses();
     }
 
     public void loadData(InputStream is) throws IOException,ParseException{
@@ -176,7 +179,40 @@ public class DataTable {
 			}
 			columnNames = parseLine(headerLine.substring(1));
 		}
-		
+		setColumnClasses();
+    }
+    
+    public void setColumnClasses() {
+        Class cl = Object.class;
+        for(int i = 0; i < columnNames.size(); i++)
+        {
+            cl = data.get(0,i).getClass();
+            for(int j = 0; j < rowNames.size(); j++)
+            {
+                if(!data.get(j,i).getClass().equals(cl))
+                {
+                    cl = Object.class;
+                    break;
+                }
+            }
+            columnClasses.add(i,cl);
+        }
+        
+        for(int i = 0; i < columnNames.size(); i++)
+        {
+            if(columnClasses.get(i).equals(Object.class))
+            {
+                for(int j = 0; j < rowNames.size(); j++)
+                {
+                    data.set(data.get(j,i).toString(),j,i);
+                }
+                columnClasses.set(i, String.class);
+            }
+        }
+    }
+    
+    public Class getColumnClass(int i) {
+        return columnClasses.get(i);
     }
 
     public SparseTable getData() {

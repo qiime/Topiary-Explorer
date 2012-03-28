@@ -103,7 +103,7 @@ public class Node implements Comparable{
   }
   
   //GETTERS AND SETTERS
-  public Color getBranchColor() { return branchColor; }
+  public Color getBranchColor() { if(branchColor!= null) return branchColor; return new Color(0); }
   public Color getLabelColor() { return labelColor; }
   public boolean isHidden() { return hidden; }
   public void setHidden(boolean cond) { hidden = cond; }

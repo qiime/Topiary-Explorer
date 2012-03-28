@@ -1247,9 +1247,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
              Color color = new Color(0);
               
              //see if this column contains numeric values
-             Class c = TopiaryFunctions.getColumnClass(column);
+             Class c = frame.currTable.getColumnClass(colIndex);//TopiaryFunctions.getColumnClass(newcol);
+             // System.out.println("columnclass: "+c);
              
-             if(c.isInstance(Number.class))
+             if(c.equals(Double.class) || c.equals(Integer.class) || c.equals(Float.class))
              {            
                  ArrayList<Double> numerics = new ArrayList<Double>();
                  for(Object o : newcol)
@@ -1282,7 +1283,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                  Collections.sort(newcol);
                   for (Object val : newcol) {
                       hue += (1.0/newcol.size());
-                      color = new Color(Color.HSBtoRGB((float)hue, 1, 1));
+                      color = new Color(Color.HSBtoRGB((float)hue*.66f, 1, 1));
                       frame.branchColorPanel.getColorMap().put(val, color);
                   }
               }

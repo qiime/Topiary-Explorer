@@ -1078,8 +1078,16 @@ public class TreeVis extends PApplet {
           else
           {
               c = node.getBranchColor(majorityColoring);
-              canvas.stroke(c.getRGB());
-              canvas.fill(c.getRGB());
+              if(c == null)
+              {
+                  canvas.stroke(0);
+                  canvas.fill(0);
+              }
+              else
+              {
+                  canvas.stroke(c.getRGB());
+                  canvas.fill(c.getRGB());
+              }
           }
       
        double minX = drawX+offsetbias-1;   
@@ -1290,7 +1298,10 @@ public class TreeVis extends PApplet {
       else
       {
           c = node.getBranchColor(majorityColoring);
-          canvas.stroke(c.getRGB());
+          if(c == null)
+            canvas.stroke(0);
+          else
+            canvas.stroke(c.getRGB());
       }
         
       if (treeLayout.equals("Rectangular")) {
@@ -1309,7 +1320,10 @@ public class TreeVis extends PApplet {
                 else
                 {
                     c = k.getBranchColor(majorityColoring);
-                    canvas.stroke(c.getRGB());
+                    if(c == null)
+                        canvas.stroke(0);
+                    else
+                        canvas.stroke(c.getRGB());
                 }
               
               canvas.strokeWeight((float)k.getLineWidth()*getLineWidthScale());
@@ -1433,8 +1447,16 @@ public class TreeVis extends PApplet {
         else
         {
             c = node.getBranchColor(majorityColoring);
-            canvas.stroke(c.getRGB());
-            canvas.fill(c.getRGB());
+            if(c == null)
+            {
+                canvas.stroke(0);
+                canvas.fill(0);
+            }
+            else
+            {
+                canvas.stroke(c.getRGB());
+                canvas.fill(c.getRGB());
+            }
         }
   
       //find the longest and shortest branch lengths

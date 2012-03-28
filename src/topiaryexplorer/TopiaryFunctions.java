@@ -424,7 +424,10 @@ public class TopiaryFunctions {
           for(int i = 0; i < column.size(); i++)
           {
               if(!cl.equals(column.get(i).getClass()))
-                return Object.class;
+              {
+                cl = Object.class;
+                break;
+                }
           }
           return cl;
         }
