@@ -1161,7 +1161,7 @@ public class TreeVis extends PApplet {
            
            if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
                if(node.getParent() != null) {
-                 if (node.getParent().longestBranch() == node)
+                 // if (node.getParent().longestBranch() == node)
                     canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
                 }
            }

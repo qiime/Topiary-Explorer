@@ -110,16 +110,17 @@ public class TipLabelCustomizer extends JFrame {
             for(Object o : ops)
             {
                 o = (String)o;
-                int colIndex = 0;
-                for (String val : frame.otuMetadata.getColumnNames()) {
-                    if (val.equals(o)) {
-                        break;
-                    }
-                    colIndex++;
-                }
+                System.out.println(o);
+                int colIndex = frame.otuMetadata.getColumnNames().indexOf(o.toString());
+                // for (Object val : frame.otuMetadata.getColumnNames()) {
+                //     if (val.toString().equals(o)) {
+                //         break;
+                //     }
+                //     colIndex++;
+                // }
                 int rowIndex = frame.otuMetadata.getRowNames().indexOf(n.getName());
                 if (rowIndex == -1) {
-/*                    JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+n.getName()+" not found in OTU Metadata Table.", "Error", JOptionPane.ERROR_MESSAGE);*/
+                    // System.out.println("Cannot find nodename: "+ n.getName());
                     continue;
                 }
                 Object category = frame.otuMetadata.getValueAt(rowIndex, colIndex);
