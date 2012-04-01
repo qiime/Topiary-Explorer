@@ -1094,6 +1094,7 @@ public class TreeVis extends PApplet {
        double fullrotation = 0;
        boolean textflip = false;
        double rotation = 0;
+       double maxX = drawX + (textwidth*nodeFont.size);
        
       if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
         canvas.pushMatrix();
@@ -1133,14 +1134,17 @@ public class TreeVis extends PApplet {
         
         //draw all text rightside-up
         if (fullrotation > Math.PI/2 && fullrotation < 3*Math.PI/2) {
+            textAlign(RIGHT);
             //add 180 degrees
-            drawX = -drawX - (float)offsetbias - (float)(textwidth*nodeFont.size);
+            drawX = -drawX - (float)offsetbias -2;
+            maxX = drawX - (textwidth*nodeFont.size);
+            // drawX = -drawX -  - (float)(textwidth*nodeFont.size);
             // textAlign(RIGHT);
             canvas.rotate((float)Math.PI);
         }
       }
      
-     double maxX =  drawX + (textwidth*nodeFont.size);
+     // maxX =  drawX + (textwidth*nodeFont.size);
      double maxY = ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
      double minY = drawY - maxY;// - (nodeFont.descent()*nodeFont.size);
      
@@ -1158,21 +1162,13 @@ public class TreeVis extends PApplet {
                canvas.fill(lc.getRGB());
                canvas.stroke(lc.getRGB());
            }
-           
-           if (treeLayout.equals("Polar") || treeLayout.equals("Radial")) {
-               if(node.getParent() != null) {
-                 // if (node.getParent().longestBranch() == node)
-                    canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
-                }
-           }
-           else
                canvas.text(s, (float)(drawX+offsetbias), (float)(drawY));
      }
      else
      {
      }
 
-      
+      textAlign(LEFT);
      if (selected || hilighted) {
         int sc;
         if (selected) { sc = SELECTED_COLOR; 
