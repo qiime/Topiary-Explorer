@@ -200,19 +200,28 @@ public class TopiaryFunctions {
 
     public static String createNewickStringFromTree(Node root) {
         String tree = "";
-
+        
         if (root.isLeaf()) {
-            return root.getName()+":"+root.getBranchLength();
+            System.out.print("-");
+            tree = root.getName()+":"+root.getBranchLength();
         } else {
+            System.out.print(".");
             tree = "(";
             for (Node n : root.nodes) {
+                System.out.print("*");
                 tree += createNewickStringFromTree(n) + ",";
             }
             //remove last comma
             tree = tree.substring(0,tree.length()-1);
             tree += ")" + root.getName() + ":" + root.getBranchLength();
         }
-
+        
+        try {
+            createTreeFromNewickString(tree);
+        } catch(Exception e) {
+            System.out.println("Invalid tree string built");
+        }
+        
         return tree;
     }
 

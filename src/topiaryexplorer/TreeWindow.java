@@ -131,6 +131,32 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
               });
               treePopupMenu.add(item);
 
+         item = new JMenuItem("Reroot");
+         item.addActionListener(new ActionListener() {
+             public void actionPerformed(ActionEvent arg0) {
+                 // System.out.println("rerootclicked");
+                 // Node root = tree.getTree();
+                 // Node copyroot = new Node(root.getName(), root.getLabel(), root.getBranchLength(), root.nodes, root.getParent(), root.getConsensusLineage());
+                 Node newroot = reroot(clickedNode);
+                 if(newroot == null){
+                     JOptionPane.showMessageDialog(thisWindow,
+                        "Rerooting unsucessful; can't reroot to current root.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                     return;
+                 }
+                 // System.out.println("afterreroot");
+                 ProcessReRoot(newroot);
+                 // System.out.println("afterprocessreroot");
+                 frame.newTreeWindow(TopiaryFunctions.createNewickStringFromTree(newroot),"tree rerooted at "+clickedNode.getName());
+                 // System.out.println("aftermakenewstring");
+                 // tree.setTree(copyroot);
+                 // setTreeVals(copyroot);
+                 // tree.redraw();
+                 windowClosed();
+             }
+         });
+         // treePopupMenu.add(item);
          item = new JMenuItem("Rotate (Swap Children)");
          item.addActionListener(new ActionListener() {
              public void actionPerformed(ActionEvent arg0) {
@@ -214,6 +240,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  				    treePopupMenu.getComponent(4).setEnabled(!clickedNode.isLeaf());
  				    treePopupMenu.getComponent(5).setEnabled(!clickedNode.isLeaf());
  				    treePopupMenu.getComponent(8).setEnabled(!clickedNode.isLeaf());
+ 					treePopupMenu.getComponent(9).setEnabled(!clickedNode.isLeaf());
  					treePopupMenu.show(tree, evt.getX(), evt.getY());
  				}
  			}
@@ -226,6 +253,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
  				    treePopupMenu.getComponent(4).setEnabled(!clickedNode.isLeaf());
  				    treePopupMenu.getComponent(5).setEnabled(!clickedNode.isLeaf());
  				    treePopupMenu.getComponent(8).setEnabled(!clickedNode.isLeaf());
+ 					treePopupMenu.getComponent(9).setEnabled(!clickedNode.isLeaf());
  					treePopupMenu.show(tree, evt.getX(), evt.getY());
  				}
  			}
@@ -284,6 +312,122 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          pane.add(treeEditPane, BorderLayout.WEST);
 	     pane.add(rightPanel, BorderLayout.CENTER);
 	     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+	}
+	
+	/** adapted from http://code.google.com/p/phyutility/
+	**/
+	public Node reroot(Node inRoot) {
+      // processRoot();
+      if (tree.getTree().nodes.size() < 3) {
+			tritomyRoot(inRoot);
+		}
+		
+		if (inRoot == tree.getTree()) {
+            // System.out.println("you asked to root at the current root");
+			return null;
+		} else {
+			Node tempParent = inRoot.getParent();
+			Node newRoot = new Node(tempParent);
+			newRoot.nodes.add(inRoot);
+			inRoot.setParent(newRoot);
+			tempParent.nodes.remove(inRoot);
+			tempParent.nodes.add(newRoot);
+			newRoot.setParent(tempParent);
+			newRoot.setBranchLength(inRoot.getBranchLength() / 2);
+			inRoot.setBranchLength(inRoot.getBranchLength() / 2);
+            // ProcessReRoot(newRoot);
+			return newRoot;
+		}
+  }
+  
+  /** adapted from http://code.google.com/p/phyutility/
+	**/
+  public void tritomyRoot(Node toberoot) {
+		Node curroot = tree.getTree();
+		if (toberoot == null) {
+			if (curroot.nodes.get(0).isInternal()) {
+				Node currootCH = curroot.nodes.get(0);
+				double nbl = currootCH.getBranchLength();
+				curroot.nodes.get(1).setBranchLength(curroot.nodes.get(1).getBranchLength() + nbl);
+				curroot.nodes.remove(currootCH);
+				for (int i = 0; i < currootCH.nodes.size(); i++) {
+					curroot.nodes.add(currootCH.nodes.get(i));
+					//currootCH.nodes.get(i).setParent(curroot);
+				}
+			} else {
+				Node currootCH = curroot.nodes.get(1);
+				double nbl = currootCH.getBranchLength();
+				curroot.nodes.get(0).setBranchLength(curroot.nodes.get(0).getBranchLength() + nbl);
+				curroot.nodes.remove(currootCH);
+				for (int i = 0; i < currootCH.nodes.size(); i++) {
+					curroot.nodes.add(currootCH.nodes.get(i));
+					//currootCH.nodes.get(i).setParent(curroot);
+				}
+			}
+		} else {
+			if (curroot.nodes.get(1) == toberoot) {
+				Node currootCH = curroot.nodes.get(0);
+				double nbl = currootCH.getBranchLength();
+				curroot.nodes.get(1).setBranchLength(curroot.nodes.get(1).getBranchLength() + nbl);
+				curroot.nodes.remove(currootCH);
+				for (int i = 0; i < currootCH.nodes.size(); i++) {
+					curroot.nodes.add(currootCH.nodes.get(i));
+					//currootCH.nodes.get(i).setParent(curroot);
+				}
+			} else {
+				Node currootCH = curroot.nodes.get(1);
+				double nbl = currootCH.getBranchLength();
+				curroot.nodes.get(0).setBranchLength(curroot.nodes.get(0).getBranchLength() + nbl);
+				curroot.nodes.remove(currootCH);
+				for (int i = 0; i < currootCH.nodes.size(); i++) {
+					curroot.nodes.add(currootCH.nodes.get(i));
+					//currootCH.nodes.get(i).setParent(curroot);
+				}
+			}
+		}
+		
+        // System.out.println("finished tritomyroot");
+	}
+	
+	/** adapted from http://code.google.com/p/phyutility/
+	**/
+	private void ProcessReRoot(Node node) {
+		if (node.getParent() == null) {
+			return;
+		}
+		if (node.getParent() != null) {
+			ProcessReRoot(node.getParent());
+		}
+		// Exchange branch label, length et cetera
+		exchangeInfo(node.getParent(), node);
+		// Rearrange topology
+		Node parent = node.getParent();
+		node.nodes.add(parent);
+		parent.nodes.remove(node);
+		parent.setParent(node);
+	}
+	
+	/** adapted from http://code.google.com/p/phyutility/
+	**/
+	private void exchangeInfo(Node node1, Node node2) {
+		String swapName;
+		String swapLabel;
+		String swapLineage;
+		double swapd;
+		
+		swapName = node1.getName();
+		swapLabel = node1.getLabel();
+		swapLineage = node1.getConsensusLineage();
+		node1.setName(node2.getName());
+		node1.setLabel(node2.getLabel());
+		node1.setConsensusLineage(node2.getConsensusLineage());
+		node2.setName(swapName);
+		node2.setLabel(swapLabel);
+		node2.setConsensusLineage(swapLineage);
+
+		swapd = node1.getBranchLength();
+		node1.setBranchLength(node2.getBranchLength());
+		node2.setBranchLength(swapd);
 	}
 	
 	public void resetCollapseByMenu() {
@@ -490,11 +634,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     }
     
     public void loadTree(String treeString) {
+        // System.out.println("Loading treestring");
         // frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         tree.noLoop();
         Node root = TopiaryFunctions.createTreeFromNewickString(treeString);
         setTreeVals(root);
+        // System.out.println("settreevalsdone");
         tree.setTree(root);
+        // System.out.println("setrootdone");
         treeToolbar.setScale();
         verticalTreeToolbar.setScale();
         tree.redraw();

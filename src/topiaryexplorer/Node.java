@@ -84,22 +84,25 @@ public class Node implements Comparable{
     branchlength = _branchlength;
   }
   
+  Node(Node parent) {
+      branchlength = 0.0;
+      parent = parent;
+      nodes = new ArrayList<Node>();
+  }
+  
   Node(String _name, String _label, double _branchlength, ArrayList<Node> _nodes,
-   Node _parent, String _consensusLineage, Color _branchColor, Color _labelColor) {
+   Node _parent, String _consensusLineage) {
       name = _name;
       label = _label;
       branchlength = _branchlength;
-      nodes = _nodes;
-      parent = _parent;
+      nodes = new ArrayList<Node>();
+      for(Node n : _nodes)
+          nodes.add(new Node(n.getName(), n.getLabel(), n.getBranchLength(), n.nodes, n.getParent(), n.getConsensusLineage()));
+          
+      parent = _parent;//new Node(_parent.getName(), _parent.getLabel(), _parent.getBranchLength(), _parent.nodes, _parent.getParent(), _parent.getConsensusLineage());
       setConsensusLineage(_consensusLineage);
-      branchColor = branchColor;
-      labelColor = _labelColor;
-  }
-  
-  Node(Node aNode) {
-      this(aNode.getName(), aNode.getLabel(), aNode.getBranchLength(),
-      aNode.getNodes(), aNode.getParent(), aNode.getConsensusLineage(),
-      aNode.getBranchColor(), aNode.getLabelColor());
+      // branchColor = branchColor;
+      // labelColor = _labelColor;
   }
   
   //GETTERS AND SETTERS
@@ -183,6 +186,34 @@ public class Node implements Comparable{
   public double getLabelYOffset() { return labelyoffset; }
   public void setLabelXOffset(double d) { labelxoffset = d; }
   public double getLabelXOffset() { return labelxoffset; }
+  public void setParent(Node p) { parent = p; }
+  
+  public boolean isInternal() {
+      return this.nodes.size()>1;
+  }
+  
+  // public Node unrootedDeepcopy(Node parent) {
+  //     ArrayList<Node> children = new ArrayList<Node>();
+  //     if(parent != null) {
+  //     for(Node n : nodes)
+  //       children.add(n.unrootedDeepcopy(this));
+  //     }
+  //     
+  //     Node edge = new Node();
+  //     if(parent == null)
+  //       edge = null;
+  //     else if(parent.parent == this)
+  //       edge = parent;
+  //     else { 
+  //     // if(parent == this.parent)
+  //       edge = this;
+  //     }
+  //     
+  //     if(edge == null)
+  //       edge = new Node("root","root",1.0);
+  //     edge.nodes = children;
+  //     return edge;
+  // }
   
   public int compareTo(Object otherNode) throws ClassCastException {
       if (!(otherNode instanceof Node))

@@ -1130,11 +1130,11 @@ public class TreeVis extends PApplet {
         drawY = (float)0;
         canvas.translate((float)xstart, (float)ystart);
         canvas.rotate((float)rotation);
-        textAlign(LEFT);
+        canvas.textAlign(LEFT);
         
         //draw all text rightside-up
         if (fullrotation > Math.PI/2 && fullrotation < 3*Math.PI/2) {
-            textAlign(RIGHT);
+            canvas.textAlign(RIGHT);
             //add 180 degrees
             drawX = -drawX - (float)offsetbias -2;
             maxX = drawX - (textwidth*nodeFont.size);
@@ -1143,8 +1143,10 @@ public class TreeVis extends PApplet {
             canvas.rotate((float)Math.PI);
         }
       }
+      // else
+          // maxX =  drawX + (textwidth*nodeFont.size);
      
-     // maxX =  drawX + (textwidth*nodeFont.size);
+     maxX =  drawX + (textwidth*nodeFont.size);
      double maxY = ((nodeFont.ascent()+nodeFont.descent())*nodeFont.size);
      double minY = drawY - maxY;// - (nodeFont.descent()*nodeFont.size);
      
@@ -1736,8 +1738,8 @@ public class TreeVis extends PApplet {
           float usableWidth = 0;
           float usableHeight = 0;
           
-          System.out.println("usableW"+usableWidth);
-          System.out.println("usableH"+usableHeight);
+          // System.out.println("usableW"+usableWidth);
+          // System.out.println("usableH"+usableHeight);
           
           if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
                 usableWidth = dims[0] - TREEMARGIN - 5;
@@ -1765,8 +1767,8 @@ public class TreeVis extends PApplet {
 	    
 		  //draw the tree to the file
 		  canvas.beginDraw();
-		  canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
 		  
+		  canvas.background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
           canvas.pushMatrix();
           canvas.translate((float)xstart, (float)ystart);
           canvas.rotate((float)(treerotation*Math.PI/180.0));
