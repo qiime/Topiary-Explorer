@@ -1179,11 +1179,13 @@ public class TreeVis extends PApplet {
             canvas.rect((float)(drawX+offsetbias), (float)minY, (float)(maxX-drawX), (float)maxY);
             canvas.noTint();
             }
-            if(hilighted){ 
+            if(hilighted&&(treeLayout.equals("Rectangular") || treeLayout.equals("Triangular"))){ 
             sc = HIGHLIGHTED_COLOR;
             canvas.stroke(sc);
             canvas.strokeWeight((int)yscale);
             canvas.line(getWidth()-5,drawY,getWidth(),drawY);
+            canvas.stroke(sc, 50);
+            canvas.line(drawX,drawY,getWidth(),drawY);
             }
         
       }     
@@ -1730,10 +1732,10 @@ public class TreeVis extends PApplet {
           //    textwidth += nodeFont.width(st.charAt(i));
           // }
           
-          TREEMARGIN = 0;
+          TREEMARGIN = 5;
           
           if(drawExternalNodeLabels && zoomDrawNodeLabels)
-              TREEMARGIN = textWidth(root.getLongestLabel());         
+              TREEMARGIN += textWidth(root.getLongestLabel());         
           
           float usableWidth = 0;
           float usableHeight = 0;
@@ -1742,7 +1744,7 @@ public class TreeVis extends PApplet {
           // System.out.println("usableH"+usableHeight);
           
           if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
-                usableWidth = dims[0] - TREEMARGIN - 5;
+                usableWidth = dims[0] - TREEMARGIN - 10;
                 usableHeight = dims[1] - (float)MARGIN*2 - 5;
                 
                 xscale = usableWidth/root.depth();

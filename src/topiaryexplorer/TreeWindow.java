@@ -934,7 +934,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      
                      // node name does not exist in sample-tip map
                      if (rowIndex == -1) {
-                         n.addBranchColor(new Color(0),  1.0);
+                         n.addBranchColor(new Color(0),  0);
                          // n.addBranchColor(new Color(0),  1.0);
                          n.addBranchValue("Nodes not in mapping");
                         continue;
