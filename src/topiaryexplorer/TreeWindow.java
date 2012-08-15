@@ -48,7 +48,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     Set keys = new java.util.HashSet();
     boolean showTips = false;
     String dir_path = ""; //(new File(".")).getCanonicalPath();
-    boolean blackAsNoCount = false;
+    boolean usingNoCountColor = false;
+    Color noCountColor = new Color(0);
+    Color unmappedNodeColor = new Color(0);
     
     /**
     * Class Constructor
@@ -730,8 +732,16 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          tree.redraw();
      }
      
-     public void setBlackAsNoCount(boolean b) {
-         blackAsNoCount = b;
+     public void setNoCount(boolean b) {
+         usingNoCountColor = b;
+     }
+     
+     public void setNoCountColor(Color c) {
+         noCountColor = c;
+     }
+     
+     public void setUnmappedNodeColor(Color c) {
+         unmappedNodeColor = c;
      }
      
      public void pruneTreeByBranchLength(double cutoff) {
@@ -841,17 +851,19 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         tree.redraw();
 	}
 	
-	public void recolorBranches() {
-	    if (frame.currTable != null && frame.currTable == frame.otuMetadata) {
-                recolorBranchesByOtu();
-                treeEditToolbar.summaryPanel.treeColored();
-         } else if (frame.currTable != null && frame.currTable == frame.sampleMetadata) {
-                recolorBranchesBySample();
-                treeEditToolbar.summaryPanel.treeColored();
-         } else {
-             //it's null; don't do anything
-         }
-	}
+    public void recolorBranches() {
+        if (frame.currTable != null && frame.currTable == frame.otuMetadata) {
+                    recolorBranchesByOtu();
+                    treeEditToolbar.summaryPanel.treeColored();
+             } else if (frame.currTable != null && frame.currTable == frame.sampleMetadata) {
+                    recolorBranchesBySample();
+                    treeEditToolbar.summaryPanel.treeColored();
+             } else {
+                 //it's null; don't do anything
+             }
+             // tree.fireStateChanged();
+             tree.redraw();
+    }
 	
 	 /**
      * Recolors the tree based on selected OTU metadata field
@@ -874,9 +886,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                if (category == null) continue;
                //get the color for this category
                Color c = (Color)frame.branchColorPanel.getColorMap().get(category);
-               if(blackAsNoCount && (c == Color.BLACK))
+               if(usingNoCountColor && c.equals(noCountColor))
                {
-                   System.out.println("disregarding "+nodeName);
+                   // System.out.println("disregarding "+nodeName);
                    n.clearBranchColor();
                    n.addBranchColor(c, 0.0);
                    continue;
@@ -892,6 +904,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
        }
        tree.getTree().updateBranchColorFromChildren();
        frame.repaint();
+       tree.redraw();
        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
@@ -923,7 +936,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         }
         tree.getTree().updateLabelColorFromChildren();
         frame.repaint();
-        // tree.redraw();
+        tree.redraw();
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
 
@@ -938,23 +951,21 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             //loop over each node
              for (Node n : ns) {
                  //get the node's name
-
                      String nodeName = n.getName();
                      //get the row of the OTU-Sample map with this name
                      int rowIndex = frame.otuSampleMap.getRowNames().indexOf(nodeName);
                      // System.out.println("nodename:"+nodeName+", index:"+rowIndex);
+                     n.clearBranchColor();
                      
                      // node name does not exist in sample-tip map
                      if (rowIndex == -1) {
-                         n.addBranchColor(new Color(0),  0);
-                         // n.addBranchColor(new Color(0),  1.0);
+                         n.addBranchColor(unmappedNodeColor,  -1.0);
                          n.addBranchValue("Nodes not in mapping");
                         continue;
                      }
-                     
                      //get the row
                      HashMap row = frame.otuSampleMap.getRow(rowIndex);
-                     n.clearBranchColor();
+                     
                     //for each non-zero column value in the mapping(starting after the ID column)
                      for (Object i : row.keySet()) //for all samples
                      {
@@ -988,10 +999,12 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          
                          // this sample is not in the metadata but contains the current OTU, it will not be colored
                          if (sampleRowIndex == -1) {
-                             if(blackAsNoCount)
-                                 n.addBranchColor(new Color(0),  0);
+                             if(usingNoCountColor)
+                             {
+                                 n.addBranchColor(noCountColor,  -1.0);
+                             }
                              else
-                                 n.addBranchColor(new Color(0),  weight);
+                                 n.addBranchColor(unmappedNodeColor,  -1.0);
                              n.addBranchValue("Nodes in samples without metadata");
                             continue;
                          }
@@ -1000,11 +1013,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          value = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.branchColorPanel.getColorColumnIndex());                                                          
                          if (value == null) continue;
                         
-                        if(blackAsNoCount && ((Color)frame.branchColorPanel.getColorMap().get(value) == Color.BLACK))
+                        // System.out.println(((Color)frame.branchColorPanel.getColorMap().get(value)));
+                        
+                        if(usingNoCountColor && ((Color)frame.branchColorPanel.getColorMap().get(value)).equals(noCountColor))
                            {
-                               System.out.println("disregarding "+nodeName);
-                               n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), 0);
-                               n.clearBranchColor();
+                               // System.out.println(sampleID);
+                               n.addBranchColor(noCountColor, 0.0);
+                               n.addBranchValue(value);
                            }
                            else
                         { n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), weight);
@@ -1014,17 +1029,17 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      // no samples contain this OTU
                      if(n.getGroupBranchColor().size() == 0)
                      {
-                         if(blackAsNoCount)
-                            n.addBranchColor(new Color(0),  0);
-                        else
-                            n.addBranchColor(new Color(0),  1);
+                         if(usingNoCountColor)
+                            n.addBranchColor(noCountColor,  -1.0);
+                         else
+                            n.addBranchColor(unmappedNodeColor,  -1.0);
                         n.addBranchValue("Nodes not found in any sample");
                      }
              }
 
          tree.getTree().updateBranchColorFromChildren();
          frame.repaint();
-         // tree.redraw();
+         tree.redraw();
          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
      }
      
@@ -1044,7 +1059,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                           int rowIndex = frame.otuSampleMap.getRowNames().indexOf(nodeName);
 
                           if (rowIndex == -1) {
-                             n.addLabelColor(new Color(0),  1);
+                             n.addLabelColor(unmappedNodeColor,  1);
                              n.addLabelValue("Nodes not found in mapping");
                              continue;
                           }
@@ -1071,7 +1086,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          
                          // this sample is not in the metadata but contains the current OTU, it will not be colored
                          if (sampleRowIndex == -1) {
-                             n.addLabelColor(new Color(0),  weight);
+                             n.addLabelColor(unmappedNodeColor,  weight);
                              n.addLabelValue("Nodes in samples without metadata");
                             continue;
                          }
@@ -1085,14 +1100,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                      // no samples contain this OTU
                      if(n.getGroupLabelColor().size() == 0)
                      {
-                         n.addLabelColor(new Color(0),  n.getBranchLength());
+                         n.addLabelColor(unmappedNodeColor,  n.getBranchLength());
                          n.addLabelValue("Nodes not found in any sample");
                      }
                   }
 
                tree.getTree().updateLabelColorFromChildren();
                frame.repaint();
-               // tree.redraw();
+               tree.redraw();
               this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
           }
      

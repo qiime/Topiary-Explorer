@@ -1715,7 +1715,7 @@ public class TreeVis extends PApplet {
 	  try {
 		  //save the current variables
 		  
-          setLineWidthScale(oldLineWidth*(float).2);
+          // setLineWidthScale(oldLineWidth*(float).2);
 
           xstart = 0;
           ystart = 0;

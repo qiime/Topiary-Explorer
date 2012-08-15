@@ -524,8 +524,9 @@ public class Node implements Comparable{
      
      if(majority)
      {
-         double max = -100;
+         double max = Double.MIN_VALUE;
          Color majorityColor = new Color(0);
+         
          if(groupBranchColor.size() == 1 || groupBranchWeight.size() == 1)
             return groupBranchColor.get(0);
 
@@ -549,7 +550,11 @@ public class Node implements Comparable{
           g += groupBranchWeight.get(i)/total*groupBranchColor.get(i).getGreen();
           b += groupBranchWeight.get(i)/total*groupBranchColor.get(i).getBlue();
         }
-        branchColor = new Color(Math.abs((float)r/255),Math.abs((float)g/255),Math.abs((float)b/255));
+        
+        if(total == 0)
+            branchColor = groupBranchColor.get(0);
+        else
+            branchColor = new Color(Math.abs((float)r/255),Math.abs((float)g/255),Math.abs((float)b/255));
     }
     return branchColor;
   }

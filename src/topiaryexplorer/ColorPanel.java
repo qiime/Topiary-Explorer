@@ -127,10 +127,10 @@ public class ColorPanel extends JPanel{
                      //update the color map
                      colorMap.remove(value);
                      colorMap.put(value, (Color)data);
-                     if(elementType == 0)
-                         frame.recolorBranches();
-                     else if(elementType == 1)
-                         frame.recolorLabels();
+                     // if(elementType == 0)
+                         // frame.recolorBranches();
+                     // else if(elementType == 1)
+                         // frame.recolorLabels();
                 }
             }
         });

@@ -64,7 +64,7 @@ public class MainFrame extends JFrame {
     JButton setAs = new JButton("Set As...");
     HashMap schemes = new HashMap();
     JComboBox schemeList = new JComboBox();
-    JButton interpolateButton = new JButton("Interpolate Colors");
+    JButton interpolateButton = new JButton("Apply Colors");
     NewProjectDialog newProjectChooser = null;
     JLabel databaseStatus = new JLabel("Database not connected.");
     TopiaryMenu mainMenu = new TopiaryMenu(this);

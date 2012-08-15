@@ -44,7 +44,11 @@ class BranchEditPanel extends JPanel{
     /**
     * A checkbox indicating whether or not the coloring is weighted by OTU count
     **/
-    JCheckBox blackAsNocountMenuItem = new JCheckBox("Black as not counted",false);
+    JCheckBox noCountMenuItem = new JCheckBox("",false);
+    JPanel noCountColorPanel = new JPanel();
+    JLabel noCountColorLabelText = new JLabel("as no count");
+    JLabel noCountColorLabel = new JLabel("  ");
+    JColorChooser colorChooser = new JColorChooser();
     
     
     /**
@@ -86,7 +90,7 @@ class BranchEditPanel extends JPanel{
         coloringMenuItem.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {                frame.treeEditToolbar.summaryPanel.summaryScrollPane.setVisible(!coloringMenuItem.isSelected());  
                 weightedColoringMenuItem.setEnabled(!coloringMenuItem.isSelected()); majorityColoringMenuItem.setEnabled(!coloringMenuItem.isSelected());
-                blackAsNocountMenuItem.setEnabled(!coloringMenuItem.isSelected());
+                noCountMenuItem.setEnabled(!coloringMenuItem.isSelected());
                 vis.setColorBranches(!coloringMenuItem.isSelected());
                 vis.redraw();
                 frame.treePopupMenu.getComponent(4).setEnabled(!coloringMenuItem.isSelected());
@@ -114,16 +118,46 @@ class BranchEditPanel extends JPanel{
         });
         add(weightedColoringMenuItem);
         
-        blackAsNocountMenuItem.setEnabled(false);
-        blackAsNocountMenuItem.setToolTipText("Toggle branch color weighting by OTU count.");
-        blackAsNocountMenuItem.addActionListener(new ActionListener() {
+        
+        noCountMenuItem.setEnabled(false);
+        noCountMenuItem.setToolTipText("Set a certain color to not be counted in branch coloring");
+        noCountMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                frame.setBlackAsNoCount(blackAsNocountMenuItem.isSelected());
+                frame.setNoCount(noCountMenuItem.isSelected());
                 frame.recolorBranches();
                 vis.redraw();
             }
         });
-        add(blackAsNocountMenuItem);
+        noCountColorLabel.setPreferredSize(new Dimension(30,20));
+        noCountColorLabel.setOpaque(true);
+        noCountColorLabel.setBorder(LineBorder.createGrayLineBorder());
+        noCountColorLabel.setBackground(Color.BLACK);
+        frame.setNoCountColor(Color.BLACK);
+        noCountColorLabel.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent e) {
+                Color newColor = JColorChooser.showDialog(
+                                     BranchEditPanel.this,
+                                     "Choose Background Color",
+                                     noCountColorLabel.getBackground());
+                 if(newColor != null)
+                 {
+                     noCountColorLabel.setBackground(newColor);
+                     frame.setNoCountColor(newColor);
+                     frame.recolorBranches();
+                 }
+                 vis.redraw();
+            }
+            
+            public void mouseExited(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {}
+        });
+        noCountColorLabel.setToolTipText("Change uncounted color...");
+        noCountColorPanel.add(noCountMenuItem);
+        noCountColorPanel.add(noCountColorLabel);
+        noCountColorPanel.add(noCountColorLabelText);
+        add(noCountColorPanel);
         
         colorBy.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {

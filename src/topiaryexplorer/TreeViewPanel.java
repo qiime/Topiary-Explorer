@@ -58,6 +58,11 @@ public final class TreeViewPanel extends JPanel {
     JLabel colorLabel = new JLabel("  ");
     JColorChooser colorChooser = new JColorChooser();
     
+    JPanel unmappedNodeColorPanel = new JPanel();
+    JLabel unmappedNodeColorLabelText = new JLabel("Unmapped node color: ");
+    JLabel unmappedNodeColorLabel = new JLabel("  ");
+    JSlider unmappedTranspSlider = new JSlider(0,255,255);
+    
 	// {{{ TreeViewPanel constructor
     /**
      * 
@@ -70,7 +75,7 @@ public final class TreeViewPanel extends JPanel {
         
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
-        buttonPanel.setLayout(new GridLayout(7,1));
+        buttonPanel.setLayout(new GridLayout(8,1));
         
         selectButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -283,6 +288,51 @@ public final class TreeViewPanel extends JPanel {
         bgColorPanel.add(bgColorLabel);
         bgColorPanel.add(colorLabel);
         add(bgColorPanel);
+        
+        unmappedNodeColorLabel.setPreferredSize(new Dimension(30,20));
+        unmappedNodeColorLabel.setOpaque(true);
+        unmappedNodeColorLabel.setBorder(LineBorder.createGrayLineBorder());
+        unmappedNodeColorLabel.setBackground(Color.BLACK);
+        unmappedNodeColorLabel.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent e) {
+                Color newColor = JColorChooser.showDialog(
+                                     TreeViewPanel.this,
+                                     "Choose Background Color",
+                                     unmappedNodeColorLabel.getBackground());
+                 if(newColor != null)
+                 {
+                     unmappedNodeColorLabel.setBackground(newColor);
+                     frame.setUnmappedNodeColor(newColor);
+                     frame.recolorBranches();
+                 }
+                 vis.redraw();
+            }
+            
+            public void mouseExited(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {}
+        }); 
+        unmappedNodeColorLabel.setToolTipText("Change unmapped node color...");
+        unmappedNodeColorPanel.add(unmappedNodeColorLabelText);
+        unmappedNodeColorPanel.add(unmappedNodeColorLabel);
+        add(unmappedNodeColorPanel);
+        
+        unmappedTranspSlider.addChangeListener(new ChangeListener() {
+         	public void stateChanged(ChangeEvent e) {
+         		if (unmappedTranspSlider.getValueIsAdjusting()) {
+         		    Color newColor = new Color(unmappedNodeColorLabel.getBackground().getRed(),
+      unmappedNodeColorLabel.getBackground().getGreen(),
+      unmappedNodeColorLabel.getBackground().getBlue(),
+      unmappedTranspSlider.getValue());
+         			frame.setUnmappedNodeColor(newColor);
+         			frame.recolorBranches();
+         		}
+         	}
+         });
+        unmappedTranspSlider.setPreferredSize(new Dimension(120,20));
+        
+        add(unmappedTranspSlider);
 /*        add(rotatePanel);*/
         add(layoutCP);
         add(mirrorCP);
