@@ -218,12 +218,13 @@ public class Node implements Comparable{
   public int compareTo(Object otherNode) throws ClassCastException {
       if (!(otherNode instanceof Node))
         throw new ClassCastException("A Node object expected.");
-      double otherBranchLength = ((Node)otherNode).getBranchLength();
-      if(this.branchlength > otherBranchLength)
+      int otherNumChildren = ((Node)otherNode).getLeaves().size();
+      int thisNumChildren = this.getLeaves().size();
+      if(thisNumChildren > otherNumChildren)
       {
           return 1;
       }
-      else if(this.branchlength < otherBranchLength)
+      else if(thisNumChildren < otherNumChildren)
       {
           return -1;
       }

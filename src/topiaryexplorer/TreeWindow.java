@@ -48,6 +48,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     Set keys = new java.util.HashSet();
     boolean showTips = false;
     String dir_path = ""; //(new File(".")).getCanonicalPath();
+    boolean blackAsNoCount = false;
     
     /**
     * Class Constructor
@@ -729,6 +730,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          tree.redraw();
      }
      
+     public void setBlackAsNoCount(boolean b) {
+         blackAsNoCount = b;
+     }
+     
      public void pruneTreeByBranchLength(double cutoff) {
          double total = tree.getTree().depth();
          // send cutoff percentage of branch length to prune method
@@ -869,6 +874,13 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                if (category == null) continue;
                //get the color for this category
                Color c = (Color)frame.branchColorPanel.getColorMap().get(category);
+               if(blackAsNoCount && (c == Color.BLACK))
+               {
+                   System.out.println("disregarding "+nodeName);
+                   n.clearBranchColor();
+                   n.addBranchColor(c, 0.0);
+                   continue;
+               }
                if (c == null) {
                    JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
                    continue;
@@ -976,7 +988,10 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          
                          // this sample is not in the metadata but contains the current OTU, it will not be colored
                          if (sampleRowIndex == -1) {
-                             n.addBranchColor(new Color(0),  weight);
+                             if(blackAsNoCount)
+                                 n.addBranchColor(new Color(0),  0);
+                             else
+                                 n.addBranchColor(new Color(0),  weight);
                              n.addBranchValue("Nodes in samples without metadata");
                             continue;
                          }
@@ -984,14 +999,26 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          Object value = null;
                          value = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.branchColorPanel.getColorColumnIndex());                                                          
                          if (value == null) continue;
-                         n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), weight);
+                        
+                        if(blackAsNoCount && ((Color)frame.branchColorPanel.getColorMap().get(value) == Color.BLACK))
+                           {
+                               System.out.println("disregarding "+nodeName);
+                               n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), 0);
+                               n.clearBranchColor();
+                           }
+                           else
+                        { n.addBranchColor((Color)frame.branchColorPanel.getColorMap().get(value), weight);
                          n.addBranchValue(value);
+                        }
                      }
                      // no samples contain this OTU
                      if(n.getGroupBranchColor().size() == 0)
                      {
-                         n.addBranchColor(new Color(0),  1);
-                         n.addBranchValue("Nodes not found in any sample");
+                         if(blackAsNoCount)
+                            n.addBranchColor(new Color(0),  0);
+                        else
+                            n.addBranchColor(new Color(0),  1);
+                        n.addBranchValue("Nodes not found in any sample");
                      }
              }
 

@@ -41,6 +41,11 @@ class BranchEditPanel extends JPanel{
     **/
     JCheckBox weightedColoringMenuItem = new JCheckBox("Weighted",true);
     
+    /**
+    * A checkbox indicating whether or not the coloring is weighted by OTU count
+    **/
+    JCheckBox blackAsNocountMenuItem = new JCheckBox("Black as not counted",false);
+    
     
     /**
     * A button that triggers menus containing fields that the branches can be colored by.
@@ -75,12 +80,13 @@ class BranchEditPanel extends JPanel{
         colorByMenu = new ColorByPopupMenu(frame.frame, frame, frame.frame.branchColorPanel,0);
         this.setToolTipText("Customize Branches");
 /*        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));*/
-        setLayout(new GridLayout(6,1));
+        setLayout(new GridLayout(7,1));
         
         // coloringMenuItem.setEnabled(false);
         coloringMenuItem.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {                frame.treeEditToolbar.summaryPanel.summaryScrollPane.setVisible(!coloringMenuItem.isSelected());  
                 weightedColoringMenuItem.setEnabled(!coloringMenuItem.isSelected()); majorityColoringMenuItem.setEnabled(!coloringMenuItem.isSelected());
+                blackAsNocountMenuItem.setEnabled(!coloringMenuItem.isSelected());
                 vis.setColorBranches(!coloringMenuItem.isSelected());
                 vis.redraw();
                 frame.treePopupMenu.getComponent(4).setEnabled(!coloringMenuItem.isSelected());
@@ -107,6 +113,17 @@ class BranchEditPanel extends JPanel{
             }
         });
         add(weightedColoringMenuItem);
+        
+        blackAsNocountMenuItem.setEnabled(false);
+        blackAsNocountMenuItem.setToolTipText("Toggle branch color weighting by OTU count.");
+        blackAsNocountMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.setBlackAsNoCount(blackAsNocountMenuItem.isSelected());
+                frame.recolorBranches();
+                vis.redraw();
+            }
+        });
+        add(blackAsNocountMenuItem);
         
         colorBy.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
