@@ -219,7 +219,7 @@ public class MainFrame extends JFrame {
         
         dataPane.addChangeListener(new ChangeListener(){
             public void stateChanged(ChangeEvent e){
-                tableChanged();
+                // tableChanged();
             }
         }
         );

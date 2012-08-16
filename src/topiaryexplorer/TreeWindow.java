@@ -894,7 +894,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                    continue;
                }
                if (c == null) {
-                   JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+                   // JOptionPane.showMessageDialog(null, "ERROR: No color specified for category "+category.toString(), "Error", JOptionPane.ERROR_MESSAGE);
                    continue;
                }
                //set the node to this color
