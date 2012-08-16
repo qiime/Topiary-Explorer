@@ -186,8 +186,11 @@ public final class TreeViewPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 frame.collapseTreeToolbar.sliderEnabled(true);
                 parent.treeStatus.setText("Calculating Offsets...");
-                vis.setTOffsets(vis.getTree(), 0);
+                // vis.setTOffsets(vis.getTree(), 0);
+                vis.setTOffsets();
+                // vis.setTOffsets(vis.getTree(), 2*Math.PI, 0);
                 vis.setROffsets(vis.getTree(), 0);
+                // vis.setROffsets(vis.getTree());
                 vis.setRadialOffsets(vis.getTree());
                 vis.setTreeLayout("Radial");
                 rotatePanel.setVisible(true);
@@ -216,8 +219,11 @@ public final class TreeViewPanel extends JPanel {
                 }*/
                 parent.treeStatus.setText("Calculating Offsets...");
                 vis.setRadialOffsets(vis.getTree());
-                vis.setTOffsets(vis.getTree(), 0);
+                vis.setTOffsets();
+                // vis.setTOffsets(vis.getTree(), 0);
+                // vis.setTOffsets(vis.getTree(), 2*Math.PI, 0);
                 vis.setROffsets(vis.getTree(), 0);
+                // vis.setROffsets(vis.getTree());
                 vis.setTreeLayout("Polar");
                 rotatePanel.setVisible(true);
                 layoutChanged();

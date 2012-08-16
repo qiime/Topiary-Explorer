@@ -1,5 +1,7 @@
 package topiaryexplorer;
 
+import java.awt.*;
+import java.awt.geom.*;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import javax.swing.*;
@@ -78,7 +80,7 @@ public class TreeVis extends PApplet {
     private Node mouseOverNodeToReplace; //used when dragging nodes around
     private Set hilightedNodes = new java.util.HashSet();
 
-    private List listeners = new java.util.ArrayList();
+    private ArrayList listeners = new java.util.ArrayList();
     private float wedgeFontSize = 12;
     private int wedgeFontColor = 255;
     private String wFont = "SansSerif";
@@ -722,8 +724,8 @@ public class TreeVis extends PApplet {
           row = tree.getYOffset();
           col = tree.getXOffset();
       } else if (treeLayout.equals("Radial")) {
-          row = tree.getRYOffset();
-          col = tree.getRXOffset();
+          row = tree.getPoint().getY();
+          col = tree.getPoint().getX();
       } else if (treeLayout.equals("Polar")) {
           row = tree.getROffset() * Math.sin(tree.getTOffset());
           col = tree.getROffset() * Math.cos(tree.getTOffset());
@@ -774,8 +776,8 @@ public class TreeVis extends PApplet {
           row = tree.getYOffset();
           col = tree.getXOffset();
       } else if (treeLayout.equals("Radial")) {
-          row = tree.getRYOffset();
-          col = tree.getRXOffset();
+          row = tree.getPoint().getY();
+          col = tree.getPoint().getX();
       } else if (treeLayout.equals("Polar")) {
           row = tree.getROffset() * Math.sin(tree.getTOffset()+treerotation*Math.PI/180.0);
           col = tree.getROffset() * Math.cos(tree.getTOffset()+treerotation*Math.PI/180.0);
@@ -961,8 +963,8 @@ public class TreeVis extends PApplet {
           double x = node.getXOffset();
           double y = node.getYOffset();
           if (treeLayout.equals("Radial")) {
-                x = node.getRXOffset();
-                y = node.getRYOffset();
+                x = node.getPoint().getX();
+                y = node.getPoint().getY();
             } else if (treeLayout.equals("Polar")) {
                 x = node.getROffset() * Math.cos(node.getTOffset());
                 y = node.getROffset() * Math.sin(node.getTOffset());
@@ -1022,8 +1024,8 @@ public class TreeVis extends PApplet {
       double x = node.getXOffset();
       double y = node.getYOffset();
       if (treeLayout.equals("Radial")) {
-          x = node.getRXOffset();
-          y = node.getRYOffset();
+          x = node.getPoint().getX();
+          y = node.getPoint().getY();
       } else if (treeLayout.equals("Polar")) {
           x = node.getROffset() * Math.cos(node.getTOffset());
           y = node.getROffset() * Math.sin(node.getTOffset());
@@ -1101,8 +1103,8 @@ public class TreeVis extends PApplet {
         rotation = 0;
         if (treeLayout.equals("Radial")) {
             rotation = Math.atan2(yscale*node.getRYOffset(), xscale*node.getRXOffset());
-            double xt = node.getRXOffset();
-            double yt = node.getRYOffset();
+            double xt = node.getPoint().getX();
+            double yt = node.getPoint().getY();
             drawX = (float)Math.sqrt((xscale*xt)*(xscale*xt)+(yscale*yt)*(yscale*yt));
         } else {
             rotation = node.getTOffset();
@@ -1268,8 +1270,8 @@ public class TreeVis extends PApplet {
       double x = node.getXOffset();
       double y = node.getYOffset();
       if (treeLayout.equals("Radial")) {
-          x = node.getRXOffset();
-          y = node.getRYOffset();
+          x = node.getPoint().getX();
+          y = node.getPoint().getY();
       } else if (treeLayout.equals("Polar")) {
           x = node.getROffset() * Math.cos(node.getTOffset());
           y = node.getROffset() * Math.sin(node.getTOffset());
@@ -1370,10 +1372,10 @@ public class TreeVis extends PApplet {
               double d = k.getLineWidth();
               
               canvas.strokeWeight((float)d*getLineWidthScale());
-              double xp = toScreenX(k.getRXOffset());
-              double yp = toScreenY(k.getRYOffset());
-              canvas.line((float)xs, (float)ys,
-                  (float)xp, (float)yp);
+              double xp = toScreenX(k.getPoint().getX());
+              double yp = toScreenY(k.getPoint().getY());
+              canvas.line((float)xp, (float)yp,
+                  (float)xs, (float)ys);
           }
           
       } else if (treeLayout.equals("Polar")) {
@@ -1428,8 +1430,8 @@ public class TreeVis extends PApplet {
       double x = node.getXOffset();
       double y = node.getYOffset();
       if (treeLayout.equals("Radial")) {
-          x = node.getRXOffset();
-          y = node.getRYOffset();
+          x = node.getPoint().getX();
+          y = node.getPoint().getY();
       } else if (treeLayout.equals("Polar")) {
           x = node.getROffset() * Math.cos(node.getTOffset());
           y = node.getROffset() * Math.sin(node.getTOffset());
@@ -1506,26 +1508,43 @@ public class TreeVis extends PApplet {
             }
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
                 
-          double maxt = node.getMaximumTOffset();
-          double mint = node.getMinimumTOffset();
-          
-          if(wedgeHeightScale < 1)
-          {
-              double theta = Math.abs(maxt-mint);
-              double f = (theta*(1-wedgeHeightScale))/2;
-              mint = mint + f;
-              maxt = maxt - f;
-          }
-          
-          double x1 = node.getParent().getRXOffset() + shortest * Math.cos(mint);
-          double y1 = node.getParent().getRYOffset() + shortest * Math.sin(mint);
-          double x2 = node.getParent().getRXOffset() + longest * Math.cos(maxt);
-          double y2 = node.getParent().getRYOffset() + longest * Math.sin(maxt);
+          // double maxt = node.getMaximumTOffset();
+          // double mint = node.getMinimumTOffset();
+          // 
+          // if(wedgeHeightScale < 1)
+          // {
+          //     double theta = Math.abs(maxt-mint);
+          //     double f = (theta*(1-wedgeHeightScale))/2;
+          //     mint = mint + f;
+          //     maxt = maxt - f;
+          // }
+          // 
+          // double x1 = node.getParent().getPoint().getX() + shortest * Math.cos(mint);
+          // double y1 = node.getParent().getPoint().getY() + shortest * Math.sin(mint);
+          // double x2 = node.getParent().getPoint().getX() + longest * Math.cos(maxt);
+          // double y2 = node.getParent().getPoint().getY() + longest * Math.sin(maxt);
+
+          ArrayList<Node> tips = node.getLeaves();
+          Collections.sort(tips, new java.util.Comparator() {
+              public int compare(Object o1, Object o2) {
+                  if ( ((Node)o1).longestRootToTipDistance() < ((Node)o2).longestRootToTipDistance()) {
+                      return -1;
+                  } else if ( ((Node)o1).longestRootToTipDistance() > ((Node)o2).longestRootToTipDistance()) {
+                      return 1;
+                  } else {
+                      return 0;
+                  }
+              }
+      });
+          double x1 = tips.get(0).getPoint().getX();
+          double y1 = tips.get(0).getPoint().getY();
+          double x2 = tips.get(tips.size()-1).getPoint().getX();
+          double y2 = tips.get(tips.size()-1).getPoint().getY();
 
           //draw the wedge
-          canvas.triangle((float)toScreenX(x), (float)toScreenY(y), //center to bottom
-            (float)toScreenX(x1),  (float)toScreenY(y1),  //top to longest branch length
-            (float)toScreenX(x2),  (float)toScreenY(y2) );  //bottom to shortest branch length
+          canvas.triangle((float)toScreenX(x), (float)toScreenY(y), 
+            (float)toScreenX(x1),  (float)toScreenY(y1),  
+            (float)toScreenX(x2),  (float)toScreenY(y2) );  
       }
       
       canvas.fill(wedgeFontColor);
@@ -1607,7 +1626,7 @@ public class TreeVis extends PApplet {
         }
     }
     
-    //NOTE: the theta offsets must be set before the radius offsets
+    // //NOTE: the theta offsets must be set before the radius offsets
     public void setROffsets(Node node, double _prev) {
         node.setROffset(_prev+node.getBranchLength());
         for (Node n : node.nodes) {
@@ -1624,8 +1643,31 @@ public class TreeVis extends PApplet {
       }
     }
     
+    //NOTE: the theta offsets must be set before the radius offsets
+    // public void setROffsets(Node node) {
+    //     if(node == root)
+    //         node.setROffset(0);
+    //     else{
+    //     node.setROffset(node.getParent().getBranchLength()+node.getBranchLength());
+    //     }
+    //     if(!node.isLeaf())
+    //     {
+    //         for (Node n : node.nodes) {
+    //             setROffsets(n);
+    //         }
+    //     }
+    //   //set the max and min y-offsets
+    //   node.setMaximumROffset(node.getROffset());
+    //   node.setMinimumROffset(node.getROffset());
+    //   // for (int i=0; i < node.nodes.size(); i++) {
+    //   for (Node n : node.nodes) {
+    //     node.setMaximumROffset(Math.max(node.getMaximumROffset(), n.getMaximumROffset()));
+    //     node.setMinimumROffset(Math.min(node.getMinimumROffset(), n.getMinimumROffset()));
+    //   }
+    // }
+    
     public void setTOffsets(Node node, double _prev) {
-
+    
       double delta = 2*Math.PI/root.getNumberOfLeaves();
       
       if (node.isLeaf()) {
@@ -1650,8 +1692,85 @@ public class TreeVis extends PApplet {
         node.setMaximumTOffset(Math.max(node.getMaximumTOffset(), n.getMaximumTOffset()));
         node.setMinimumTOffset(Math.min(node.getMinimumTOffset(), n.getMinimumTOffset()));
       }
-
+    
     }
+    
+    public void setTOffsets() {
+        setTOffsets(root,0.0,Math.PI*2,0.0,0.0,0.0);
+    }
+    
+    public Point2D setTOffsets(Node node, double astart, double aend, double x, double y, double length) {
+        double fullAngle = (astart+aend)/2.0;
+        double dirX = Math.cos(fullAngle);
+        double dirY = Math.sin(fullAngle);
+        Point2D nodePoint = new Point2D.Double(x+(length*dirX),y+(length*dirY));
+        node.setPoint(nodePoint);
+        
+        if(!node.isLeaf())
+        {
+            ArrayList<Node> children = node.nodes;
+            int[] leafCounts = new int[children.size()];
+            int totalLeafCount = 0;
+            
+            int i = 0;
+            for(Node child: children) {
+                leafCounts[i] = child.getNumberOfLeaves();
+                totalLeafCount += leafCounts[i];
+                i++;
+            }
+            
+            double span = (aend-astart);
+            
+            if(node != root) {
+                astart = fullAngle - (span/2.0);
+                aend = fullAngle + (span/2.0);
+            }
+            
+            double a2 = astart;
+            
+            for(i = 0; i < children.size(); ++i) {
+                int index = i;
+                Node child = children.get(index);
+                final double childLength = child.getBranchLength();
+                double a1 = a2;
+                a2 = a1 + (span*leafCounts[index]/totalLeafCount);
+                
+                Point2D childPoint = setTOffsets(child,a1,a2,nodePoint.getX(), nodePoint.getY(), childLength);
+                child.setPoint(childPoint);
+            }
+        }
+       return nodePoint; 
+      }
+    
+    
+    
+    // public void setTOffsets(Node node, double angle, double _prev) {
+    //       double delta = angle/node.getNumberOfLeaves();
+    //       // System.out.println("d:"+delta);
+    //       if(node == root)
+    //       {
+    //           System.out.println("d:"+delta);
+    //           System.out.println("delta*subtree1:"+delta*node.nodes.get(0).getNumberOfLeaves());
+    //       }
+    //     
+    //       if (!node.isLeaf()) {
+    //         for (Node n : node.nodes) {
+    //           setTOffsets(n, delta*n.getNumberOfLeaves(), _prev);
+    //           _prev += delta*n.getNumberOfLeaves();
+    //         }
+    //       }
+    //       
+    //       node.setTOffset(_prev+angle);
+    //       
+    //       //set the max and min theta-offsets
+    //       node.setMaximumTOffset(node.getTOffset());
+    //       node.setMinimumTOffset(node.getTOffset());
+    //       for (Node n : node.nodes) {
+    //         node.setMaximumTOffset(Math.max(node.getMaximumTOffset(), n.getMaximumTOffset()));
+    //         node.setMinimumTOffset(Math.min(node.getMinimumTOffset(), n.getMinimumTOffset()));
+    //       }
+    //     
+    //     }
     
     public void setRadialOffsets(Node node) {
         if (node == root) {

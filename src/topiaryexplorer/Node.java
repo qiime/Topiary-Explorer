@@ -4,7 +4,9 @@ package topiaryexplorer;
  * Represents a node in the tree, which may be a leaf or internal node.
  */
 
+
 import java.awt.*;
+import java.awt.geom.*;
 import java.util.*;
 
 public class Node implements Comparable{
@@ -71,6 +73,8 @@ public class Node implements Comparable{
   private boolean hover = false;
   
   private boolean toPrune = false;
+  
+  private Point2D point = new Point2D.Double(0.0,0.0);
 
   Object userObject = null;
   String userString = "";
@@ -106,6 +110,8 @@ public class Node implements Comparable{
   }
   
   //GETTERS AND SETTERS
+  public void setPoint(Point2D p) {point = p;}
+  public Point2D getPoint() { return point; }
   public Color getBranchColor() { if(branchColor!= null) return branchColor; return new Color(0); }
   public Color getLabelColor() { return labelColor; }
   public boolean isHidden() { return hidden; }
