@@ -818,7 +818,37 @@ public class TreeVis extends PApplet {
                 else
                     return null;
             }
-            else if (treeLayout.equals("Radial") || treeLayout.equals("Polar"))
+            else if (treeLayout.equals("Radial"))
+            {
+                  ArrayList<Node> tips = tree.getLeaves();
+                  Collections.sort(tips, new java.util.Comparator() {
+                      public int compare(Object o1, Object o2) {
+                          if ( ((Node)o1).longestRootToTipDistance() < ((Node)o2).longestRootToTipDistance()) {
+                              return -1;
+                          } else if ( ((Node)o1).longestRootToTipDistance() > ((Node)o2).longestRootToTipDistance()) {
+                              return 1;
+                          } else {
+                              return 0;
+                          }
+                      }
+                  });
+                  double x1 = tips.get(0).getPoint().getX();
+                  double y1 = tips.get(0).getPoint().getY();
+                  double x2 = tips.get(tips.size()-1).getPoint().getX();
+                  double y2 = tips.get(tips.size()-1).getPoint().getY();
+                  
+                  int[] xs = new int[]{(int)nodeX, (int)toScreenX(x1), (int)toScreenX(x2)};
+                  int[] ys = new int[]{(int)nodeY, (int)toScreenY(y1), (int)toScreenY(y2)};
+                  Polygon poly = new Polygon(xs,ys,3);
+
+                  if(poly.contains(x,y))
+                  {
+                      return tree;
+                  }
+                  else
+                      return null;
+            }
+            else if (treeLayout.equals("Polar"))
             {
                 double maxt = tree.getMaximumTOffset();
                 double mint = tree.getMinimumTOffset();
@@ -847,6 +877,14 @@ public class TreeVis extends PApplet {
                   else
                       return null;
             }
+      }
+      
+      if(treeLayout.equals("Radial") || treeLayout.equals("Polar"))
+      {
+          minX = nodeX;
+          maxX = minX+10;
+          minY = nodeY-5;
+          maxY = minY+5;
       }
       
       //if the current node is within TOLERANCE pixels, return this node
@@ -1426,15 +1464,17 @@ public class TreeVis extends PApplet {
      * @param  canvas  the PGraphics object to draw to
      */
     private void drawWedge(Node node, PGraphics canvas) {
-      
+        
       double x = node.getXOffset();
       double y = node.getYOffset();
+      double rotation = 0;
       if (treeLayout.equals("Radial")) {
           x = node.getPoint().getX();
           y = node.getPoint().getY();
       } else if (treeLayout.equals("Polar")) {
-          x = node.getROffset() * Math.cos(node.getTOffset());
-          y = node.getROffset() * Math.sin(node.getTOffset());
+          rotation = node.getTOffset();
+          x = node.getROffset() * Math.cos(rotation);
+          y = node.getROffset() * Math.sin(rotation);
       }
         
       //set up the drawing properties
@@ -1473,6 +1513,11 @@ public class TreeVis extends PApplet {
         //set wedge at y location
         top = y + top;
         bottom = y - bottom;
+      // coords for radial and polar wedges
+      double x1 = 0;
+      double y1 = 0;
+      double x2 = 0;
+      double y2 = 0;
       
       if (treeLayout.equals("Rectangular")) {   
           if(mirrored)
@@ -1507,22 +1552,6 @@ public class TreeVis extends PApplet {
             (float)toScreenX(x+longest),  (float)toScreenY(bottom) );  //bottom to shortest branch length
             }
       } else if (treeLayout.equals("Radial") || treeLayout.equals("Polar")) {
-                
-          // double maxt = node.getMaximumTOffset();
-          // double mint = node.getMinimumTOffset();
-          // 
-          // if(wedgeHeightScale < 1)
-          // {
-          //     double theta = Math.abs(maxt-mint);
-          //     double f = (theta*(1-wedgeHeightScale))/2;
-          //     mint = mint + f;
-          //     maxt = maxt - f;
-          // }
-          // 
-          // double x1 = node.getParent().getPoint().getX() + shortest * Math.cos(mint);
-          // double y1 = node.getParent().getPoint().getY() + shortest * Math.sin(mint);
-          // double x2 = node.getParent().getPoint().getX() + longest * Math.cos(maxt);
-          // double y2 = node.getParent().getPoint().getY() + longest * Math.sin(maxt);
 
           ArrayList<Node> tips = node.getLeaves();
           Collections.sort(tips, new java.util.Comparator() {
@@ -1536,10 +1565,10 @@ public class TreeVis extends PApplet {
                   }
               }
       });
-          double x1 = tips.get(0).getPoint().getX();
-          double y1 = tips.get(0).getPoint().getY();
-          double x2 = tips.get(tips.size()-1).getPoint().getX();
-          double y2 = tips.get(tips.size()-1).getPoint().getY();
+          x1 = tips.get(0).getPoint().getX();
+          y1 = tips.get(0).getPoint().getY();
+          x2 = tips.get(tips.size()-1).getPoint().getX();
+          y2 = tips.get(tips.size()-1).getPoint().getY();
 
           //draw the wedge
           canvas.triangle((float)toScreenX(x), (float)toScreenY(y), 
@@ -1565,15 +1594,30 @@ public class TreeVis extends PApplet {
             else
             {s = ""+node.getNumberOfLeaves();}
           
+          if(s.indexOf("null") != -1)
+          {
+              canvas.fill(0);
+              canvas.stroke(0);
+              return;
+          }
+          
           if(Math.abs((toScreenY(top)-toScreenY(bottom))) > wedgeFontSize)
           {
               canvas.textFont(wedgeFont);
-              if(mirrored)
+              if(treeLayout.equals("Triangular") || treeLayout.equals("Rectangular"))
               {
-                  canvas.text(s, (float)(toScreenX(x-(shortest)/2)+labelXOffset+node.getLabelXOffset()), (float)(toScreenY(bottom+(top-bottom)/2)+5+labelYOffset+node.getLabelYOffset()));
+              
+                  if(mirrored)
+                  {
+                      canvas.text(s, (float)(toScreenX(x-(shortest)/2)+labelXOffset+node.getLabelXOffset()), (float)(toScreenY(bottom+(top-bottom)/2)+5+labelYOffset+node.getLabelYOffset()));
+                  }
+                  else
+                      canvas.text(s, (float)(toScreenX(x+(shortest)/2)+labelXOffset+node.getLabelXOffset()), (float)(toScreenY(bottom+(top-bottom)/2)+5+labelYOffset+node.getLabelYOffset()));
               }
               else
-                  canvas.text(s, (float)(toScreenX(x+(shortest)/2)+labelXOffset+node.getLabelXOffset()), (float)(toScreenY(bottom+(top-bottom)/2)+5+labelYOffset+node.getLabelYOffset()));
+              {
+                  canvas.text(s, (float)(toScreenX(x2)+node.getLabelXOffset()), (float)(toScreenY(y2)+node.getLabelYOffset()));
+              }
           }
           canvas.textFont(nodeFont);
       }
