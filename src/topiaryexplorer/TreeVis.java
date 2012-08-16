@@ -1626,7 +1626,7 @@ public class TreeVis extends PApplet {
         }
     }
     
-    // //NOTE: the theta offsets must be set before the radius offsets
+    //NOTE: the theta offsets must be set before the radius offsets
     public void setROffsets(Node node, double _prev) {
         node.setROffset(_prev+node.getBranchLength());
         for (Node n : node.nodes) {
@@ -1643,31 +1643,8 @@ public class TreeVis extends PApplet {
       }
     }
     
-    //NOTE: the theta offsets must be set before the radius offsets
-    // public void setROffsets(Node node) {
-    //     if(node == root)
-    //         node.setROffset(0);
-    //     else{
-    //     node.setROffset(node.getParent().getBranchLength()+node.getBranchLength());
-    //     }
-    //     if(!node.isLeaf())
-    //     {
-    //         for (Node n : node.nodes) {
-    //             setROffsets(n);
-    //         }
-    //     }
-    //   //set the max and min y-offsets
-    //   node.setMaximumROffset(node.getROffset());
-    //   node.setMinimumROffset(node.getROffset());
-    //   // for (int i=0; i < node.nodes.size(); i++) {
-    //   for (Node n : node.nodes) {
-    //     node.setMaximumROffset(Math.max(node.getMaximumROffset(), n.getMaximumROffset()));
-    //     node.setMinimumROffset(Math.min(node.getMinimumROffset(), n.getMinimumROffset()));
-    //   }
-    // }
-    
     public void setTOffsets(Node node, double _prev) {
-    
+
       double delta = 2*Math.PI/root.getNumberOfLeaves();
       
       if (node.isLeaf()) {
@@ -1692,7 +1669,7 @@ public class TreeVis extends PApplet {
         node.setMaximumTOffset(Math.max(node.getMaximumTOffset(), n.getMaximumTOffset()));
         node.setMinimumTOffset(Math.min(node.getMinimumTOffset(), n.getMinimumTOffset()));
       }
-    
+
     }
     
     public void setTOffsets() {
@@ -1742,35 +1719,6 @@ public class TreeVis extends PApplet {
        return nodePoint; 
       }
     
-    
-    
-    // public void setTOffsets(Node node, double angle, double _prev) {
-    //       double delta = angle/node.getNumberOfLeaves();
-    //       // System.out.println("d:"+delta);
-    //       if(node == root)
-    //       {
-    //           System.out.println("d:"+delta);
-    //           System.out.println("delta*subtree1:"+delta*node.nodes.get(0).getNumberOfLeaves());
-    //       }
-    //     
-    //       if (!node.isLeaf()) {
-    //         for (Node n : node.nodes) {
-    //           setTOffsets(n, delta*n.getNumberOfLeaves(), _prev);
-    //           _prev += delta*n.getNumberOfLeaves();
-    //         }
-    //       }
-    //       
-    //       node.setTOffset(_prev+angle);
-    //       
-    //       //set the max and min theta-offsets
-    //       node.setMaximumTOffset(node.getTOffset());
-    //       node.setMinimumTOffset(node.getTOffset());
-    //       for (Node n : node.nodes) {
-    //         node.setMaximumTOffset(Math.max(node.getMaximumTOffset(), n.getMaximumTOffset()));
-    //         node.setMinimumTOffset(Math.min(node.getMinimumTOffset(), n.getMinimumTOffset()));
-    //       }
-    //     
-    //     }
     
     public void setRadialOffsets(Node node) {
         if (node == root) {
