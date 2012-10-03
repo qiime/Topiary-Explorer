@@ -123,6 +123,7 @@ public class Node implements Comparable{
   public void setDrawLabel(boolean b) { drawLabel = b; }
   public boolean getDrawLabel() { return drawLabel; }
   public ArrayList<String> getGroupBranchValue() { return groupBranchValue; }
+  public ArrayList<Double> getGroupBranchWeight() { return groupBranchWeight; }
   public ArrayList<Color> getGroupBranchColor() { return groupBranchColor; }
   public ArrayList<Double> getGroupBranchFraction() { return groupBranchWeight; }
   public ArrayList<String> getGroupLabelValue() { return groupLabelValue; }
