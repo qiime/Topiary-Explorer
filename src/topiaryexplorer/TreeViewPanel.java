@@ -27,9 +27,9 @@ public final class TreeViewPanel extends JPanel {
     JButton recenterButton = new JButton("Recenter");
     JButton ladderizeButton = new JButton("Ladderize");
     JButton subtreeButton = new JButton("View subtree...");
-    JButton pruneButton = new JButton("Prune Tree");
-    JButton showHiddenButton = new JButton("Show Hidden Nodes");
-    JButton setLineageButton = new JButton("Set Consensus Lineage...");
+    JButton pruneButton = new JButton("Prune tree");
+    JButton showHiddenButton = new JButton("Show hidden nodes");
+    JButton setLineageButton = new JButton("Set consensus lineage...");
     JButton collapseByButton = new JButton("Collapse By");
     JPopupMenu collapseByMenu = new JPopupMenu();
     JPanel buttonPanel = new JPanel();
@@ -53,13 +53,15 @@ public final class TreeViewPanel extends JPanel {
     JToggleButton mirrorvertButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("mirror_vert.gif"))));
     JToggleButton mirrorhorzButton = new JToggleButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("mirror_horz.gif"))));
     
+	JPanel colorsPanel = new JPanel();
+	
     JPanel bgColorPanel = new JPanel();
-    JLabel bgColorLabel = new JLabel("Background Color: ");
+    JLabel bgColorLabel = new JLabel("  Background color");
     JLabel colorLabel = new JLabel("  ");
     JColorChooser colorChooser = new JColorChooser();
     
     JPanel unmappedNodeColorPanel = new JPanel();
-    JLabel unmappedNodeColorLabelText = new JLabel("Unmapped node color: ");
+    JLabel unmappedNodeColorLabelText = new JLabel("  Unmapped node color");
     JLabel unmappedNodeColorLabel = new JLabel("  ");
     JSlider unmappedTranspSlider = new JSlider(0,255,255);
     
@@ -74,7 +76,6 @@ public final class TreeViewPanel extends JPanel {
         vis = frame.tree;
         
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        
         buttonPanel.setLayout(new GridLayout(8,1));
         
         selectButton.addActionListener(new ActionListener() {
@@ -262,9 +263,10 @@ public final class TreeViewPanel extends JPanel {
         mirrorPanel.add(mirrorvertButton);
         mirrorPanel.add(mirrorhorzButton);
 
-        
-        
-        colorLabel.setPreferredSize(new Dimension(30,20));
+        // colorsPanel.setLayout(new GridLayout(2,1));
+		// colorsPanel.setAlignmentY(Component.LEFT_ALIGNMENT);
+
+        colorLabel.setPreferredSize(new Dimension(20,20));
         colorLabel.setOpaque(true);
         colorLabel.setBorder(LineBorder.createGrayLineBorder());
         colorLabel.setBackground(Color.WHITE);
@@ -288,11 +290,12 @@ public final class TreeViewPanel extends JPanel {
             public void mousePressed(MouseEvent e) {}
         }); 
         colorLabel.setToolTipText("Change background color...");
-        bgColorPanel.add(bgColorLabel);
-        bgColorPanel.add(colorLabel);
+		bgColorPanel.setLayout(new BorderLayout());
+        bgColorPanel.add(bgColorLabel,BorderLayout.CENTER);
+        bgColorPanel.add(colorLabel,BorderLayout.WEST);
         add(bgColorPanel);
         
-        unmappedNodeColorLabel.setPreferredSize(new Dimension(30,20));
+        unmappedNodeColorLabel.setPreferredSize(new Dimension(20,20));
         unmappedNodeColorLabel.setOpaque(true);
         unmappedNodeColorLabel.setBorder(LineBorder.createGrayLineBorder());
         unmappedNodeColorLabel.setBackground(Color.BLACK);
@@ -316,11 +319,15 @@ public final class TreeViewPanel extends JPanel {
             public void mouseReleased(MouseEvent e) {}
             public void mousePressed(MouseEvent e) {}
         }); 
-        unmappedNodeColorLabel.setToolTipText("Change unmapped node color...");
-        unmappedNodeColorPanel.add(unmappedNodeColorLabelText);
-        unmappedNodeColorPanel.add(unmappedNodeColorLabel);
+        unmappedNodeColorLabel.setToolTipText("Change unmapped node color");
+		unmappedNodeColorPanel.setLayout(new BorderLayout());
+        unmappedNodeColorPanel.add(unmappedNodeColorLabelText, BorderLayout.CENTER);
+        unmappedNodeColorPanel.add(unmappedNodeColorLabel, BorderLayout.WEST);
+		// unmappedNodeColorPanel.setAlignmentY(Component.LEFT_ALIGNMENT);
         add(unmappedNodeColorPanel);
         
+		// add(colorsPanel);
+
         unmappedTranspSlider.addChangeListener(new ChangeListener() {
          	public void stateChanged(ChangeEvent e) {
          		if (unmappedTranspSlider.getValueIsAdjusting()) {
@@ -334,8 +341,8 @@ public final class TreeViewPanel extends JPanel {
          	}
          });
         unmappedTranspSlider.setPreferredSize(new Dimension(120,20));
-        
-        add(unmappedTranspSlider);
+        unmappedTranspSlider.setToolTipText("Unmapped node transparancy");
+        unmappedNodeColorPanel.add(unmappedTranspSlider, BorderLayout.SOUTH);
 /*        add(rotatePanel);*/
         add(layoutCP);
         add(mirrorCP);

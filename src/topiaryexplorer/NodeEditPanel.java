@@ -24,18 +24,18 @@ import javax.swing.plaf.basic.BasicArrowButton;
 public final class NodeEditPanel extends JPanel{
     TreeWindow frame = null;
     TreeVis vis = null;
-    JLabel wedgeLabel = new JLabel("Customize Nodes:");
+    JLabel wedgeLabel = new JLabel("Customize nodes:");
     
-    JCheckBox pieChartCheckBox = new JCheckBox("Pie Chart");
-    JLabel pieChartLabel = new JLabel("Pie chart radius:");
+    JCheckBox pieChartCheckBox = new JCheckBox("Pie chart");
+    JLabel pieChartLabel = new JLabel(" Pie chart radius");
     JSlider pieChartRadius = new JSlider(1,100,15);
-    JCheckBox nodeLabelCheckBox = new JCheckBox("Tip Labels");
-    JCheckBox internalLabelCheckBox = new JCheckBox("Internal Node Labels");
+    JCheckBox nodeLabelCheckBox = new JCheckBox("Tip labels");
+    JCheckBox internalLabelCheckBox = new JCheckBox("Internal node labels");
     JPanel labelPanel = new JPanel();
     CollapsablePanel labelPanelCP = new CollapsablePanel("Labels",labelPanel, 
         false, true);
     Boolean warningShown = false;
-    JButton tipLabelButton = new JButton("Set Labels As...");
+    JButton tipLabelButton = new JButton("Set as...");
     
     JLabel fntSizeLabel = new JLabel("Size: ");
     JTextField fntSize = new JTextField("",3);
@@ -48,7 +48,7 @@ public final class NodeEditPanel extends JPanel{
     // JButton fntDecButton = new JButton("v");
     JPanel fntPanel = new JPanel();
     JPanel fntSizePanel = new JPanel();
-    
+    JPanel fntButtonPanel = new JPanel();
     JPanel fntColorPanel = new JPanel();
     JLabel fntColorLabel = new JLabel("Color: ");
     JButton colorButton = new JButton("Color");
@@ -61,8 +61,8 @@ public final class NodeEditPanel extends JPanel{
     JPanel pieChartHolder = new JPanel();
     JPanel holder3 = new JPanel();
     
-    JLabel colorByLabel = new JLabel("Color By:");
-    JButton colorByButton = new JButton("Color By...");
+    JLabel colorByLabel = new JLabel("Color by:");
+    JButton colorByButton = new JButton("Color by...");
     ColorByPopupMenu colorByMenu;// = new ColorByComboBox()
     
 	// {{{ NodeEditPanel constructor
@@ -75,10 +75,11 @@ public final class NodeEditPanel extends JPanel{
         vis = frame.tree;
         colorByMenu = new ColorByPopupMenu(frame.frame, frame, 
             frame.frame.labelColorPanel,1);
-        this.setToolTipText("Customize Nodes");
+        this.setToolTipText("Customize nodes");
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		// setLayout(new GridLayout(4,1));
         
-        pieChartHolder.setLayout(new GridLayout(2,1));
+        pieChartHolder.setLayout(new BorderLayout());
         pieChartRadius.addChangeListener(new ChangeListener() {
             public synchronized void stateChanged(ChangeEvent e) {
                 if (pieChartRadius.getValueIsAdjusting()){
@@ -93,9 +94,8 @@ public final class NodeEditPanel extends JPanel{
         pieChartRadius.setMajorTickSpacing(10);
         pieChartRadius.setMinorTickSpacing(5);
         pieChartRadius.setSnapToTicks(true);
-        holder3.add(pieChartLabel);
-        pieChartHolder.add(holder3);
-        pieChartHolder.add(pieChartRadius);
+        pieChartHolder.add(pieChartLabel, BorderLayout.NORTH);
+        pieChartHolder.add(pieChartRadius, BorderLayout.CENTER);
         add(pieChartHolder);
         
         internalLabelCheckBox.addActionListener(new ActionListener() {
@@ -109,8 +109,9 @@ public final class NodeEditPanel extends JPanel{
                 vis.redraw();
             }
         });
-        holder1.add(internalLabelCheckBox);
-        holder1.add(new JLabel());
+		holder1.setLayout(new BorderLayout());
+        holder1.add(internalLabelCheckBox, BorderLayout.CENTER);
+        // holder1.add(new JLabel());
         add(holder1);
         
         nodeLabelCheckBox.addActionListener(new ActionListener() {
@@ -134,34 +135,46 @@ public final class NodeEditPanel extends JPanel{
                     nodeLabelCheckBox.isSelected() || internalLabelCheckBox.isSelected());
             }
         });
-        holder.add(nodeLabelCheckBox);
-        holder.add(new JLabel());
+		holder.setLayout(new BorderLayout());
+        holder.add(nodeLabelCheckBox, BorderLayout.CENTER);
+        // holder.add(new JLabel());
         add(holder);
         
 /*        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));*/
-        labelPanel.setLayout(new GridLayout(4,1));
-        
+        // labelPanel.setLayout(new GridLayout(4,1));
+		labelPanel.setLayout(new BorderLayout());
+        holder2.setLayout(new GridLayout(2,1));
         tipLabelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.resetTipLabelCustomizer(true);
             }
         });
-        labelPanel.add(tipLabelButton);
+		holder2.add(tipLabelButton);
+        
+		colorByButton.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+				colorByMenu.show(colorByButton, 100, 10);
+           } 
+        });
+		holder2.add(colorByButton);
+        labelPanel.add(holder2, BorderLayout.NORTH);
+
         fntFace.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                vis.setNodeFontFace((String)fntFace.getSelectedItem());
                vis.redraw();
-/*               System.out.println((String)fntFace.getSelectedItem());*/
             }
         });
-/*        holder2.add(new JLabel("Font Face: "));*/
-        labelPanel.add(fntFace);
-/*        labelPanel.add(holder2);*/
-/*        labelPanel.add(fntSizeLabel);*/
-        fntSizePanel.add(fntSizeLabel);
+        labelPanel.add(fntFace, BorderLayout.CENTER);
+		
+
+        // fntSizePanel.add(fntSizeLabel);
+		fntSizePanel.setLayout(new BorderLayout());
+		fntButtonPanel.setLayout(new GridLayout(2,1));
         fntSize.setToolTipText("Change the font size of node labels.");
         fntSize.setMaximumSize(new Dimension(30,20));
-        fntSize.setText(""+vis.getNodeFontSize());
+        fntSize.setText(""+(int)vis.getNodeFontSize());
+		fntSize.setFont(new Font("Helvetica",0,10));
         fntSize.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
             }
@@ -172,35 +185,25 @@ public final class NodeEditPanel extends JPanel{
                     vis.setNodeFontSize(Float.parseFloat(fntSize.getText()));
             }
         });
-/*        fntSize.setText(""+vis.getNodeFontSize());*/
-/*        fntSize.setMaximumSize(new Dimension(20,10));*/
-/*        fntSizePanel.add(fntSize);*/
-/*        fntSizePanel.add(ptLabel);*/
-/*        fntPanel.setLayout(new GridLayout(2,1));*/
-/*        fntPanel.setMaximumSize(new Dimension(10,10));*/
+		fntSizePanel.add(fntSize, BorderLayout.CENTER);
+		
         fntDecButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 vis.setNodeFontSize(vis.getNodeFontSize()-1);
-                fntSize.setText(""+vis.getNodeFontSize());
+                fntSize.setText(""+(int)vis.getNodeFontSize());
                     
             }
         });
-        
-/*        fntPanel.add(fntDecButton);*/
-/*        fntSizePanel.add(fntPanel);*/
-        fntSizePanel.add(fntDecButton);
-        fntSizePanel.add(fntSize);
         fntIncButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 vis.setNodeFontSize(vis.getNodeFontSize()+1);
-                fntSize.setText(""+vis.getNodeFontSize());
+                fntSize.setText(""+(int)vis.getNodeFontSize());
             }
-        });
-/*        fntPanel.add(fntIncButton);*/
-        fntSizePanel.add(fntIncButton);       
-        labelPanel.add(fntSizePanel);
-        
-/*        add(fntColorLabel);*/
+        }); 
+   		fntButtonPanel.add(fntIncButton);
+		fntButtonPanel.add(fntDecButton);
+		fntSizePanel.add(fntButtonPanel, BorderLayout.EAST);
+		labelPanel.add(fntSizePanel, BorderLayout.EAST);
 
         colorLabel.setPreferredSize(new Dimension(30,15));
         colorLabel.setOpaque(true);
@@ -210,7 +213,7 @@ public final class NodeEditPanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 Color newColor = JColorChooser.showDialog(
                                      NodeEditPanel.this,
-                                     "Choose Node Label Color",
+                                     "Choose node label color",
                                      colorLabel.getBackground());
                  if(newColor != null)
                  {
@@ -229,13 +232,7 @@ public final class NodeEditPanel extends JPanel{
 /*        fntColorPanel.add(colorLabel);*/
 /*        labelPanel.add(fntColorPanel);*/
         
-        colorByButton.addActionListener(new ActionListener() {
-           public void actionPerformed(ActionEvent e) {
-				colorByMenu.show(colorByButton, 100, 10);
-           } 
-        });
-        
-        labelPanel.add(colorByButton);
+        // labelPanel.add(colorByButton, BorderLayout.CENTER);
 /*        labelPanel.add(colorByComboBox);*/
         
         labelPanelCP.setVisible(nodeLabelCheckBox.isSelected());

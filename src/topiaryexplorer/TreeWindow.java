@@ -1172,7 +1172,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
             } else if (Integer.class.isInstance(category)) {
                 linevalue = (double) ( ((Integer)category).intValue());
             } else { //double
-                linevalue = ((Double)category).doubleValue();;
+                linevalue = ((Double)category).doubleValue();
             }      
            
             //set the node to this line width

@@ -17,48 +17,32 @@ import javax.swing.plaf.basic.BasicArrowButton;
 public class WedgeEditPanel extends JPanel{
     TreeWindow frame = null;
     TreeVis vis = null;
-    JLabel wedgeLabel = new JLabel("Customize Wedges:");
+    JLabel wedgeLabel = new JLabel("Customize wedges:");
     
     JPanel labelPanel = new JPanel();
     CollapsablePanel labelPanelCP = new CollapsablePanel("Labels",labelPanel, false, true);
     
     JPanel heightPanel = new JPanel();
-    JLabel heightLabel = new JLabel("Height:  ");
+    JLabel heightLabel = new JLabel("Height  ");
     JSlider wedgeHeightSlider = new JSlider(0,101,100);
-    
-    JButton consensusButton = new JButton("Consensus Lineages");
-    
-    // JCheckBox labelDragging = new JCheckBox("Drag Mode", false);
-    // JLabel position = new JLabel("Position:  ");
-    // JPanel positionPanel = new JPanel();
-    // BasicArrowButton upButton = new BasicArrowButton(SwingConstants.NORTH);
-    // BasicArrowButton downButton = new BasicArrowButton(SwingConstants.SOUTH);
-    // BasicArrowButton rightButton = new BasicArrowButton(SwingConstants.EAST);
-    // BasicArrowButton leftButton = new BasicArrowButton(SwingConstants.WEST);
-    // JButton upButton = new JButton("^");
-    // JButton downButton = new JButton("v");
-    // JButton rightButton = new JButton(">");
-    // JButton leftButton = new JButton("<");
+
     JButton resetPosition = new JButton("Reset Positions");
     JPanel pPanel = new JPanel();
     
     String[] fntFaces = {"SansSerif","Serif","Courier"};//PFont.list();
     JComboBox fntFace = new JComboBox(fntFaces);
-    JLabel fontSizeLabel = new JLabel("Size: ");
+    // JLabel fontSizeLabel = new JLabel("Size: ");
     JTextField fntSize = new JTextField("",3);
-    JLabel ptLabel = new JLabel("pt");
+    // JLabel ptLabel = new JLabel("pt");
     BasicArrowButton fntIncButton = new BasicArrowButton(SwingConstants.NORTH);
     BasicArrowButton fntDecButton = new BasicArrowButton(SwingConstants.SOUTH);
-    // JButton fntIncButton = new JButton("^");
-    // JButton fntDecButton = new JButton("v");
     JPanel fntPanel = new JPanel();
     JPanel fontSizePanel = new JPanel();
-    
     JPanel fontColorPanel = new JPanel();
-    JLabel fontColorLabel = new JLabel("Color: ");
     JButton colorButton = new JButton("Color");
     JLabel colorLabel = new JLabel("  ");
     JColorChooser colorChooser = new JColorChooser();
+	JPanel fntButtonPanel = new JPanel();
     
     JPanel holder = new JPanel();
     JCheckBox wedgeLabelCheckBox = new JCheckBox("Labels", true);
@@ -72,8 +56,9 @@ public class WedgeEditPanel extends JPanel{
         frame = _frame;
         vis = frame.tree;
         this.setToolTipText("Customize Wedges");
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        
+        // setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
+
         heightPanel.add(heightLabel);
         wedgeHeightSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
@@ -83,10 +68,10 @@ public class WedgeEditPanel extends JPanel{
                 }
             }
         });
-        wedgeHeightSlider.setToolTipText("Slide to change the size of wedges.");
+        wedgeHeightSlider.setToolTipText("Slide to change the size of wedges");
         wedgeHeightSlider.setPreferredSize(new Dimension(120,20));
         heightPanel.add(wedgeHeightSlider);
-        add(heightPanel);
+        add(heightPanel, BorderLayout.NORTH);
         
         wedgeLabelCheckBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -97,11 +82,12 @@ public class WedgeEditPanel extends JPanel{
         });
         holder.add(wedgeLabelCheckBox);
         holder.add(new JLabel());
-        add(holder);
+        add(holder, BorderLayout.WEST);
         
-        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
+        // labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
+        labelPanel.setLayout(new BorderLayout());
         
-        resetPosition.addActionListener(new ActionListener() {
+		resetPosition.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 for(Node n : vis.getTree().getNodes()) {
                     n.setLabelYOffset(0.0);
@@ -112,8 +98,8 @@ public class WedgeEditPanel extends JPanel{
         });
 
         // resetPosition.setMinimumSize(new Dimension(188, 20));
-        pPanel.add(resetPosition);     
-        labelPanel.add(pPanel);
+        // pPanel.add(resetPosition);     
+        labelPanel.add(resetPosition, BorderLayout.NORTH);
         
         fntFace.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -123,13 +109,16 @@ public class WedgeEditPanel extends JPanel{
             }
         });
 /*        holder2.add(new JLabel("Font Face: "));*/
-        labelPanel.add(fntFace);
+        labelPanel.add(fntFace, BorderLayout.CENTER);
         
 /*        labelPanel.add(fontSizeLabel);*/
-        fontSizePanel.add(fontSizeLabel);
-        fntSize.setToolTipText("Change the font size of wedge labels.");
-        fntSize.setText(""+vis.getWedgeFontSize());
+		fontSizePanel.setLayout(new BorderLayout());
+        // fontSizePanel.add(fontSizeLabel);
+		fntButtonPanel.setLayout(new GridLayout(2,1));
+        fntSize.setToolTipText("Change the font size of wedge labels");
+        fntSize.setText(""+(int)vis.getWedgeFontSize());
         fntSize.setMaximumSize(new Dimension(20,20));
+		fntSize.setFont(new Font("Helvetica",0,10));
         fntSize.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
             }
@@ -140,30 +129,24 @@ public class WedgeEditPanel extends JPanel{
                     vis.setWedgeFontSize(Float.parseFloat(fntSize.getText()));
             }
         });
-        fontSizePanel.add(fntSize);
-        fontSizePanel.add(ptLabel);
-        fntPanel.setLayout(new GridLayout(2,1));
-        fntPanel.setMaximumSize(new Dimension(10,20));
+        fontSizePanel.add(fntSize, BorderLayout.CENTER);
         fntIncButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 vis.setWedgeFontSize(vis.getWedgeFontSize()+1);
-                fntSize.setText(""+vis.getWedgeFontSize());
+                fntSize.setText(""+(int)vis.getWedgeFontSize());
             }
         });
-        fntPanel.add(fntIncButton);
+		fntButtonPanel.add(fntIncButton);
         fntDecButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 vis.setWedgeFontSize(vis.getWedgeFontSize()-1);
-                fntSize.setText(""+vis.getWedgeFontSize());
+                fntSize.setText(""+(int)vis.getWedgeFontSize());
             }
         });
-        fntPanel.add(fntDecButton);
-        fontSizePanel.add(fntPanel);
-        labelPanel.add(fontSizePanel);
-        
-/*        add(fontColorLabel);*/
-
-        colorLabel.setPreferredSize(new Dimension(30,20));
+		fntButtonPanel.add(fntDecButton);
+        fontSizePanel.add(fntButtonPanel, BorderLayout.EAST);
+        labelPanel.add(fontSizePanel, BorderLayout.EAST);
+        colorLabel.setPreferredSize(new Dimension(20,20));
         colorLabel.setOpaque(true);
         colorLabel.setBorder(LineBorder.createGrayLineBorder());
         colorLabel.setBackground(Color.WHITE);
@@ -185,12 +168,11 @@ public class WedgeEditPanel extends JPanel{
             public void mouseReleased(MouseEvent e) {}
             public void mousePressed(MouseEvent e) {}
         }); 
-        colorLabel.setToolTipText("Change the wedge label font color...");
-        fontColorPanel.add(new JLabel("Font Color: "));
-        fontColorPanel.add(colorLabel);
-        labelPanel.add(fontColorPanel);
+        colorLabel.setToolTipText("Change the wedge label font color");
+        labelPanel.add(colorLabel, BorderLayout.WEST);
+
         labelPanelCP.setVisible(wedgeLabelCheckBox.isSelected());
-        add(labelPanelCP);
+        add(labelPanelCP, BorderLayout.SOUTH);
     }
 	// }}}
 	

@@ -49,6 +49,8 @@ class BranchEditPanel extends JPanel{
     JLabel noCountColorLabelText = new JLabel("as no count");
     JLabel noCountColorLabel = new JLabel("  ");
     JColorChooser colorChooser = new JColorChooser();
+	JPanel holder = new JPanel();
+	JLabel spacer = new JLabel();
     
     
     /**
@@ -63,8 +65,9 @@ class BranchEditPanel extends JPanel{
 /*    JButton sortByButton = new JButton("Sort by...");
     JMenu sortBy = new JMenu("Sort by");*/
     
-    JMenu lineWidthMenu = new JMenu("Line Width");
-    JLabel lineWidthLabel = new JLabel("Line Width:");
+    // JMenu lineWidthMenu = new JMenu("Line Width");
+    JLabel lineWidthLabel = new JLabel("Line width:");
+	JCheckBox lineWidthByAbundance = new JCheckBox("Line width by abundance",false);
     JSlider lineWidthSlider = new JSlider(1, 75, 15);
     // ButtonGroup lineWidthGroup = new ButtonGroup();
     
@@ -86,6 +89,12 @@ class BranchEditPanel extends JPanel{
 /*        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));*/
         setLayout(new GridLayout(7,1));
         
+		colorBy.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+				colorByMenu.show(colorBy, 100, 10);
+           } 
+        });
+        add(colorBy);
         // coloringMenuItem.setEnabled(false);
         coloringMenuItem.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {                frame.treeEditToolbar.summaryPanel.summaryScrollPane.setVisible(!coloringMenuItem.isSelected());  
@@ -98,7 +107,7 @@ class BranchEditPanel extends JPanel{
         });
         add(coloringMenuItem);
         majorityColoringMenuItem.setEnabled(false);
-        majorityColoringMenuItem.setToolTipText("Toggle branch color mode between majority and mixed coloring.");
+        majorityColoringMenuItem.setToolTipText("Toggle branch color mode between majority and mixed coloring");
         majorityColoringMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                    vis.setMajorityColoring(majorityColoringMenuItem.isSelected());
@@ -109,7 +118,7 @@ class BranchEditPanel extends JPanel{
         add(majorityColoringMenuItem);
         
         weightedColoringMenuItem.setEnabled(false);
-        weightedColoringMenuItem.setToolTipText("Toggle branch color weighting by OTU count.");
+        weightedColoringMenuItem.setToolTipText("Toggle branch color weighting by OTU count");
         weightedColoringMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.recolorBranches();
@@ -128,7 +137,7 @@ class BranchEditPanel extends JPanel{
                 vis.redraw();
             }
         });
-        noCountColorLabel.setPreferredSize(new Dimension(30,20));
+        noCountColorLabel.setPreferredSize(new Dimension(20,20));
         noCountColorLabel.setOpaque(true);
         noCountColorLabel.setBorder(LineBorder.createGrayLineBorder());
         noCountColorLabel.setBackground(Color.BLACK);
@@ -153,19 +162,20 @@ class BranchEditPanel extends JPanel{
             public void mouseReleased(MouseEvent e) {}
             public void mousePressed(MouseEvent e) {}
         });
-        noCountColorLabel.setToolTipText("Change uncounted color...");
-        noCountColorPanel.add(noCountMenuItem);
-        noCountColorPanel.add(noCountColorLabel);
-        noCountColorPanel.add(noCountColorLabelText);
+        noCountColorLabel.setToolTipText("Change uncounted color");
+		noCountColorPanel.setLayout(new BorderLayout());
+		holder.add(noCountColorLabel);
+		holder.add(noCountColorLabelText);
+        noCountColorPanel.add(noCountMenuItem, BorderLayout.WEST);
+        // noCountColorPanel.add(noCountColorLabel, BorderLayout.CENTER);
+        noCountColorPanel.add(holder, BorderLayout.CENTER);
+		spacer.setPreferredSize(new Dimension(62,20));
+		noCountColorPanel.add(spacer, BorderLayout.EAST);
         add(noCountColorPanel);
         
-        colorBy.addActionListener(new ActionListener() {
-           public void actionPerformed(ActionEvent e) {
-				colorByMenu.show(colorBy, 100, 10);
-           } 
-        });
-        add(colorBy);
-        add(lineWidthLabel);
+        // add(lineWidthLabel);
+		add(lineWidthByAbundance);
+		lineWidthSlider.setToolTipText("Line width scale");
         lineWidthSlider.setMajorTickSpacing(15);
         lineWidthSlider.setSnapToTicks(true);
         lineWidthSlider.addChangeListener(new ChangeListener() {
@@ -179,46 +189,46 @@ class BranchEditPanel extends JPanel{
         add(lineWidthSlider);
     }
 	// }}}
-	
-/*  public void resetLineWidthOtuMenu() {
-       uniformLineWidthItem.setSelected(true);
-        lineWidthOtuMetadataMenu.removeAll();
-        ArrayList<String> data = frame.frame.otuMetadata.getColumnNames();
-        //start at 1 to skip ID column
-        for (int i = 1; i < data.size(); i++) {
-             String value = data.get(i);
-             item = new JRadioButtonMenuItem(value);
-             lineWidthGroup.add(item);
-             item.addActionListener(new ActionListener() {
-                 public void actionPerformed(ActionEvent e) {
-                     //get the category to color by
-                     String value = e.getActionCommand();
-                     frame.frame.currTable = frame.frame.otuMetadata;
-                     ((TreeWindow)parent).setLineWidthByValue(value);
-                 }
-             });
-             lineWidthOtuMetadataMenu.add(item);
-        }
-    }
-    
-    public void resetLineWidthSampleMenu() {
-        uniformLineWidthItem.setSelected(true);
-           lineWidthSampleMetadataMenu.removeAll();
-           ArrayList<String> data = frame.frame.sampleMetadata.getColumnNames();
-           //start at 1 to skip ID column
-           for (int i = 1; i < data.size(); i++) {
-                String value = data.get(i);
-                JRadioButtonMenuItem item = new JRadioButtonMenuItem(value);
-                item.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        //get the category to color by
-                        String value = e.getActionCommand();
-                        frame.frame.currTable = frame.frame.sampleMetadata;
-                        ((TreeWindow)parent).setLineWidthByValue(value);
-                    }
-                });
-                lineWidthGroup.add(item);
-                lineWidthSampleMetadataMenu.add(item);
-           }
-    }*/
+  // 	
+  // public void resetLineWidthOtuMenu() {
+  //      uniformLineWidthItem.setSelected(true);
+  //       lineWidthOtuMetadataMenu.removeAll();
+  //       ArrayList<String> data = frame.frame.otuMetadata.getColumnNames();
+  //       //start at 1 to skip ID column
+  //       for (int i = 1; i < data.size(); i++) {
+  //            String value = data.get(i);
+  //            item = new JRadioButtonMenuItem(value);
+  //            lineWidthGroup.add(item);
+  //            item.addActionListener(new ActionListener() {
+  //                public void actionPerformed(ActionEvent e) {
+  //                    //get the category to color by
+  //                    String value = e.getActionCommand();
+  //                    frame.frame.currTable = frame.frame.otuMetadata;
+  //                    frame.setLineWidthByValue(value);
+  //                }
+  //            });
+  //            lineWidthOtuMetadataMenu.add(item);
+  //       }
+  //   }
+  //   
+  //   public void resetLineWidthSampleMenu() {
+  //       uniformLineWidthItem.setSelected(true);
+  //          lineWidthSampleMetadataMenu.removeAll();
+  //          ArrayList<String> data = frame.frame.sampleMetadata.getColumnNames();
+  //          //start at 1 to skip ID column
+  //          for (int i = 1; i < data.size(); i++) {
+  //               String value = data.get(i);
+  //               JRadioButtonMenuItem item = new JRadioButtonMenuItem(value);
+  //               item.addActionListener(new ActionListener() {
+  //                   public void actionPerformed(ActionEvent e) {
+  //                       //get the category to color by
+  //                       String value = e.getActionCommand();
+  //                       frame.frame.currTable = frame.frame.sampleMetadata;
+  //                       frame.setLineWidthByValue(value);
+  //                   }
+  //               });
+  //               lineWidthGroup.add(item);
+  //               lineWidthSampleMetadataMenu.add(item);
+  //          }
+  //   }
 }
