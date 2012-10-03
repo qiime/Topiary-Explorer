@@ -291,9 +291,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          leftPanel.add(treeEditToolbar);
          treeEditPane.setViewportView(leftPanel);
 	     
-	     
 	     //options menu
-	     item = new JMenuItem("Save Newick String...");
+	     item = new JMenuItem("Save Tree...");
          item.addActionListener(this);
          treeMenu.add(item);
          treeMenu.add(new JSeparator());
@@ -440,7 +439,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getActionCommand().equals("Save Tree...")) {
              saveTree();
-         }    else if (e.getActionCommand().equals("Lock/Unlock")) {
+         } else if(e.getActionCommand().equals("Save Newick String...")) {
+	
+			}else if (e.getActionCommand().equals("Lock/Unlock")) {
                     if (frame.clickedNode != null) {
                        frame.clickedNode.setLocked(!frame.clickedNode.isLocked());
                     } 

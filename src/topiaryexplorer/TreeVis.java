@@ -1565,6 +1565,7 @@ public class TreeVis extends PApplet {
                   }
               }
       });
+		  //get longest and shortest
           x1 = tips.get(0).getPoint().getX();
           y1 = tips.get(0).getPoint().getY();
           x2 = tips.get(tips.size()-1).getPoint().getX();
@@ -1591,8 +1592,8 @@ public class TreeVis extends PApplet {
                 if(s.lastIndexOf(";",s.length()-2) != -1)
                     s = s.substring(s.lastIndexOf(";",s.length()-2)+1,s.length());
             }
-            else
-            {s = ""+node.getNumberOfLeaves();}
+            // else
+            // {s = ""+node.getNumberOfLeaves();}
           
           if(s.indexOf("null") != -1)
           {
@@ -1720,6 +1721,8 @@ public class TreeVis extends PApplet {
         setTOffsets(root,0.0,Math.PI*2,0.0,0.0,0.0);
     }
     
+
+/** Adapted from figtree radial drawing methods **/
     public Point2D setTOffsets(Node node, double astart, double aend, double x, double y, double length) {
         double fullAngle = (astart+aend)/2.0;
         double dirX = Math.cos(fullAngle);
