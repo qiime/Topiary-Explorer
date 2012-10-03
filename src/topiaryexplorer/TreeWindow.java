@@ -1144,40 +1144,45 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
           }
      
      
-     public void resetLineWidthsByOtu() {
+     public void resetLineWidthsByAbundance() {
          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         //loop over each node
-        for (Node n : tree.getTree().getLeaves()){
+		ArrayList<Node> ns = tree.getTree().getLeaves();
+		double maxAbundance = 0;
+		double minAbundance = Double.POSITIVE_INFINITY;
+        for (Node n : ns){
             //get the node's name
             String nodeName = n.getName();
             //get the row of the OTU metadata table with this name
-            int rowIndex = -1;
-            Object nodeNameObj = TopiaryFunctions.objectify(nodeName);
-            for (int i = 0; i < frame.otuMetadata.getData().maxRow(); i++) {
-                if (frame.otuMetadata.getData().get(i,0).equals(nodeNameObj)) {
-                    rowIndex = i;
-                    break;
-                }
-            }
+            int rowIndex = frame.otuSampleMap.getRowNames().indexOf(nodeName);
+			//tip not in otuTable
             if (rowIndex == -1) {
                 continue;
             }
-            double linevalue = 0;
-            Object category = frame.otuMetadata.getValueAt(rowIndex, frame.lineWidthColumnIndex);
-            if (category == null) continue;
 
-            if (String.class.isInstance(category)) {
-                JOptionPane.showMessageDialog(null, "ERROR: OTU ID "+nodeName+" is not all numerical data and cannot be used for line widths.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            } else if (Integer.class.isInstance(category)) {
-                linevalue = (double) ( ((Integer)category).intValue());
-            } else { //double
-                linevalue = ((Double)category).doubleValue();
-            }      
+			double totalAbundance = 0.0;
            
+			for(Object o : frame.otuSampleMap.getRow(rowIndex).values())
+			{
+				try {
+				totalAbundance += Double.parseDouble(o.toString());
+				} catch(Exception e)
+				{
+					//value is not numeric
+				}
+			}
+			
+			maxAbundance = Math.max(maxAbundance, totalAbundance);
+			minAbundance = Math.min(minAbundance, totalAbundance);
+			
             //set the node to this line width
-            n.setLineWidth(linevalue);
+            n.setTotalAbundance(totalAbundance);
         }
+
+		for(Node n : ns)
+	n.setLineWidth((n.getTotalAbundance()-minAbundance)/(maxAbundance-minAbundance));
+		
+
         tree.getTree().updateLineWidthsFromChildren();
         tree.redraw();
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

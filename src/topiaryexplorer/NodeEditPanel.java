@@ -41,7 +41,7 @@ public final class NodeEditPanel extends JPanel{
     JTextField fntSize = new JTextField("",3);
     String[] fntFaces = {"SansSerif","Serif","Courier"};//PFont.list();
     JComboBox fntFace = new JComboBox(fntFaces);
-    JLabel ptLabel = new JLabel("pt");
+    // JLabel ptLabel = new JLabel("pt");
     BasicArrowButton fntIncButton = new BasicArrowButton(SwingConstants.NORTH);
     BasicArrowButton fntDecButton = new BasicArrowButton(SwingConstants.SOUTH);
     // JButton fntIncButton = new JButton("^");
@@ -61,7 +61,7 @@ public final class NodeEditPanel extends JPanel{
     JPanel pieChartHolder = new JPanel();
     JPanel holder3 = new JPanel();
     
-    JLabel colorByLabel = new JLabel("Color by:");
+    // JLabel colorByLabel = new JLabel("Color by:");
     JButton colorByButton = new JButton("Color by...");
     ColorByPopupMenu colorByMenu;// = new ColorByComboBox()
     
@@ -140,8 +140,6 @@ public final class NodeEditPanel extends JPanel{
         // holder.add(new JLabel());
         add(holder);
         
-/*        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));*/
-        // labelPanel.setLayout(new GridLayout(4,1));
 		labelPanel.setLayout(new BorderLayout());
         holder2.setLayout(new GridLayout(2,1));
         tipLabelButton.addActionListener(new ActionListener() {
@@ -171,7 +169,7 @@ public final class NodeEditPanel extends JPanel{
         // fntSizePanel.add(fntSizeLabel);
 		fntSizePanel.setLayout(new BorderLayout());
 		fntButtonPanel.setLayout(new GridLayout(2,1));
-        fntSize.setToolTipText("Change the font size of node labels.");
+        fntSize.setToolTipText("Change the font size of node labels");
         fntSize.setMaximumSize(new Dimension(30,20));
         fntSize.setText(""+(int)vis.getNodeFontSize());
 		fntSize.setFont(new Font("Helvetica",0,10));
@@ -205,7 +203,7 @@ public final class NodeEditPanel extends JPanel{
 		fntSizePanel.add(fntButtonPanel, BorderLayout.EAST);
 		labelPanel.add(fntSizePanel, BorderLayout.EAST);
 
-        colorLabel.setPreferredSize(new Dimension(30,15));
+        colorLabel.setPreferredSize(new Dimension(20,20));
         colorLabel.setOpaque(true);
         colorLabel.setBorder(LineBorder.createGrayLineBorder());
         colorLabel.setBackground(Color.WHITE);
@@ -227,13 +225,7 @@ public final class NodeEditPanel extends JPanel{
             public void mouseReleased(MouseEvent e) {}
             public void mousePressed(MouseEvent e) {}
         }); 
-        colorLabel.setToolTipText("Change the node label font color...");
-/*        fntColorPanel.add(new JLabel("Font Color: "));*/
-/*        fntColorPanel.add(colorLabel);*/
-/*        labelPanel.add(fntColorPanel);*/
-        
-        // labelPanel.add(colorByButton, BorderLayout.CENTER);
-/*        labelPanel.add(colorByComboBox);*/
+        colorLabel.setToolTipText("Change the node label font color");
         
         labelPanelCP.setVisible(nodeLabelCheckBox.isSelected());
         add(labelPanelCP);

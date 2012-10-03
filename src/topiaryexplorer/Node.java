@@ -62,7 +62,8 @@ public class Node implements Comparable{
   private ArrayList<Color> groupLabelColor = new ArrayList<Color>();
   private ArrayList<Double> groupLabelWeight = new ArrayList<Double>();
   private ArrayList<String> groupLabelValue = new ArrayList<String>();
-  
+
+  private double totalAbundance = 0;
   private double lineWidth = 1;
 
   // if true, the children are not shown (draws a wedge)
@@ -178,6 +179,8 @@ public class Node implements Comparable{
   public void setMinimumRXOffset(double f) { minimumRXOffset = f; }    
   public double getMaximumRXOffset() { return maximumRXOffset; }
   public void setMaximumRXOffset(double f) { maximumRXOffset = f; }  
+  public double getTotalAbundance() { return totalAbundance; }
+  public void setTotalAbundance(double f) { totalAbundance = f; }
   public double getLineWidth() { return lineWidth; }
   public void setLineWidth(double f) { lineWidth = f; }
   public void setAnscestors(ArrayList<Node> a) { anscestors = a; }
@@ -941,7 +944,7 @@ public class Node implements Comparable{
   
   public double getLineWidthF() {
       if (isLeaf()) {
-          return 1; 
+          return lineWidth; 
           }
 
       //make the lists empty
@@ -949,10 +952,10 @@ public class Node implements Comparable{
       for (int i=0; i < nodes.size(); i++) {
         //recursion
         nodes.get(i).updateLineWidthsFromChildren();
-
         total = total + nodes.get(i).getLineWidth();
       }
-      return total/nodes.size();
+	// return max;
+     return total/nodes.size();
     }
   
   public void updateLineWidthsFromChildren() {
@@ -961,7 +964,6 @@ public class Node implements Comparable{
     //make the lists empty
     double total = 0;
     for (int i=0; i < nodes.size(); i++) {
-      //recursion
       nodes.get(i).updateLineWidthsFromChildren();
 
       total = total + nodes.get(i).getLineWidth();

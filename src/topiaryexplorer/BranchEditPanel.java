@@ -68,7 +68,7 @@ class BranchEditPanel extends JPanel{
     // JMenu lineWidthMenu = new JMenu("Line Width");
     JLabel lineWidthLabel = new JLabel("Line width:");
 	JCheckBox lineWidthByAbundance = new JCheckBox("Line width by abundance",false);
-    JSlider lineWidthSlider = new JSlider(1, 75, 15);
+    JSlider lineWidthSlider = new JSlider(5, 150, 10);
     // ButtonGroup lineWidthGroup = new ButtonGroup();
     
 /*    JRadioButtonMenuItem uniformLineWidthItem = new JRadioButtonMenuItem("Uniform");
@@ -174,14 +174,22 @@ class BranchEditPanel extends JPanel{
         add(noCountColorPanel);
         
         // add(lineWidthLabel);
+		lineWidthByAbundance.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+				vis.setLineWidthByAbundance(lineWidthByAbundance.isSelected());
+				if(lineWidthByAbundance.isSelected()) 
+                	frame.resetLineWidthsByAbundance();
+                vis.redraw();
+            }
+        });
 		add(lineWidthByAbundance);
 		lineWidthSlider.setToolTipText("Line width scale");
-        lineWidthSlider.setMajorTickSpacing(15);
+        lineWidthSlider.setMajorTickSpacing(5);
         lineWidthSlider.setSnapToTicks(true);
         lineWidthSlider.addChangeListener(new ChangeListener() {
             public synchronized void stateChanged(ChangeEvent e) {
                 if (lineWidthSlider.getValueIsAdjusting()){
-                    frame.tree.setLineWidthScale(lineWidthSlider.getValue()/15.0F);
+                    frame.tree.setLineWidthScale(lineWidthSlider.getValue()/10.0F);
                 }
                 frame.tree.redraw();
             }

@@ -40,6 +40,7 @@ public class TreeVis extends PApplet {
     
     //scaling for the line width
     private float lineWidthScale = 1;
+	private boolean lineWidthByAbundance = false;
 
     //the tree that is currently being displayed
     private Node root;
@@ -212,6 +213,8 @@ public class TreeVis extends PApplet {
     public void setSelectMode(boolean b) { selectMode = b; }
     public void setPieChartRadius(int i) { pieChartRadius = i; }
     public void setCollapseMode(String s) { collapseMode = s; }
+	public void setLineWidthByAbundance(boolean b) { lineWidthByAbundance = b; }
+	public boolean getLineWidthByAbundance() { return lineWidthByAbundance; }
 
     //SCROLLBAR METHODS
     public int getCurrentVerticalScrollPosition() {
@@ -1327,8 +1330,11 @@ public class TreeVis extends PApplet {
       //get the actual screen coordinates
       double xs = toScreenX(x);
       double ys = toScreenY(y);
-        
-      canvas.strokeWeight((float)node.getLineWidth()*getLineWidthScale());
+      
+	  if(lineWidthByAbundance)
+      	canvas.strokeWeight((float)node.getLineWidth()*getLineWidthScale());
+	  else
+		canvas.strokeWeight(1.0f*getLineWidthScale());
       
       Color c = null;
       if(!colorBranches)
@@ -1366,7 +1372,12 @@ public class TreeVis extends PApplet {
                         canvas.stroke(c.getRGB());
                 }
               
-              canvas.strokeWeight((float)k.getLineWidth()*getLineWidthScale());
+			  if(lineWidthByAbundance)
+		      	canvas.strokeWeight((float)k.getLineWidth()*getLineWidthScale());
+			  else
+				canvas.strokeWeight(1.0f*getLineWidthScale());
+
+              // canvas.strokeWeight((float)k.getLineWidth()*getLineWidthScale());
               double yp = toScreenY(k.getYOffset());
               double xp = toScreenX(k.getXOffset());
               canvas.line((float)xs, (float)yp,
@@ -1388,7 +1399,12 @@ public class TreeVis extends PApplet {
                   canvas.stroke(c.getRGB());
               }
               
-              canvas.strokeWeight((float)(k.getLineWidth()*getLineWidthScale()));
+			if(lineWidthByAbundance)
+		      	canvas.strokeWeight((float)k.getLineWidth()*getLineWidthScale());
+			  else
+				canvas.strokeWeight(1.0f*getLineWidthScale());
+
+              // canvas.strokeWeight((float)(k.getLineWidth()*getLineWidthScale()));
               double yp = toScreenY(k.getYOffset());
               double xp = toScreenX(k.getXOffset());
               canvas.line((float)xs, (float)ys,
@@ -1409,7 +1425,12 @@ public class TreeVis extends PApplet {
               
               double d = k.getLineWidth();
               
-              canvas.strokeWeight((float)d*getLineWidthScale());
+			if(lineWidthByAbundance)
+		      	canvas.strokeWeight((float)d*getLineWidthScale());
+			  else
+				canvas.strokeWeight(1.0f*getLineWidthScale());
+
+              // canvas.strokeWeight((float)d*getLineWidthScale());
               double xp = toScreenX(k.getPoint().getX());
               double yp = toScreenY(k.getPoint().getY());
               canvas.line((float)xp, (float)yp,
@@ -1442,7 +1463,11 @@ public class TreeVis extends PApplet {
                   canvas.stroke(c.getRGB());
               }
               double d = k.getLineWidth();
-              canvas.strokeWeight((float)d*getLineWidthScale());
+			if(lineWidthByAbundance)
+		      	canvas.strokeWeight((float)d*getLineWidthScale());
+			  else
+				canvas.strokeWeight(1.0f*getLineWidthScale());
+              // canvas.strokeWeight((float)d*getLineWidthScale());
               double xp = k.getROffset() * Math.cos(k.getTOffset());
               double yp = k.getROffset() * Math.sin(k.getTOffset());
               double ctheta = k.getTOffset();
@@ -1478,7 +1503,11 @@ public class TreeVis extends PApplet {
       }
         
       //set up the drawing properties
-      canvas.strokeWeight((float)node.getLineWidth()*getLineWidthScale());
+	  if(lineWidthByAbundance)
+      	canvas.strokeWeight((float)node.getLineWidth()*getLineWidthScale());
+	  else
+		canvas.strokeWeight(1.0f*getLineWidthScale());
+      // canvas.strokeWeight((float)node.getLineWidth()*getLineWidthScale());
 
       Color c = null;
         if(!colorBranches)
@@ -1818,7 +1847,8 @@ public class TreeVis extends PApplet {
      * @param  dims The dimentions of the output image file
      */
     public void exportTreeImage(String path, int dims[]) {
-        float oldLineWidth = getLineWidthScale();
+		  //save the current variables
+          float oldLineWidth = getLineWidthScale();
 		  int oldWidth = getWidth();
 		  int oldHeight = getHeight();
 		  double oldXScale = xscale;
@@ -1827,9 +1857,9 @@ public class TreeVis extends PApplet {
 		  double oldYStart = ystart;
 		  
 	  try {
-		  //save the current variables
 		  
-          // setLineWidthScale(oldLineWidth*(float).2);
+		  
+          setLineWidthScale(oldLineWidth*.5f);
 
           xstart = 0;
           ystart = 0;
