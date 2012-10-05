@@ -1,48 +1,54 @@
 package topiaryexplorer;
 
+import java.text.*;
+import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.media.opengl.*;
-import java.sql.*;
-import javax.swing.table.*;
-import java.io.*;
-import javax.jnlp.*;
 import javax.swing.text.*;
-import java.text.*;
+import javax.media.opengl.*;
+import javax.swing.table.*;
+import javax.swing.border.LineBorder;
+import javax.jnlp.*;
+
 /**
  * <<Class summary>>
  *
  * @author Meg Pirrung &lt;&gt;
  * @version $Rev$
  */
-public class ExportTreeDialog extends JDialog implements ActionListener, DocumentListener {
+public class ExportTreeThumbnailDialog extends JDialog implements ActionListener, DocumentListener {
     TreeWindow frame = null;
     TreeVis tree = null;
     
     JPanel mainPanel = new JPanel();
-    JLabel dimsLabel = new JLabel("PDF Dimensions:");
+    JLabel dimsLabel = new JLabel("PDF dimensions:");
     JPanel dimsPanel = new JPanel();
     JLabel horzLabel = new JLabel("Horizontal: ");
-    JTextField xdim = new JTextField(10);
+    JTextField xdim = new JTextField(5);
     JLabel vertLabel = new JLabel("Vertical: ");
-    JTextField ydim = new JTextField(10);
-    JLabel saveName = new JLabel("Save as:");
+    JTextField ydim = new JTextField(5);
+	JLabel colorLabelText = new JLabel("Unselected category color");
+	JLabel colorLabel = new JLabel("  ");
+	JPanel colorPanel = new JPanel();
+    JLabel saveName = new JLabel("Thumbnail folder name: ");
     JTextField saveField = new JTextField(100);
     JPanel okCancelPanel = new JPanel();
     JButton okButton = new JButton("Export");
     JButton cancelButton = new JButton("Cancel");
     
+	public String prefix = "";
+	public Color unselectedColor = new Color(0);
     public int dims[] = {0, 0};
     private DecimalFormat df = new DecimalFormat("#.####");
     
-    public ExportTreeDialog(TreeWindow _frame) {
+    public ExportTreeThumbnailDialog(TreeWindow _frame) {
         super((Frame)_frame, true);
         frame = _frame;
-        this.setTitle("Export Tree Image");
-        this.setSize(new Dimension(350,150));
+        this.setTitle("Export Tree Thumbnail Images");
+        this.setSize(new Dimension(350,170));
         
         //dimensions stuff
         tree = frame.tree;
@@ -69,7 +75,7 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
         ydim.getDocument().putProperty("name", "ydim");
         
         //add stuff
-        mainPanel.setLayout(new GridLayout(5,1));
+        mainPanel.setLayout(new GridLayout(6,1));
         mainPanel.add(dimsLabel);
         dimsPanel.setLayout(new GridLayout(1,4));
         dimsPanel.add(horzLabel);
@@ -77,8 +83,38 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
         dimsPanel.add(vertLabel);
         dimsPanel.add(ydim);
         mainPanel.add(dimsPanel);
-        mainPanel.add(saveName);
+        
+
+		colorLabel.setPreferredSize(new Dimension(20,20));
+        colorLabel.setOpaque(true);
+        colorLabel.setBorder(LineBorder.createGrayLineBorder());
+        colorLabel.setBackground(Color.BLACK);
+        frame.setNoCountColor(Color.BLACK);
+        colorLabel.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent e) {
+                Color newColor = JColorChooser.showDialog(
+                                     ExportTreeThumbnailDialog.this,
+                                     "Choose Unselected Color",
+                                     colorLabel.getBackground());
+                 if(newColor != null)
+                 {
+                     colorLabel.setBackground(newColor);
+                     unselectedColor = newColor;
+                 }
+            }
+            
+            public void mouseExited(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {}
+        });
+        colorLabel.setToolTipText("Chose color for categories when they are not the subject of the thumbnail");
+		colorPanel.add(colorLabel);
+		colorPanel.add(colorLabelText);
+		mainPanel.add(colorPanel);
+		mainPanel.add(saveName);
         mainPanel.add(saveField);
+		
         okCancelPanel.setLayout(new GridLayout(1,4));
         okCancelPanel.add(new JLabel());
         okCancelPanel.add(new JLabel());
@@ -86,13 +122,16 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
               public void actionPerformed(ActionEvent e) {
                   dims[0] = 0;
                   dims[1] = 0;
+				  unselectedColor = null;
+				  prefix = null;
                   dispose();
               }
            });
         okCancelPanel.add(cancelButton);
         okButton.addActionListener(new ActionListener() {
               public void actionPerformed(ActionEvent e) {
-                  exportTree();
+				  prefix = saveField.getText();
+                  exportTrees();
                   dispose();
               }
            });
@@ -103,11 +142,11 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
     }
 	// }}}
 	
-	public void exportTree() {
+	public void exportTrees() {
 	    this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	    //Determine PDF dimensions
          if (dims[0]!=0 && dims[1]!=0 && saveField.getText().length() > 0) {
-            tree.exportTreeImage(frame.dir_path+"/tree_export_images/"+saveField.getText()+".pdf", dims);
+           frame.cycleColorsThroughMetadata(dims, prefix, unselectedColor);
 		}
 		else
 		{
@@ -115,7 +154,7 @@ public class ExportTreeDialog extends JDialog implements ActionListener, Documen
 		    JOptionPane.showMessageDialog(frame,
                 "Please check inputs.\n"+
                 "Dimensions cannot be 0 and \n"+
-                "you must supply a file name.",
+                "you must supply a folder name.",
                 "Save error",
                 JOptionPane.ERROR_MESSAGE);
 		}

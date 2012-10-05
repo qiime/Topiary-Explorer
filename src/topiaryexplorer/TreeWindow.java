@@ -307,6 +307,9 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          item = new JMenuItem("Export Tree Image...");
          item.addActionListener(this);
          treeMenu.add(item);
+         item = new JMenuItem("Export Tree Thumbnails...");
+         item.addActionListener(this);
+         treeMenu.add(item);
          item = new JMenuItem("Export Tree Screen Capture...");
          item.addActionListener(this);
          treeMenu.add(item);
@@ -331,8 +334,8 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getActionCommand().equals("Save Tree...")) {
              saveTree();
-         } else if(e.getActionCommand().equals("Save Newick String...")) {
-	
+         } else if(e.getActionCommand().equals("Export Tree Thumbnails...")) {
+			exportTreeThumbnails();
 			}else if (e.getActionCommand().equals("Lock/Unlock")) {
                     if (frame.clickedNode != null) {
                        frame.clickedNode.setLocked(!frame.clickedNode.isLocked());
@@ -711,6 +714,45 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         if(this.isActive()) tree.redraw();
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
+
+	/**
+    * Exports the current tree in thumbnails colored by each different
+    * metadata value for the current coloring category
+    */
+    public void exportTreeThumbnails() {
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        tree.noLoop();
+		ExportTreeThumbnailDialog ettd = new ExportTreeThumbnailDialog(this);
+        ettd.setVisible(true);
+		// Color unselectedColor = new Color(0);
+		// String path = "";
+		// int[] dims = new int[2];
+		
+		
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
+
+	public void cycleColorsThroughMetadata(int[] dims, String prefix, Color unselectedColor) {
+		HashMap masterMap = frame.branchColorPanel.getColorMap();
+		HashMap tempMap = (HashMap)masterMap.clone();
+
+		for(Object coloringValue : masterMap.keySet())
+		{
+			for(Object value : tempMap.keySet())
+				tempMap.put(value, unselectedColor);
+			
+			tempMap.put(coloringValue, masterMap.get(coloringValue));
+			frame.branchColorPanel.setColorMap(tempMap);
+			frame.branchColorPanel.syncColorKeyTable();
+			frame.recolorBranches();
+				tree.exportTreeImage(frame.dir_path+"/tree_export_images/"+prefix+"/"+coloringValue+".pdf", dims);
+		}
+		
+        frame.branchColorPanel.setColorMap(masterMap);
+		frame.branchColorPanel.syncColorKeyTable();
+		frame.recolorBranches();
+        if(this.isActive()) tree.redraw();
+	}
     
     /**
     * Exports the current tree view as screencap
@@ -1287,17 +1329,17 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          tree.redraw();
      }
 
-      public void setLineWidthByValue(String value) {
-         //get the column that this category is
-         int colIndex = frame.currTable.getColumnNames().indexOf(value);
-         if (colIndex == -1) {
-             return;
-         }
-         frame.lineWidthColumnIndex = colIndex;
-         frame.resetLineWidths();
-         tree.redraw();
-         tree.getTree().updateLineWidthsFromChildren();
-      }
+      // public void setLineWidthByValue(String value) {
+      //    //get the column that this category is
+      //    int colIndex = frame.currTable.getColumnNames().indexOf(value);
+      //    if (colIndex == -1) {
+      //        return;
+      //    }
+      //    frame.lineWidthColumnIndex = colIndex;
+      //    // frame.resetLineWidths();
+      //    tree.redraw();
+      //    tree.getTree().updateLineWidthsFromChildren();
+      // }
       
       /**
       * Uncollapses all tree branches

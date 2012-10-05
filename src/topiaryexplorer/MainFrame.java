@@ -721,17 +721,17 @@ public class MainFrame extends JFrame {
          }
      }
      
-     public void resetLineWidths() {
-         if (currTable != null && currTable == otuMetadata) {
-             for(int i = 0; i < treeWindows.size(); i++)
-                 treeWindows.get(i).resetLineWidthsByOtu();
-         } else if (currTable != null && currTable == sampleMetadata) {
-             for(int i = 0; i < treeWindows.size(); i++)
-                  treeWindows.get(i).resetLineWidthsByOtu();
-         } else {
-             //it's null; don't do anything
-         }     
-     }
+     // public void resetLineWidths() {
+     //     if (currTable != null && currTable == otuMetadata) {
+     //         for(int i = 0; i < treeWindows.size(); i++)
+     //             treeWindows.get(i).resetLineWidthsByOtu();
+     //     } else if (currTable != null && currTable == sampleMetadata) {
+     //         for(int i = 0; i < treeWindows.size(); i++)
+     //              treeWindows.get(i).resetLineWidthsByOtu();
+     //     } else {
+     //         //it's null; don't do anything
+     //     }     
+     // }
 
      public void recolorBranches() {
          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));

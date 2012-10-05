@@ -151,9 +151,13 @@ public class TreeVis extends PApplet {
     public double getMargin() { return MARGIN; }
     public double getTreeMargin() { return TREEMARGIN; }
     public double getYScale() { return yscale; }
+	public void setYScale(double d) { yscale = d; }
     public double getXScale() { return xscale; }
+	public void setXScale(double d) { xscale = d; }
     public double getYStart() { return ystart; }
+	public void setYStart(double d) { ystart = d; }
     public double getXStart() { return xstart; }
+	public void setXStart(double d) { xstart = d; }
     public Color getBackgroundColor() { return backgroundColor; }
     public void setBackgroundColor(Color c) { backgroundColor = c; }    
     public String getTreeLayout() { return treeLayout; }
@@ -1856,7 +1860,7 @@ public class TreeVis extends PApplet {
 		  double oldXStart = xstart;
 		  double oldYStart = ystart;
 		  
-	  try {
+	  // try {
 		  
 		  
           setLineWidthScale(oldLineWidth*.5f);
@@ -1867,25 +1871,13 @@ public class TreeVis extends PApplet {
           width = dims[0];
           height = dims[1];
           
-          // float textwidth = 0;
-          // String st = "";
-          // if(drawExternalNodeLabels)
-          //   st = root.getLongestLabel();
-          // 
-          // for (int i = 0; i < st.length(); i++) {
-          //    textwidth += nodeFont.width(st.charAt(i));
-          // }
-          
           TREEMARGIN = 5;
           
           if(drawExternalNodeLabels && zoomDrawNodeLabels)
               TREEMARGIN += textWidth(root.getLongestLabel());         
           
-          float usableWidth = 0;
-          float usableHeight = 0;
-          
-          // System.out.println("usableW"+usableWidth);
-          // System.out.println("usableH"+usableHeight);
+          float usableWidth = width;
+          float usableHeight = height;
           
           if (treeLayout.equals("Rectangular") || treeLayout.equals("Triangular")) {
                 usableWidth = dims[0] - TREEMARGIN - 10;
@@ -1934,10 +1926,11 @@ public class TreeVis extends PApplet {
                   // no application registered for PDFs
               }
           }
-        	} catch (Exception e) {
-        	    JOptionPane.showMessageDialog(null, "Unable to export pdf.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        	    }
-	    		  //go back to how it was
+        	// } 
+			// catch (Exception e) {
+			//         	        	        	    JOptionPane.showMessageDialog(null, "Unable to export pdf.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			//         	        }
+	      //go back to how it was
           setLineWidthScale(oldLineWidth);
 		  xscale = oldXScale;
 		  yscale = oldYScale;
@@ -1945,6 +1938,7 @@ public class TreeVis extends PApplet {
 		  ystart = oldYStart;
 		  width = oldWidth;
 		  height = oldHeight;
-		  redraw();
+		  // redraw();
     }
+
 }

@@ -1,15 +1,13 @@
 package topiaryexplorer;
 
 import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import javax.swing.event.*;
-import javax.swing.border.LineBorder;
-import javax.swing.event.*;
 import javax.media.opengl.*;
-import java.sql.*;
-import javax.swing.table.*;
 import java.io.*;
 import javax.jnlp.*;
 
@@ -146,7 +144,7 @@ class BranchEditPanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 Color newColor = JColorChooser.showDialog(
                                      BranchEditPanel.this,
-                                     "Choose Background Color",
+                                     "Choose No Count Color",
                                      noCountColorLabel.getBackground());
                  if(newColor != null)
                  {
