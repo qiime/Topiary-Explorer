@@ -110,7 +110,7 @@ public class TipLabelCustomizer extends JFrame {
             for(Object o : ops)
             {
                 o = (String)o;
-                System.out.println(o);
+                // System.out.println(o);
                 int colIndex = frame.otuMetadata.getColumnNames().indexOf(o.toString());
                 // for (Object val : frame.otuMetadata.getColumnNames()) {
                 //     if (val.toString().equals(o)) {

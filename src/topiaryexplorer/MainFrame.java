@@ -219,7 +219,7 @@ public class MainFrame extends JFrame {
         
         dataPane.addChangeListener(new ChangeListener(){
             public void stateChanged(ChangeEvent e){
-                // tableChanged();
+                tableChanged();
             }
         }
         );
@@ -292,6 +292,7 @@ public class MainFrame extends JFrame {
              JOptionPane.showMessageDialog(null, "Please select a valid metadata table to change schemes.", "Error", JOptionPane.ERROR_MESSAGE);
              return;
          }
+		// System.out.println(currTable);
          // System.out.println("changing to scheme "+name);
          ColorPanel tmp = ((ColorPanel)colorPane.getSelectedComponent());
          tmp.setColorMap((HashMap)((Object[])schemes.get(name))[1]);
@@ -308,8 +309,8 @@ public class MainFrame extends JFrame {
          else if(colorPane.getSelectedIndex() == 1)
             recolorLabels();
          
-         resetOtuMenus();
-         resetSampleMenus();
+         // resetOtuMenus();
+         // resetSampleMenus();
          
          for(TreeWindow t : treeWindows)
          {
@@ -735,14 +736,17 @@ public class MainFrame extends JFrame {
 
      public void recolorBranches() {
          this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-         if (currTable != null && currTable == otuMetadata) {
+		 if(currTable == null) {
+			this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			return;
+		 } else if (currTable == otuMetadata) {
              for(TreeWindow t : treeWindows)
              {
                  // System.out.println("hurf");
                   t.recolorBranchesByOtu();
                   t.treeEditToolbar.summaryPanel.treeColored();
               }
-         } else if (currTable != null && currTable == sampleMetadata) {
+         } else if (currTable == sampleMetadata) {
              for(TreeWindow t : treeWindows)
              {
                  // System.out.println("durf");
