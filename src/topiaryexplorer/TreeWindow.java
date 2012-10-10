@@ -867,6 +867,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
        }
        tree.getTree().prune();
        setTreeVals(tree.getTree());
+	   recolorBranches();
        tree.redraw();
 	}
 	

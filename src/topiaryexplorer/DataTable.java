@@ -183,6 +183,7 @@ public class DataTable {
     }
     
     public void setColumnClasses() {
+		columnClasses = new ArrayList<Class>();
         Class cl = Object.class;
         for(int i = 0; i < columnNames.size(); i++)
         {

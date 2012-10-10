@@ -186,6 +186,7 @@ public class AddColumnDialog extends JFrame {
         }
         
         data.addColumn(newColumn);
+		data.setColumnClasses();
         
         SparseTableModel model = null;
         TableSorter sorter = null;

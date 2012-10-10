@@ -272,14 +272,10 @@ public class Node implements Comparable{
           boolean prune = node.toPrune;
           if(node.pruneStates.size() > 0)
           {
-              // System.out.println("name-"+node.getName());
-          // prune = true;
             for(boolean p : node.pruneStates)
                 {
-                    // System.out.println("state-"+p);
                     prune = prune && p;
                 }
-              // System.out.println("final state-"+prune);
           }
           if(prune)
             node.parent.nodes.remove(node);
@@ -289,15 +285,9 @@ public class Node implements Comparable{
       }
       
       for(Node node : getNodes())
-      {
-        // if(node.pruneVals.size() > 1)
-          // continue;
-        // else if(node.pruneVals.size() == 1)
-            
+      {            
         if(node.parent == null)
           continue;
-        // if(node.nodes.size() == 1)
-            // node.toPrune = true;
         if(node.toPrune && node.nodes.size() == 1)
           nodes_to_remove.add(node);
       }
@@ -381,18 +371,6 @@ public class Node implements Comparable{
       // prune this node
       toPrune = b;
       pruneStates.add(b);
-      // parent.nodes.remove(this);
-      // parent.setName(parent.getName()+"_"+this.getName());
-      // parent = null;
-      
-      // check all siblings
-      // for(Node s : parent.nodes)
-      //       {
-      //           if(!s.toPrune)
-      //             return;
-      //       }
-      //       // if all siblings were pruned, prune parent
-      //       parent.prune(p);
   }
   
   public void prune(boolean p, Object k, Object v) {
@@ -534,8 +512,9 @@ public class Node implements Comparable{
      
      if(majority)
      {
-         double max = Double.MIN_VALUE;
-         Color majorityColor = new Color(0);
+        double max = Double.MIN_VALUE;
+        // Color majorityColor = new Color(0);
+		ArrayList<Color> majorityColors = new ArrayList<Color>();
          
          if(groupBranchColor.size() == 1 || groupBranchWeight.size() == 1)
             return groupBranchColor.get(0);
@@ -544,16 +523,32 @@ public class Node implements Comparable{
          {
              if(groupBranchWeight.get(i) > max)
              {
-                 majorityColor = groupBranchColor.get(i);
-                 max = groupBranchWeight.get(i);
+				majorityColors = new ArrayList<Color>();
+                majorityColors.add(groupBranchColor.get(i));
+                max = groupBranchWeight.get(i);
+				 
              }
+			else if(groupBranchWeight.get(i) == max)
+			{
+				majorityColors.add(groupBranchColor.get(i));
+			}
          }
-         branchColor = majorityColor;
+		
+		double total = majorityColors.size();
+		for(Color c : majorityColors)
+		{
+			r += c.getRed()/total;
+			g += c.getGreen()/total;
+			b += c.getBlue()/total;
+		}
+		
+         branchColor = new Color(Math.abs((float)r/255),Math.abs((float)g/255),Math.abs((float)b/255));
      }
      else {
         double total = 0;
         for (Double weight : groupBranchWeight) {
-          total = total + weight;
+			if(weight > 0)
+          		total = total + weight;
         }
         for (int i = 0; i < groupBranchWeight.size(); i++) {
           r += groupBranchWeight.get(i)/total*groupBranchColor.get(i).getRed();
@@ -561,10 +556,14 @@ public class Node implements Comparable{
           b += groupBranchWeight.get(i)/total*groupBranchColor.get(i).getBlue();
         }
         
-        if(total == 0)
-            branchColor = groupBranchColor.get(0);
-        else
+        if(total == 0 && groupBranchColor.size() != 0)
+		{
+			branchColor = groupBranchColor.get(0);
+		}
+        else if(groupBranchColor.size() != 0)
             branchColor = new Color(Math.abs((float)r/255),Math.abs((float)g/255),Math.abs((float)b/255));
+		else if(groupBranchColor.size() == 0)
+			branchColor = new Color(0);
     }
     return branchColor;
   }
