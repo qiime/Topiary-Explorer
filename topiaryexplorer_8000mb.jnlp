@@ -7,7 +7,7 @@
     <description>TopiaryExplorer</description>
     <homepage href="http://topiaryexplorer.sourceforge.net/"/>
     <description kind="short">Phylogenetic tree viewing program</description>
-    <icon href="TEIcon.gif"/>    
+    <icon href="te.icns"/>    
     <offline-allowed/> 
 
   </information>
@@ -19,7 +19,7 @@
   <resources>
     <j2se version="1.6+" initial-heap-size="500M" max-heap-size="8000m" />
 
-	<jar href="topiaryexplorer0.9.6.jar" />
+	<jar href="topiaryexplorer1.0.jar" />
 	<jar href="lib/jogl.jar" />
 	<jar href="lib/guava-r09.jar" />
 	<jar href="lib/core.jar" />

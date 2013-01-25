@@ -16,7 +16,7 @@
 		  description="Construct a jar ">
 		<mkdir dir="build" />
 
-		<jar jarfile="topiaryexplorer0.9.6.jar">
+		<jar jarfile="topiaryexplorer1.0.jar">
 			<fileset dir="build/classes" />
 			<fileset dir="src/images/">
 	            <include name="**/*.gif" />
@@ -38,6 +38,6 @@
 	
 	<target name="clean">
 		<delete dir="build" />
-        <delete file="topiaryexplorer0.9.6.jar" />
+        <delete file="topiaryexplorer1.0.jar" />
 	</target>
 </project>

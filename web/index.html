@@ -17,15 +17,18 @@
 	<div class="wrapper clearfix">
 		<div class="bodywrapper clearfix">
 			<div class="topwrapper clearfix">
-				<a href="index.html"><img src="images/logo_new.png" alt="Topiary Explorer"></a>
+				<a href="index.html"><img src="images/logo1pt0.png" alt="Topiary Explorer"></a>
 			</div>
 			<div class="menudiv clearfix">
 				<ul class="menu">
 					<li>
-						<a href="index.html">Home</a>
+						<a class="news" href="index.html">News</a>
 					</li>
 					<li>
-						<a href="javascript:showPaper()">Publication</a>
+						<a class="about" href="javascript:showAbout()">About</a>
+					</li>
+					<li>
+						<a class="paper" href="javascript:showPaper()">Publication</a>
 					</li>
 					<li>
 						<a href="app/topiaryexplorer.jnlp">Download</a>
@@ -51,7 +54,44 @@
 
 <p><a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3198578/?tool=pubmed">TopiaryExplorer: An application for connecting large phylogenetic trees to environmental metadata</a>; Meg Pirrung, Ryan Kennedy, J. Gregory Caporaso, Jesse Stombaugh, Doug Wendel, and Rob Knight (Bioinformatics 2011).</p>
 					</div>
-					<div id="about" class="visible">						
+					<div id="news" class="visible">
+						TopiaryExplorer version 1.0 has been released! Download it <a href="https://sourceforge.net/projects/topiaryexplorer/files/releases/te0.9.6.tgz/download">here</a>!
+						<h3>TopiaryExplorer v1.0 Release Notes</h3>
+<h3>New Features</h3>
+<ul>
+<li>Select color for unmapped nodes</li>
+<li>Select no count color</li>
+<li>Generate figures over metadata category</li>
+<li>By-value coloring for numerics</li>
+<li>Mouse scrolling works in tree view</li>
+<li>Added distance from parent collapsing</li>
+<li>Metadata corresponding to pruned nodes is removed from tables when project is saved</li>
+<li>Export list of node names</li>
+<li>Branch width by abundance</li>
+</ul>
+
+<h3>Changes</h3>
+<ul>
+<li>Refactored interpolate so it takes less time</li>
+<li>Interpolate is now Apply Colors and colors are only changed when that button is clicked</li>
+<li>TreeToolbar interface standardized</li>
+<li>Updated user guide</li>
+</ul>
+
+<h3>Bug Fixes</h3>
+<ul>
+<li>Fixed radial view rendering bug</li>
+<li>Radial wedge labeling fixes</li>
+<li>Ladderize fix</li>
+<li>Export radial, polar image labeling fixes</li>
+<li>Bug fix for columns containing string and numeric values crash</li>
+<li>Allow double type in otu tables</li>
+<li>Save tree as newick string fix</li>
+<li>Color by new column</li>
+</ul>
+
+					</div>
+					<div id="about" class="hidden">	
 						<p class="blurb">
 						Current technologies for high-throughput sequencing provide an 
 						investigator with massive amounts of data that are most easily 
@@ -93,20 +133,17 @@
 						</p>
 					</div>
 					<div id="screenshots" class="hidden">
-						<a href="images/Screen shot 2010-11-19 at 12.58.15 PM.png" target="_blank" rel="lightbox[screenshots]"><img class ="screenshot" src="images/Screen shot 2010-11-19 at 12.58.15 PM.png" alt="Screenshot of Topiary Explorer"></a>
-						<a href="images/Screen shot 2010-11-19 at 12.59.25 PM.png" target="_blank" rel="lightbox[screenshots]"><img class ="screenshot" src="images/Screen shot 2010-11-19 at 12.59.25 PM.png" alt="Screenshot of Topiary Explorer"></a>
-						<a href="images/Screen shot 2010-11-19 at 1.02.02 PM.png" target="_blank" rel="lightbox[screenshots]"><img class ="screenshot" src="images/Screen shot 2010-11-19 at 1.02.02 PM.png" alt="Screenshot of Topiary Explorer"></a>
-						<a href="images/Screen shot 2010-11-19 at 1.03.13 PM.png" target="_blank" rel="lightbox[screenshots]"><img class ="screenshot" src="images/Screen shot 2010-11-19 at 1.03.13 PM.png" alt="Screenshot of Topiary Explorer"></a>
-						<a href="images/Screen shot 2010-11-19 at 1.03.46 PM.png" target="_blank" rel="lightbox[screenshots]"><img class ="screenshot" src="images/Screen shot 2010-11-19 at 1.03.46 PM.png" alt="Screenshot of Topiary Explorer"></a>
-						<a href="images/Screen shot 2010-11-19 at 1.05.12 PM.png" target="_blank" rel="lightbox[screenshots]"><img class ="screenshot" src="images/Screen shot 2010-11-19 at 1.05.12 PM.png" alt="Screenshot of Topiary Explorer"></a>
+						<a href="images/ss1.png" target="_blank" rel="lightbox[screenshots]"><img class ="screenshot" src="images/ss1.png" alt="TopiaryExplorer Tree window options"></a>
+						<a href="images/ss2.png" target="_blank" rel="lightbox[screenshots]"><img class ="screenshot" src="images/ss2.png" alt="Node specific options"></a>
+						<a href="images/ss3.png" target="_blank" rel="lightbox[screenshots]"><img class ="screenshot" src="images/ss3.png" alt="Label coloring and pie charts"></a>
 					</div>
 				</div>
 			</div>
 			<div class="footerwrapper clearfix">
 			<br>
-				<img src="images/TEIcon.gif" alt="Topiary Explorer">
+				<img src="images/te.iconset/icon_32x32.png" alt="Topiary Explorer">
 			<br>
-			&copy; 2011 Topiary Explorer Team
+			&copy; 2012 Topiary Explorer Team
 			<br>
 			<a href="http://sourceforge.net/projects/topiaryexplorer/">SourceForge Project Page</a>
 		</div>

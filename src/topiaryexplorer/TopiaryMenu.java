@@ -201,11 +201,10 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
                     frame.repaint();
                 }
             }
-            catch(IOException e)
+            catch(Exception e)
             {
-                frame.consoleWindow.update("Error opening project.");
+                JOptionPane.showMessageDialog(null, "Error opening project file.\nPlease make sure that your .tep is valid.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            
         }
     
         public void openProject(String projectPath){
@@ -296,7 +295,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
             }
             catch(Exception e)
             {
-                JOptionPane.showMessageDialog(null, "Error opening project file.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error opening project file.\nPlease make sure that your .tep is valid.", "Error", JOptionPane.ERROR_MESSAGE);
                 System.out.println("Error opening project."+e);
             }
 
@@ -309,6 +308,12 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		{
 		    FileContents fc = frame.fss.saveFileDialog(dir_path, new String[]{"tep"}, 
 				new ByteArrayInputStream(b.toByteArray()),null);
+			
+			if(fc == null) // user cancelled request
+			{
+				frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				return;
+			}
 			
 			fc.setMaxLength(1000000000000L);
 			
@@ -364,7 +369,7 @@ public class TopiaryMenu extends JMenuBar implements ActionListener{
 		catch(IOException e)
 			{
 			    JOptionPane.showMessageDialog(null, "Unable to save project file.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-              System.out.println("Error saving project.");
+              	System.out.println("Error saving project.");
                 // frame.consoleWindow.update("Error saving project.");
 			}
 			frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
