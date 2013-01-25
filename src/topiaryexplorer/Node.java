@@ -63,6 +63,8 @@ public class Node implements Comparable{
   private ArrayList<Double> groupLabelWeight = new ArrayList<Double>();
   private ArrayList<String> groupLabelValue = new ArrayList<String>();
 
+  private Color normalizedBranchColor = null;
+  
   private double totalAbundance = 0;
   private double lineWidth = 1;
 
@@ -557,15 +559,23 @@ public class Node implements Comparable{
         }
         
         if(total == 0 && groupBranchColor.size() != 0)
-		{
 			branchColor = groupBranchColor.get(0);
-		}
         else if(groupBranchColor.size() != 0)
             branchColor = new Color(Math.abs((float)r/255),Math.abs((float)g/255),Math.abs((float)b/255));
 		else if(groupBranchColor.size() == 0)
 			branchColor = new Color(0);
     }
     return branchColor;
+  }
+  
+  public void setNormalizedBranchColor(Color c) {
+	  normalizedBranchColor = c;
+  }
+  
+  public Color getNormalizedBranchColor() {
+	  if(normalizedBranchColor == null)
+		  return getBranchColor(true);
+	  return normalizedBranchColor;
   }
   
   public void noBranchColor() {
@@ -988,13 +998,6 @@ public class Node implements Comparable{
         newgroupBranchWeight.add(groupBranchWeight.get(i));
       }
     }
-    
-    // for(String v: groupBranchValue)
-    // {
-    //     if(!newgroupBranchValue.contains(v))
-    //         newgroupBranchValue.add(v);
-    // }
-    // 
     groupBranchWeight = newgroupBranchWeight;
     groupBranchColor = newgroupBranchColor;
     groupBranchValue = newgroupBranchValue;

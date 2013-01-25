@@ -243,6 +243,15 @@ public class DataTable {
         }
         return result;
     }
+	
+	public ArrayList<Object> getColumn(String columnName) {
+		int index = getColumnIndex(columnName);
+        ArrayList<Object> result = new ArrayList<Object>();
+        for (int i = 0; i < data.maxRow(); i++) {
+            result.add(data.get(i, index));
+        }
+        return result;
+	}
     
     public ArrayList<Object> getRow2(int index) {
         ArrayList<Object> result = new ArrayList<Object>();

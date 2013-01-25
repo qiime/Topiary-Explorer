@@ -69,6 +69,7 @@ public class TreeVis extends PApplet {
     
     private boolean zoomDrawNodeLabels = false;
     private boolean majorityColoring = true;
+	private boolean normalizedColoring = false;
     private boolean mirrored = false;
     private boolean colorBranches = false;
     private boolean selectMode = false;
@@ -177,6 +178,8 @@ public class TreeVis extends PApplet {
     public void setLineWidthScale(float f) { lineWidthScale = f; }
     public void setMajorityColoring(boolean cond) { majorityColoring = cond; }
     public boolean getMajorityColoring() { return majorityColoring; }
+    public void setNormalizedColoring(boolean cond) { normalizedColoring = cond; }
+    public boolean getNormalizedColoring() { return normalizedColoring; }
     public void setLabelXOffset(int i) { labelXOffset = i; redraw(); }
     public int getLabelXOffset() { return labelXOffset; }
     public void setLabelYOffset(int i) { labelYOffset = i; redraw();}
@@ -1124,7 +1127,10 @@ public class TreeVis extends PApplet {
           }
           else
           {
-              c = node.getBranchColor(majorityColoring);
+              c = node.getBranchColor(majorityColoring);			  
+			  if(normalizedColoring)
+				  c = node.getNormalizedBranchColor();
+			  
               if(c == null)
               {
                   canvas.stroke(0);
@@ -1284,7 +1290,10 @@ public class TreeVis extends PApplet {
       }
       else
       {
-          c = node.getBranchColor(majorityColoring);
+		  c = node.getBranchColor(majorityColoring);
+		  if(normalizedColoring)
+			  c = node.getNormalizedBranchColor();
+          
           if(c == null)
             canvas.stroke(0);
           else
@@ -1306,7 +1315,10 @@ public class TreeVis extends PApplet {
                 }
                 else
                 {
-                    c = k.getBranchColor(majorityColoring);
+		  		  c = k.getBranchColor(majorityColoring);
+		  		  if(normalizedColoring)
+		  			  c = k.getNormalizedBranchColor();
+	  			  
                     if(c == null)
                         canvas.stroke(0);
                     else
@@ -1336,7 +1348,10 @@ public class TreeVis extends PApplet {
               }
               else
               {
-                  c = k.getBranchColor(majorityColoring);
+		  		  c = k.getBranchColor(majorityColoring);
+		  		  if(normalizedColoring)
+		  			  c = k.getNormalizedBranchColor();
+                  
                   canvas.stroke(c.getRGB());
               }
               
@@ -1360,7 +1375,10 @@ public class TreeVis extends PApplet {
                 }
                 else
                 {
-                    c = k.getBranchColor(majorityColoring);
+  		  		  c = k.getBranchColor(majorityColoring);
+  		  		  if(normalizedColoring)
+  		  			  c = k.getNormalizedBranchColor();
+                    
                     canvas.stroke(c.getRGB());
                 }
               
@@ -1400,7 +1418,10 @@ public class TreeVis extends PApplet {
               }
               else
               {
-                  c = k.getBranchColor(majorityColoring);
+  		  		  c = k.getBranchColor(majorityColoring);
+  		  		  if(normalizedColoring)
+  		  			  c = k.getNormalizedBranchColor();
+                  
                   canvas.stroke(c.getRGB());
               }
               double d = k.getLineWidth();
@@ -1458,7 +1479,10 @@ public class TreeVis extends PApplet {
         }
         else
         {
-            c = node.getBranchColor(majorityColoring);
+  		  c = node.getBranchColor(majorityColoring);
+  		  if(normalizedColoring)
+  			  c = node.getNormalizedBranchColor();
+  		  
             if(c == null)
             {
                 canvas.stroke(0);

@@ -307,7 +307,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          item = new JMenuItem("Export Tree Image...");
          item.addActionListener(this);
          treeMenu.add(item);
-         item = new JMenuItem("Export Tree Thumbnails...");
+         item = new JMenuItem("Batch Export Tree Images...");
          item.addActionListener(this);
          treeMenu.add(item);
          item = new JMenuItem("Export Tree Screen Capture...");
@@ -334,7 +334,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getActionCommand().equals("Save Tree...")) {
              saveTree();
-         } else if(e.getActionCommand().equals("Export Tree Thumbnails...")) {
+         } else if(e.getActionCommand().equals("Batch Export Tree Images...")) {
 			exportTreeThumbnails();
 			}else if (e.getActionCommand().equals("Lock/Unlock")) {
                     if (frame.clickedNode != null) {
@@ -723,19 +723,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         tree.noLoop();
 		ExportTreeThumbnailDialog ettd = new ExportTreeThumbnailDialog(this);
-        ettd.setVisible(true);
-		// Color unselectedColor = new Color(0);
-		// String path = "";
-		// int[] dims = new int[2];
-		
-		
+        ettd.setVisible(true);		
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
 	public void cycleColorsThroughMetadata(int[] dims, String prefix, Color unselectedColor) {
 		HashMap masterMap = frame.branchColorPanel.getColorMap();
 		HashMap tempMap = (HashMap)masterMap.clone();
-
+		//set all colors to unselected then set current category color
 		for(Object coloringValue : masterMap.keySet())
 		{
 			for(Object value : tempMap.keySet())
@@ -744,8 +739,15 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 			tempMap.put(coloringValue, masterMap.get(coloringValue));
 			frame.branchColorPanel.setColorMap(tempMap);
 			frame.branchColorPanel.syncColorKeyTable();
-			frame.recolorBranches();
-				tree.exportTreeImage(frame.dir_path+"/tree_export_images/"+prefix+"/"+coloringValue+".pdf", dims);
+			
+	   		 if(frame.currTable == null) {
+	   			return;
+	   		 } else if (frame.currTable == frame.otuMetadata) {
+	                     recolorBranchesByOtu();
+	         } else if (frame.currTable == frame.sampleMetadata) {
+	                     recolorBranchesBySample();
+	         }
+			tree.exportTreeImage(frame.dir_path+"/tree_export_images/"+prefix+"/"+coloringValue+".pdf", dims);
 		}
 		
         frame.branchColorPanel.setColorMap(masterMap);
@@ -753,6 +755,297 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 		frame.recolorBranches();
         if(this.isActive()) tree.redraw();
 	}
+	
+	public void cycleColorsThroughMetadataNormalized(int[] dims, String prefix, Color unselectedColor) {
+		HashMap masterMap = frame.branchColorPanel.getColorMap();
+		HashMap tempMap = (HashMap)masterMap.clone();
+		HashMap otuAbundances = null;
+		HashMap sampleAbundances = null;
+		
+		tree.setNormalizedColoring(true);
+		
+		boolean oldNoCount = usingNoCountColor;
+		Color oldNoCountColor = new Color(noCountColor.getRed(),noCountColor.getGreen(),noCountColor.getBlue());
+		
+		setNoCount(true);
+		setNoCountColor(unselectedColor);
+		
+   		if(frame.currTable == null) {
+   			return;
+   		} else if (frame.currTable == frame.otuMetadata) {
+			otuAbundances = getMaxOTUAbundances(masterMap);
+        } else if (frame.currTable == frame.sampleMetadata) {
+			sampleAbundances = getMaxSampleAbundances(masterMap);
+        }
+		
+		// set all colors to unselected then set current category color
+		for(Object coloringValue : masterMap.keySet())
+		{
+			for(Object value : tempMap.keySet())
+				tempMap.put(value, unselectedColor);
+			
+			tempMap.put(coloringValue, masterMap.get(coloringValue));
+			frame.branchColorPanel.setColorMap(tempMap);
+			frame.branchColorPanel.syncColorKeyTable();
+			
+	   		if(frame.currTable == null) {
+	   			return;
+	   		} else if (frame.currTable == frame.otuMetadata) {
+				recolorBranchesByOtu();
+				double max = (Double)otuAbundances.get(coloringValue);
+	            recolorBranchesByOTUNormalized(coloringValue, (Color)masterMap.get(coloringValue), max);
+	        } else if (frame.currTable == frame.sampleMetadata) {
+				recolorBranchesBySample();
+				double max = (Double)sampleAbundances.get(coloringValue);
+	        	recolorBranchesBySampleNormalized(coloringValue, (Color)masterMap.get(coloringValue), max);
+	        }
+			
+			tree.exportTreeImage(frame.dir_path+"/tree_export_images/"+prefix+"/"+coloringValue+".pdf", dims);
+		}
+		tree.setNormalizedColoring(false);
+		setNoCount(oldNoCount);
+		setNoCountColor(oldNoCountColor);
+		
+		frame.branchColorPanel.setColorMap(masterMap);
+		frame.branchColorPanel.syncColorKeyTable();
+		frame.recolorBranches();
+		if(this.isActive()) tree.redraw();
+	}
+	
+	public void recolorBranchesBySampleNormalized(Object coloringValue, Color firstColor, double max) {
+		for(Node n : tree.getTree().getNodes())
+		{
+			if(!n.isCollapsed())
+				continue;
+			Color c = null;
+			float currAbundance = (float)getAbundanceBySampleValue(n,coloringValue);
+			if(currAbundance == 0)
+				c = noCountColor;
+			else
+			{
+		    float frac = currAbundance/(float)max;
+ 			float one_minus_frac = 1 - frac;
+			
+            float first_red_adj = firstColor.getRed() / 255.0f;
+            float first_green_adj = firstColor.getGreen() / 255.0f;
+            float first_blue_adj = firstColor.getBlue() / 255.0f;
+                
+            float second_red_adj = noCountColor.getRed() / 255.0f;
+            float second_green_adj = noCountColor.getGreen() / 255.0f;
+            float second_blue_adj = noCountColor.getBlue() / 255.0f;
+
+            c = new Color(frac*first_red_adj+ one_minus_frac*second_red_adj,
+frac*first_green_adj +
+one_minus_frac*second_green_adj,
+frac*first_blue_adj + one_minus_frac*second_blue_adj);
+			
+			}
+			n.setNormalizedBranchColor(c);
+		}
+		tree.redraw();
+	}
+	
+	public double getAbundanceBySampleValue(Node n, Object coloringValue) {
+		double abundance = 0.0;
+		for(Node leaf : n.getLeaves())
+		{
+         	//get the node's name
+             String nodeName = leaf.getName();
+             //get the row of the OTU-Sample map with this name
+             int rowIndex = frame.otuSampleMap.getRowNames().indexOf(nodeName);
+                     
+             // node name does not exist in sample-tip map
+             if (rowIndex == -1)
+                continue;
+             //get the row
+             HashMap row = frame.otuSampleMap.getRow(rowIndex);
+                     
+            //for each non-zero column value in the mapping(starting after the ID column)
+             for (Object i : row.keySet()) //for all samples
+             {
+                 Object w = row.get(i); // get the OTU count
+                 //if it's not a Number, skip it
+                 if (!(w instanceof Number)) continue;
+                 double weight = 0;
+                 try {
+                     weight = (Double)w;
+                 } catch (ClassCastException e) {
+                     weight = ((Integer)w).doubleValue();
+                 }
+                 if (weight == 0.0) continue; // this sample doesn't contain this OTU
+                         
+                 String sampleID = frame.otuSampleMap.getColumnName(((Number)i).intValue());
+
+                 //The sampleID is taken from the columnames of the
+                 //sample-tip map and one of the headers is otu id
+                 if(sampleID.equals("OTU ID"))
+                    continue;
+                         
+                 //find the row that has this sampleID                         
+                 int sampleRowIndex = frame.sampleMetadata.getRowNames().indexOf(sampleID);
+                         
+                 // this sample is not in the metadata but contains the current OTU, it will not be colored
+                 if (sampleRowIndex == -1)
+                    continue;
+                         
+                 Object value = null;
+                 value = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.branchColorPanel.getColorColumnIndex());                                                          
+                 if (value == null) continue;
+				 if(value.equals(coloringValue))
+					 abundance += weight;
+             }
+		}
+		return abundance;
+	}
+	
+	public HashMap getMaxSampleAbundances(HashMap masterMap) {
+		HashMap maxAbundances = new HashMap();
+		for(Object coloringValue : masterMap.keySet())
+		{
+			double max = 1;
+			for(Node n : tree.getTree().getNodes())
+			{
+				if(!n.isCollapsed())
+					continue;
+				double ab = getAbundanceBySampleValue(n, coloringValue);
+				if(max < ab)
+					max = ab;
+			}
+			maxAbundances.put(coloringValue, max);
+		}
+		return maxAbundances;
+	}
+	
+	// public HashMap getTotalSampleAbundances(HashMap masterMap) {
+	// 		HashMap totalAbundances = new HashMap();
+	// 		ArrayList<String> sampleIDs = frame.otuSampleMap.getColumnNames();
+	// 		//calculate total abundance values for each category
+	// 		for(Object coloringValue : masterMap.keySet())
+	// 		{
+	// 			// ArrayList vals = new ArrayList();
+	// 			// vals.add(masterMap.get(coloringValue));
+	// 			double total = 0;
+	// 			for(String sample : sampleIDs)
+	// 			{
+	// 				int sampleRowIndex = frame.sampleMetadata.getRowNames().indexOf(sample);
+	// 				Object value = null;
+	//                 value = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.branchColorPanel.getColorColumnIndex());                                                          
+	//                 if (value == null) continue;
+	// 				if (value.equals(coloringValue))
+	// 				{
+	// 					ArrayList column = frame.otuSampleMap.getColumn(sample);
+	// 					for(Object count : column)
+	// 					{
+	// 						if (!(count instanceof Number)) continue;
+	// 		                double weight = 0.0;
+	// 		                try {
+	// 		                    weight = (Double)count;
+	// 		                } catch (ClassCastException e) {
+	// 		                    weight = ((Integer)count).doubleValue();
+	// 		                }
+	// 						total += weight;
+	// 					}
+	// 				}
+	// 			}
+	// 			// vals.add(total);
+	// 			totalAbundances.put(coloringValue, total);
+	// 		}
+	// 		return totalAbundances;
+	// 	}
+	
+	public void recolorBranchesByOTUNormalized(Object coloringValue, Color firstColor, double max) {
+		for(Node n : tree.getTree().getNodes())
+		{
+			if(!n.isCollapsed())
+				continue;
+			Color c = null;
+			float currAbundance = (float)getAbundanceByOTUValue(n,coloringValue);
+			if(currAbundance == 0)
+				c = noCountColor;
+			else
+			{
+		    float frac = currAbundance/(float)max;
+ 			float one_minus_frac = 1 - frac;
+			
+            float first_red_adj = firstColor.getRed() / 255.0f;
+            float first_green_adj = firstColor.getGreen() / 255.0f;
+            float first_blue_adj = firstColor.getBlue() / 255.0f;
+                
+            float second_red_adj = noCountColor.getRed() / 255.0f;
+            float second_green_adj = noCountColor.getGreen() / 255.0f;
+            float second_blue_adj = noCountColor.getBlue() / 255.0f;
+
+            c = new Color(frac*first_red_adj+ one_minus_frac*second_red_adj,
+frac*first_green_adj +
+one_minus_frac*second_green_adj,
+frac*first_blue_adj + one_minus_frac*second_blue_adj);
+			
+			}
+			n.setNormalizedBranchColor(c);
+		}
+		tree.redraw();
+	}
+	
+	public double getAbundanceByOTUValue(Node n, Object coloringValue) {
+		double abundance = 0.0;
+		for(Node leaf : n.getLeaves())
+		{
+        	//get the node's name
+            String nodeName = leaf.getName();
+			Object value = null;
+			int otuIDindex = frame.otuMetadata.getRowNames().indexOf(nodeName);
+			if(otuIDindex == -1)
+				continue;
+            value = frame.otuMetadata.getValueAt(otuIDindex, frame.branchColorPanel.getColorColumnIndex());                                                          
+            if (value == null) continue;
+			if (value.equals(coloringValue))
+				abundance += 1.0;
+		}
+		return abundance;
+	}
+	
+	public HashMap getMaxOTUAbundances(HashMap masterMap) {
+		HashMap maxAbundances = new HashMap();
+		for(Object coloringValue : masterMap.keySet())
+		{
+			double max = 1;
+			for(Node n : tree.getTree().getNodes())
+			{
+				if(!n.isCollapsed())
+					continue;
+				double ab = getAbundanceByOTUValue(n, coloringValue);
+				if(max < ab)
+					max = ab;
+			}
+			maxAbundances.put(coloringValue, max);
+		}
+		return maxAbundances;
+	}
+	
+	// public HashMap getTotalOTUAbundances(HashMap masterMap) {
+	// 	HashMap totalAbundances = new HashMap();
+	// 	ArrayList<String> sampleIDs = frame.otuSampleMap.getColumnNames();
+	// 	//calculate total abundance values for each category
+	// 	for(Object coloringValue : masterMap.keySet())
+	// 	{
+	// 		ArrayList vals = new ArrayList();
+	// 		// vals.add(masterMap.get(coloringValue));
+	// 		double total = 0;
+	// 		
+	// 		for(String otuID : frame.otuMetadata.getRowNames())
+	// 		{
+	// 			Object value = null;
+	// 			int otuIDindex = frame.otuMetadata.getRowNames().indexOf(otuID);
+	//                 value = frame.otuMetadata.getValueAt(otuIDindex, frame.branchColorPanel.getColorColumnIndex());                                                          
+	//                 if (value == null) continue;
+	// 			if (value.equals(coloringValue))
+	// 				total += 1.0;
+	// 		}
+	// 		// vals.add(total);
+	// 		totalAbundances.put(coloringValue, total);
+	// 	}
+	// 	return totalAbundances;
+	// }
     
     /**
     * Exports the current tree view as screencap
@@ -927,10 +1220,14 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 	}
 	
     public void recolorBranches() {
-        if (frame.currTable != null && frame.currTable == frame.otuMetadata) {
+		if(frame.currTable == null)
+			{
+				return;
+			}
+        else if (frame.currTable == frame.otuMetadata) {
                     recolorBranchesByOtu();
                     treeEditToolbar.summaryPanel.treeColored();
-             } else if (frame.currTable != null && frame.currTable == frame.sampleMetadata) {
+             } else if (frame.currTable == frame.sampleMetadata) {
                     recolorBranchesBySample();
                     treeEditToolbar.summaryPanel.treeColored();
              } else {
@@ -1025,7 +1322,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));        
             //loop over each node
              for (Node n : ns) {
-                 //get the node's name
+                 	//get the node's name
                      String nodeName = n.getName();
                      //get the row of the OTU-Sample map with this name
                      int rowIndex = frame.otuSampleMap.getRowNames().indexOf(nodeName);
@@ -1087,9 +1384,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
                          Object value = null;
                          value = frame.sampleMetadata.getValueAt(sampleRowIndex, frame.branchColorPanel.getColorColumnIndex());                                                          
                          if (value == null) continue;
-                        
-                        // System.out.println(((Color)frame.branchColorPanel.getColorMap().get(value)));
-                        
+
                         if(usingNoCountColor && ((Color)frame.branchColorPanel.getColorMap().get(value)).equals(noCountColor))
                            {
                                // System.out.println(sampleID);
@@ -1298,7 +1593,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
          
          if(frame.otuMetadata != null) {
                     ConsensusLineageDialog cld = new ConsensusLineageDialog(frame, this);
-                    treePopupMenu.getComponent(6).setEnabled(true);
+                    treePopupMenu.getComponent(7).setEnabled(true);
                     treeEditToolbar.treeViewPanel.collapseByMenu.getComponent(3).setEnabled(true);
                 }
                 else

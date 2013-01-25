@@ -226,6 +226,11 @@ public class TopiaryFunctions {
     }
 
     public static Object objectify (String str) {
+		if(str.toUpperCase().matches("^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]+$"))
+		{
+			return str;
+		}			
+		
         try {
                 int i = Integer.parseInt(str);
                 if (i == 0)
@@ -236,11 +241,7 @@ public class TopiaryFunctions {
                     double f = Double.parseDouble(str);
                     return f;
                 } catch (NumberFormatException nfx2) {
-                    // if (str.equals("NA")) {
-                    //     return null;
-                    // } else {
                         return str;
-                    // }
                 }
 			}
 	}
