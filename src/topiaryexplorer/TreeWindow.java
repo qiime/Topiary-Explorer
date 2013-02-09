@@ -474,7 +474,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
 		}
 		
 		try {
-        	FileContents fc = frame.fss.saveFileDialog(null,new String[]{"txt","csv"},new ByteArrayInputStream(tipNames.getBytes()),"tipnames.txt");
+        	FileContents fc = frame.fss.saveFileDialog(null,new String[]{"txt","csv"},new ByteArrayInputStream(tipNames.getBytes()),null);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error writing to file.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -696,7 +696,7 @@ public class TreeWindow extends TopiaryWindow implements KeyListener, ActionList
     public void saveTree() {
 	    String s = TopiaryFunctions.createNewickStringFromTree(tree.getTree());
         try {
-        	FileContents fc = frame.fss.saveFileDialog(null,null,new ByteArrayInputStream(s.getBytes()),null);
+        	FileContents fc = frame.fss.saveFileDialog(dir_path,new String[]{"txt"},new ByteArrayInputStream(s.getBytes()),null);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error writing to file.", "Error", JOptionPane.ERROR_MESSAGE);
         }

@@ -24,13 +24,13 @@ public final class TreeViewPanel extends JPanel {
     TreeVis vis = null;
     
     JToggleButton selectButton = new JToggleButton("Select Mode");
-    JButton recenterButton = new JButton("Recenter");
-    JButton ladderizeButton = new JButton("Ladderize");
-    JButton subtreeButton = new JButton("View subtree...");
-    JButton pruneButton = new JButton("Prune tree");
-    JButton showHiddenButton = new JButton("Show hidden nodes");
-    JButton setLineageButton = new JButton("Set consensus lineage...");
-    JButton collapseByButton = new JButton("Collapse By");
+    JButton recenterButton = new JButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("recenter.gif"))));
+    JButton ladderizeButton = new JButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("ladderize.gif"))));
+    JButton subtreeButton = new JButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("new_subtree.gif"))));
+    JButton pruneButton = new JButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("prune.gif"))));
+    JButton showHiddenButton = new JButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("show_hidden.gif"))));
+    JButton setLineageButton = new JButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("consensus_lineage.gif"))));
+    JButton collapseByButton = new JButton(new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("collapse_by.gif"))));
     JPopupMenu collapseByMenu = new JPopupMenu();
     JPanel buttonPanel = new JPanel();
     
@@ -76,7 +76,7 @@ public final class TreeViewPanel extends JPanel {
         vis = frame.tree;
         
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        buttonPanel.setLayout(new GridLayout(8,1));
+        buttonPanel.setLayout(new GridLayout(2,4));
         
         selectButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -84,7 +84,7 @@ public final class TreeViewPanel extends JPanel {
             }
         });
         // buttonPanel.add(selectButton);
-        
+        recenterButton.setToolTipText("Recenter");
         recenterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                  frame.recenter();
@@ -92,6 +92,7 @@ public final class TreeViewPanel extends JPanel {
         });
         buttonPanel.add(recenterButton);
         
+		ladderizeButton.setToolTipText("Ladderize");
         ladderizeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                  frame.ladderize();
@@ -99,6 +100,7 @@ public final class TreeViewPanel extends JPanel {
         });
         buttonPanel.add(ladderizeButton);
         
+		subtreeButton.setToolTipText("View Subtree...");
         subtreeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -111,6 +113,7 @@ public final class TreeViewPanel extends JPanel {
         });
         buttonPanel.add(subtreeButton);
         
+		pruneButton.setToolTipText("Prune Tree...");
         pruneButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                  pruneTree();
@@ -118,6 +121,7 @@ public final class TreeViewPanel extends JPanel {
         });
         buttonPanel.add(pruneButton);
         
+		showHiddenButton.setToolTipText("Show Hidden Nodes");
         showHiddenButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 for(Node n: vis.getTree().getNodes())
@@ -127,16 +131,19 @@ public final class TreeViewPanel extends JPanel {
         });
         buttonPanel.add(showHiddenButton);
         
+		setLineageButton.setToolTipText("Set Consensus Lineage...");
         setLineageButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.resetConsensusLineage();
             }
         });
         buttonPanel.add(setLineageButton);
+		
         resetCollapseByMenu();
+		collapseByButton.setToolTipText("Collapse By...");
         collapseByButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                collapseByMenu.show(collapseByButton, collapseByButton.getX()+100, collapseByButton.getY()-75);
+                collapseByMenu.show(collapseByButton, collapseByButton.getX()-60, collapseByButton.getY()-5);
             }
         });
         buttonPanel.add(collapseByButton);

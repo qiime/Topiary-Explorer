@@ -88,7 +88,7 @@ Next we'll use this new metadata field to color the tree's branches. Move back t
 
    Dialog to color by metadata.
 
-By default each option for the category will be colored randomly. To change this, switch to the Topiary Explorer window. The Color Key toolbar on the left is used to choose colors on a per-category basis. To change the color for a given value click the small colored box, which will open a the "Pick a Color" window. To sort the values, click on the header of the color key toolbar with the name of your new column. Choose blue for the RightM3, LeftM3, and AmbiguousM3 values.
+By default each option for the category will be colored randomly. To change this, switch to the Topiary Explorer window. The Color Key toolbar on the left is used to choose colors on a per-category basis. To change the color for a given value click the small colored box, which will open a the "Pick a Color" window. To sort the values, click on the header of the color key toolbar with the name of your new column. Choose blue for the RightM3, LeftM3, and AmbiguousM3 values, then click the ``Apply Colors`` button.
 
 .. figure::  _images/choose_colors.png
    :align:   center
@@ -147,14 +147,14 @@ To remove unwanted branches, use the prune tree button at the top of the Tree To
 In the subtree window, we are going to remove branches based on sample metadata. Click the "Prune tree" button, then select the "Metadata" button, followed by the "Sample Metadata" button. In the dropdown box select the "IndividualKeyHand" value, and then select the three categories associated beginning with "NA" as shown in the image below. Use the filter text box to filter the options down to only NA.
 
 .. figure::  _images/prune_dialog.png
-   :align:   left
+   :align:   center
 
    Prune dialog box.
 
 Click the "Prune" button in the bottom right of this window to prune the tips associated with the "NA" samples (i.e., the skin samples as opposed to the keyboard samples) from the tree. The resulting tree should look like this:
 
 .. figure::  _images/pruned_tree.png
-   :align:   left
+   :align:   center
 
    Pruned tree.
 

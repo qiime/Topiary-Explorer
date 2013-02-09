@@ -58,7 +58,7 @@ This toolbar contains:
 
   *  The branch coloring pane
   *  The label coloring pane
-  *  The interpolate button
+  *  The apply colors button
 
 .. note:: By clicking on the "Color Key" text and dragging, the color key toolbar can be moved from the TopiaryExplorer window and placed elsewhere.
 
@@ -70,10 +70,10 @@ Both of these panes of the color key toolbar have identical functionality except
 
 Interpolate button
 ------------------
-The interpolate button is used to create a gradient which interpolates across selected colors in the color key toolbar.
+The apply colors button is used to push color choices to the tree and/or create a gradient which interpolates across selected colors in the color key toolbar. When you select colors in the color key toolbar, you must click apply colors for them to show up on the tree.
 
 
-.. figure::  _images/interpolate.png
+.. figure::  _images/apply_colors.png
    :align:   center
 
 Data table tab pane

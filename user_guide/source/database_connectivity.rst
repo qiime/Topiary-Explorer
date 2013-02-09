@@ -99,6 +99,6 @@ Next switch to the Tree Window. Uncollapse the tree by dragging the slider on to
    :align:   center
 
 .. note::
-   You'll notice that the only individual that shows up is ``M9`` since we filtered the sample metadata table in step 4. 22% of the lineages present in the tree are found in individual M9.
+   You'll notice that the only individual that shows up is ``M9`` since we filtered the sample metadata table in `step 4 <./database_connectivity#step-4-select-the-the-data-that-you-d-like-to-use>`_. 22.74% of the lineages present in the tree are found in individual M9.
 
 This last step was covered very quickly here: if you got lost you should refer to the `TopiaryExplorer Overview Tutorial <./quickstart.html>`_ which goes through the steps for coloring a tree in a lot more detail.

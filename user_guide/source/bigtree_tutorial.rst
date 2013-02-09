@@ -3,7 +3,7 @@
 *****************
 Big tree tutorial
 *****************
-This tutorial discusses how to load data from a large tree (greater than about 100k tips) efficiently using TopiaryExplorer and `QIIME <http://www.qiime.org>`_. This process requires filtering the tree to include fewer tips that are representative of the full diversity of the tree. The figures used in this tutorial are derived from applying this process to the full Greengenes tree (408,135 tips) filtered to include only sequences less 99% identical to other sequences (84,413 tips).
+This tutorial discusses how to load data from a large tree efficiently using TopiaryExplorer and `QIIME <http://www.qiime.org>`_. This process requires filtering the tree to include fewer tips that are representative of the full diversity of the tree. The figures used in this tutorial are derived from applying this process to the full Greengenes tree (408,135 tips).
 
 Assumptions made in this tutorial
 ---------------------------------
@@ -48,22 +48,14 @@ Step 4. Create a new project in TopiaryExplorer
 -----------------------------------------------
 Open TopiaryExplorer and create a new project using the new project dialog. Open the tree and any metadata you have about the tips.
 
-.. figure::  _images/open_gg.png
+.. figure::  _images/big_open_gg.png
    :align:   center
 
 Step 5. Color the tree
 ----------------------
-Uncollapse the tree and then color the branches by a metadata field of interest. In this example we're coloring by ``kingdom_phylum``.
+Color the branches by a metadata field of interest. In this example we're coloring by ``CATEGORY1``.
 
-.. figure::  _images/colored_gg.png
+.. figure::  _images/big_colored_gg.png
    :align:   center
 
-.. note:: Using the interpolate colors function with large trees can take a long time.
-
-Step 6. Open a subtree and set tip labels
------------------------------------------
-Open a subtree (this is the archaea subtree with ~2000 nodes) in a new window and zoom in so that there is enough space for labels to show. In this example we're setting tip labels as ``kingdom_phylum``.
-
-.. figure::  _images/subtree_gg.png
-   :align:   center
-
+.. note:: Using the interpolate colors function with large trees can take a while (this example took a few minutes to color).

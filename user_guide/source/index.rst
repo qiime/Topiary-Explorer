@@ -14,10 +14,12 @@ TopiaryExplorer UserGuide
    file_formats
    quickstart
    interface_guide
+   coloring_trees
    database_connectivity
    bigtree_tutorial
    insertion_tutorial
    scheme_tutorial
+   batch_tutorial
 
 
 Introduction
